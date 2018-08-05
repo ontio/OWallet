@@ -35,6 +35,19 @@
     src: url('../../static/fonts/SourceSansPro-Semibold.ttf');
   }
 
+  @font-face {
+    font-family: AvenirNext-Bold;
+    src: url('../../static/fonts/AvenirNextBold.ttf');
+  }
+  @font-face {
+    font-family: AvenirNext-Medium;
+    src: url('../../static/fonts/AvenirNextMedium.ttf');
+  }
+  @font-face {
+    font-family: AvenirNext-Regular;
+    src: url('../../static/fonts/avenirnextregular.otf');
+  }
+
   .loading {
     text-align: center;
     background: rgba(0, 0, 0, 0.05);

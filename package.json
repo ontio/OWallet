@@ -22,7 +22,8 @@
     "pack:main": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.main.config.js",
     "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
     "postinstall": "npm run lint:fix",
-    "package": "npm run pack && electron-builder -mwl"
+    "package": "npm run pack && electron-builder -mwl",
+    "packageLocal": "electron-builder"
   },
   "build": {
     "productName": "O Wallet",

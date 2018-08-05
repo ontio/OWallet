@@ -121,7 +121,7 @@ export default {
             if (this.sharedWallet) {
                 var that = this;
                 const coPayers = this.sharedWallet.coPayers;
-                dbService.wallet.find({}, function (err, accounts) {
+                dbService.find({type:'CommonWallet'}, function (err, accounts) {
                     if (err) {
                         console.log(err)
                         return;

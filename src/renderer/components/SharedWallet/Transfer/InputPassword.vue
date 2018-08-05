@@ -105,11 +105,12 @@ export default {
         //to support update vuex data
         this.payers = this.transfer.coPayers;
         const that = this
-        dbService.wallet.findOne({address: this.transfer.coPayers[0].address}, function(err, doc) {
+        
+        dbService.findOne({address: this.transfer.coPayers[0].address}, function(err, doc) {
             if(err) {
                 console.log(err)
             }
-            that.sponsorWallet = doc
+            that.sponsorWallet = doc.wallet
         })
     },
     components:{

@@ -8,27 +8,27 @@ if(!localStorage.getItem('savePath')) {
 console.log('path' + userData)
 //create db
 var Datastore = require('nedb');
-const db = {};
+
 const savePath = localStorage.getItem('savePath')
 
-db.wallet = new Datastore(savePath + '/userData/wallet.db');
-db.sharedWallet = new Datastore(savePath + '/userData/sharedWallet.db');
-db.hardwareWallet = new Datastore(savePath + '/userData/hardwareWallet.db');
+const db = new Datastore({filename: savePath + '/keystore.db', autoload:true});
+// db.sharedWallet = new Datastore(savePath + '/sharedWallet.db');
+// db.hardwareWallet = new Datastore(savePath + '/userData/hardwareWallet.db');
 
 //indexing
-db.wallet.ensureIndex({fieldName: 'address', unique: true}, function(err) {
+db.ensureIndex({fieldName: 'address', unique: true}, function(err) {
     console.log(err)
 });
-db.sharedWallet.ensureIndex({fieldName: 'sharedWalletAddress', unique:true }, function(err){
-    console.log(err)
-})
-db.hardwareWallet.ensureIndex({ fieldName: 'address', unique: true }, function (err) {
-    console.log(err)
-});
+// db.sharedWallet.ensureIndex({fieldName: 'sharedWalletAddress', unique:true }, function(err){
+//     console.log(err)
+// })
+// db.hardwareWallet.ensureIndex({ fieldName: 'address', unique: true }, function (err) {
+//     console.log(err)
+// });
 
-db.wallet.loadDatabase();
-db.sharedWallet.loadDatabase();
-db.hardwareWallet.loadDatabase();
+db.loadDatabase();
+// db.sharedWallet.loadDatabase();
+// db.hardwareWallet.loadDatabase();
 
 const findWallet = (db, opt) => {
     return new Promise((resolve, reject) => {

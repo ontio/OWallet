@@ -206,6 +206,7 @@
 .tx-item {
     float: left;
     margin: 5px 0;
+    cursor: pointer;
 }
 .pendingTx-item {
     cursor: pointer;
@@ -329,7 +330,7 @@
                     <span class="transfer-icon"></span>
                 </div>
             
-                <div v-for="(tx,index) in completedTx" :key="tx.txHash" class="tx-item" v-if="index<6">
+                <div v-for="(tx,index) in completedTx" :key="tx.txHash" class="tx-item" v-if="index<6" @click="showTxDetail(tx.txHash)">
                     <span>{{tx.txHash}}</span>
                     <span>{{tx.amount}} {{tx.asset}}</span>
                 </div>
@@ -498,7 +499,7 @@ export default {
             var that = this;
                 const coPayers = this.sharedWallet.coPayers;
                 const localCopayers = []
-                dbService.wallet.find({}, function (err, accounts) {
+                dbService.find({type:'CommonWallet'}, function (err, accounts) {
                     if (err) {
                         console.log(err)
                         that.$message.error(err)
@@ -507,7 +508,7 @@ export default {
                     for (let cp of coPayers) {
                         for (let ac of accounts) {
                             if (cp.address === ac.address) {
-                                localCopayers.push(ac)
+                                localCopayers.push(ac.wallet)
                             }
                         }
                     }
@@ -524,7 +525,14 @@ export default {
                 url += '/testnet'
             }
             window.location.href = url;
+        },
+        showTxDetail(txHash) {
+        let url = `https://explorer.ont.io/transaction/${txHash}`
+        if(this.network === 'Test Net') {
+            url += '/testnet'
         }
+        window.location.href = url;
+      }
     }
 }
 </script>

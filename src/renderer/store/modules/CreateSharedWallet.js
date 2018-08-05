@@ -58,7 +58,12 @@ const actions = {
                     address: body.sharedWalletAddress
                 })
                 //save to db
-                dbService.sharedWallet.insert(body);
+                const wallet = {
+                    type: 'SharedWallet',
+                    address: body.sharedWalletAddress,
+                    wallet: body
+                }
+                dbService.sharedWallet.insert(wallet);
                 return res.data.Error;
             } else {
                 return res.data.Error;

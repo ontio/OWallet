@@ -7,7 +7,7 @@
     <div class="col-2 text-center">
       <div class="div-slogan home-slogan">
           <p>O Wallet</p>  
-          <p>A comprehensive desktop wallet based on Ontology</p>
+          <p>A comprehensive Ontology desktop wallet</p>
       </div>
       <div>
         <router-link class="btn btn-default go-to-wallets text-center" to="Wallets">
