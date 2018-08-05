@@ -127,7 +127,7 @@ export default {
 
 .basic-container {
     padding-bottom:90px;
-    overflow:scroll;
+    overflow:auto;
 }
 .basic-label {
     width:540px;

@@ -46,7 +46,7 @@
     name: 'Setting',
     data() {
       return {
-        net: localStorage.getItem('net') || 'TEST_NET',
+        net: localStorage.getItem('net') || 'MAIN_NET',
         lang: this.$i18n.locale,
         savePath: localStorage.getItem('savePath')
       }

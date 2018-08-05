@@ -184,7 +184,12 @@
       },
       saveToDb(account) {
         const that = this;
-        dbService.wallet.insert(account, function (err, newDoc) {
+        const wallet = {
+          type: 'CommonWallet',
+          address: account.address,
+          wallet:account
+        }
+        dbService.insert(wallet, function (err, newDoc) {
           if (err) {
             console.log(err)
             that.$message.warning('The wallet already exists in local.')

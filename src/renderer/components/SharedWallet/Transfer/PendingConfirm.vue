@@ -2,7 +2,7 @@
 .confirm-container {
     height: 400px;
     padding-bottom: 20px;
-    overflow:scroll;
+    overflow:auto;
 }
 
 .label-container {
@@ -196,14 +196,14 @@ export default {
                     return;
                 }
                 const localCopayers = []
-                dbService.wallet.find({}, function (err, accounts) {
+                dbService.find({type:'CommonWallet'}, function (err, accounts) {
                     if (err) {
                         console.log(err)
                         return;
                     }
                     for (let ac of accounts) {
                         if (nextSigner.address === ac.address) {
-                            that.$store.commit('UPDATE_CURRENT_SIGNER', {account: ac})
+                            that.$store.commit('UPDATE_CURRENT_SIGNER', {account: ac.wallet})
                             that.showSign = true;
                             return;
                         }

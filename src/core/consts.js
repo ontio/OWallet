@@ -22,6 +22,12 @@ export const ONT_PASS_URL = {
     ///api/v1/onto/exchangerate/reckon/{currency}/{goaltype}/{amount}
 }
 
+export const WALLET_TYPE = {
+    CommonWallet : 'CommonWallet',
+    SharedWallet: 'SharedWallet',
+    HardwareWallet: 'HardwareWallet'
+}
+
 export const DEFAULT_SCRYPT = {
     cost: 16384, // 除以2时间减半
     blockSize: 8,

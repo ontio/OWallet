@@ -6,9 +6,9 @@ export default {
 
   SetPaths: {
     name: '钱包文件存储路径',
-    tips: '* 此文件路径用于保存您的钱包文件，请使用安全的路径。',
+    tips: '* 此keystore.db文件保存着您的加密私钥，请确保您的PC安全和做好keystore.db文件的备份。',
     close: '关闭',
-    enter: '设置'
+    enter: '去设置'
   },
 
   wallets: {

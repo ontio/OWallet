@@ -6,9 +6,9 @@ export default {
 
   SetPaths: {
     name: 'Keystore File Path',
-    tips: '* This file path is used for saving your keystores, please keep it safely.',
+    tips: '*The keystore.db file stores your encrypted private keys.Please make sure your PC is safe and make a backup of your keystore.db file.',
     close: 'Close',
-    enter: 'Enter'
+    enter: 'To Set'
   },
 
   wallets: {

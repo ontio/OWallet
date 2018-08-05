@@ -19,6 +19,7 @@
   import {Crypto} from 'ontology-ts-sdk'
   import FileHelper from "../../../../core/fileHelper"
   import dbService from '../../../../core/dbService'
+  import {WALLET_TYPE,DEFAULT_SCRYPT} from '../../../../core/consts'
   import en from '../../../../common/lang/en'
   import zh from '../../../../common/lang/zh'
 
@@ -50,7 +51,15 @@
         // FileHelper.downloadFile(this.downloadContent)
 
         //save to db
-        dbService.wallet.insert(this.account, function (err, newDoc) {
+        console.log(WALLET_TYPE)
+        console.log(DEFAULT_SCRYPT)
+        
+        const wallet = {
+          type : WALLET_TYPE.CommonWallet,
+          address: this.address,
+          wallet: this.account
+        }
+        dbService.insert(wallet, function (err, newDoc) {
           if (err) {
             console.log(err)
           }

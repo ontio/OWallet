@@ -209,6 +209,7 @@
 .tx-item {
     float: left;
     margin: 5px 0;
+    cursor: pointer;
 }
 .tx-item :first-child {
     width:65%;
@@ -343,7 +344,7 @@
                     <span>{{$t('sharedWalletHome.completedTx')}}</span>
                     <span class="transfer-icon"></span>
                 </div>
-                <div v-for="(tx,index) in completedTx" :key="tx.txHash" class="tx-item" v-if="index<10">
+                <div v-for="(tx,index) in completedTx" :key="tx.txHash" class="tx-item" v-if="index<10" @click="showTxDetail(tx.txHash)">
                     <span>{{tx.txHash}}</span>
                     <span>{{tx.amount}} {{tx.asset}}</span>
                 </div>
@@ -456,7 +457,7 @@ import Breadcrumb from './Breadcrumb'
                 const completed = txlist.map(t => {
                     const asset = t.TransferList[0].AssetName === 'ont'? 'ONT' : 'ONG'
                     let amount = asset === 'ONT' ? parseInt(t.TransferList[0].Amount) 
-                                : Number(t.TransferList[0].Amount).toFixed(2)
+                                : Number(t.TransferList[0].Amount).toFixed(9)
                     if(t.TransferList[0].FromAddress === this.address) {
                         amount = '-' + amount;
                     } else {
@@ -621,6 +622,13 @@ import Breadcrumb from './Breadcrumb'
       },
       checkMoreTx() {
         let url = `https://explorer.ont.io/address/${this.address}/10/1`
+        if(this.network === 'Test Net') {
+            url += '/testnet'
+        }
+        window.location.href = url;
+      },
+      showTxDetail(txHash) {
+        let url = `https://explorer.ont.io/transaction/${txHash}`
         if(this.network === 'Test Net') {
             url += '/testnet'
         }

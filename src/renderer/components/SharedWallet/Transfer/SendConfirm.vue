@@ -189,7 +189,7 @@ export default {
             var that = this;
                 const coPayers = this.sharedWallet.coPayers;
                 const localCopayers = []
-                dbService.wallet.find({}, function (err, accounts) {
+                dbService.find({type:'CommonWallet'}, function (err, accounts) {
                     if (err) {
                         console.log(err)
                         return;
@@ -197,7 +197,7 @@ export default {
                     for (let cp of coPayers) {
                         for (let ac of accounts) {
                             if (cp.address === ac.address) {
-                                localCopayers.push(Object.assign({}, cp, {value:ac.address, label:ac.name}))
+                                localCopayers.push(Object.assign({}, cp, {value:ac.address, label:ac.wallet.label}))
                             }
                         }
                     }

@@ -201,10 +201,16 @@ export default {
         back() {
             this.$store.commit('SUB_IMPORT_SHARED_STEP')
         },
+        
         next() {
             //save to db
             const that = this
-            dbService.sharedWallet.insert(this.sharedWallet, function (err,newDoc) {
+            const wallet = {
+                type : 'SharedWallet',
+                address: this.sharedWallet.sharedWalletAddress,
+                wallet: this.sharedWallet
+            }
+            dbService.insert(wallet, function (err,newDoc) {
                 if(err) {
                     that.$message.warning(that.lang.importSharedWallet.joinBefore);
                     that.$store.commit('CLEAR_IMPORT_SHARED_STATE')

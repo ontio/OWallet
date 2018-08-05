@@ -3,7 +3,7 @@
         width:600px;
         margin:0 auto;
         padding-bottom:5.3rem;
-        overflow: scroll;
+        overflow: auto;
     }
     .steps {
         height:68px;
