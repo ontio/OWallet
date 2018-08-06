@@ -224,7 +224,9 @@ export default {
             const to = new Ont.Crypto.Address(this.transfer.to);
             const asset = this.transfer.asset;
             const amount = asset === 'ONT' ? this.transfer.amount : Number(this.transfer.amount) * 1e9;
-            const tx = Ont.OntAssetTxBuilder.makeTransferTx(asset, from, to, amount, '500', '20000');
+            const gasLimit = '20000';
+            const gasPrice = (this.transfer.gas*1e9/parseInt(gasLimit)).toString();
+            const tx = Ont.OntAssetTxBuilder.makeTransferTx(asset, from, to, amount, gasPrice, gasLimit);
             this.$store.dispatch('showLoadingModals')
             if(this.isCommonWallet()) {
                 const enc = new Crypto.PrivateKey(this.currentWallet.key)
