@@ -5,12 +5,18 @@
         <img class="logo-img" src="./../assets/logo.png" alt="">
       </router-link>
 
-      <div class="nav-wallets" @click="goToWallet"></div>
+      <!-- <div class="nav-wallets" @click="goToWallet"></div> -->
 
-      <!-- <router-link class="setting-btn bottom" to="Setting">
-      </router-link> -->
+      <router-link  to="wallets" active-class="nav-wallets-active">
+        <div class="nav-wallets"></div>
+      </router-link>
+
+      <router-link  to="setting" active-class="nav-setting-active">
+        <div class="setting-img"></div>
+      </router-link>
+
+        <!-- <div class="setting-img" alt="" @click="toSetting"></div> -->
       <div class="nav-help" ></div>
-        <div class="setting-img" alt="" @click="toSetting"></div>
 
       <div class="nav-network">
         {{network}}
@@ -65,6 +71,10 @@
     width: 1.5rem;
   }
 
+  .nav-setting-active div {
+    background:url('../assets/selectsetting.png') center center;
+  }
+
   .setting-img {
     background: url('../assets/settingunselect.png') center center;
     background-size:contain;
@@ -113,6 +123,9 @@
     background: url('../assets/unselectwallet.png') center center;
     background-size:cover;
     cursor: pointer;
+  }
+  .nav-wallets-active div {
+    background: url('../assets/selectwallet.png') center center;
   }
   .nav-wallets:hover {
     background:url('../assets/selectwallet.png') center center;

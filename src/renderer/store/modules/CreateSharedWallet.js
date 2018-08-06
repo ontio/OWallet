@@ -63,7 +63,7 @@ const actions = {
                     address: body.sharedWalletAddress,
                     wallet: body
                 }
-                dbService.sharedWallet.insert(wallet);
+                dbService.insert(wallet);
                 return res.data.Error;
             } else {
                 return res.data.Error;

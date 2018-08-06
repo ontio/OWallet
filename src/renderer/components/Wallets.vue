@@ -147,6 +147,9 @@
     mounted() {
       this.$store.dispatch('fetchWalletsFromDb')
       this.isSetPath()
+      if(this.normalWallet.length === 0 && this.sharedWallet.length === 0 && this.hardwareWallet.length === 0) {
+        $('#pills-tab li:nth-child(2) a').tab('show')
+      }
     },
     methods: {
       isSetPath() {

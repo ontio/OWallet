@@ -94,6 +94,8 @@
         this.tabName = tabName
       },
       next() {
+        this.$store.dispatch('showLoadingModals')
+
         if (this.tabName === 'pk') {
           this.importAccountForPK()
         } else if (this.tabName === 'wif') {

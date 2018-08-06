@@ -75,6 +75,7 @@
           }
           localStorage.setItem('savePath', filePath[0])
           localStorage.setItem('isSavePath', 'true')
+          window.location.reload();
           this.savePath = filePath[0]
         })
       }
