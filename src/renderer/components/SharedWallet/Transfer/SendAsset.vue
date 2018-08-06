@@ -34,6 +34,9 @@
 .error-to {
     border-color:red !important;
 }
+.error-amount :first-child {
+    border-color:red !important;
+}
 </style>
 <template>
     <div class=" clearfix">
@@ -43,8 +46,8 @@
                 <a-select-option value="ONG">ONG</a-select-option>             
         </a-select> 
         <a-input-search :placeholder="$t('sharedWalletHome.amount')" class="input-amount"
+        @change="validateAmount" :class="validAmount? '': 'error-amount'"
         @search="maxAmount" :enterButton="$t('sharedWalletHome.max')" v-model="amount" type="number"/>
-        
 
         <a-row class="fee-select">
             <a-col :span="2">
@@ -82,6 +85,7 @@
 </template>
 
 <script>
+import {varifyPositiveInt, varifyOngValue} from '../../../../core/utils.js'
 import {mapState} from 'vuex'
 export default {
     name: 'SendAsset',
@@ -91,7 +95,8 @@ export default {
             asset:'ONT',
             amount: 0,
             to:'',
-            validToAddress: true
+            validToAddress: true,
+            validAmount: true
         }
     },
     computed: {
@@ -115,7 +120,19 @@ export default {
             }
             this.validToAddress = true;
         },
+        validateAmount() {
+            if(this.asset === 'ONT' && !varifyPositiveInt(this.amount)) {
+                this.validAmount = false;
+                return;
+            }
+            if(this.asset === 'ONG' && !varifyOngValue(this.amount)) {
+                this.validAmount = false;
+                return;
+            }
+            this.validAmount = true;
+        },
         changeAsset(value) {
+            this.amount = 0;
             console.log(value)
         },
         maxAmount() {
@@ -130,11 +147,11 @@ export default {
             this.$emit('cancelEvent');
         },
         next() {
-            if(!this.amount) {
-                this.$message.error('Transfer amount can not be 0.')
+            if(!this.validAmount) {
+                this.$message.error('Please input valid transfer amount.')
             }
-            if(!this.to) {
-                this.$message.error('Transfer receiver address can not be empty.')
+            if(!this.validToAddress) {
+                this.$message.error('Please input valid receiver address.')
             }
             if(this.amount && this.to) {
                 const transfer = {

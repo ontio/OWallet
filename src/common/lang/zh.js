@@ -80,7 +80,7 @@ export default {
     cancel: '取消',
     back: '返回',
     importSharedWallet: '导入共享钱包',
-    requiredSigNum: '签名顺序 ',
+    requiredSigNum: '选择签名数量',
     success: '成功',
     duplicateCreate: '共享钱包已存在，请导入.',
     createFailed: '错误，请稍后重试。',
