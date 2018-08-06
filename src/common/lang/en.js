@@ -9,7 +9,7 @@ export default {
     ongNoEnough: 'No enough ong to pay for the transfer fee.',
     transferFailed: 'Transfer failed. ',
     networkErr: 'Network error!',
-    normalWallet: 'Normal Wallet',
+    normalWallet: 'Individual Wallet',
     sharedWallet: 'Shared Wallet',
     export: 'Export'
   },
@@ -33,7 +33,7 @@ export default {
 
   wallets: {
     all: 'All Wallets',
-    common: 'Common Wallet',
+    common: 'Individual Wallet',
     shared: 'Shared Wallet',
     temp: 'TEMP',
     createCommonWallet: 'Create Wallet',
@@ -49,9 +49,9 @@ export default {
   },
 
   createJsonWallet: {
-    create: 'Create Common Wallet',
+    create: 'Create Individual Wallet',
     basicInfo: 'Basic info',
-    label: 'Name of Common Wallet',
+    label: 'Name of Individual Wallet',
     password: 'Password',
     rePassword: 'Repeat password',
     next: 'Next',
@@ -71,9 +71,9 @@ export default {
   importJsonWallet: {
     dat: '.dat File',
     datImportPassword: 'Open .dat file password',
-    create: 'Import Common Wallet',
+    create: 'Import Individual Wallet',
     basicInfo: 'Basic info',
-    label: 'Name of Common Wallet',
+    label: 'Name of Individual Wallet',
     wif: 'WIF',
     datPassword: 'New Password',
     datRePassword: 'Repeat New password',
@@ -86,7 +86,7 @@ export default {
     confirmInfo: 'Confirm info',
     mnemonic: 'Please use space to separate the mnemonic words.',
     privateKey: 'Private Key',
-    createSuccess: 'Create common wallet successfully!'
+    createSuccess: 'Create Individual wallet successfully!'
   },
 
   createSharedWallet: {

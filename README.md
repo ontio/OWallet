@@ -11,4 +11,32 @@ OWallet is a comprehensive Ontology desktop wallet. OWallet supports standard wa
 
 Welcome to join [our community on Discord](https://discord.gg/4TQujHj).
 
-coming soon......
+## Get started
+
+1. Clone the repo
+
+```
+git clone https://github.com/ontio/OWallet.git
+```
+
+2. Install packages
+**yarn** is recommended.
+```
+yarn install
+```
+
+3. Run in Development
+
+```
+npm run dev
+```
+
+4. Build
+
+```
+npm run package
+```
+
+## Install released app
+
+Please download the latest version that is compatiable with your platform.

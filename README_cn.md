@@ -11,6 +11,35 @@ OWallet是本体综合性桌面版钱包，支持标准的钱包管理、基于�
 
 欢迎加入我们的[技术讨论社区](https://discord.gg/4TQujHj)：
 
-尽情期待......
+## 如何开始
+
+1. 克隆repo
+
+```
+git clone https://github.com/ontio/OWallet.git
+```
+
+2. 安装依赖
+推荐使用**yarn**
+
+```
+yarn install
+```
+
+3. 开发模式运行
+
+```
+npm run dev
+```
+
+4. 打包
+
+```
+npm run package
+```
+
+## 安装发布的客户端
+
+请下载适合于您的操作系统的最新版本客户端。
 
 
