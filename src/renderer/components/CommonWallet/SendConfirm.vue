@@ -215,7 +215,7 @@ export default {
         this.$message.warning(this.$t('common.confirmPwdTips'))
         return;
       }
-      const relient = new Ont.RestClient(this.nodeUrl);
+      const restClient = new Ont.RestClient(this.nodeUrl);
       const from = new Ont.Crypto.Address(this.currentWallet.address);
       const to = new Ont.Crypto.Address(this.transfer.to);
       const asset = this.transfer.asset;
