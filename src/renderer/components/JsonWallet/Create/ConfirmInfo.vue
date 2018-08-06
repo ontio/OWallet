@@ -47,13 +47,15 @@
         this.$store.commit('SUB_CREATE_JSON_STEP')
       },
       next() {
+        this.$store.dispatch('showLoadingModals')
+
         //Download file
         // FileHelper.downloadFile(this.downloadContent)
 
         //save to db
-        console.log(WALLET_TYPE)
-        console.log(DEFAULT_SCRYPT)
-        
+        // console.log(WALLET_TYPE)
+        // console.log(DEFAULT_SCRYPT)
+
         const wallet = {
           type : WALLET_TYPE.CommonWallet,
           address: this.address,
