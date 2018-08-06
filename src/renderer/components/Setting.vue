@@ -76,10 +76,6 @@
           localStorage.setItem('savePath', filePath[0])
           localStorage.setItem('isSavePath', 'true')
           this.savePath = filePath[0]
-          window.location.reload()
-          setTimeout(function(){
-            this.$message.success('Change keystore file path successfully!')
-          },100)
         })
       }
     },
