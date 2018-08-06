@@ -162,4 +162,9 @@
   .ant-spin-dot i {
     background-color: white !important;
   }
+
+  .v-validate-span-errors {
+    color: red;
+    font-size: 12px;
+  }
 </style>

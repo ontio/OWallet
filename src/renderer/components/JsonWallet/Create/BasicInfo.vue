@@ -2,8 +2,16 @@
   <div>
     <div class="basic-label">
       <a-input class="input" :placeholder="$t('createJsonWallet.label')" v-model="label"></a-input>
-      <a-input type="password" class="input input-password" :placeholder="$t('createJsonWallet.password')" v-model="password"></a-input>
-      <a-input type="password" class="input input-repassword" :placeholder="$t('createJsonWallet.rePassword')" v-model="rePassword"></a-input>
+
+      <a-input type="password" class="input input-password"
+               v-validate="{required: true ,min:6}" name="password"
+               v-model="password" :placeholder="$t('createJsonWallet.password')"></a-input>
+      <span class="v-validate-span-errors" v-show="errors.has('password')">{{ errors.first('password') }}</span>
+
+      <a-input type="password" class="input input-repassword"
+               v-validate="{required: true , min:6, is:password}" data-vv-as="password confirmation" name="rePassword"
+               v-model="rePassword" :placeholder="$t('createJsonWallet.rePassword')"></a-input>
+      <span class="v-validate-span-errors" v-show="errors.has('rePassword')">{{ errors.first('rePassword') }}</span>
     </div>
 
     <div class="basic-pk-btns">
@@ -17,7 +25,7 @@
 
 <script>
   import {mapState} from 'vuex'
-  import { Wallet, Account, Crypto } from "ontology-ts-sdk"
+  import {Wallet, Account, Crypto} from "ontology-ts-sdk"
   import FileHelper from "../../../../core/fileHelper"
   import dbService from '../../../../core/dbService'
 
@@ -33,28 +41,21 @@
     },
     methods: {
       next() {
-        if (
-          !this.password.trim() ||
-          !this.rePassword.trim() ||
-          this.password !== this.rePassword
-        ) {
-          alert("Please enter the same password twice.");
-          return
-        }
+        this.$validator.validateAll().then(result => {
+          if(result) {
+            let privateKey = Crypto.PrivateKey.random()
+            let body = {
+              label: this.label,
+              privateKey: privateKey,
+              password: this.password
+            }
+            this.$store.dispatch('createJsonWalletWithPrivateKey', body).then(res => {
+              // console.log(res)
+            })
 
-        let privateKey = Crypto.PrivateKey.random()
-
-
-        let body = {
-          label: this.label,
-          privateKey: privateKey,
-          password: this.password
-        }
-        this.$store.dispatch('createJsonWalletWithPrivateKey', body).then(res => {
-          // console.log(res)
+            this.$store.commit('ADD_CREATE_JSON_STEP')
+          }
         })
-
-        this.$store.commit('ADD_CREATE_JSON_STEP')
       },
       cancel() {
         this.$router.push({name: 'Wallets'})
@@ -72,6 +73,7 @@
   .input-password {
     margin-top: 30px;
   }
+
   .input-repassword {
     margin-top: 10px;
   }
