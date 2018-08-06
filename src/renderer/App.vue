@@ -11,7 +11,6 @@
 </template>
 
 <script>
-  import $ from 'jquery'
   import 'bootstrap/dist/css/bootstrap.min.css'
   import 'bootstrap/dist/js/bootstrap.min.js'
   import 'vue-antd-ui/dist/antd.css'
@@ -21,15 +20,12 @@
   export default {
     name: 'ont-wallet-test',
     components: {TopLeftNav, LoadingModal},
-    data: function () {
-      return {}
-    },
     watch: {
       '$route': 'hideLoadingPage'
     },
     created() {
       if (!localStorage.getItem('net')) {
-        localStorage.setItem('net', 'TEST_NET');
+        localStorage.setItem('net', 'MAIN_NET');
       }
     },
     methods: {
