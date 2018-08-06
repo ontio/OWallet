@@ -1,13 +1,13 @@
 <template>
   <div class="container json-import-container">
     <ul class="nav nav-pills import-json-nav-pills" id="pills-tab" role="tablist">
-      <!--<li class="nav-item">-->
-        <!--<a class="nav-link active" id="import-json-private-key-pills-tab" data-toggle="pill" href="#import-json-private-key-pills"-->
-           <!--role="tab"-->
-           <!--aria-controls="import-json-private-key-pills" aria-selected="true" @click="activeTab('pk')">{{ $t('createJsonWallet.privateKey') }}</a>-->
-      <!--</li>-->
       <li class="nav-item">
-        <a class="nav-link active" id="import-json-dat-pills-tab" data-toggle="pill" href="#import-json-dat-pills"
+        <a class="nav-link active" id="import-json-private-key-pills-tab" data-toggle="pill" href="#import-json-private-key-pills"
+           role="tab"
+           aria-controls="import-json-private-key-pills" aria-selected="true" @click="activeTab('pk')">{{ $t('createJsonWallet.privateKey') }}</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="import-json-dat-pills-tab" data-toggle="pill" href="#import-json-dat-pills"
            role="tab"
            aria-controls="import-json-dat-pills" aria-selected="true" @click="activeTab('dat')">{{ $t('importJsonWallet.dat') }}</a>
       </li>
@@ -24,17 +24,24 @@
     </ul>
 
     <div class="tab-content" id="pills-tabContent">
-      <!--<div class="tab-pane fade show active" id="import-json-private-key-pills" role="tabpanel"-->
-           <!--aria-labelledby="import-json-private-key-pills-tab">-->
-        <!--<a-input class="input" :placeholder="$t('importJsonWallet.label')" v-model="pkLabel"></a-input>-->
-        <!--<a-input class="input input-wif" :placeholder="$t('importJsonWallet.privateKey')" v-model="pk"></a-input>-->
-        <!--<a-input type="password" class="input input-password" :placeholder="$t('importJsonWallet.password')"-->
-                 <!--v-model="pkPassword"></a-input>-->
-        <!--<a-input type="password" class="input input-repassword" :placeholder="$t('importJsonWallet.rePassword')"-->
-                 <!--v-model="pkRePassword"></a-input>-->
-      <!--</div>-->
+      <div class="tab-pane fade show active" id="import-json-private-key-pills" role="tabpanel"
+           aria-labelledby="import-json-private-key-pills-tab">
+        <a-input class="input" :placeholder="$t('importJsonWallet.label')" v-model="pkLabel"></a-input>
+        <a-input class="input input-wif"
+                 v-validate="{required: true, length:64}" data-vv-as="private key" name="pk"
+                 v-model="pk" :placeholder="$t('importJsonWallet.privateKey')"></a-input>
+        <span class="v-validate-span-errors" v-show="errors.has('pk')">{{ errors.first('pk') }}</span>
+        <a-input type="password" class="input input-password"
+                 v-validate="{required: true, min:6}" data-vv-as="password" name="pkPassword"
+                 v-model="pkPassword" :placeholder="$t('importJsonWallet.password')"></a-input>
+        <span class="v-validate-span-errors" v-show="errors.has('pkPassword')">{{ errors.first('pkPassword') }}</span>
+        <a-input type="password" class="input input-repassword"
+                 v-validate="{required: true, min:6, is:pkPassword}" data-vv-as="password confirmation" name="pkRePassword"
+                 v-model="pkRePassword" :placeholder="$t('createJsonWallet.rePassword')"></a-input>
+        <span class="v-validate-span-errors" v-show="errors.has('pkRePassword')">{{ errors.first('pkRePassword') }}</span>
+      </div>
 
-      <div class="tab-pane fade show active" id="import-json-dat-pills" role="tabpanel"
+      <div class="tab-pane fade" id="import-json-dat-pills" role="tabpanel"
            aria-labelledby="import-json-dat-pills-tab">
         <input type="file" @change="onFileChange" id="datFile">
         <a-input type="password" class="input" :placeholder="$t('importJsonWallet.datImportPassword')"
@@ -75,9 +82,9 @@
         <a-input class="input" :placeholder="$t('importJsonWallet.label')" v-model="mnemonicLabel"></a-input>
 
         <textarea class="import-json-mnemonic" id="import-json-mnemonic" rows="6"
-                  v-validate="{required: true} "data-vv-as="mnemonic" name="import-json-mnemonic"
+                  v-validate="{required: true} "data-vv-as="mnemonic" name="mnemonic"
                   :placeholder="$t('importJsonWallet.mnemonic')" v-model="mnemonic"></textarea>
-        <span class="v-validate-span-errors" v-show="errors.has('import-json-mnemonic')">{{ errors.first('import-json-mnemonic') }}</span>
+        <span class="v-validate-span-errors" v-show="errors.has('mnemonic')">{{ errors.first('mnemonic') }}</span>
 
         <a-input type="password" class="input input-password"
                  v-validate="{required: true ,min:6}" data-vv-as="password" name="mnemonicPassword"
@@ -109,7 +116,7 @@
     name: 'BasicInfo',
     data() {
       return {
-        tabName: 'dat', // dat | pk | wif | mnemonic
+        tabName: 'pk', // dat | pk | wif | mnemonic
 
         pk: '',
         pkLabel: '',
@@ -139,37 +146,54 @@
         this.tabName = tabName
       },
       next() {
-        this.$validator.validateAll().then(result => {
-          if (result) {
-            this.$store.dispatch('showLoadingModals')
-
-            if (this.tabName === 'pk') {
+        if (this.tabName === 'pk') {
+          this.$validator.validateAll({
+            pk: this.pk,
+            pkPassword: this.pkPassword,
+            pkRePassword: this.pkRePassword
+          }).then(result => {
+            console.log(result)
+            if (result) {
+              this.$store.dispatch('showLoadingModals')
               this.importAccountForPK()
-            } else if (this.tabName === 'dat') {
+            }
+          })
+        } else if (this.tabName === 'dat') {
+          this.$validator.validateAll({
+            datImportPassword: this.datImportPassword,
+            datPassword: this.datPassword,
+            datRePassword: this.datRePassword
+          }).then(result => {
+            if (result) {
+              this.$store.dispatch('showLoadingModals')
               this.importAccountForDat()
-            } else if (this.tabName === 'wif') {
+            }
+          })
+        } else if (this.tabName === 'wif') {
+          this.$validator.validateAll({
+            wif: this.wif,
+            wifPassword: this.wifPassword,
+            wifRePassword: this.wifRePassword
+          }).then(result => {
+            if (result) {
+              this.$store.dispatch('showLoadingModals')
               this.importAccountForWif()
-            } else {
+            }
+          })
+        } else {
+          this.$validator.validateAll({
+            mnemonic: this.mnemonic,
+            mnemonicPassword: this.mnemonicPassword,
+            mnemonicRePassword: this.mnemonicRePassword
+          }).then(result => {
+            if (result) {
+              this.$store.dispatch('showLoadingModals')
               this.importAccountForMnemonic()
             }
-          }
-        })
+          })
+        }
       },
       importAccountForPK() {
-        if (!this.pk.trim() || this.pk.length !== 64) {
-          alert("Please enter the valid private key.");
-          return;
-        }
-
-        if (
-          !this.pkPassword.trim() ||
-          !this.pkRePassword.trim() ||
-          this.pkPassword !== this.pkRePassword
-        ) {
-          alert("Please enter the same password twice.");
-          return;
-        }
-
         let body = {
           label: this.pkLabel,
           privateKey: new Crypto.PrivateKey(this.pk),
@@ -200,7 +224,7 @@
         try {
           privateKey = Crypto.PrivateKey.deserializeWIF(this.wif);
         } catch (err) {
-          alert("Please input the valid WIF.");
+          this.$message.error(this.$t('basicInfo.errWif'))
           return;
         }
 
@@ -255,7 +279,7 @@
   }
 
   .import-json-nav-pills > li.nav-item {
-    width: 33%;
+    width: 25%;
     text-align: center;
     height: 2rem;
     margin-bottom: 30px;

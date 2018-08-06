@@ -20,7 +20,8 @@ export default {
   },
 
   basicInfo: {
-    InvalidMnemonic: 'Invalid mnemonic.'
+    InvalidMnemonic: 'Invalid mnemonic.',
+    errWif: 'Please input the valid WIF.'
   },
 
   SetPaths: {

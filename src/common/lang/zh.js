@@ -20,7 +20,8 @@ export default {
   },
 
   basicInfo: {
-    InvalidMnemonic: '无效的助记词。'
+    InvalidMnemonic: '无效的助记词。',
+    errWif: '无效的WIF'
   },
 
   SetPaths: {
