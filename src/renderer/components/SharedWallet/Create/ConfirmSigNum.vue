@@ -79,7 +79,7 @@
 <template>
     <div class="basic-container">
         <p class="confirm-label wallet-label" style="margin-bottom:40px;">{{label}}</p>
-        
+
         <p class="confirm-label font-bold">{{$t('createSharedWallet.copayers')}}({{copayers.length}})</p>
         <div class="confirm-pk-box">
             <div class="confirm-pk-item clearfix" v-for="(pk,index) in copayers" :key="pk.index">
@@ -96,7 +96,7 @@
         <div class="confirm-btns">
             <div class="confirm-btn-container">
                 <a-button type="default" class="btn-cancel" @click="back">{{$t('createSharedWallet.back')}}</a-button>
-                <a-button type="primary" class="btn-next" @click="next">{{$t('createSharedWallet.next')}}</a-button>            
+                <a-button type="primary" class="btn-next" @click="next">{{$t('createSharedWallet.next')}}</a-button>
             </div>
         </div>
     </div>
@@ -166,7 +166,7 @@ export default {
             this.$store.dispatch('createSharedWallet', body).then(res => {
                 this.processing = false;
                 if(res === 0) {
-                    this.$message.success(this.lang.createSharedWallet.createSuccess);
+                    this.$message.success(this.lang.createSedWallet.createSuccess);
                     this.$store.commit('CLEAR_CREATE_SHARED_STATE')
                     this.$router.push({name:'Wallets'})
                 } else if (res === 61002) { //重复创建

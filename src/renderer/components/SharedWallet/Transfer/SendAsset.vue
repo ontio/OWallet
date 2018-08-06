@@ -43,8 +43,8 @@
         <p class="label">{{$t('sharedWalletHome.send')}}</p>
         <a-select v-model="asset" @change="changeAsset" class="select-asset">
                 <a-select-option value="ONT">ONT</a-select-option>
-                <a-select-option value="ONG">ONG</a-select-option>             
-        </a-select> 
+                <a-select-option value="ONG">ONG</a-select-option>
+        </a-select>
         <a-input-search :placeholder="$t('sharedWalletHome.amount')" class="input-amount"
         @change="validateAmount" :class="validAmount? '': 'error-amount'"
         @search="maxAmount" :enterButton="$t('sharedWalletHome.max')" v-model="amount" type="number"/>
@@ -79,7 +79,7 @@
             <a-button type="default"  class="btn-cancel" @click="cancel">{{$t('sharedWalletHome.cancel')}}</a-button>
             <a-button type="primary" class="btn-next" @click="next">{{$t('sharedWalletHome.next')}}</a-button>
           </div>
-          
+
       </div>
     </div>
 </template>
@@ -148,10 +148,10 @@ export default {
         },
         next() {
             if(!this.validAmount) {
-                this.$message.error('Please input valid transfer amount.')
+                this.$message.error(this.$t('transfer.inputValidAmount'))
             }
             if(!this.validToAddress) {
-                this.$message.error('Please input valid receiver address.')
+                this.$message.error(this.$t('transfer.inputValidAddress'))
             }
             if(this.amount && this.to) {
                 const transfer = {

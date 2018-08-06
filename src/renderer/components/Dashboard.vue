@@ -500,7 +500,7 @@
           }
         }).catch(err => {
           console.log(err);
-          this.$message.error('Fetch transaction history failed.Network error')
+          this.$message.error(this.$t('dashboard.getTransErr'))
         })
       },
       getUnclaimOng() {
@@ -509,7 +509,7 @@
           console.log(res.Result)
           this.unclaimOng = Number(res.Result) / 1e9;
         }).catch(err => {
-          this.$message.error('Network error')
+          this.$message.error(this.$t('common.networkErr'))
         })
       },
       getBalance() {

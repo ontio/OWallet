@@ -1,12 +1,23 @@
 export default {
   common: {
     testNet: 'TestNet',
-    mainNet: 'MainNet'
+    mainNet: 'MainNet',
+    copied: 'Copied!',
+    confirmPwdTips: 'Please confirm and input the password your wallet.',
+    transSentSuccess: 'Transaction has been sent successfully!',
+    pwdErr: 'Password error',
+    ongNoEnough: 'No enough ong to pay for the transfer fee.',
+    transferFailed: 'Transfer failed. ',
+    networkErr: 'Network error!'
   },
 
   TopNav: {
     new: 'New',
     edit: 'Edit'
+  },
+
+  basicInfo: {
+    InvalidMnemonic: 'Invalid mnemonic.'
   },
 
   SetPaths: {
@@ -27,6 +38,10 @@ export default {
     joinSharedWallet: 'Join Wallet',
     ledger: 'Ledger',
     comingSoon: 'Coming soon...'
+  },
+
+  dashboard: {
+    getTransErr: 'Fetch transaction history failed. Network error.'
   },
 
   createJsonWallet: {
@@ -62,7 +77,8 @@ export default {
     details: '',
     confirmInfo: 'Confirm info',
     mnemonic: 'Please use space to separate the mnemonic words.',
-    privateKey: 'Private Key'
+    privateKey: 'Private Key',
+    createSuccess: 'Create common wallet successfully!'
   },
 
   createSharedWallet: {
@@ -85,7 +101,8 @@ export default {
     duplicateCreate: 'The shared wallet is already existed.Please import it.',
     createFailed: 'Failed. Please try later.',
     createSuccess: 'Create shared wallet successfully.',
-    create: 'Create Shared Wallet'
+    create: 'Create Shared Wallet',
+    walletNameErr: 'Wallet name can not be more than 12 chars'
   },
 
   importSharedWallet: {
@@ -162,6 +179,11 @@ export default {
     publicKey: 'Public Key'
   },
 
+  transfer: {
+    inputValidAmount: 'Please input valid transfer amount.',
+    inputValidAddress: 'Please input valid receiver address.'
+  },
+
   setting: {
     name: 'Setting',
     net: 'Network',
@@ -172,6 +194,7 @@ export default {
     zh: 'Chinese',
     pathTit: 'Path: ',
     path: 'Save keystore file path',
-    change: 'Change'
+    change: 'Change',
+    setNetworkSuccess: 'The network has been set to '
   }
 }

@@ -464,7 +464,7 @@ export default {
                 })
             }).catch(err => {
                 console.log(err);
-                this.$message.error('Network error')
+                this.$message.error(this.$t('common.networkErr'))
             })
         },
         toCopayerDetail() {

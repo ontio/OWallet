@@ -60,7 +60,7 @@
         <div class="input-content">
             <div>
                 <a-checkbox @change="onChange" :checked="checked" class="input-check">{{$t('sharedWalletHome.agreeToSend')}}</a-checkbox>
-                
+
                 <a-input type="password" class="input-pass" :placeholder="$t('sharedWalletHome.inputPassToTransfer')" v-model="password"></a-input>
             </div>
         <div class="input-btns">
@@ -70,7 +70,7 @@
                 </a-button>
         </div>
         </div>
-        
+
     </div>
 </template>
 
@@ -100,12 +100,12 @@ export default {
             transfer: state => state.CurrentWallet.transfer
         })
     },
-    
+
     mounted(){
         //to support update vuex data
         this.payers = this.transfer.coPayers;
         const that = this
-        
+
         dbService.findOne({address: this.transfer.coPayers[0].address}, function(err, doc) {
             if(err) {
                 console.log(err)
@@ -125,7 +125,7 @@ export default {
         },
         submit() {
             if(!this.password || !this.checked) {
-                this.$message.error('Please confirm and input password');
+                this.$message.error(this.$t('common.confirmPwdTips'));
                 return;
             }
             if(this.password && this.checked && !this.sending) {
@@ -151,7 +151,7 @@ export default {
                 this.$store.dispatch('hideLoadingModals')
                 this.sending = false;
                 console.log(err);
-                this.$message.error('Password error')
+                this.$message.error(this.$t('common.pwdErr'))
                 return;
             }
             TransactionBuilder.signTx(tx, M, pks, pri)
@@ -189,17 +189,17 @@ export default {
                     //         this.$emit('inputPassNext')
                     //     }
                     // })
-                    
+
                 }
             }).catch(err => {
                 this.$store.dispatch('hideLoadingModals')
                 this.sending = false;
                 console.log(err);
-                this.$message.error('Network error.')
+                this.$message.error(this.$t('common.networkErr'))
             })
-            
-            
-            
+
+
+
             }
         }
     }

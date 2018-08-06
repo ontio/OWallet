@@ -69,7 +69,7 @@
         localStorage.setItem('address', this.address)
 
         this.$store.commit('INIT_JSON_WALLET')
-        this.$message.success('Create common wallet successfully!')
+        this.$message.success(this.$t('createJsonWallet.createSuccess'))
         this.$router.push({name: 'Wallets'})
       }
     }

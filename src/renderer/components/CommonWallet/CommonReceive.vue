@@ -97,9 +97,9 @@ export default {
         } else {
             wallet = JSON.parse(sessionStorage.getItem('sharedWallet'))
             walletName = wallet.sharedWalletName
-            routes = [{name: walletName, path:'/sharedWallet/home'}]   
+            routes = [{name: walletName, path:'/sharedWallet/home'}]
             address = wallet.sharedWalletAddress
-            pk = ''         
+            pk = ''
         }
 
         return {
@@ -110,7 +110,7 @@ export default {
         }
     },
     mounted() {
-        
+
     },
     methods: {
         backToWallets() {
@@ -118,7 +118,7 @@ export default {
         },
         copy(value) {
             this.$copyText(value);
-            this.$message.success('Copied!')
+            this.$message.success(this.$t('common.copied'))
         }
     }
 }

@@ -161,7 +161,7 @@ export default {
                     restClient.sendRawTransaction(tx.serialize()).then(res => {
                         console.log(res)
                         if(res.Error === 0) {
-                            this.$message.success('Transaction has been sent successfully!')
+                            this.$message.success(this.$t('common.transSentSuccess'))
                             this.$emit('submitEvent')
                             return;
                         } else if(res.Error === -1) {

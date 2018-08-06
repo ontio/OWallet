@@ -146,16 +146,16 @@
 <template>
     <div class="confirm-container clearfix">
             <p class="label">{{$t('sharedWalletHome.send')}}</p>
-        
+
         <div class="asset-table">
             <div class="asset-item">
                 <span class="font-medium">{{$t('sharedWalletHome.amount')}}</span>
                 <span class="font-medium-black">{{transfer.amount}} {{transfer.asset}}</span>
-                              
+
             </div>
             <div class="asset-item">
-                <span class="font-medium">{{$t('sharedWalletHome.recipient')}}</span>  
-                <span class="font-medium-black">{{transfer.to}}</span>                
+                <span class="font-medium">{{$t('sharedWalletHome.recipient')}}</span>
+                <span class="font-medium-black">{{transfer.to}}</span>
             </div>
             <div class="fee font-medium-black">{{$t('sharedWalletHome.fee')}}: {{transfer.gas}} ONG</div>
         </div>
@@ -164,18 +164,18 @@
         <div class="input-content">
             <div>
                 <a-checkbox @change="onChange" :checked="checked" class="input-check">{{$t('sharedWalletHome.agreeToSend')}}</a-checkbox>
-                
+
                 <a-input type="password" class="input" :placeholder="$t('sharedWalletHome.inputPassToTransfer')" v-model="password"></a-input>
             </div>
-        </div>   
-        
+        </div>
+
 
         <div class="confirm-btns">
             <div class="btns-container">
-                <a-button type="default" class="btn-cancel" @click="back">{{$t('sharedWalletHome.back')}}</a-button>            
+                <a-button type="default" class="btn-cancel" @click="back">{{$t('sharedWalletHome.back')}}</a-button>
                 <a-button type="primary" class="btn-next" @click="submit">{{$t('sharedWalletHome.submit')}}</a-button>
             </div>
-            
+
         </div>
     </div>
 </template>
@@ -186,105 +186,101 @@ import { TEST_NET, MAIN_NET, ONT_CONTRACT, ONT_PASS_NODE, DEFAULT_SCRYPT } from 
 import {Crypto, OntAssetTxBuilder, TransactionBuilder} from 'ontology-ts-sdk'
 import axios from 'axios';
 export default {
-    name: 'SendConfirm',
-    data() {
-        const currentWallet = JSON.parse(sessionStorage.getItem('currentWallet'));
-        return {
-            currentWallet,
-            checked:false,
-            password:''
-        
-        }
-    },
-    mounted(){
-    },
-
-    computed:{
-        ...mapState({
-            transfer: state => state.CurrentWallet.transfer
-        })
-    },
-    methods: {
-        isCommonWallet() {
-            return this.currentWallet.key ? true: false;
-        },
-        back(){
-            this.$emit('backEvent')
-        },
-        onChange(){
-            this.checked = !this.checked;
-        },
-        submit(){
-            if (!this.password || !this.checked) {
-                this.$message.warning('Please confirm and input the password your wallet.')
-                return;
-            }
-            const restClient = new Ont.RestClient(this.nodeUrl);
-            const from = new Ont.Crypto.Address(this.currentWallet.address);
-            const to = new Ont.Crypto.Address(this.transfer.to);
-            const asset = this.transfer.asset;
-            const amount = asset === 'ONT' ? this.transfer.amount : Number(this.transfer.amount) * 1e9;
-            const gasLimit = '20000';
-            const gasPrice = (this.transfer.gas*1e9/parseInt(gasLimit)).toString();
-            const tx = Ont.OntAssetTxBuilder.makeTransferTx(asset, from, to, amount, gasPrice, gasLimit);
-            this.$store.dispatch('showLoadingModals')
-            if(this.isCommonWallet()) {
-                const enc = new Crypto.PrivateKey(this.currentWallet.key)
-                let pri;
-                try {
-                    pri = enc.decrypt(this.password, new Crypto.Address(this.currentWallet.address), this.currentWallet.salt, DEFAULT_SCRYPT)
-                }catch(err) {
-                    this.sending = false;
-                    console.log(err);
-                    this.$message.error('Password error')
-                    return;
-                }
-                TransactionBuilder.signTransaction(tx, pri);
-                restClient.sendRawTransaction(tx.serialize()).then(res => {
-                    console.log(res)
-                    if(res.Error === 0) {
-                        this.$message.success('Transaction has been sent successfully!')
-                    } else if(res.Error === -1) {
-                        this.$message.error('No enough ong to pay for the transfer fee.')
-                    } else {
-                        this.$message.error(res.Result)
-                    }
-                    this.$emit('sendConfirmSubmit')
-                })
-            } else {
-                const pk = new Ont.Crypto.PublicKey(this.publicKey);
-                const txSig = new Ont.TxSignature();
-                txSig.M = 1;
-                txSig.pubKeys = [pk];
-                tx.payer = from;
-                const txData = tx.serializeUnsignedData();
-                legacySignWithLedger(txData, this.publicKey).then(res => {
-                // console.log('txSigned: ' + res);
-                    const sign = '01' + res; //ECDSAwithSHA256
-                    txSig.sigData = [sign]
-                    tx.sigs = [txSig];
-                    const txSerialized = tx.serialize();
-                    // console.log('txSerialized: ' + txSerialized);
-
-                    //send tx
-                    restClient.sendRawTransaction(txSerialized).then(resp => {
-                        console.log('send tx resp: ' + JSON.stringify(resp));
-                        
-                        if(resp.Error === 0) {
-                        alert('Transaction has been sent successfully.')
-                        } else if(res.Error === -1) {
-                            this.$message.error('No enough ong to pay for the transfer fee.')
-                        } else {
-                            alert('Transfer failed. ' + resp.Result)
-                        }
-                        this.$emit('sendConfirmSubmit')
-                    })
-                }, err => {
-                alert(err.message)
-                })
-            }
-        }
-        
+  name: 'SendConfirm',
+  data() {
+    const currentWallet = JSON.parse(sessionStorage.getItem('currentWallet'));
+    return {
+      currentWallet,
+      checked: false,
+      password: ''
     }
+  },
+  computed: {
+    ...mapState({
+      transfer: state => state.CurrentWallet.transfer
+    })
+  },
+  methods: {
+    isCommonWallet() {
+      return this.currentWallet.key ? true : false;
+    },
+    back() {
+      this.$emit('backEvent')
+    },
+    onChange() {
+      this.checked = !this.checked;
+    },
+    submit() {
+      if (!this.password || !this.checked) {
+        this.$message.warning(this.$t('common.confirmPwdTips'))
+        return;
+      }
+      const relient = new Ont.RestClient(this.nodeUrl);
+      const from = new Ont.Crypto.Address(this.currentWallet.address);
+      const to = new Ont.Crypto.Address(this.transfer.to);
+      const asset = this.transfer.asset;
+      const amount = asset === 'ONT' ? this.transfer.amount : Number(this.transfer.amount) * 1e9;
+      const gasLimit = '20000';
+      const gasPrice = (this.transfer.gas * 1e9 / parseInt(gasLimit)).toString();
+      const tx = Ont.OntAssetTxBuilder.makeTransferTx(asset, from, to, amount, gasPrice, gasLimit);
+      this.$store.dispatch('showLoadingModals')
+      if (this.isCommonWallet()) {
+        const enc = new Crypto.PrivateKey(this.currentWallet.key)
+        let pri;
+        try {
+          pri = enc.decrypt(this.password, new Crypto.Address(this.currentWallet.address), this.currentWallet.salt, DEFAULT_SCRYPT)
+        } catch (err) {
+          this.sending = false;
+          console.log(err);
+          this.$message.error(this.$t('common.pwdErr'))
+          return;
+        }
+        TransactionBuilder.signTransaction(tx, pri);
+        restClient.sendRawTransaction(tx.serialize()).then(res => {
+          console.log(res)
+          if (res.Error === 0) {
+            this.$message.success(this.$t('common.transSentSuccess'))
+          } else if (res.Error === -1) {
+            this.$message.error(this.$t('common.ongNoEnough'))
+          } else {
+            this.$message.error(res.Result)
+          }
+          this.$emit('sendConfirmSubmit')
+        })
+      } else {
+        const pk = new Ont.Crypto.PublicKey(this.publicKey);
+        const txSig = new Ont.TxSignature();
+        txSig.M = 1;
+        txSig.pubKeys = [pk];
+        tx.payer = from;
+        const txData = tx.serializeUnsignedData();
+        legacySignWithLedger(txData, this.publicKey).then(res => {
+          // console.log('txSigned: ' + res);
+          const sign = '01' + res; //ECDSAwithSHA256
+          txSig.sigData = [sign]
+          tx.sigs = [txSig];
+          const txSerialized = tx.serialize();
+          // console.log('txSerialized: ' + txSerialized);
+
+          //send tx
+          restClient.sendRawTransaction(txSerialized).then(resp => {
+            console.log('send tx resp: ' + JSON.stringify(resp));
+
+            if (resp.Error === 0) {
+              this.$message.success(this.$t('common.transSentSuccess'))
+            } else if (res.Error === -1) {
+              this.$message.error(this.$t('common.ongNoEnough'))
+            } else {
+              alert(this.$t('common.transferFailed') + resp.Result)
+            }
+            this.$emit('sendConfirmSubmit')
+          })
+        }, err => {
+          alert(err.message)
+        })
+      }
+    }
+
+  }
 }
 </script>
