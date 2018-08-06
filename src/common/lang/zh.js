@@ -10,7 +10,8 @@ export default {
     transferFailed: '交易失败。',
     networkErr: '网络错误！',
     normalWallet: '普通钱包',
-    sharedWallet: '共享钱包'
+    sharedWallet: '共享钱包',
+    export: '导出'
   },
 
   TopNav: {

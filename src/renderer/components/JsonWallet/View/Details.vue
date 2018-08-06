@@ -1,7 +1,9 @@
 <template>
-  <div>
+  <div class="common-detail-container">
     <div @click="toWalletHome(wallet)">
-      <div class="div-shared-wallet-sign">{{ $t('common.normalWallet') }}</div>
+      <div class="div-shared-wallet-sign">
+        <span>{{ $t('common.normalWallet') }}</span>
+      </div>
       <div class="div-wallet-name">{{wallet.label}}</div>
       <!--<img class="img-wallet-edit" src="./../assets/edit.png" alt="">-->
       <div class="div-wallet-address">
@@ -11,10 +13,14 @@
     </div>
     <div v-show="addressCopied" class="copied-label">Copied</div>
     <img class="img-wallet-copy" src="../../../assets/copy.png" @click="copyAddress(wallet)" alt="">
+    <a-button type="primary" class="common-export-btn" @click="exportWallet(wallet)">{{$t('common.export')}}</a-button>  
+    
   </div>
 </template>
 
 <script>
+  import {Wallet, Account} from 'ontology-ts-sdk';
+  import FileHelper from "../../../../core/fileHelper"
 	export default {
     name: "JsonWalletDetails",
     props: ['wallet'],
@@ -39,12 +45,24 @@
       },
       addressCopiedDisabled() {
         this.addressCopied = false
+      },
+      exportWallet(commonWallet) {
+        console.log(commonWallet)
+        let wallet = Wallet.create(commonWallet.label || "")
+        console.log(wallet)
+        wallet.scrypt.n = 16384;
+        const account = Account.parseJsonObj(commonWallet)
+        wallet.addAccount(account)
+        FileHelper.downloadFile(wallet.toJsonObj());
       }
     }
   }
 </script>
 
 <style scoped>
+  .common-detail-container {
+    position: relative;
+  }
   .div-shared-wallet-sign {
     margin-top: 0.88rem;
     font-family: AvenirNext-Medium;
@@ -75,13 +93,13 @@
 
   .img-wallet-copy {
     position: absolute;
-    top: 9.66rem;
+    top: 9rem;
     right: 1.29rem;
   }
 
   .copied-label {
     position: absolute;
-    top: 9.56rem;
+    top: 9rem;
     right: 2.69rem;
     background-color: #8a9098;
     border-radius: 2px;
@@ -89,5 +107,18 @@
     font-size: 10px;
     font-weight: 100;
     color: white;
+  }
+  .common-export-btn {
+    height: 34px;
+    width:114px;
+    background:#5EA2FF;
+    font-family: AvenirNext-Medium;
+    font-size: 18px;
+    color: #FFFFFF;
+    border:none;
+    border-radius:0;
+    position: absolute;
+    top:0px;
+    right:20px;
   }
 </style>

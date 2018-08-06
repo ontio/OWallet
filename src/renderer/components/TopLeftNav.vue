@@ -7,11 +7,11 @@
 
       <!-- <div class="nav-wallets" @click="goToWallet"></div> -->
 
-      <router-link  to="wallets" active-class="nav-wallets-active">
+      <router-link  :to="{name:'Wallets'}" active-class="nav-wallets-active">
         <div class="nav-wallets"></div>
       </router-link>
 
-      <router-link  to="setting" active-class="nav-setting-active">
+      <router-link  :to="{name:'Setting'}" active-class="nav-setting-active">
         <div class="setting-img"></div>
       </router-link>
 
