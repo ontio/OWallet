@@ -138,7 +138,7 @@ export default {
             const gasLimit = '20000';
             const gasPrice = (this.transfer.gas*1e9/parseInt(gasLimit)).toString();
             const tx = OntAssetTxBuilder.makeTransferTx(tokenType, from, to, amount, gasPrice, gasLimit, from);
-            
+            this.$store.dispatch('showLoadingModals')
             //sign tx
             const M = this.sharedWallet.requiredNumber;
             const pks = this.sharedWallet.coPayers.map(p => new Crypto.PublicKey(p.publickey))
@@ -148,9 +148,10 @@ export default {
             try {
                 pri = enc.decrypt(this.password, new Crypto.Address(this.sponsorWallet.address), this.sponsorWallet.salt, DEFAULT_SCRYPT)
             }catch(err) {
+                this.$store.dispatch('hideLoadingModals')
                 this.sending = false;
                 console.log(err);
-                alert('Password error')
+                this.$message.error('Password error')
                 return;
             }
             TransactionBuilder.signTx(tx, M, pks, pri)
@@ -191,6 +192,7 @@ export default {
                     
                 }
             }).catch(err => {
+                this.$store.dispatch('hideLoadingModals')
                 this.sending = false;
                 console.log(err);
                 this.$message.error('Network error.')

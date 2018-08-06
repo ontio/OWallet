@@ -89,7 +89,6 @@
     width:24px;
     background: url('../../assets/refresh.png') center center;
     background-size:cover;
-    margin-left: 14px;
     cursor: pointer;
 }
 .asset-ont {
@@ -384,8 +383,6 @@ export default {
     },
     mounted(){
         this.refresh()
-        this.getTransactions();
-        this.getPendingTx();
         this.ifHasLocalCopayer();
     },
     computed: {
@@ -474,6 +471,10 @@ export default {
             this.$router.push({path:'/sharedWallet/copayers'})
         },
         refresh() {
+            this.$store.dispatch('showLoadingModals')
+            setTimeout(() => {
+                this.$store.dispatch('hideLoadingModals')
+            }, 100)
             this.getTransactions();
             this.getBalance();
             this.getPendingTx();

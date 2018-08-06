@@ -123,6 +123,7 @@ export default {
             }
             if(this.password && this.checked) {
                 this.sending = true;
+                this.$store.dispatch('showLoadingModals')
                 //sign and decide to send
                 const tx = Ont.Transaction.deserialize(this.pendingTx.transactionbodyhash);
                 const txHash = this.pendingTx.transactionidhash;
@@ -160,7 +161,7 @@ export default {
                     restClient.sendRawTransaction(tx.serialize()).then(res => {
                         console.log(res)
                         if(res.Error === 0) {
-                            alert('Transaction has been sent successfully!')
+                            this.$message.success('Transaction has been sent successfully!')
                             this.$emit('submitEvent')
                             return;
                         } else if(res.Error === -1) {

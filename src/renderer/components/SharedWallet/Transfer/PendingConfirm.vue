@@ -114,7 +114,7 @@
         <div class="asset-table">
             <div class="asset-item">
                 <span class="font-medium">{{$t('sharedWalletHome.amount')}}</span>
-                <span class="font-medium-black">{{pendingTx.amount}} ONT</span>
+                <span class="font-medium-black">{{pendingTx.amount}} {{pendingTx.assetName}}</span>
                               
             </div>
             <div class="asset-item">

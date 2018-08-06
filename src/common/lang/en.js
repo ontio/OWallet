@@ -17,7 +17,7 @@ export default {
   },
 
   wallets: {
-    all: 'All Wallet',
+    all: 'All Wallets',
     common: 'Common Wallet',
     shared: 'Shared Wallet',
     temp: 'TEMP',

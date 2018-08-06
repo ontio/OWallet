@@ -32,7 +32,7 @@
     padding-left: 4rem;
 }
 .error-to {
-    border-color:red;
+    border-color:red !important;
 }
 </style>
 <template>
@@ -111,6 +111,7 @@ export default {
         validateToAddress() {
             if(!this.to || this.to.length !== 34 || this.to[0] !== 'A') {
                 this.validToAddress = false;
+                return;
             }
             this.validToAddress = true;
         },
@@ -129,6 +130,12 @@ export default {
             this.$emit('cancelEvent');
         },
         next() {
+            if(!this.amount) {
+                this.$message.error('Transfer amount can not be 0.')
+            }
+            if(!this.to) {
+                this.$message.error('Transfer receiver address can not be empty.')
+            }
             if(this.amount && this.to) {
                 const transfer = {
                     amount: this.amount,

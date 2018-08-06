@@ -98,8 +98,7 @@
     height: 24px;
     width: 24px;
     background: url('../assets/refresh.png') center center;
-    background-size: cover;
-    margin-left: 14px;
+    background-size:cover;
     cursor: pointer;
   }
 
@@ -550,8 +549,13 @@
         })
       },
       refresh() {
+        this.$store.dispatch('showLoadingModals')
+        setTimeout(() => {
+            this.$store.dispatch('hideLoadingModals')
+        }, 100)
         this.getBalance();
         this.getTransactions();
+
       },
       sendAsset() {
         this.$store.commit('CLEAR_CURRENT_TRANSFER');

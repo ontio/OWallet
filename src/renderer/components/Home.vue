@@ -1,42 +1,5 @@
-<template>
-  <div class="row row-home home-container">
-    <div class="col-10">
-      <!-- <img class="img-home-page" src="./../assets/home/background@1.5x.png" alt=""> -->
-      <div class="home-img"></div>
-    </div>
-    <div class="col-2 text-center">
-      <div class="div-slogan home-slogan">
-          <p>O Wallet</p>  
-          <p>A comprehensive Ontology desktop wallet</p>
-      </div>
-      <div>
-        <router-link class="btn btn-default go-to-wallets text-center" to="Wallets">
-          <div>ENTER →</div>
-        </router-link>
-      </div>
 
-      <div class="div-footer-version">
-        <p>Version: 0.8.0</p>
-        <p>Powered by Ontology</p>
-      </div>
-    </div>
-  </div>
-</template>
-
-<script>
-  import {mapState} from 'vuex'
-  import {legacySignWithLedger} from '../../core/ontLedger'
-  import {TEST_NET, MAIN_NET} from '../../core/consts'
-
-  export default {
-    name: 'Home',
-    mounted() {
-      this.$store.dispatch('fetchWalletsFromDb')
-    }
-  }
-</script>
-
-<style>
+<style scoped>
   @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
 
   .row-home {
@@ -74,6 +37,10 @@
     text-align: center;
     position: absolute;
     bottom:10px;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right:0;
   }
   .div-footer-version P {
     margin:0;
@@ -101,3 +68,41 @@
     margin: 0;
   }
 </style>
+<template>
+  <div class="row row-home home-container">
+    <div class="col-10">
+      <!-- <img class="img-home-page" src="./../assets/home/background@1.5x.png" alt=""> -->
+      <div class="home-img"></div>
+    </div>
+    <div class="col-2 text-center">
+      <div class="div-slogan home-slogan">
+          <p>O Wallet</p>  
+          <p>A comprehensive Ontology desktop wallet.</p>
+      </div>
+      <div>
+        <router-link class="btn btn-default go-to-wallets text-center" to="Wallets">
+          <div>ENTER →</div>
+        </router-link>
+      </div>
+
+      <div class="div-footer-version">
+        <p>Version: 0.8.0</p>
+        <p>Powered by Ontology</p>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  import {mapState} from 'vuex'
+  import {legacySignWithLedger} from '../../core/ontLedger'
+  import {TEST_NET, MAIN_NET} from '../../core/consts'
+
+  export default {
+    name: 'Home',
+    mounted() {
+      this.$store.dispatch('fetchWalletsFromDb')
+    }
+  }
+</script>
+

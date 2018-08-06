@@ -54,7 +54,8 @@
       "target": [
         "nsis"
       ],
-      "icon": "build/icons/icon.ico"
+      "icon": "build/icons/icon.ico",
+      "perMachine":true
     },
     "linux": {
       "target": [

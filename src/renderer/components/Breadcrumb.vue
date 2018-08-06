@@ -13,8 +13,8 @@
     }
     .back-icon {
         display: inline-block;
-        height:0.83rem;
-        width:1.5rem;
+        height:10px;
+        width:18px;
         background:url(../assets/back.png) center center;
         background-size: cover;
         line-height: 1.7rem;
