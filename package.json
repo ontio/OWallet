@@ -53,17 +53,22 @@
     "win": {
       "target": [
         "nsis"
-      ]
+      ],
+      "icon": "build/icons/icon.ico"
     },
     "linux": {
       "target": [
         "deb",
         "AppImage"
-      ]
+      ],
+      "icon": "build/icons"
     },
     "directories": {
       "buildResources": "resources",
       "output": "release"
+    },
+    "mac": {
+      "icon": "build/icons/icon.icns"
     }
   },
   "dependencies": {

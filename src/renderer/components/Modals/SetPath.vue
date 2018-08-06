@@ -29,14 +29,14 @@
     },
     methods: {
       setSavePath() {
-        dialog.showOpenDialog({properties: ['openDirectory']}, (filePath) => {
+        dialog.showOpenDialog({properties: ['openDirectory', 'createDirectory']}, (filePath) => {
           if (filePath === undefined) {
             alert('You did not set the path')
             return;
           }
           localStorage.setItem('savePath', filePath)
           localStorage.setItem('isSavePath', 'true')
-
+          window.location.reload();//reset dbService
           $("#setPathModal").modal("hide")
         })
       }

@@ -53,9 +53,6 @@
         // FileHelper.downloadFile(this.downloadContent)
 
         //save to db
-        // console.log(WALLET_TYPE)
-        // console.log(DEFAULT_SCRYPT)
-
         const wallet = {
           type : WALLET_TYPE.CommonWallet,
           address: this.address,
