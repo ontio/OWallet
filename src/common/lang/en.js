@@ -8,7 +8,9 @@ export default {
     pwdErr: 'Password error',
     ongNoEnough: 'No enough ong to pay for the transfer fee.',
     transferFailed: 'Transfer failed. ',
-    networkErr: 'Network error!'
+    networkErr: 'Network error!',
+    normalWallet: 'Normal Wallet',
+    sharedWallet: 'Shared Wallet'
   },
 
   TopNav: {
