@@ -1,7 +1,7 @@
 <template>
   <div>
     <div @click="toWalletHome(wallet)">
-      <div class="div-shared-wallet-sign">Normal Wallet</div>
+      <div class="div-shared-wallet-sign">{{ $t('common.normalWallet') }}</div>
       <div class="div-wallet-name">{{wallet.label}}</div>
       <!--<img class="img-wallet-edit" src="./../assets/edit.png" alt="">-->
       <div class="div-wallet-address">

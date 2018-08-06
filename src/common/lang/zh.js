@@ -8,7 +8,9 @@ export default {
     pwdErr: '密码错误',
     ongNoEnough: 'ONG不足，无法支付转账手续费。',
     transferFailed: '交易失败。',
-    networkErr: '网络错误！'
+    networkErr: '网络错误！',
+    normalWallet: '普通钱包',
+    sharedWallet: '共享钱包'
   },
 
   TopNav: {
