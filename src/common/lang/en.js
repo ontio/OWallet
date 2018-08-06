@@ -10,7 +10,8 @@ export default {
     transferFailed: 'Transfer failed. ',
     networkErr: 'Network error!',
     normalWallet: 'Normal Wallet',
-    sharedWallet: 'Shared Wallet'
+    sharedWallet: 'Shared Wallet',
+    export: 'Export'
   },
 
   TopNav: {
