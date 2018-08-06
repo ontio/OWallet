@@ -43,19 +43,13 @@
 
       <div class="tab-pane fade" id="import-json-dat-pills" role="tabpanel"
            aria-labelledby="import-json-dat-pills-tab">
+        <a-input class="input" :placeholder="$t('importJsonWallet.label')" v-model="datLabel"></a-input>
         <input type="file" @change="onFileChange" id="datFile">
-        <a-input type="password" class="input" :placeholder="$t('importJsonWallet.datImportPassword')"
-                 v-model="datImportPassword"></a-input>
 
-        <a-input class="input input-dat-label" :placeholder="$t('importJsonWallet.label')" v-model="datLabel"></a-input>
-        <a-input type="password" class="input input-dat-password"
-                 v-validate="{required: true ,min:6}" data-vv-as="new password" name="datPassword"
-                 v-model="datPassword" :placeholder="$t('importJsonWallet.datPassword')"></a-input>
+        <a-input type="password" class="input"
+                 v-validate="{required: true}" data-vv-as="password" name="datPassword"
+                 v-model="datPassword" :placeholder="$t('importJsonWallet.datImportPassword')"></a-input>
         <span class="v-validate-span-errors" v-show="errors.has('datPassword')">{{ errors.first('datPassword') }}</span>
-        <a-input type="password" class="input input-repassword"
-                 v-validate="{required: true , min:6, is:datPassword}" data-vv-as="new password confirmation" name="datRePassword"
-                 v-model="datRePassword" :placeholder="$t('createJsonWallet.rePassword')"></a-input>
-        <span class="v-validate-span-errors" v-show="errors.has('datRePassword')">{{ errors.first('datRePassword') }}</span>
       </div>
 
       <div class="tab-pane fade" id="import-json-wif-pills" role="tabpanel"
@@ -125,9 +119,7 @@
 
         dat: '',
         datLabel: '',
-        datImportPassword: '',
         datPassword: '',
-        datRePassword: '',
 
         wif: '',
         wifLabel: '',
@@ -160,9 +152,7 @@
           })
         } else if (this.tabName === 'dat') {
           this.$validator.validateAll({
-            datImportPassword: this.datImportPassword,
-            datPassword: this.datPassword,
-            datRePassword: this.datRePassword
+            datPassword: this.datPassword
           }).then(result => {
             if (result) {
               this.$store.dispatch('showLoadingModals')
@@ -210,14 +200,12 @@
       importAccountForDat() {
         /**
          * 打开的文件：this.dat
-         * 打开文件的密码： this.datImportPassword
-         * 新文件名：this.datLabel
-         * 新密码： this.datPassword
+         * 打开文件的密码： this.datPassword
+         * 钱包名称：this.datLabel
          */
         console.log(this.dat)
-        console.log(this.datImportPassword)
-        console.log(this.datLabel)
         console.log(this.datPassword)
+        console.log(this.datLabel)
       },
       importAccountForWif() {
         let privateKey;
@@ -306,17 +294,10 @@
     margin-top: 30px;
   }
 
-  .input-dat-label {
-    margin-top: 50px;
-  }
-
-  .input-dat-password {
-    margin-top: 20px;
-  }
-
   #datFile {
     width: 100%;
     height: 34px;
+    margin-top: 15px;
   }
 
   .input-password {
