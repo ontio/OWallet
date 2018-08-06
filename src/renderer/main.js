@@ -15,6 +15,9 @@ import VueClipboard from 'vue-clipboard2'
 VueClipboard.config.autoSetContainer = true // add this line
 Vue.use(VueClipboard)
 
+import VeeValidate from 'vee-validate'
+Vue.use(VeeValidate)
+
 import VueI18n from 'vue-i18n'
 import LangStorage from '../core/lang'
 import zh from '../common/lang/zh'

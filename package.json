@@ -87,6 +87,7 @@
     "ontology-ts-sdk": "^0.9.1",
     "popper.js": "^1.14.3",
     "vue": "^2.3.3",
+    "vee-validate": "^2.1.0-beta.7",
     "vue-antd-ui": "^1.0.0",
     "vue-axios": "^2.1.1",
     "vue-clipboard2": "^0.2.1",
