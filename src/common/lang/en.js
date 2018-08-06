@@ -67,10 +67,14 @@ export default {
   },
 
   importJsonWallet: {
+    dat: '.dat File',
+    datImportPassword: 'Open .dat file password',
     create: 'Import Common Wallet',
     basicInfo: 'Basic info',
     label: 'Name of Common Wallet',
     wif: 'WIF',
+    datPassword: 'New Password',
+    datRePassword: 'Repeat New password',
     password: 'Password',
     rePassword: 'Repeat password',
     next: 'Import',

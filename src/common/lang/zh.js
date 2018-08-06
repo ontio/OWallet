@@ -68,10 +68,14 @@ export default {
   },
 
   importJsonWallet: {
+    dat: '.dat文件',
+    datImportPassword: '解锁dat文件的密码',
     create: '导入普通钱包',
     basicInfo: '基本信息',
     label: '钱包名称',
     wif: 'WIF',
+    datPassword: '输入新密码',
+    datRePassword: '重复新密码',
     password: '输入密码',
     rePassword: '重复密码',
     next: '继续',

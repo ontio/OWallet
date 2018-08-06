@@ -1,10 +1,15 @@
 <template>
   <div class="container json-import-container">
     <ul class="nav nav-pills import-json-nav-pills" id="pills-tab" role="tablist">
+      <!--<li class="nav-item">-->
+        <!--<a class="nav-link active" id="import-json-private-key-pills-tab" data-toggle="pill" href="#import-json-private-key-pills"-->
+           <!--role="tab"-->
+           <!--aria-controls="import-json-private-key-pills" aria-selected="true" @click="activeTab('pk')">{{ $t('createJsonWallet.privateKey') }}</a>-->
+      <!--</li>-->
       <li class="nav-item">
-        <a class="nav-link active" id="import-json-private-key-pills-tab" data-toggle="pill" href="#import-json-private-key-pills"
+        <a class="nav-link active" id="import-json-dat-pills-tab" data-toggle="pill" href="#import-json-dat-pills"
            role="tab"
-           aria-controls="import-json-private-key-pills" aria-selected="true" @click="activeTab('pk')">{{ $t('createJsonWallet.privateKey') }}</a>
+           aria-controls="import-json-dat-pills" aria-selected="true" @click="activeTab('dat')">{{ $t('importJsonWallet.dat') }}</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" id="import-json-wif-pills-tab" data-toggle="pill" href="#import-json-wif-pills"
@@ -19,35 +24,69 @@
     </ul>
 
     <div class="tab-content" id="pills-tabContent">
-      <div class="tab-pane fade show active" id="import-json-private-key-pills" role="tabpanel"
-           aria-labelledby="import-json-private-key-pills-tab">
-        <a-input class="input" :placeholder="$t('importJsonWallet.label')" v-model="pkLabel"></a-input>
-        <a-input class="input input-wif" :placeholder="$t('importJsonWallet.privateKey')" v-model="pk"></a-input>
-        <a-input type="password" class="input input-password" :placeholder="$t('importJsonWallet.password')"
-                 v-model="pkPassword"></a-input>
-        <a-input type="password" class="input input-repassword" :placeholder="$t('importJsonWallet.rePassword')"
-                 v-model="pkRePassword"></a-input>
+      <!--<div class="tab-pane fade show active" id="import-json-private-key-pills" role="tabpanel"-->
+           <!--aria-labelledby="import-json-private-key-pills-tab">-->
+        <!--<a-input class="input" :placeholder="$t('importJsonWallet.label')" v-model="pkLabel"></a-input>-->
+        <!--<a-input class="input input-wif" :placeholder="$t('importJsonWallet.privateKey')" v-model="pk"></a-input>-->
+        <!--<a-input type="password" class="input input-password" :placeholder="$t('importJsonWallet.password')"-->
+                 <!--v-model="pkPassword"></a-input>-->
+        <!--<a-input type="password" class="input input-repassword" :placeholder="$t('importJsonWallet.rePassword')"-->
+                 <!--v-model="pkRePassword"></a-input>-->
+      <!--</div>-->
+
+      <div class="tab-pane fade show active" id="import-json-dat-pills" role="tabpanel"
+           aria-labelledby="import-json-dat-pills-tab">
+        <input type="file" @change="onFileChange" id="datFile">
+        <a-input type="password" class="input" :placeholder="$t('importJsonWallet.datImportPassword')"
+                 v-model="datImportPassword"></a-input>
+
+        <a-input class="input input-dat-label" :placeholder="$t('importJsonWallet.label')" v-model="datLabel"></a-input>
+        <a-input type="password" class="input input-dat-password"
+                 v-validate="{required: true ,min:6}" data-vv-as="new password" name="datPassword"
+                 v-model="datPassword" :placeholder="$t('importJsonWallet.datPassword')"></a-input>
+        <span class="v-validate-span-errors" v-show="errors.has('datPassword')">{{ errors.first('datPassword') }}</span>
+        <a-input type="password" class="input input-repassword"
+                 v-validate="{required: true , min:6, is:datPassword}" data-vv-as="new password confirmation" name="datRePassword"
+                 v-model="datRePassword" :placeholder="$t('createJsonWallet.rePassword')"></a-input>
+        <span class="v-validate-span-errors" v-show="errors.has('datRePassword')">{{ errors.first('datRePassword') }}</span>
       </div>
 
       <div class="tab-pane fade" id="import-json-wif-pills" role="tabpanel"
            aria-labelledby="import-json-wif-pills-tab">
         <a-input class="input" :placeholder="$t('importJsonWallet.label')" v-model="wifLabel"></a-input>
-        <a-input class="input input-wif" :placeholder="$t('importJsonWallet.wif')" v-model="wif"></a-input>
-        <a-input type="password" class="input input-password" :placeholder="$t('importJsonWallet.password')"
-                 v-model="wifPassword"></a-input>
-        <a-input type="password" class="input input-repassword" :placeholder="$t('importJsonWallet.rePassword')"
-                 v-model="wifRePassword"></a-input>
+
+        <a-input class="input input-wif"
+                 v-validate="{required: true}" name="wif"
+                 v-model="wif" :placeholder="$t('importJsonWallet.wif')"></a-input>
+        <span class="v-validate-span-errors" v-show="errors.has('wif')">{{ errors.first('wif') }}</span>
+
+        <a-input type="password" class="input input-password"
+                 v-validate="{required: true ,min:6}" data-vv-as="password" name="wifPassword"
+                 v-model="wifPassword" :placeholder="$t('importJsonWallet.password')"></a-input>
+        <span class="v-validate-span-errors" v-show="errors.has('wifPassword')">{{ errors.first('wifPassword') }}</span>
+        <a-input type="password" class="input input-repassword"
+                 v-validate="{required: true ,min:6, is:wifPassword}" data-vv-as="password confirmation" name="wifRePassword"
+                 v-model="wifRePassword" :placeholder="$t('importJsonWallet.rePassword')"></a-input>
+        <span class="v-validate-span-errors" v-show="errors.has('wifRePassword')">{{ errors.first('wifRePassword') }}</span>
       </div>
 
       <div class="tab-pane fade" id="import-json-mnemonic-pills" role="tabpanel"
            aria-labelledby="import-json-mnemonic-pills-tab">
         <a-input class="input" :placeholder="$t('importJsonWallet.label')" v-model="mnemonicLabel"></a-input>
-        <textarea class="import-json-mnemonic" name="import-json-mnemonic" id="import-json-mnemonic" rows="6"
+
+        <textarea class="import-json-mnemonic" id="import-json-mnemonic" rows="6"
+                  v-validate="{required: true} "data-vv-as="mnemonic" name="import-json-mnemonic"
                   :placeholder="$t('importJsonWallet.mnemonic')" v-model="mnemonic"></textarea>
-        <a-input type="password" class="input input-password" :placeholder="$t('importJsonWallet.password')"
-                 v-model="mnemonicPassword"></a-input>
-        <a-input type="password" class="input input-repassword" :placeholder="$t('importJsonWallet.rePassword')"
-                 v-model="mnemonicRePassword"></a-input>
+        <span class="v-validate-span-errors" v-show="errors.has('import-json-mnemonic')">{{ errors.first('import-json-mnemonic') }}</span>
+
+        <a-input type="password" class="input input-password"
+                 v-validate="{required: true ,min:6}" data-vv-as="password" name="mnemonicPassword"
+                 v-model="mnemonicPassword" :placeholder="$t('importJsonWallet.password')"></a-input>
+        <span class="v-validate-span-errors" v-show="errors.has('mnemonicPassword')">{{ errors.first('mnemonicPassword') }}</span>
+        <a-input type="password" class="input input-repassword"
+                 v-validate="{required: true ,min:6, is:mnemonicPassword}" data-vv-as="password confirmation" name="mnemonicRePassword"
+                 v-model="mnemonicRePassword" :placeholder="$t('importJsonWallet.rePassword')"></a-input>
+        <span class="v-validate-span-errors" v-show="errors.has('mnemonicRePassword')">{{ errors.first('mnemonicRePassword') }}</span>
       </div>
     </div>
 
@@ -70,12 +109,18 @@
     name: 'BasicInfo',
     data() {
       return {
-        tabName: 'pk', // pk | wif | mnemonic
+        tabName: 'dat', // dat | pk | wif | mnemonic
 
         pk: '',
         pkLabel: '',
         pkPassword: '',
         pkRePassword: '',
+
+        dat: '',
+        datLabel: '',
+        datImportPassword: '',
+        datPassword: '',
+        datRePassword: '',
 
         wif: '',
         wifLabel: '',
@@ -94,15 +139,21 @@
         this.tabName = tabName
       },
       next() {
-        this.$store.dispatch('showLoadingModals')
+        this.$validator.validateAll().then(result => {
+          if (result) {
+            this.$store.dispatch('showLoadingModals')
 
-        if (this.tabName === 'pk') {
-          this.importAccountForPK()
-        } else if (this.tabName === 'wif') {
-          this.importAccountForWif()
-        } else {
-          this.importAccountForMnemonic()
-        }
+            if (this.tabName === 'pk') {
+              this.importAccountForPK()
+            } else if (this.tabName === 'dat') {
+              this.importAccountForDat()
+            } else if (this.tabName === 'wif') {
+              this.importAccountForWif()
+            } else {
+              this.importAccountForMnemonic()
+            }
+          }
+        })
       },
       importAccountForPK() {
         if (!this.pk.trim() || this.pk.length !== 64) {
@@ -128,21 +179,23 @@
           this.saveToDb(res)
         })
       },
+      onFileChange() {
+        let files = document.getElementById("datFile").files
+        this.dat = files[0]
+      },
+      importAccountForDat() {
+        /**
+         * 打开的文件：this.dat
+         * 打开文件的密码： this.datImportPassword
+         * 新文件名：this.datLabel
+         * 新密码： this.datPassword
+         */
+        console.log(this.dat)
+        console.log(this.datImportPassword)
+        console.log(this.datLabel)
+        console.log(this.datPassword)
+      },
       importAccountForWif() {
-        if (!this.wif.trim()) {
-          alert("Please enter the WIF.");
-          return;
-        }
-
-        if (
-          !this.wifPassword.trim() ||
-          !this.wifRePassword.trim() ||
-          this.wifPassword !== this.wifRePassword
-        ) {
-          alert("Please enter the same password twice.");
-          return;
-        }
-
         let privateKey;
         try {
           privateKey = Crypto.PrivateKey.deserializeWIF(this.wif);
@@ -161,20 +214,6 @@
         })
       },
       importAccountForMnemonic() {
-        if (!this.mnemonic.trim()) {
-          alert("Please enter the WIF.");
-          return;
-        }
-
-        if (
-          !this.mnemonicPassword.trim() ||
-          !this.mnemonicRePassword.trim() ||
-          this.mnemonicPassword !== this.mnemonicRePassword
-        ) {
-          alert("Please enter the same password twice.");
-          return;
-        }
-
         // 助记词导入
         const res = Ont.SDK.importAccountMnemonic(this.mnemonicLabel, this.mnemonic, this.mnemonicPassword);
         if (res.error === 0) {
@@ -189,7 +228,7 @@
         const wallet = {
           type: 'CommonWallet',
           address: account.address,
-          wallet:account
+          wallet: account
         }
         dbService.insert(wallet, function (err, newDoc) {
           if (err) {
@@ -243,12 +282,25 @@
     margin-top: 30px;
   }
 
+  .input-dat-label {
+    margin-top: 50px;
+  }
+
+  .input-dat-password {
+    margin-top: 20px;
+  }
+
+  #datFile {
+    width: 100%;
+    height: 34px;
+  }
+
   .input-password {
     margin-top: 30px;
   }
 
   .input-repassword {
-    margin-top: 10px;
+    margin-top: 6px;
   }
 
   .import-json-mnemonic {
