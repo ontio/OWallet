@@ -51,7 +51,7 @@
           password: this.password
         }
         this.$store.dispatch('createJsonWalletWithPrivateKey', body).then(res => {
-          console.log(res)
+          // console.log(res)
         })
 
         this.$store.commit('ADD_CREATE_JSON_STEP')

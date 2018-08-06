@@ -5,24 +5,36 @@
     <div class="container-fluid">
       <router-view></router-view>
     </div>
+
+    <loading-modal></loading-modal>
   </div>
 </template>
 
 <script>
+  import $ from 'jquery'
   import 'bootstrap/dist/css/bootstrap.min.css'
   import 'bootstrap/dist/js/bootstrap.min.js'
-  import 'vue-antd-ui/dist/antd.css';
-  import TopLeftNav from "./components/TopLeftNav";
+  import 'vue-antd-ui/dist/antd.css'
+  import TopLeftNav from "./components/TopLeftNav"
+  import LoadingModal from './components/Modals/Loading'
 
   export default {
     name: 'ont-wallet-test',
-    components: {TopLeftNav},
+    components: {TopLeftNav, LoadingModal},
     data: function () {
       return {}
+    },
+    watch: {
+      '$route': 'hideLoadingPage'
     },
     created() {
       if (!localStorage.getItem('net')) {
         localStorage.setItem('net', 'TEST_NET');
+      }
+    },
+    methods: {
+      hideLoadingPage() {
+        this.$store.dispatch('hideLoadingModals')
       }
     }
   }
@@ -78,7 +90,7 @@
   }
 
   .btn-cancel {
-    width: 120px !important; 
+    width: 120px !important;
     height: 44px !important;
     background: #F5F7FB !important;
     text-align: center;
@@ -144,5 +156,14 @@
 
   .footer-btn-container :last-child {
     float: right;
+  }
+
+  .ant-spin-text {
+    color: white !important;
+    text-shadow: none !important;
+  }
+
+  .ant-spin-dot i {
+    background-color: white !important;
   }
 </style>
