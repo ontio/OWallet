@@ -256,7 +256,7 @@
             <div class="left-half">
                 <div class="wallet-info">
                     <p>{{$t('sharedWalletHome.walletAddress')}}: {{this.sharedWallet.sharedWalletAddress}}</p>
-                    
+
                 </div>
                 <div class="wallet-balance">
                     <span>{{$t('sharedWalletHome.balance')}}</span>
@@ -276,7 +276,7 @@
                     </div>
                     <!-- <div class="asset-value">{{'$900'}}</div> -->
                 </div>
-                
+
 
                 <div v-if="hasLocalCopayer">
                     <a-button class="asset-btn" type="primary"  @click="showTransferBox">
@@ -284,7 +284,7 @@
                         {{$t('sharedWalletHome.send')}}</a-button>
                     <a-button class="asset-btn" type="primary" @click="shwoReceive">
                         <i class="arrow-down"></i>
-                        {{$t('sharedWalletHome.receive')}}</a-button>                
+                        {{$t('sharedWalletHome.receive')}}</a-button>
                 </div>
 
 
@@ -295,11 +295,11 @@
                     <span>{{$t('sharedWalletHome.copayers')}}</span>
                     <span>{{$t('sharedWalletHome.rule')}} {{sharedWallet.requiredNumber}}-of-{{sharedWallet.totalNumber}}</span>
                 </div>
-    
+
                 <div class="owners-table">
                     <div class="table-item" v-for="(item,index) in sharedWallet.coPayers" :key="item.address" v-if="index<2">
                         <span>{{item.name}}</span>
-                        <span>Address: {{item.address}}</span>                    
+                        <span>Address: {{item.address}}</span>
                     </div>
                     <div class="check-more" @click="toCopayerDetail">
                         {{$t('sharedWalletHome.checkMore')}}>>
@@ -322,14 +322,14 @@
                     <span>-{{tx.amount}} {{tx.assetName}}</span>
                 </div>
                 </div>
-                
+
             </div>
             <div class="completed-tx">
                 <div class="txList-header">
                     <span>{{$t('sharedWalletHome.completedTx')}}</span>
                     <span class="transfer-icon"></span>
                 </div>
-            
+
                 <div v-for="(tx,index) in completedTx" :key="tx.txHash" class="tx-item" v-if="index<6" @click="showTxDetail(tx.txHash)">
                     <span>{{tx.txHash}}</span>
                     <span>{{tx.amount}} {{tx.asset}}</span>
@@ -338,10 +338,10 @@
                     {{$t('sharedWalletHome.checkMore')}}>>
                 </div>
             </div>
-            
+
         </div>
         </div>
-        
+
     </div>
 </template>
 
@@ -355,7 +355,7 @@ export default {
     name:'SharedWalletHome',
     data() {
         const net = localStorage.getItem('net');
-        const network = net && net === 'TEST_NET' ? 'Test Net' : 'Main Net';
+        const network = net && net === 'TEST_NET' ? this.$t('common.testNet') : this.$t('common.mainNet');
         let url = ''
         if (net === 'TEST_NET') {
             url = TEST_NET + ':20334'
@@ -398,13 +398,13 @@ export default {
             this.$router.push({name: 'Wallets'})
         },
         getTransactions() {
-            const url = this.network === 'Test Net' ? 'https://polarisexplorer.ont.io' : 'https://explorer.ont.io';
+            const url = this.network === 'TestNet' ? 'https://polarisexplorer.ont.io' : 'https://explorer.ont.io';
             this.axios.get(url + '/api/v1/explorer/address/' + this.sharedWallet.sharedWalletAddress + '/10/1').then(response => {
             if (response.status === 200 && response.data && response.data.Result) {
                 const txlist = response.data.Result.TxnList
                 const completed = txlist.map(t => {
                     const asset = t.TransferList[0].AssetName === 'ont'? 'ONT' : 'ONG'
-                    let amount = asset === 'ONT' ? parseInt(t.TransferList[0].Amount) 
+                    let amount = asset === 'ONT' ? parseInt(t.TransferList[0].Amount)
                                 : Number(t.TransferList[0].Amount).toFixed(2)
                     if(t.TransferList[0].FromAddress === this.sharedWallet.sharedWalletAddress) {
                         amount = '-' + amount;
@@ -454,7 +454,7 @@ export default {
             this.axios.get(url, {
                 params: {
                     sharedAddress,
-                    // assetName, 
+                    // assetName,
                     beforeTimeStamp: timeStamp
                 }
             }).then(res => {
@@ -521,14 +521,14 @@ export default {
         },
         checkMoreTx() {
             let url = `https://explorer.ont.io/address/${this.sharedWallet.sharedWalletAddress}/10/1`
-            if(this.network === 'Test Net') {
+            if(this.network === 'TestNet') {
                 url += '/testnet'
             }
             window.location.href = url;
         },
         showTxDetail(txHash) {
         let url = `https://explorer.ont.io/transaction/${txHash}`
-        if(this.network === 'Test Net') {
+        if(this.network === 'TestNet') {
             url += '/testnet'
         }
         window.location.href = url;

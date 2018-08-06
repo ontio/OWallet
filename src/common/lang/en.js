@@ -1,4 +1,9 @@
 export default {
+  common: {
+    testNet: 'TestNet',
+    mainNet: 'MainNet'
+  },
+
   TopNav: {
     new: 'New',
     edit: 'Edit'
@@ -29,7 +34,7 @@ export default {
     basicInfo: 'Basic info',
     label: 'Name of Common Wallet',
     password: 'Password',
-    rePassword: 'Repeat Password',
+    rePassword: 'Repeat password',
     next: 'Next',
     cancel: 'Cancel',
     back: 'Back',
@@ -50,7 +55,7 @@ export default {
     label: 'Name of Common Wallet',
     wif: 'WIF',
     password: 'Password',
-    rePassword: 'Repeat Password',
+    rePassword: 'Repeat password',
     next: 'Import',
     cancel: 'Cancel',
     back: 'Back',
@@ -75,7 +80,7 @@ export default {
     cancel: 'Cancel',
     back: 'Back',
     importSharedWallet: 'Import Shared Wallet',
-    requiredSigNum: 'Required Signature Number ',
+    requiredSigNum: 'Number of required signatures ',
     success: 'Success',
     duplicateCreate: 'The shared wallet is already existed.Please import it.',
     createFailed: 'Failed. Please try later.',
@@ -161,8 +166,8 @@ export default {
     name: 'Setting',
     net: 'Network',
     lang: 'Language',
-    testNet: 'Test Net',
-    mainNet: 'Main Net',
+    testNet: 'TestNet',
+    mainNet: 'MainNet',
     en: 'English',
     zh: 'Chinese',
     pathTit: 'Path: ',

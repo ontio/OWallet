@@ -1,4 +1,9 @@
 export default {
+  common: {
+    testNet: 'TestNet',
+    mainNet: 'Main Net'
+  },
+
   TopNav: {
     new: '新建',
     edit: '编辑'

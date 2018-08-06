@@ -57,7 +57,7 @@
         <div class="input-content">
             <div>
                 <a-checkbox @change="onChange" :checked="checked" class="input-check">{{$t('sharedWalletHome.agreeToSend')}}</a-checkbox>
-                
+
                 <a-input type="password" class="input-pass" :placeholder="$t('sharedWalletHome.inputPassToTransfer')" v-model="password"></a-input>
             </div>
         <div class="input-btns">
@@ -67,7 +67,7 @@
                 </a-button>
         </div>
         </div>
-        
+
     </div>
 </template>
 
@@ -82,7 +82,6 @@ export default {
     name:'PendingTxSign',
     data() {
         const net = localStorage.getItem('net');
-        const network = net && net === 'TEST_NET' ? 'Test Net' : 'Main Net';
         let url = ''
         if (net === 'TEST_NET') {
             url = TEST_NET + ':20334'
@@ -105,9 +104,6 @@ export default {
             pendingTx: state => state.CurrentWallet.pendingTx,
             currentSigner: state => state.CurrentWallet.currentSigner
         })
-    },
-    
-    mounted(){
     },
     methods:{
         back(){
@@ -172,8 +168,8 @@ export default {
                             return;
                         }
                     })
-                    
-                } 
+
+                }
                 this.$emit('submitEvent')
             }
         }

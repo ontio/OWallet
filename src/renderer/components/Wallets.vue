@@ -130,7 +130,7 @@
     name: 'Wallets',
     data() {
       const net = localStorage.getItem('net')
-      const network = net === 'TEST_NET' ? 'Test Net' : 'Main Net';
+      const network = net === 'TEST_NET' ? this.$t('common.testNet') : this.$t('common.mainNet');
 
       return {
         network: network,
