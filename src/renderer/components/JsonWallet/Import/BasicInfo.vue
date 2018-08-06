@@ -181,7 +181,7 @@
           this.mnemonicAccount = JSON.parse(res.result)
           this.saveToDb(this.mnemonicAccount)
         } else if (res.error === 42002) {
-          this.$message.error('Invalid mnemonic.');
+          this.$message.error(this.$t('basicInfo.InvalidMnemonic'));
         }
       },
       saveToDb(account) {

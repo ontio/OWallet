@@ -1,12 +1,23 @@
 export default {
   common: {
     testNet: 'TestNet',
-    mainNet: 'Main Net'
+    mainNet: 'Main Net',
+    copied: '已复制！',
+    confirmPwdTips: '请确认并输入钱包密码。',
+    transSentSuccess: '交易已成功发送',
+    pwdErr: '密码错误',
+    ongNoEnough: 'ONG不足，无法支付转账手续费。',
+    transferFailed: '交易失败。',
+    networkErr: '网络错误！'
   },
 
   TopNav: {
     new: '新建',
     edit: '编辑'
+  },
+
+  basicInfo: {
+    InvalidMnemonic: '无效的助记词。'
   },
 
   SetPaths: {
@@ -29,6 +40,10 @@ export default {
     comingSoon: '敬请期待'
   },
 
+  dashboard: {
+    getTransErr: '交易记录获取失败，网络错误。'
+  },
+
   createJsonWallet: {
     create: '新建普通钱包',
     basicInfo: '基本信息',
@@ -46,7 +61,8 @@ export default {
     signatureSchemeN: '签名算法',
     wif: 'WIF',
     mnemonic: '助记词',
-    privateKey: '私钥'
+    privateKey: '私钥',
+    createSuccess: '创建普通钱包成功！'
   },
 
   importJsonWallet: {
@@ -85,7 +101,8 @@ export default {
     duplicateCreate: '共享钱包已存在，请导入.',
     createFailed: '错误，请稍后重试。',
     createSuccess: '创建共享钱包成功',
-    create: '创建共享钱包'
+    create: '创建共享钱包',
+    walletNameErr: '钱包名称长度不可超过12个字符。'
   },
 
   importSharedWallet: {
@@ -162,6 +179,10 @@ export default {
     publicKey :'公钥'
   },
 
+  transfer: {
+    inputValidAmount: '请输入有效的转账金额。',
+    inputValidAddress: '请输入有效的转账地址。'
+  },
   setting: {
     name: '设置',
     net: '网络',
@@ -172,6 +193,7 @@ export default {
     zh: 'Chinese',
     pathTit: '当前路径： ',
     path: '钱包保存路径',
-    change: '修改'
+    change: '修改',
+    setNetworkSuccess: '网络成功设置成：'
   }
 }

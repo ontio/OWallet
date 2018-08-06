@@ -60,7 +60,7 @@
         this.$store.commit('UPDATE_SETTING_NETWORK', {network: this.net})
         setTimeout(() => {
           const net = this.net === 'TEST_NET' ? this.$t('common.testNet') : this.$t('common.mainNet');
-          this.$message.success('The network has been set to ' + net);
+          this.$message.success(this.$t('setting.setNetworkSuccess') + net);
         }, 100)
       },
       changeLanguage() {

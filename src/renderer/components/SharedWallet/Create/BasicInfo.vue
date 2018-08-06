@@ -1,17 +1,17 @@
 <template>
     <div class="basic-container">
         <div class="basic-label">
-            <a-input class="input" :class="validLabel?'':'error-input'" :placeholder="$t('createSharedWallet.label')" 
+            <a-input class="input" :class="validLabel?'':'error-input'" :placeholder="$t('createSharedWallet.label')"
             v-model="label" @change="validateLabel"></a-input>
         </div>
         <p class="copayer-label font-bold">{{$t('createSharedWallet.copayers2_12')}}</p>
         <div class="basic-pks">
             <div class="pk-item" v-for="(item,index) in pks" :key="index">
-                <a-input class="input" :class="item.nameValid?'':'error-input' " :placeholder="$t('createSharedWallet.name')" 
+                <a-input class="input" :class="item.nameValid?'':'error-input' " :placeholder="$t('createSharedWallet.name')"
                 v-model="item.name" ></a-input>
                 <a-input class="input" :class="item.pkValid?'':'error-input' " :placeholder="$t('createSharedWallet.publicKey')" v-model="item.publickey"
                 @change="validatePublickey(index,item.publickey)"></a-input>
-                <span class="delete-icon" @click="removePk(index)"></span>                
+                <span class="delete-icon" @click="removePk(index)"></span>
             </div>
             <a-button class="btn-add" style="margin-top:30px;" @click="addNewPk" v-if="pks.length<12">
                 {{$t('createSharedWallet.add')}}
@@ -19,7 +19,7 @@
         </div>
         <div class="basic-pk-btns">
             <div class="btn-container">
-                <a-button type="default"  @click="cancel" class="btn-cancel"> 
+                <a-button type="default"  @click="cancel" class="btn-cancel">
                     {{$t('createSharedWallet.cancel')}}</a-button>
                 <a-button type="primary" @click="next" class="btn-next">
                     {{$t('createSharedWallet.next')}}</a-button>
@@ -74,7 +74,7 @@ export default {
         validateLabel() {
             const length = this.label.split('').length;
             if(length > 12) {
-                this.$message.error('Wallet name can not be more than 12 chars')
+                this.$message.error(this.$t('createSharedWallet.walletNameErr'))
                 this.validLabel = false;
             } else {
                 this.validLabel = true;
@@ -85,7 +85,7 @@ export default {
             if(value && value.length === 66) {
                 this.pks[index].pkValid = true;
             } else {
-                this.pks[index].pkValid = false;                
+                this.pks[index].pkValid = false;
             }
         },
         validInput() {
@@ -152,7 +152,7 @@ export default {
     display: inline-block;
 }
 .pk-item :nth-child(2) {
-    width:318px; 
+    width:318px;
 }
 .delete-icon {
     height: 34px;
