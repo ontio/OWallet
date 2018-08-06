@@ -16,13 +16,13 @@
             <p class="successText">Then transaction has been sent successfully.</p>
             <p> The transaction hash is:</p>
             <textarea name="" id="" rows="2" v-model="txHash" disabled></textarea>
-            <p>You can check the transaction result by this 
+            <p>You can check the transaction result by this
                 <a v-bind:href="checkLink">link.</a>
             </p>
             <button @click="back" class="btn btn-success">Back</button>
         </div>
     </div>
-        
+
 </template>
 
 <script>
@@ -33,14 +33,14 @@ export default {
     name: 'SendTransaction',
     data() {
         const net = localStorage.getItem('net');
-        const network = net === 'TEST_NET' ? 'Test net' : 'Main net';
+        const network = net === 'TEST_NET' ? 'TestNet' : 'Main net';
         return {
             txData: '',
             txHash: '',
             checkLink: '',
             network: network
         }
-        
+
     },
 
     methods: {
@@ -69,7 +69,7 @@ export default {
                     const result = 'Error Code: '+ res.Error + ', Error Desc: ' + res.Desc;
                     alert('Transaction sent failed.Please try later.' + result);
                 }
-                
+
             })
         },
         back() {

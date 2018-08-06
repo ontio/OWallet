@@ -59,7 +59,7 @@
         localStorage.setItem('net', this.net);
         this.$store.commit('UPDATE_SETTING_NETWORK', {network: this.net})
         setTimeout(() => {
-          const net = this.net === 'TEST_NET' ? 'TestNet' : 'MainNet';
+          const net = this.net === 'TEST_NET' ? this.$t('common.testNet') : this.$t('common.mainNet');
           this.$message.success('The network has been set to ' + net);
         }, 100)
       },

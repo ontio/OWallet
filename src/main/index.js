@@ -62,7 +62,7 @@ let template = [
   {
     label: 'Edit ( 操作 )',
     submenu: [{
-      label: 'SelectAll ( 全选 )',
+      label: 'Select All ( 全选 )',
       accelerator: 'CmdOrCtrl+A',
       role: 'selectall'
     }, {
