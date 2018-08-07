@@ -40,6 +40,7 @@ export default {
     importCommonWallet: '导入钱包',
     createSharedWallet: '创建钱包',
     joinSharedWallet: '加入钱包',
+    importLedgerWallet: '导入Ledger钱包',
     ledger: 'Ledger钱包',
     comingSoon: '敬请期待'
   },
@@ -140,6 +141,11 @@ export default {
     passwordError: '密码错误。',
     sorry: '对不起！',
     notFound: '找不到该共享钱包。'
+  },
+
+  importLedgerWallet: {
+    import: '导入Ledger钱包',
+    label: '钱包名称'
   },
 
   sharedWalletHome: {
