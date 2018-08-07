@@ -40,6 +40,7 @@ export default {
     importCommonWallet: 'Import Wallet',
     createSharedWallet: 'Create Wallet',
     joinSharedWallet: 'Join Wallet',
+    importLedgerWallet: 'Import Ledger',
     ledger: 'Ledger',
     comingSoon: 'Coming soon...'
   },
@@ -140,6 +141,11 @@ export default {
     passwordError: 'Password error.',
     sorry: 'Sorry!',
     notFound: 'The shared wallet you are looking for is not found.'
+  },
+
+  importLedgerWallet: {
+    import: 'Import Ledger Wallet',
+    label: 'Name of Individual Wallet'
   },
 
   sharedWalletHome: {

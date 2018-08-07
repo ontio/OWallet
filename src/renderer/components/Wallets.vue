@@ -13,10 +13,10 @@
         <a class="nav-link" id="pills-shared-tab" data-toggle="pill" href="#pills-shared" role="tab"
            aria-controls="pills-shared" aria-selected="false">{{ $t('wallets.shared') }}</a>
       </li>
-      <!-- <li class="nav-item"> //暂时隐藏
-        <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab"
-           aria-controls="pills-profile" aria-selected="false">{{ $t('wallets.temp') }}</a>
-      </li> -->
+      <!--<li class="nav-item">-->
+        <!--<a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab"-->
+           <!--aria-controls="pills-profile" aria-selected="false">{{ $t('wallets.temp') }}</a>-->
+      <!--</li>-->
       <li class="nav-item">
         <a class="nav-link" id="pills-ledger-tab" data-toggle="pill" href="#pills-ledger" role="tab"
            aria-controls="pills-ledger" aria-selected="false">{{ $t('wallets.ledger') }}</a>
@@ -76,9 +76,20 @@
       </div>
 
       <div class="tab-pane fade" id="pills-ledger" role="tabpanel" aria-labelledby="pills-ledger-tab">
-          <div class="center">
-            <h4 style="text-align:center;">{{$t('wallets.comingSoon')}}</h4>
+        <div class="d-flex flex-wrap align-content-start center">
+          <!--需要填充实际内容-->
+          <!--<div class="normalWallet" v-for="w in ledgerWallet" :key="w.address">-->
+            <!--<ledger-wallet-details :wallet="w"></ledger-wallet-details>-->
+          <!--</div>-->
+
+          <div class="div-create-wallet" :class="[viewBtn?'div-create-wallet-bg-color':'']"
+               v-on:mouseenter="viewAllBtn(true)" v-on:mouseleave="viewAllBtn(false)">
+            <div class="div-join div-ledger-join" v-show="viewBtn">
+              <router-link class="btn btn-default btn-create" to="ImportLedgerWallet">{{$t('wallets.importLedgerWallet')}}</router-link>
+            </div>
+            <img class="img-wallet-create" v-show="!viewBtn" src="./../assets/add.png" alt="">
           </div>
+        </div>
       </div>
 
       <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
@@ -266,6 +277,10 @@
   .div-join {
     padding-top: 1.88rem;
     padding-left: 6.48rem;
+  }
+
+  .div-ledger-join {
+    padding-top: 5rem;
   }
 
   /* TODO 以下样式可能需要删除：*/

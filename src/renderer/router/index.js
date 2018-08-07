@@ -70,6 +70,11 @@ export default new Router({
       component: require('@/components/JsonWallet/ImportJsonWallet').default
     },
     {
+      path: '/importLedgerWallet',
+      name: 'ImportLedgerWallet',
+      component: require('@/components/LedgerWallet/ImportLedgerWallet').default
+    },
+    {
       path: '/createSharedWallet',
       name: 'CreateSharedWallet',
       component: require('@/components/SharedWallet/CreateSharedWallet').default
