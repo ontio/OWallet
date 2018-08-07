@@ -190,7 +190,12 @@ export default {
     receive: 'Receive',
     walletQrCode: 'Wallet QR Code',
     walletAddress: 'Wallet Address',
-    publicKey: 'Public Key'
+    publicKey: 'Public Key',
+    redeemCharge: 'Each redeem charges 0.01 ONG',
+    inputPass: 'Please input your wallet password',
+    emptyPass: 'Password can not be empty',
+    cancel: 'Cancel',
+    submit: 'Submit'
   },
 
   transfer: {

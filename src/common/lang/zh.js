@@ -190,7 +190,12 @@ export default {
     receive: '接收',
     walletQrCode: '钱包地址二维码',
     walletAddress: '钱包地址',
-    publicKey :'公钥'
+    publicKey :'公钥',
+    redeemCharge: '提取ONG需要支付0.01ONG',
+    inputPass: '请输入钱包密码',
+    emptyPass: '密码不能为空',
+    cancel: '取消',
+    submit: '提交'
   },
 
   transfer: {
