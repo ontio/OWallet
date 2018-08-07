@@ -13,7 +13,8 @@
     </div>
     <div v-show="addressCopied" class="copied-label">Copied</div>
     <img class="img-wallet-copy" src="../../../assets/copy.png" @click="copyAddress(wallet)" alt="">
-    <a-button type="primary" class="common-export-btn" @click="exportWallet(wallet)">{{$t('common.export')}}</a-button>  
+    <a-button type="primary" class="common-export-btn" @click="exportWallet(wallet)" v-if="isCommonWallet"
+    >{{$t('common.export')}}</a-button>  
     
   </div>
 </template>
@@ -26,7 +27,8 @@
     props: ['wallet'],
     data() {
       return {
-        addressCopied: false
+        addressCopied: false,
+        isCommonWallet: this.wallet.key ? true: false
       }
     },
     methods: {

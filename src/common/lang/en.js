@@ -4,6 +4,7 @@ export default {
     mainNet: 'MainNet',
     copied: 'Copied!',
     confirmPwdTips: 'Please confirm and input the password your wallet.',
+    confirmTips: 'Please confirm the transfer.',
     transSentSuccess: 'Transaction has been sent successfully!',
     pwdErr: 'Password error',
     ongNoEnough: 'No enough ong to pay for the transfer fee.',
@@ -215,5 +216,14 @@ export default {
     path: 'Save keystore file path',
     change: 'Change',
     setNetworkSuccess: 'The network has been set to '
+  },
+
+  ledgerWallet: {
+    nameOfLedgerWallet: 'Name of your ledger wallet',
+    info: 'Ledger Info',
+    connectApp: 'Please connect to your ledger device and open the ONT app on it.',
+    status: 'Device Status',
+    labelEmpty: 'Label can not be empty.',
+    deviceError: 'Can not connect to device.Please try again.'
   }
 }

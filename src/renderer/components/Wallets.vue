@@ -13,10 +13,6 @@
         <a class="nav-link" id="pills-shared-tab" data-toggle="pill" href="#pills-shared" role="tab"
            aria-controls="pills-shared" aria-selected="false">{{ $t('wallets.shared') }}</a>
       </li>
-      <!--<li class="nav-item">-->
-        <!--<a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab"-->
-           <!--aria-controls="pills-profile" aria-selected="false">{{ $t('wallets.temp') }}</a>-->
-      <!--</li>-->
       <li class="nav-item">
         <a class="nav-link" id="pills-ledger-tab" data-toggle="pill" href="#pills-ledger" role="tab"
            aria-controls="pills-ledger" aria-selected="false">{{ $t('wallets.ledger') }}</a>
@@ -77,10 +73,9 @@
 
       <div class="tab-pane fade" id="pills-ledger" role="tabpanel" aria-labelledby="pills-ledger-tab">
         <div class="d-flex flex-wrap align-content-start center">
-          <!--需要填充实际内容-->
-          <!--<div class="normalWallet" v-for="w in ledgerWallet" :key="w.address">-->
-            <!--<ledger-wallet-details :wallet="w"></ledger-wallet-details>-->
-          <!--</div>-->
+          <div class="normalWallet" v-for="w in hardwareWallet" :key="w.address">
+            <json-wallet-details :wallet="w"></json-wallet-details>
+          </div>
 
           <div class="div-create-wallet" :class="[viewBtn?'div-create-wallet-bg-color':'']"
                v-on:mouseenter="viewAllBtn(true)" v-on:mouseleave="viewAllBtn(false)">
