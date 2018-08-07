@@ -1,6 +1,6 @@
 import { wallet } from '@cityofzion/neon-js'
-
-
+import { WALLET_TYPE} from '../../../core/consts'
+import dbService from '../../../core/dbService'
 const state = {
     publicKey: '',
     address: '',
@@ -26,6 +26,15 @@ const actions = {
         localStorage.setItem('address', account.address);        
         commit('LOGIN_WITH_LEDGER', {publicKeyEncoded, address: account.address})
         return true;
+    },
+    createLedgerWalletWithPk({commit}, pk) {
+        const publicKeyEncoded = wallet.getPublicKeyEncoded(pk);
+        const account = new wallet.Account(publicKeyEncoded);
+        const ledgerWallet =  {
+                publicKey: publicKeyEncoded,
+                address: account.address
+            }
+        return ledgerWallet;
     }
 }
 

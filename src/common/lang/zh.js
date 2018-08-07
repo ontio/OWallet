@@ -4,6 +4,7 @@ export default {
     mainNet: 'Main Net',
     copied: '已复制！',
     confirmPwdTips: '请确认并输入钱包密码。',
+    confirmTips: '请确认转账',
     transSentSuccess: '交易已成功发送',
     pwdErr: '密码错误',
     ongNoEnough: 'ONG不足，无法支付转账手续费。',
@@ -214,5 +215,13 @@ export default {
     path: '钱包保存路径',
     change: '修改',
     setNetworkSuccess: '网络成功设置成：'
+  },
+  ledgerWallet: {
+    nameOfLedgerWallet: 'Ledger钱包名称',
+    info: 'Ledger钱包信息',
+    connectApp: '请连接您的ledger设备并打开ONT app.',
+    status: '设备状态',
+    labelEmpty: '钱包名称不能为空.',
+    deviceError: '不能连接到设备，请重试.'
   }
 }

@@ -43,7 +43,9 @@
 
       <div class="tab-pane fade" id="import-json-dat-pills" role="tabpanel"
            aria-labelledby="import-json-dat-pills-tab">
-        <a-input class="input" :placeholder="$t('importJsonWallet.label')" v-model="datLabel"></a-input>
+        <a-input class="input" :placeholder="$t('importJsonWallet.label')" v-model="datLabel" name="datLabel"
+        v-validate="{required: true}" ></a-input>
+        <span class="v-validate-span-errors" v-show="errors.has('datLabel')">{{ errors.first('datLabel') }}</span>
         <input type="file" @change="onFileChange" id="datFile">
 
         <a-input type="password" class="input"
@@ -105,6 +107,7 @@
   import {Wallet, Account, Crypto} from "ontology-ts-sdk"
   import FileHelper from "../../../../core/fileHelper"
   import dbService from '../../../../core/dbService'
+import { DEFAULT_SCRYPT } from '../../../../core/consts';
 
   export default {
     name: 'BasicInfo',
@@ -152,7 +155,8 @@
           })
         } else if (this.tabName === 'dat') {
           this.$validator.validateAll({
-            datPassword: this.datPassword
+            datPassword: this.datPassword,
+            datLabel: this.datLabel
           }).then(result => {
             if (result) {
               this.$store.dispatch('showLoadingModals')
@@ -206,6 +210,22 @@
         console.log(this.dat)
         console.log(this.datPassword)
         console.log(this.datLabel)
+        FileHelper.readWalletFile(this.dat).then(res => {
+          const wallet = JSON.parse(res)
+          const account = wallet.accounts[0]
+          const enc = new Crypto.PrivateKey(account.key);
+          const address = new Crypto.Address(account.address)
+
+          try {
+            enc.decrypt(this.datPassword, address, account.salt, DEFAULT_SCRYPT)
+          } catch(err) {
+            console.log(err)
+            this.$store.dispatch('hideLoadingModals')
+            this.$message.error(this.$t('common.pwdErr'))
+            return;
+          }
+          this.saveToDb(account);
+        })
       },
       importAccountForWif() {
         let privateKey;

@@ -4,13 +4,14 @@
       <a-input class="input" :placeholder="$t('importLedgerWallet.label')" v-model="label"></a-input>
     </div>
     <div class="div-ledger-info">
-      <div class="div-ledger-info-tit"><strong>Ledger Info</strong></div>
+      <div class="div-ledger-info-tit"><strong>{{$t('ledgerWallet.info')}}</strong></div>
 
-      <div class="title" style="margin-bottom: 15px;">Login with Ledger</div>
-      <button :disabled="ledgerStatus!==''" @click="login">Login</button>
+      <div class="title" style="margin-bottom: 15px;">{{$t('ledgerWallet.connectApp')}}</div>
+
       <p style="color: red;margin-top: 30px;">
-        <strong style="color: black">Status: </strong>{{ ledgerStatus }}
+        <strong style="color: black">{{$t('ledgerWallet.status')}}: </strong>{{ ledgerStatus }}
       </p>
+
     </div>
 
     <div class="basic-pk-btns">
@@ -26,6 +27,7 @@
   import {mapState} from 'vuex'
   import {Wallet, Account, Crypto} from "ontology-ts-sdk"
   import dbService from '../../../../core/dbService'
+  import {WALLET_TYPE}  from '../../../../core/consts'
   import {getDeviceInfo, getPublicKey} from '../../../../core/ontLedger'
 
   export default {
@@ -35,10 +37,13 @@
       this.intervalId = setInterval(() => {
         that.getDevice()
       }, this.interval)
-      console.log('created.')
+    },
+    beforeDestroy(){
+      clearInterval(this.intervalId)
     },
     data() {
       return {
+        intervalId: '',
         interval: 3000,
         label: '',
         ledgerStatus: ''
@@ -46,11 +51,21 @@
     },
     methods: {
       next() {
-        let account
-        // Get address, Create account.
-        // account =
-
-        // this.saveToDb(account)
+        if(!this.label) {
+          this.$message.error(this.$t('ledgerWallet.labelEmpty'))
+          return;
+        }
+        if(!this.publicKey) {
+          this.$message.error(this.$t('ledgerWallet.deviceError'))
+          return;
+        }
+        if(this.publicKey) {
+          this.$store.dispatch('createLedgerWalletWithPk', this.publicKey).then(res => {
+            if(res) {
+              this.saveToDb(res)
+            }
+          })
+        }
       },
 
       getDevice() {
@@ -61,7 +76,7 @@
         }).catch(err => {
           console.log(err)
           if (err === 'NOT_FOUND') {
-            this.ledgerStatus = 'USB not found.'
+            this.ledgerStatus = 'Ledger not open.'
           } else if (err === 'NOT_SUPPORT') {
             this.ledgerStatus = 'Ledger not supported.'
           } else {
@@ -73,7 +88,7 @@
         getPublicKey().then(res => {
           console.log('pk info: ' + res);
           this.publicKey = res
-          this.ledgerStatus = ''
+          this.ledgerStatus = 'Ready to join'
         }).catch(err => {
           this.ledgerStatus = err.message
         })
@@ -92,9 +107,10 @@
       },
 
       saveToDb(account) {
+        account.label = this.label;
         const that = this;
         const wallet = {
-          type: 'CommonWallet',
+          type: WALLET_TYPE.HardwareWallet,
           address: account.address,
           wallet: account
         }
@@ -104,9 +120,7 @@
             that.$message.warning('The wallet already exists in local.')
             return;
           }
-          // console.log(newDoc)
-          that.$store.commit('INIT_JSON_WALLET')
-          that.$message.success('Import wallet succeessfully!')
+          that.$message.success('Import ledger wallet succeessfully!')
           that.$router.push({name: 'Wallets'})
         })
       },
