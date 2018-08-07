@@ -28,8 +28,11 @@ const state = {
         
     },
     currentSigner: '',
-    localCopayers : []
-
+    localCopayers : [],
+    redeem: {
+        claimableOng: 0,
+        balanceOng: 0
+    }
 }
 
 const mutations = {
@@ -65,6 +68,9 @@ const mutations = {
             coPayers: [],
             sponsorPayer: ''
         }
+    },
+    UPDATE_CURRENT_REDEEM(state, payload) {
+        state.redeem = payload.redeem
     }
 
 }

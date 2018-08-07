@@ -188,11 +188,19 @@ import axios from 'axios';
 export default {
   name: 'SendConfirm',
   data() {
+    const net = localStorage.getItem('net');
+    let url = ''
+    if (net === 'TEST_NET') {
+        url = TEST_NET + ':20334'
+    } else {
+        url = MAIN_NET + ':20334'
+    }
     const currentWallet = JSON.parse(sessionStorage.getItem('currentWallet'));
     return {
       currentWallet,
       checked: false,
-      password: ''
+      password: '',
+      nodeUrl: url
     }
   },
   computed: {

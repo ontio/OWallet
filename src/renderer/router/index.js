@@ -119,5 +119,10 @@ export default new Router({
       name: 'CommonReceive',
       component: require('@/components/CommonWallet/CommonReceive').default
     },
+    {
+      path: '/commonWalletRedeem/:walletType',
+      name: 'CommonRedeem',
+      component: require('@/components/CommonWallet/CommonRedeem').default
+    },
   ]
 })

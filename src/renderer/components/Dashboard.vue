@@ -347,7 +347,8 @@
               <span>{{waitBoundOng}}</span>
             </div>
           </div>
-          <!-- <a-button type="default" class="btn-redeem">{{$t('commonWalletHome.redeem')}}</a-button> -->
+          <a-button type="default" class="btn-redeem" :disabled="unboundOng == 0"
+          @click="redeemOng">{{$t('commonWalletHome.redeem')}}</a-button>
         </div>
 
 
@@ -564,6 +565,19 @@
       },
       commnReceive() {
         this.$router.push({path: '/commonWalletReceive/commonWallet'})
+      },
+      redeemOng() {
+        
+          const redeem = {
+              claimableOng : this.unboundOng,
+              balance: this.balance.ong
+          }
+        this.$store.commit('UPDATE_CURRENT_REDEEM', {redeem: redeem})
+        if(this.currentWallet.key) {
+            this.$router.push({path:'/commonWalletRedeem/commonWallet'})
+        } else {
+            this.$router.push({path: '/commonWalletRedeem/hardwareWallet'})            
+        }
       },
       claimOng() {
         // makeWithdrawOngTx(addressObj, addressObj, value, new Address(payer), gasPrice, gasLimit)
