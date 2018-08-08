@@ -69,6 +69,9 @@ Vue.component(Breadcrumb.name, Breadcrumb)
 Vue.component(Breadcrumb.Item.name, Breadcrumb.Item)
 Vue.component(Checkbox.name, Checkbox)
 Vue.prototype.$message = message
+Vue.prototype.$confirm = Modal.confirm
+Vue.prototype.$success = Modal.success
+
 /* eslint-disable no-new */
 new Vue({
   components: { App },

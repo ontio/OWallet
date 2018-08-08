@@ -19,7 +19,7 @@ export default {
     pluginDevice: 'Please plugin the device and login.',
     readyToSubmit: 'Ready to submit',
     waitForSign: 'Waiting for sign',
-    readyToImport: 'Ready to import',
+    readyToImport: 'Ready to connect',
     existLocal: 'The wallet is already in local',
     importLedgerSuccess: 'Import ledger wallet successfully.'
   },
@@ -50,9 +50,10 @@ export default {
     importCommonWallet: 'Import Wallet',
     createSharedWallet: 'Create Wallet',
     joinSharedWallet: 'Join Wallet',
-    importLedgerWallet: 'Import Ledger',
+    importLedgerWallet: 'Connect Ledger',
     ledger: 'Ledger Wallet',
-    comingSoon: 'Coming soon...'
+    comingSoon: 'Coming soon...',
+    ledgerHelpLink: 'How to use ONT app on ledger?'
   },
 
   dashboard: {
@@ -97,7 +98,7 @@ export default {
     datRePassword: 'Repeat New password',
     password: 'Password',
     rePassword: 'Repeat password',
-    next: 'Import',
+    next: 'Connect',
     cancel: 'Cancel',
     back: 'Back',
     details: '',
@@ -161,8 +162,8 @@ export default {
   },
 
   importLedgerWallet: {
-    import: 'Import Ledger Wallet',
-    label: 'Name of Individual Wallet'
+    import: 'Connect Ledger Wallet',
+    label: 'Name of Ledger Wallet'
   },
 
   sharedWalletHome: {

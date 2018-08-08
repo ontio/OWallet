@@ -22,12 +22,12 @@
   const interval = 3000;
   export default {
     name: 'LoginLedger',
-    created: function () {
+    mounted: function () {
       var that = this;
+      this.getDevice()
       this.intervalId = setInterval(() => {
         that.getDevice()
       }, interval)
-      console.log('created.')
     },
     beforeDestroy: function () {
       clearInterval(this.intervalId);
@@ -55,11 +55,11 @@
         }).catch(err => {
           console.log(err)
           if (err === 'NOT_FOUND') {
-            this.ledgerStatus = 'USB not found.'
+            this.ledgerStatus = this.$t('common.ledgerNotOpen')
           } else if (err === 'NOT_SUPPORT') {
-            this.ledgerStatus = 'Ledger not supported.'
+            this.ledgerStatus = this.$t('common.ledgerNotSupported')
           } else {
-            this.ledgerStatus = 'Please plugin device to login.'
+            this.ledgerStatus = this.$t('common.pluginDevice')
           }
         })
       },

@@ -430,11 +430,21 @@ import { BigNumber } from 'bignumber.js';
         nodeUrl: url,
         unboundOng: 0,
         waitBoundOng: 0,
-        completedTx: []
+        completedTx: [],
+        intervalId: '',
+        interval:2000,
       }
     },
     mounted: function () {
       this.refresh()
+        let that = this;
+        this.intervalId = setInterval(() => {
+            that.getBalance();
+            that.getTransactions();
+        }, this.interval)
+    },
+    beforeDestroy(){
+        clearInterval(this.intervalId)
     },
     methods: {
       handleBack() {

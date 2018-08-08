@@ -192,18 +192,19 @@
 import {mapState} from 'vuex'
 import {legacySignWithLedger} from '../../../core/ontLedger'
 import { TEST_NET, MAIN_NET, ONT_CONTRACT, ONT_PASS_NODE, DEFAULT_SCRYPT } from '../../../core/consts'
-import {Crypto, OntAssetTxBuilder, TransactionBuilder} from 'ontology-ts-sdk'
+import {Crypto, OntAssetTxBuilder, TransactionBuilder, utils} from 'ontology-ts-sdk'
 import axios from 'axios';
 import {getDeviceInfo, getPublicKey} from '../../../core/ontLedger'
 import $ from 'jquery'
 import {BigNumber} from 'bignumber.js'
 export default {
   name: 'SendConfirm',
-  created: function () {
+  mounted: function () {
       const currentWallet = JSON.parse(sessionStorage.getItem('currentWallet'));
       if(currentWallet.key) {
           return;
       }
+      this.getDevice()
       let that = this;
       this.intervalId = setInterval(() => {
         that.getDevice()
@@ -290,6 +291,13 @@ export default {
             this.$message.error(res.Result)
           }
           this.$emit('sendConfirmSubmit')
+          const title = this.$t('common.transSentSuccess')
+          setTimeout(() => {
+              this.$success({
+                  title: title,
+                  content: 'Transaction hash: ' + utils.reverseHex(tx.getHash())
+              })
+          }, 100)
         })
       },
     submit() {

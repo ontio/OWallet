@@ -76,6 +76,9 @@
 
       <div class="tab-pane fade" id="pills-ledger" role="tabpanel" aria-labelledby="pills-ledger-tab">
         <div class="d-flex flex-wrap align-content-start center">
+          <div class="ledger-help-link" @click="toLedgerHelp">
+             {{$t('wallets.ledgerHelpLink')}}
+          </div>
           <div class="normalWallet" v-for="w in hardwareWallet" :key="w.address">
             <json-wallet-details :wallet="w"></json-wallet-details>
           </div>
@@ -134,7 +137,7 @@
   import JsonWalletDetails from './JsonWallet/View/Details'
   import SharedWalletDetails from './SharedWallet/View/Details'
   import SetPathModal from './Modals/SetPath'
-
+const {BrowserWindow} = require('electron').remote
   export default {
     name: 'Wallets',
     data() {
@@ -174,6 +177,15 @@
       },
       viewAllBtn(bool) {
         this.viewBtn = bool
+      },
+      toLedgerHelp() {
+        let win = new BrowserWindow({width: 800, height: 600, center:true})
+        win.on('closed', () => {
+          win = null
+        })
+        
+        // Load a remote URL
+        win.loadURL('https://support.ledgerwallet.com/hc/en-us/articles/360007583514')
       }
     },
     components: {
@@ -217,6 +229,7 @@
 
   .center {
     padding: 1.88rem 3rem;
+    position: relative;
   }
 
   .normalWallet,
@@ -330,5 +343,17 @@
     font-size: 18px;
     font-weight: bold;
     color: #35bfdf;
+  }
+  .ledger-help-link {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    top: -5px;
+    left: -5rem;
+    cursor: pointer;
+    color: #196BD8;
+  }
+  .ledger-help-link :hover {
+    text-decoration: underline;
   }
 </style>

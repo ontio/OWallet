@@ -33,10 +33,16 @@
     },
     methods: {
       toWalletHome(wallet) {
-        localStorage.setItem('publicKey', wallet.publicKey);
-        localStorage.setItem('address', wallet.address)
-        sessionStorage.setItem('currentWallet', JSON.stringify(wallet))
-        this.$router.push({name: 'Dashboard'})
+        if(this.isCommonWallet) {
+          localStorage.setItem('publicKey', wallet.publicKey);
+          localStorage.setItem('address', wallet.address)
+          sessionStorage.setItem('currentWallet', JSON.stringify(wallet))
+          this.$router.push({name: 'Dashboard'})
+        } else {
+          sessionStorage.setItem('currentWallet', JSON.stringify(wallet))
+          this.$router.push({name: 'LoginLedger'})
+        }
+        
       },
       copyAddress(wallet) {
         this.$copyText(wallet.address)

@@ -56,7 +56,7 @@
 <script>
 import Breadcrumb from '../Breadcrumb'
 import {legacySignWithLedger} from '../../../core/ontLedger'
-import {RestClient, Crypto,OntAssetTxBuilder, TransactionBuilder} from 'ontology-ts-sdk'
+import {RestClient, Crypto,OntAssetTxBuilder, TransactionBuilder, utils} from 'ontology-ts-sdk'
 import { TEST_NET, MAIN_NET, ONT_CONTRACT, ONT_PASS_NODE, DEFAULT_SCRYPT } from '../../../core/consts'
 import {mapState} from 'vuex'
 import {getDeviceInfo, getPublicKey} from '../../../core/ontLedger'
@@ -66,12 +66,13 @@ export default {
     components: {
         Breadcrumb
     },
-    created: function () {
+    mounted: function () {
     const currentWallet = JSON.parse(sessionStorage.getItem('currentWallet'));
       if(currentWallet.key) {
           return;
       }
       let that = this;
+      that.getDevice()
       this.intervalId = setInterval(() => {
         that.getDevice()
       }, this.interval)
@@ -157,7 +158,14 @@ export default {
             } else {
                 this.$message.error(res.Result)
             }
+            const title = this.$t('common.transSentSuccess')
             this.$router.push({path:'/dashboard'})
+            setTimeout(() => {
+                this.$success({
+                    title: title,
+                    content: 'Transaction hash: ' + utils.reverseHex(tx.getHash())
+                })
+            }, 100)
         })
       },
         submit() {
