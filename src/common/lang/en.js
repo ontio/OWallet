@@ -12,7 +12,12 @@ export default {
     networkErr: 'Network error!',
     normalWallet: 'Individual Wallet',
     sharedWallet: 'Shared Wallet',
-    export: 'Export'
+    export: 'Export',
+    ledgerNotOpen: 'Ledger not open',
+    ledgerNotSupported: 'Ledger not supported',
+    pluginDevice: 'Please plugin the device and login.',
+    readyToSubmit: 'Ready to submit',
+    waitForSign: 'Waiting for sign'
   },
 
   TopNav: {

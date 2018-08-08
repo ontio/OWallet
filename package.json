@@ -56,6 +56,11 @@
       ],
       "icon": "build/icons/icon.ico"
     },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true
+    },
     "linux": {
       "target": [
         "deb",

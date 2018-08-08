@@ -12,7 +12,12 @@ export default {
     networkErr: '网络错误！',
     normalWallet: '普通钱包',
     sharedWallet: '共享钱包',
-    export: '导出'
+    export: '导出',
+    ledgerNotOpen: 'Ledger未打开',
+    ledgerNotSupported: 'Ledger不支持',
+    pluginDevice: '请连接设备并登录.',
+    readyToSubmit: '可以提交',
+    waitForSign: '等待签名'
   },
 
   TopNav: {
@@ -185,9 +190,9 @@ export default {
   },
 
   commonWalletHome: {
-    claimableOng: '可认领的ONG',
+    claimableOng: '可提取的ONG',
     unboundOng: '未绑定的ONG',
-    redeem: '赎回',
+    redeem: '提取',
     receive: '接收',
     walletQrCode: '钱包地址二维码',
     walletAddress: '钱包地址',
