@@ -80,6 +80,8 @@ export default {
   },
 
   importJsonWallet: {
+    datFile: '选择文件',
+    selectedDatFile: '已选择文件： ',
     dat: '.dat文件',
     datImportPassword: '解锁dat文件的密码',
     create: '导入普通钱包',

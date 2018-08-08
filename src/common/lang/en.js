@@ -79,6 +79,8 @@ export default {
   },
 
   importJsonWallet: {
+    datFile: 'Select the file',
+    selectedDatFile: 'Selected file: ',
     dat: '.dat File',
     datImportPassword: 'Open .dat file password',
     create: 'Import Individual Wallet',

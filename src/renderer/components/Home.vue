@@ -76,7 +76,7 @@
     </div>
     <div class="col-2 text-center">
       <div class="div-slogan home-slogan">
-          <p>O Wallet</p>  
+          <p>O Wallet</p>
           <p>A comprehensive Ontology desktop wallet.</p>
       </div>
       <div>
@@ -86,7 +86,7 @@
       </div>
 
       <div class="div-footer-version">
-        <p>Version: 0.8.0</p>
+        <p>Version: 0.8.1</p>
         <p>Powered by Ontology</p>
       </div>
     </div>

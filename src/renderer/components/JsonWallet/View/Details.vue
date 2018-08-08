@@ -14,8 +14,8 @@
     <div v-show="addressCopied" class="copied-label">Copied</div>
     <img class="img-wallet-copy" src="../../../assets/copy.png" @click="copyAddress(wallet)" alt="">
     <a-button type="primary" class="common-export-btn" @click="exportWallet(wallet)" v-if="isCommonWallet"
-    >{{$t('common.export')}}</a-button>  
-    
+    >{{$t('common.export')}}</a-button>
+
   </div>
 </template>
 
@@ -112,15 +112,15 @@
   }
   .common-export-btn {
     height: 34px;
-    width:114px;
-    background:#5EA2FF;
+    width: 78px;
+    background: #5EA2FF;
     font-family: AvenirNext-Medium;
-    font-size: 18px;
+    font-size: 14px;
     color: #FFFFFF;
-    border:none;
-    border-radius:0;
+    border: 1px solid #FFFFFF;
+    border-radius: 0;
     position: absolute;
-    top:0px;
-    right:20px;
+    top: 0px;
+    right: 20px;
   }
 </style>

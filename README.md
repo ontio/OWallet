@@ -28,13 +28,13 @@ yarn install
 3. Run in Development
 
 ```
-npm run dev
+yarn run dev
 ```
 
 4. Build
 
 ```
-npm run package
+yarn run package
 ```
 
 ## Install released app

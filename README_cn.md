@@ -29,13 +29,13 @@ yarn install
 3. 开发模式运行
 
 ```
-npm run dev
+yarn run dev
 ```
 
 4. 打包
 
 ```
-npm run package
+yarn run package
 ```
 
 ## 安装发布的客户端
