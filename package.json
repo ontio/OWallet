@@ -2,7 +2,7 @@
   "name": "ont-wallet-test",
   "productName": "O Wallet",
   "homepage": "http://ont.io",
-  "version": "v0.8.0",
+  "version": "v0.8.1",
   "author": "MickeyWang <wangdashuang@onchain.com>",
   "description": "ledger",
   "license": "Apache-2.0",
