@@ -30,6 +30,9 @@
           <div class="normalWallet" v-for="w in sharedWallet" :key="w.address">
             <shared-wallet-details :wallet="w"></shared-wallet-details>
           </div>
+          <div class="normalWallet" v-for="w in hardwareWallet" :key="w.address">
+            <json-wallet-details :wallet="w"></json-wallet-details>
+          </div>
         </div>
       </div>
 

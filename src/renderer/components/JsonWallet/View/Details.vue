@@ -2,7 +2,7 @@
   <div class="common-detail-container">
     <div @click="toWalletHome(wallet)">
       <div class="div-shared-wallet-sign">
-        <span>{{ $t('common.normalWallet') }}</span>
+        <span>{{ isCommonWallet ? $t('common.normalWallet') : $t('common.hardwareWallet') }}</span>
       </div>
       <div class="div-wallet-name">{{wallet.label}}</div>
       <!--<img class="img-wallet-edit" src="./../assets/edit.png" alt="">-->
