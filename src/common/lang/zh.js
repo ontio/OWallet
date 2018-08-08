@@ -76,7 +76,9 @@ export default {
     wif: 'WIF',
     mnemonic: '助记词',
     privateKey: '私钥',
-    createSuccess: '创建普通钱包成功！'
+    backupWallet: '请下载.dat文件并做好备份',
+    createSuccess: '创建普通钱包成功！',
+    download: '下载'
   },
 
   importJsonWallet: {
@@ -88,6 +90,8 @@ export default {
     basicInfo: '基本信息',
     label: '钱包名称',
     wif: 'WIF',
+    wifTip: '请输入52位的WIF文本',
+    privateKeyTip: '请输入64位HEX格式的密钥',
     datPassword: '输入新密码',
     datRePassword: '重复新密码',
     password: '输入密码',
@@ -211,7 +215,8 @@ export default {
 
   transfer: {
     inputValidAmount: '请输入有效的转账金额。',
-    inputValidAddress: '请输入有效的转账地址。'
+    inputValidAddress: '请输入有效的转账地址。',
+    exceedBalance : '转账金额不能超余额'
   },
   setting: {
     name: '设置',

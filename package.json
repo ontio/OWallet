@@ -23,7 +23,8 @@
     "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
     "postinstall": "npm run lint:fix",
     "package": "npm run pack && electron-builder -mwl",
-    "packageLocal": "electron-builder"
+    "packageLocal": "electron-builder",
+    "packageWin": "yarn run pack && electron-builder --win --x64"
   },
   "build": {
     "productName": "O Wallet",
@@ -83,6 +84,7 @@
     "axios": "^0.18.0",
     "babel-core": "^6.25.0",
     "babel-plugin-import": "^1.8.0",
+    "bignumber.js": "^7.2.1",
     "bootstrap": "^4.1.1",
     "clipboard": "^2.0.1",
     "font-awesome": "^4.7.0",
@@ -90,8 +92,8 @@
     "nedb": "^1.8.0",
     "ontology-ts-sdk": "^0.9.1",
     "popper.js": "^1.14.3",
-    "vue": "^2.3.3",
     "vee-validate": "^2.1.0-beta.7",
+    "vue": "^2.3.3",
     "vue-antd-ui": "^1.0.0",
     "vue-axios": "^2.1.1",
     "vue-clipboard2": "^0.2.1",

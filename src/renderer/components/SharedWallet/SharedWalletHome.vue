@@ -350,6 +350,7 @@ import { TEST_NET, MAIN_NET, ONT_PASS_NODE, ONT_PASS_NODE_PRD,ONT_PASS_URL } fro
 import dbService from '../../../core/dbService'
 import axios from 'axios'
 import Breadcrumb from '../Breadcrumb'
+import { BigNumber } from 'bignumber.js';
 export default {
     name:'SharedWalletHome',
     data() {
@@ -425,7 +426,7 @@ export default {
             const from = new Ont.Crypto.Address(this.sharedWallet.sharedWalletAddress);
             restClient.getBalance(from).then(res => {
             this.balance.ont = res.Result.ont
-            this.balance.ong = parseFloat(res.Result.ong/1e9).toFixed(9)
+            this.balance.ong = new BigNumber(res.Result.ong).div(1e9).toFixed(9)
             this.getExchangeCurrency()
             })
         },
@@ -458,7 +459,7 @@ export default {
                 console.log(res)
                 this.pendingTx = res.data.SigningSharedTransfers.map(p => {
                     if(p.assetName.toLowerCase() ==='ong') {
-                        p.amount = p.amount/1e9
+                        p.amount = new BigNumber(p.amount).div(1e9)
                     }
                     return p;
                 })

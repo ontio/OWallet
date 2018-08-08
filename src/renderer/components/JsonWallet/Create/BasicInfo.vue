@@ -1,8 +1,11 @@
 <template>
   <div>
     <div class="basic-label">
-      <a-input class="input" :placeholder="$t('createJsonWallet.label')" v-model="label"></a-input>
-
+      <a-input class="input" :placeholder="$t('createJsonWallet.label')" v-model="label"
+          v-validate="{required: true}" name="label"
+      ></a-input>
+      <span class="v-validate-span-errors" v-show="errors.has('label')">{{ errors.first('label') }}</span>
+      
       <a-input type="password" class="input input-password"
                v-validate="{required: true ,min:6}" name="password"
                v-model="password" :placeholder="$t('createJsonWallet.password')"></a-input>

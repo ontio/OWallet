@@ -396,6 +396,7 @@
   import {Crypto, OntAssetTxBuilder} from 'ontology-ts-sdk'
   import axios from 'axios';
   import Breadcrumb from './Breadcrumb'
+import { BigNumber } from 'bignumber.js';
 
   export default {
     name: 'Dashboard',
@@ -508,7 +509,7 @@
         const restClient = new Ont.RestClient(this.nodeUrl);
         restClient.getAllowance('ong', new Crypto.Address(ONT_CONTRACT), new Crypto.Address(this.address)).then(res => {
           console.log(res.Result)
-          this.unclaimOng = Number(res.Result) / 1e9;
+          this.unclaimOng = new BigNumber(res.Result).div(1e9);
         }).catch(err => {
           this.$message.error(this.$t('common.networkErr'))
         })
@@ -583,7 +584,7 @@
         // makeWithdrawOngTx(addressObj, addressObj, value, new Address(payer), gasPrice, gasLimit)
         const from = new Crypto.Address(this.address);
         const to = from;
-        const value = this.unclaimOng * 1e9;
+        const value = new BigNumber(this.unclaimOng).multipliedBy(1e9);
         const tx = OntAssetTxBuilder.makeWithdrawOngTx(from, to, value, from, '500', '20000');
         const pk = new Ont.Crypto.PublicKey(this.publicKey);
         const txSig = new Ont.TxSignature();
@@ -625,7 +626,7 @@
         const restClient = new Ont.RestClient(this.nodeUrl);
         const from = new Ont.Crypto.Address(this.address);
         const to = new Ont.Crypto.Address(this.toAddress);
-        const amount = this.asset === 'ONT' ? this.amount : Number(this.amount) * 1e9;
+        const amount = this.asset === 'ONT' ? this.amount : new BigNumber(this.amount).multipliedBy(1e9);
         const tx = Ont.OntAssetTxBuilder.makeTransferTx(this.asset, from, to, amount, '500', '20000');
         const pk = new Ont.Crypto.PublicKey(this.publicKey);
         const txSig = new Ont.TxSignature();

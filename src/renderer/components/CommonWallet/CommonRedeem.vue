@@ -60,7 +60,7 @@ import {RestClient, Crypto,OntAssetTxBuilder, TransactionBuilder} from 'ontology
 import { TEST_NET, MAIN_NET, ONT_CONTRACT, ONT_PASS_NODE, DEFAULT_SCRYPT } from '../../../core/consts'
 import {mapState} from 'vuex'
 import {getDeviceInfo, getPublicKey} from '../../../core/ontLedger'
-
+import {BigNumber} from 'bignumber.js'
 export default {
     name: 'CommonRedeem',
     components: {
@@ -168,8 +168,9 @@ export default {
             
             const from = new Crypto.Address(this.currentWallet.address);
             const to = from;
-            const value = Number(this.redeem.claimableOng) * 1e9;
-            const tx = OntAssetTxBuilder.makeWithdrawOngTx(from, to, value, from, '500', '20000');
+            const value = new BigNumber(this.redeem.claimableOng);
+            const amount = value.multipliedBy(1e9).toString();
+            const tx = OntAssetTxBuilder.makeWithdrawOngTx(from, to, amount, from, '500', '20000');
             if(this.type === 'commonWallet') {
                 this.$store.dispatch('showLoadingModals')
                 const enc = new Crypto.PrivateKey(this.currentWallet.key)

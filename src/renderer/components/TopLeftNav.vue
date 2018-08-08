@@ -16,7 +16,7 @@
       </router-link>
 
         <!-- <div class="setting-img" alt="" @click="toSetting"></div> -->
-      <div class="nav-help" ></div>
+      <div class="nav-help" @click="toHelp"></div>
 
       <div class="nav-network">
         {{network}}
@@ -26,6 +26,7 @@
 </template>
 
 <script>
+const {BrowserWindow} = require('electron').remote
 	export default {
     name: "TopLeftNav",
     computed: {
@@ -42,6 +43,23 @@
       },
       toSetting() {
         this.$router.push({name:'Setting'})
+      },
+      toHelp() {
+        const lang = localStorage.getItem('user_lang')
+        let url = ''
+        if(lang === 'zh') {
+          url = 'https://ontfans.io/?/article/36'
+        } else {
+          url = 'https://ontfans.io/article_39.html'
+        }
+        
+        let win = new BrowserWindow({width: 800, height: 600, center:true})
+        win.on('closed', () => {
+          win = null
+        })
+        
+        // Load a remote URL
+        win.loadURL(url)
       }
 		}
 	}

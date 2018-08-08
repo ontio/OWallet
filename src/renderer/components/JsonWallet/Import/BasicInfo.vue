@@ -30,7 +30,7 @@
         <a-input class="input" :placeholder="$t('importJsonWallet.label')" v-model="pkLabel"></a-input>
         <a-input class="input input-wif"
                  v-validate="{required: true, length:64}" data-vv-as="private key" name="pk"
-                 v-model="pk" :placeholder="$t('importJsonWallet.privateKey')"></a-input>
+                 v-model="pk" :placeholder="$t('importJsonWallet.privateKeyTip')"></a-input>
         <span class="v-validate-span-errors" v-show="errors.has('pk')">{{ errors.first('pk') }}</span>
         <a-input type="password" class="input input-password"
                  v-validate="{required: true, min:6}" data-vv-as="password" name="pkPassword"
@@ -64,7 +64,7 @@
 
         <a-input class="input input-wif"
                  v-validate="{required: true}" name="wif"
-                 v-model="wif" :placeholder="$t('importJsonWallet.wif')"></a-input>
+                 v-model="wif" :placeholder="$t('importJsonWallet.wifTip')"></a-input>
         <span class="v-validate-span-errors" v-show="errors.has('wif')">{{ errors.first('wif') }}</span>
 
         <a-input type="password" class="input input-password"

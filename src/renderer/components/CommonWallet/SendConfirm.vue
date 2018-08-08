@@ -196,6 +196,7 @@ import {Crypto, OntAssetTxBuilder, TransactionBuilder} from 'ontology-ts-sdk'
 import axios from 'axios';
 import {getDeviceInfo, getPublicKey} from '../../../core/ontLedger'
 import $ from 'jquery'
+import {BigNumber} from 'bignumber.js'
 export default {
   name: 'SendConfirm',
   created: function () {
@@ -304,9 +305,10 @@ export default {
       const from = new Ont.Crypto.Address(this.currentWallet.address);
       const to = new Ont.Crypto.Address(this.transfer.to);
       const asset = this.transfer.asset;
-      const amount = asset === 'ONT' ? this.transfer.amount : Number(this.transfer.amount) * 1e9;
+      const amount = asset === 'ONT' ? this.transfer.amount : new BigNumber(this.transfer.amount).multipliedBy(1e9);
       const gasLimit = '20000';
-      const gasPrice = (this.transfer.gas * 1e9 / parseInt(gasLimit)).toString();
+      const gas = (new BigNumber(this.transfer.gas)).multipliedBy(1e9);
+      const gasPrice = gas.div(parseInt(gasLimit)).toString();
       const tx = Ont.OntAssetTxBuilder.makeTransferTx(asset, from, to, amount, gasPrice, gasLimit);
       
       if (this.isCommonWallet) {

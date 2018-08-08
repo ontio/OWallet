@@ -81,6 +81,7 @@ import {OntAssetTxBuilder, Crypto, TransactionBuilder, utils} from 'ontology-ts-
 import {ONT_PASS_NODE, ONT_PASS_NODE_PRD, ONT_PASS_URL, DEFAULT_SCRYPT} from '../../../../core/consts'
 import axios from 'axios'
 import dbService from '../../../../core/dbService'
+import { BigNumber } from 'bignumber.js';
 
 export default {
     name:'InputPassword',
@@ -134,9 +135,10 @@ export default {
             const tokenType = this.transfer.asset;
             const from = new Crypto.Address(this.sharedWallet.sharedWalletAddress)
             const to = new Crypto.Address(this.transfer.to);
-            const amount = tokenType === 'ONT' ? this.transfer.amount : Number(this.transfer.amount)*1e9;
+            const amount = tokenType === 'ONT' ? this.transfer.amount : new BigNumber(this.transfer.amount).multipliedBy(1e9);
             const gasLimit = '20000';
-            const gasPrice = (this.transfer.gas*1e9/parseInt(gasLimit)).toString();
+            const gas = new BigNumber(this.transfer.gas).multipliedBy(1e9);
+            const gasPrice = gas.div(gasLimit).toString();
             const tx = OntAssetTxBuilder.makeTransferTx(tokenType, from, to, amount, gasPrice, gasLimit, from);
             this.$store.dispatch('showLoadingModals')
             //sign tx

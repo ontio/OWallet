@@ -58,6 +58,7 @@
 <script>
 import { GAS_LIMIT, GAS_PRICE,TEST_NET, MAIN_NET } from '../../core/consts'
 import { OntAssetTxBuilder, Crypto, RestClient } from 'ontology-ts-sdk'
+import {BigNumber} from 'bignumber.js'
 
 export default {
     name: 'CreateMultiSignTx',
@@ -91,7 +92,7 @@ export default {
             const from = new Crypto.Address(this.from);
             restClient.getBalance(from).then(res => {
             this.ont = res.Result.ont
-            this.ong = parseFloat(res.Result.ong/1e9).toFixed(9);
+            this.ong = (new BigNumber(res.Result.ong)).div(1e9).toFixed(9);
             })
         },
         toSign() {
@@ -105,7 +106,7 @@ export default {
           const to = new Crypto.Address(this.to);
           let amount = this.amount;
           if (this.asset === 'ONG') {
-              amount *= 1e9;
+              amount  = new BigNumber(amount).multipliedBy(1e9)
           }
           const tx = OntAssetTxBuilder.makeTransferTx(this.asset, from, to, amount, this.gasPrice, this.gasLimit, from);
           const multiSignTx = tx.serialize();
