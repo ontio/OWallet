@@ -17,7 +17,10 @@ export default {
     ledgerNotSupported: 'Ledger不支持',
     pluginDevice: '请连接设备并登录.',
     readyToSubmit: '可以提交',
-    waitForSign: '等待签名'
+    waitForSign: '等待签名',
+    readyToImport: '可以导入Ledger钱包',
+    existLocal: '本地已有此钱包',
+    importLedgerSuccess: '导入Ledger钱包成功'
   },
 
   TopNav: {

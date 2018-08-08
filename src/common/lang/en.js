@@ -17,7 +17,10 @@ export default {
     ledgerNotSupported: 'Ledger not supported',
     pluginDevice: 'Please plugin the device and login.',
     readyToSubmit: 'Ready to submit',
-    waitForSign: 'Waiting for sign'
+    waitForSign: 'Waiting for sign',
+    readyToImport: 'Ready to import',
+    existLocal: 'The wallet is already in local',
+    importLedgerSuccess: 'Import ledger wallet successfully.'
   },
 
   TopNav: {
