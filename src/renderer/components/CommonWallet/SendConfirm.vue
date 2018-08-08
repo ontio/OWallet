@@ -169,8 +169,12 @@
                 :placeholder="$t('sharedWalletHome.inputPassToTransfer')" 
                 v-model="password"></a-input>
 
-                <p v-if="!isCommonWallet">{{$t('ledgerWallet.connectApp')}}</p>
-                <p v-if="ledgerStatus">{{$t('ledgerWallet.status')}}: {{ledgerStatus}}</p>
+                <p class="font-medium" v-if="!isCommonWallet">{{$t('ledgerWallet.connectApp')}}</p>
+                <p v-if="ledgerStatus">
+                   <span class="font-medium-black">{{$t('ledgerWallet.status')}}: </span> 
+                    <span class="font-medium">{{ledgerStatus}}</span>
+
+                    </p>
             </div>
         </div>
 
@@ -178,7 +182,7 @@
         <div class="confirm-btns">
             <div class="btns-container">
                 <a-button type="default" class="btn-cancel" @click="back">{{$t('sharedWalletHome.back')}}</a-button>
-                <a-button type="primary" class="btn-next" @click="submit">{{$t('sharedWalletHome.submit')}}</a-button>
+                <a-button type="primary" class="btn-next" @click="submit" :disabled="sending">{{$t('sharedWalletHome.submit')}}</a-button>
             </div>
 
         </div>
@@ -191,7 +195,7 @@ import { TEST_NET, MAIN_NET, ONT_CONTRACT, ONT_PASS_NODE, DEFAULT_SCRYPT } from 
 import {Crypto, OntAssetTxBuilder, TransactionBuilder} from 'ontology-ts-sdk'
 import axios from 'axios';
 import {getDeviceInfo, getPublicKey} from '../../../core/ontLedger'
-
+import $ from 'jquery'
 export default {
   name: 'SendConfirm',
   created: function () {
@@ -225,7 +229,8 @@ export default {
       nodeUrl: url,
       isCommonWallet: currentWallet.key ? true: false,
       ledgerStatus: '',
-      publicKey: ''
+      publicKey: '',
+      sending: false
     }
   },
   computed: {
@@ -250,12 +255,13 @@ export default {
           this.getPublicKey()
         }).catch(err => {
           console.log(err)
+          this.publicKey = '';
           if (err === 'NOT_FOUND') {
-            this.ledgerStatus = 'Ledger not open.'
+            this.ledgerStatus = this.$t('common.ledgerNotOpen')
           } else if (err === 'NOT_SUPPORT') {
-            this.ledgerStatus = 'Ledger not supported.'
+            this.ledgerStatus = this.$t('common.ledgerNotSupported')
           } else {
-            this.ledgerStatus = 'Please plugin device to login.'
+            this.ledgerStatus = this.$t('common.pluginDevice')
           }
         })
       },
@@ -266,9 +272,23 @@ export default {
         getPublicKey().then(res => {
           console.log('pk info: ' + res);
           this.publicKey = res
-          this.ledgerStatus = 'Waiting for sign'
+          this.ledgerStatus = this.$t('common.readyToSubmit')
         }).catch(err => {
           this.ledgerStatus = err.message
+        })
+      },
+      sendTx(tx){
+          const restClient = new Ont.RestClient(this.nodeUrl);
+          restClient.sendRawTransaction(tx.serialize()).then(res => {
+          console.log(res)
+          if (res.Error === 0) {
+            this.$message.success(this.$t('common.transSentSuccess'))
+          } else if (res.Error === -1) {
+            this.$message.error(this.$t('common.ongNoEnough'))
+          } else {
+            this.$message.error(res.Result)
+          }
+          this.$emit('sendConfirmSubmit')
         })
       },
     submit() {
@@ -280,7 +300,7 @@ export default {
           this.$message.warning(this.$t('common.confirmTips'))
           return;
       }
-      const restClient = new Ont.RestClient(this.nodeUrl);
+      
       const from = new Ont.Crypto.Address(this.currentWallet.address);
       const to = new Ont.Crypto.Address(this.transfer.to);
       const asset = this.transfer.asset;
@@ -302,20 +322,12 @@ export default {
           return;
         }
         TransactionBuilder.signTransaction(tx, pri);
-        restClient.sendRawTransaction(tx.serialize()).then(res => {
-          console.log(res)
-          if (res.Error === 0) {
-            this.$message.success(this.$t('common.transSentSuccess'))
-          } else if (res.Error === -1) {
-            this.$message.error(this.$t('common.ongNoEnough'))
-          } else {
-            this.$message.error(res.Result)
-          }
-          this.$emit('sendConfirmSubmit')
-        })
+        this.sendTx(tx)
       } else {
         if(this.publicKey) {
-           this.$store.dispatch('showLoadingModals')
+            this.sending = true;
+            this.ledgerStatus = this.$t('common.waitForSign')
+            this.$store.dispatch('showLoadingModals')
             const pk = new Ont.Crypto.PublicKey(this.currentWallet.publicKey);
             const txSig = new Ont.TxSignature();
             txSig.M = 1;
@@ -327,24 +339,11 @@ export default {
             const sign = '01' + res; //ECDSAwithSHA256
             txSig.sigData = [sign]
             tx.sigs = [txSig];
-            const txSerialized = tx.serialize();
-            // console.log('txSerialized: ' + txSerialized);
-
-            //send tx
-            restClient.sendRawTransaction(txSerialized).then(resp => {
-                console.log('send tx resp: ' + JSON.stringify(resp));
-
-                if (resp.Error === 0) {
-                this.$message.success(this.$t('common.transSentSuccess'))
-                } else if (res.Error === -1) {
-                this.$message.error(this.$t('common.ongNoEnough'))
-                } else {
-                this.$message.error(this.$t('common.transferFailed') + resp.Result)
-                }
-                this.$emit('sendConfirmSubmit')
-            })
+            this.sendTx(tx);
             }, err => {
-            alert(err.message)
+                this.sending = false;
+                this.ledgerStatus = '';
+                alert(err.message)
             }) 
         } else {
             this.$message.warning(this.$t('ledgerWallet.connectApp'))

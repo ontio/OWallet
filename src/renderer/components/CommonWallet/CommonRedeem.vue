@@ -13,11 +13,13 @@
     padding-left: 4rem;
 }
 .connect-ledger-app {
-
+    margin-top: 20px;
+    margin-left: 4rem;
 }
 
 .ledger-status {
-
+    margin-top:10px;
+    margin-left: 4rem;
 }
 </style>
 <template>
@@ -31,12 +33,12 @@
             <div class="input-pass" v-if="type=== 'commonWallet'">
                 <a-input type="password" class="input" :placeholder="$t('commonWalletHome.inputPass')" v-model="password"></a-input>
             </div>
-            <div v-if="type === 'hardwareWallet'" class="connect-ledger-app">
+            <div v-if="type === 'hardwareWallet'" class="connect-ledger-app font-medium">
                 {{$t('ledgerWallet.connectApp')}}
             </div>
-            <div v-if="ledgerStatus" class="ledger-status">
-                <span>{{$t('ledgerWallet.status')}}: </span>
-                <span>{{ledgerStatus}} </span>
+            <div v-if="ledgerStatus" class="ledger-status ">
+                <span class="font-medium-black">{{$t('ledgerWallet.status')}}: </span>
+                <span class="font-medium">{{ledgerStatus}} </span>
             </div>
         </div>
         <div class="footer-btns">
@@ -113,26 +115,33 @@ export default {
             this.$router.push('/dashboard')
         },
         getDevice() {
+        if(this.publicKey) {
+            return;
+        }
             getDeviceInfo().then(res => {
                 console.log('device: ' + res)
                 this.device = res;
                 this.getPublicKey()
             }).catch(err => {
                 console.log(err)
+                this.publicKey = '';
                 if (err === 'NOT_FOUND') {
-                    this.ledgerStatus = 'Ledger not open.'
+                    this.ledgerStatus = this.$t('common.ledgerNotOpen')
                 } else if (err === 'NOT_SUPPORT') {
-                    this.ledgerStatus = 'Ledger not supported.'
+                    this.ledgerStatus = this.$t('common.ledgerNotSupported')
                 } else {
-                    this.ledgerStatus = 'Please plugin device to login.'
+                    this.ledgerStatus = this.$t('common.pluginDevice')
                 }
             })
       },
       getPublicKey() {
+        if(this.publicKey) {
+            return;
+        }
         getPublicKey().then(res => {
           console.log('pk info: ' + res);
           this.publicKey = res
-          this.ledgerStatus = 'Ready to send transaction'
+          this.ledgerStatus = this.$t('common.readyToSubmit')
         }).catch(err => {
           this.ledgerStatus = err.message
         })
@@ -177,6 +186,8 @@ export default {
             } else {
                 if(this.publicKey) {
                     this.$store.dispatch('showLoadingModals')
+                    this.sending = true;
+                    this.ledgerStatus = this.$t('common.waitForSign')
                     const pk = new Ont.Crypto.PublicKey(this.currentWallet.publicKey);
                     const txSig = new Ont.TxSignature();
                     txSig.M = 1;
@@ -190,7 +201,9 @@ export default {
                         tx.sigs = [txSig];
                         this.sendTx(tx);
                     }, err => {
-                    alert(err.message)
+                        this.sending = false;
+                        this.ledgerStatus = '';
+                        alert(err.message)
                     }) 
                 } else {
                     this.$message.warning(this.$t('ledgerWallet.connectApp'))

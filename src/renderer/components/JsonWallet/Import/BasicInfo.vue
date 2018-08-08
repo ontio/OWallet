@@ -207,9 +207,6 @@ import { DEFAULT_SCRYPT } from '../../../../core/consts';
          * 打开文件的密码： this.datPassword
          * 钱包名称：this.datLabel
          */
-        console.log(this.dat)
-        console.log(this.datPassword)
-        console.log(this.datLabel)
         FileHelper.readWalletFile(this.dat).then(res => {
           const wallet = JSON.parse(res)
           const account = wallet.accounts[0]
@@ -224,6 +221,7 @@ import { DEFAULT_SCRYPT } from '../../../../core/consts';
             this.$message.error(this.$t('common.pwdErr'))
             return;
           }
+          account.label = this.datLabel;
           this.saveToDb(account);
         })
       },
