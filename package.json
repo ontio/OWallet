@@ -1,6 +1,6 @@
 {
   "name": "ont-wallet-test",
-  "productName": "O Wallet",
+  "productName": "OWallet",
   "homepage": "http://ont.io",
   "version": "v0.8.1",
   "author": "MickeyWang <wangdashuang@onchain.com>",
@@ -27,7 +27,7 @@
     "packageWin": "yarn run pack && electron-builder --win --x64"
   },
   "build": {
-    "productName": "O Wallet",
+    "productName": "OWallet",
     "appId": "org.ont.wallet",
     "files": [
       "dist/",

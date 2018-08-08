@@ -76,7 +76,7 @@
     </div>
     <div class="col-2 text-center">
       <div class="div-slogan home-slogan">
-          <p>O Wallet</p>
+          <p>OWallet</p>
           <p>A comprehensive Ontology desktop wallet.</p>
       </div>
       <div>
