@@ -12,6 +12,7 @@ export default {
     networkErr: 'Network error!',
     normalWallet: 'Individual Wallet',
     sharedWallet: 'Shared Wallet',
+    hardwareWallet: 'Ledger Wallet',
     export: 'Export',
     ledgerNotOpen: 'Ledger not open',
     ledgerNotSupported: 'Ledger not supported',
@@ -50,7 +51,7 @@ export default {
     createSharedWallet: 'Create Wallet',
     joinSharedWallet: 'Join Wallet',
     importLedgerWallet: 'Import Ledger',
-    ledger: 'Ledger',
+    ledger: 'Ledger Wallet',
     comingSoon: 'Coming soon...'
   },
 

@@ -12,6 +12,7 @@ export default {
     networkErr: '网络错误！',
     normalWallet: '普通钱包',
     sharedWallet: '共享钱包',
+    hardwareWallet: 'Ledger钱包',
     export: '导出',
     ledgerNotOpen: 'Ledger未打开',
     ledgerNotSupported: 'Ledger不支持',
