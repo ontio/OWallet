@@ -129,10 +129,16 @@ export default {
                 this.validAmount = false;
                 return;
             }
+            if(this.asset === 'ONT' && Number(this.amount) > Number(this.balance.ont) 
+             || this.asset === 'ONG' && Number(this.amount) > Number(this.balance.ong)) {
+                 this.validAmount = false;
+                 this.$message.error(this.$t('transfer.exceedBalance'))
+                 return;
+             }
             this.validAmount = true;
         },
         changeAsset(value) {
-            this.amount = 0;
+            this.amount = '0';
             console.log(value)
         },
         maxAmount() {
@@ -147,11 +153,13 @@ export default {
             this.$emit('cancelEvent');
         },
         next() {
-            if(!this.validAmount) {
+            if(!this.amount ||!this.validAmount) {
                 this.$message.error(this.$t('transfer.inputValidAmount'))
+                return;
             }
-            if(!this.validToAddress) {
+            if(!this.to || !this.validToAddress) {
                 this.$message.error(this.$t('transfer.inputValidAddress'))
+                return;
             }
             if(this.amount && this.to) {
                 const transfer = {

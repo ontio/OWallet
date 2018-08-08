@@ -77,9 +77,9 @@
         }).catch(err => {
           console.log(err)
           if (err === 'NOT_FOUND') {
-            this.ledgerStatus = this.$t('ledgerNotOpen')
+            this.ledgerStatus = this.$t('common.ledgerNotOpen')
           } else if (err === 'NOT_SUPPORT') {
-            this.ledgerStatus = this.$t('ledgerNotSupported')
+            this.ledgerStatus = this.$t('common.ledgerNotSupported')
           } else {
             this.ledgerStatus = this.$t('common.pluginDevice')
           }

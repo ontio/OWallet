@@ -5,6 +5,12 @@
     <p><b>{{$t('createJsonWallet.pubKeyN')}}: </b> {{publicKey}}</p>
     <p><b>{{$t('createJsonWallet.signatureSchemeN')}}: </b> SHA256withECDSA </p>
 
+    <div class="backup-text">
+      <p class="font-medium-black">
+        <span></span>
+         <a-icon type="warning" />{{$t('createJsonWallet.backupWallet')}}</p>
+         <a-button type="primary" @click="downloadWallet">{{$t('createJsonWallet.download')}}</a-button>
+    </div>
     <div class="confirm-btns">
       <div class="confirm-btn-container">
         <a-button type="default" class="btn-cancel" @click="back">{{ $t('createJsonWallet.back') }}</a-button>
@@ -16,7 +22,7 @@
 
 <script>
   import {mapState} from 'vuex'
-  import {Crypto} from 'ontology-ts-sdk'
+  import {Crypto, Wallet, Account} from 'ontology-ts-sdk'
   import FileHelper from "../../../../core/fileHelper"
   import dbService from '../../../../core/dbService'
   import {WALLET_TYPE,DEFAULT_SCRYPT} from '../../../../core/consts'
@@ -33,6 +39,9 @@
         processing: false
       }
     },
+    mounted() {
+      this.downloadWallet()
+    },
     computed: {
       ...mapState({
         label: state => state.CreateJsonWallet.label,
@@ -46,8 +55,19 @@
       back() {
         this.$store.commit('SUB_CREATE_JSON_STEP')
       },
+      downloadWallet() {
+        const commonWallet = this.account
+        let wallet = Wallet.create(commonWallet.label || "")
+        console.log(wallet)
+        wallet.scrypt.n = 16384;
+        const account = Account.parseJsonObj(commonWallet)
+        wallet.addAccount(account)
+        FileHelper.downloadFile(wallet.toJsonObj(), commonWallet.label);
+      },
       next() {
         this.$store.dispatch('showLoadingModals')
+
+        
 
         //Download file
         // FileHelper.downloadFile(this.downloadContent)
@@ -100,4 +120,15 @@
   .confirm-btn-container :last-child {
     float: right;
   }
+  .backup-text {
+    text-align: center;
+    padding: 20px;
+    border: 1px solid #dddddd;
+    font-size: 16px;
+  }
+  .backup-text p {
+    margin:0;
+    font-size:16px !important;
+  }
+
 </style>

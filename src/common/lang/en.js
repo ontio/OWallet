@@ -75,7 +75,10 @@ export default {
     signatureSchemeN: 'Signature Scheme',
     wif: 'WIF',
     mnemonic: 'Mnemonic',
-    privateKey: 'Private Key'
+    privateKey: 'Private Key',
+    backupWallet: 'Please download the .dat file and keep it safe.',
+    createSuccess:'Create individual wallet successfully.',
+    download: "Download"
   },
 
   importJsonWallet: {
@@ -87,6 +90,8 @@ export default {
     basicInfo: 'Basic info',
     label: 'Name of Individual Wallet',
     wif: 'WIF',
+    wifTip: 'Please enter the private key with 64 bytes HEX format',
+    privateKeyTip: 'Please enter 52-bit WIF text',
     datPassword: 'New Password',
     datRePassword: 'Repeat New password',
     password: 'Password',
@@ -211,7 +216,8 @@ export default {
 
   transfer: {
     inputValidAmount: 'Please input valid transfer amount.',
-    inputValidAddress: 'Please input valid receiver address.'
+    inputValidAddress: 'Please input valid receiver address.',
+    exceedBalance: 'Amount of transfer can not exceed your balance.'
   },
 
   setting: {

@@ -159,6 +159,7 @@
 <script>
 import {mapState} from 'vuex'
 import dbService from '../../../../core/dbService'
+import { BigNumber } from 'bignumber.js';
 export default {
     name: 'PendingConfirm',
     data() {
@@ -178,9 +179,9 @@ export default {
         }),
         gas: {
             get() {
-                const gasPrice = this.$store.state.CurrentWallet.pendingTx.gasprice
-                const gasLimit = this.$store.state.CurrentWallet.pendingTx.gaslimit
-                const gas = gasPrice * gasLimit / 1e9
+                const gasPrice = new BigNumber(this.$store.state.CurrentWallet.pendingTx.gasprice)
+                const gasLimit = new BigNumber(this.$store.state.CurrentWallet.pendingTx.gaslimit)
+                const gas = gasPrice.multipliedBy(gasLimit).div(1e9)
                 return gas;
             }
         }

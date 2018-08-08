@@ -55,7 +55,7 @@
         wallet.scrypt.n = 16384;
         const account = Account.parseJsonObj(commonWallet)
         wallet.addAccount(account)
-        FileHelper.downloadFile(wallet.toJsonObj());
+        FileHelper.downloadFile(wallet.toJsonObj(), commonWallet.label);
       }
     }
   }
@@ -112,10 +112,10 @@
   }
   .common-export-btn {
     height: 34px;
-    width: 78px;
-    background: #5EA2FF;
-    font-family: AvenirNext-Medium;
-    font-size: 14px;
+    width:78px;
+    background:#5EA2FF;
+    font-family: AvenirNext-Regular;
+    font-size: 16px;
     color: #FFFFFF;
     border: 1px solid #FFFFFF;
     border-radius: 0;
