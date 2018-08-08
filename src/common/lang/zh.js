@@ -19,7 +19,7 @@ export default {
     pluginDevice: '请连接设备并登录.',
     readyToSubmit: '可以提交',
     waitForSign: '等待签名',
-    readyToImport: '可以导入Ledger钱包',
+    readyToImport: '可以连接Ledger钱包',
     existLocal: '本地已有此钱包',
     importLedgerSuccess: '导入Ledger钱包成功'
   },
@@ -50,9 +50,10 @@ export default {
     importCommonWallet: '导入钱包',
     createSharedWallet: '创建钱包',
     joinSharedWallet: '加入钱包',
-    importLedgerWallet: '导入Ledger钱包',
+    importLedgerWallet: '连接Ledger钱包',
     ledger: 'Ledger钱包',
-    comingSoon: '敬请期待'
+    comingSoon: '敬请期待',
+    ledgerHelpLink: '如何使用'
   },
 
   dashboard: {
@@ -160,7 +161,7 @@ export default {
   },
 
   importLedgerWallet: {
-    import: '导入Ledger钱包',
+    import: '连接Ledger钱包',
     label: '钱包名称'
   },
 

@@ -376,7 +376,9 @@ export default {
             transferStep: 0,
             network,
             nodeUrl: url,
-            hasLocalCopayer:true
+            hasLocalCopayer:true,
+            interval: 2000,
+            intervalId: ''
         }
     },
     components: {
@@ -385,6 +387,15 @@ export default {
     mounted(){
         this.refresh()
         this.ifHasLocalCopayer();
+        let that = this;
+        this.intervalId = setInterval(() => {
+            this.getTransactions();
+            this.getBalance();
+            this.getPendingTx();
+        }, this.interval)
+    },
+    beforeDestroy(){
+        clearInterval(this.intervalId)
     },
     computed: {
         ...mapState({
@@ -403,7 +414,7 @@ export default {
                 const completed = txlist.map(t => {
                     const asset = t.TransferList[0].AssetName === 'ont'? 'ONT' : 'ONG'
                     let amount = asset === 'ONT' ? parseInt(t.TransferList[0].Amount)
-                                : Number(t.TransferList[0].Amount).toFixed(2)
+                                : Number(t.TransferList[0].Amount).toFixed(9)
                     if(t.TransferList[0].FromAddress === this.sharedWallet.sharedWalletAddress) {
                         amount = '-' + amount;
                     } else {
@@ -459,7 +470,7 @@ export default {
                 console.log(res)
                 this.pendingTx = res.data.SigningSharedTransfers.map(p => {
                     if(p.assetName.toLowerCase() ==='ong') {
-                        p.amount = new BigNumber(p.amount).div(1e9)
+                        p.amount = new BigNumber(p.amount).div(1e9).toFixed(9)
                     }
                     return p;
                 })

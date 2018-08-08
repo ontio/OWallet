@@ -33,8 +33,9 @@
 
   export default {
     name: 'BasicInfo',
-    created: function () {
+    mounted: function () {
       let that = this;
+      that.getDevice()
       this.intervalId = setInterval(() => {
         that.getDevice()
       }, this.interval)
@@ -52,10 +53,10 @@
     },
     methods: {
       next() {
-        if(!this.label) {
-          this.$message.error(this.$t('ledgerWallet.labelEmpty'))
-          return;
-        }
+        // if(!this.label) {
+        //   this.$message.error(this.$t('ledgerWallet.labelEmpty'))
+        //   return;
+        // }
         if(!this.publicKey) {
           this.$message.error(this.$t('ledgerWallet.deviceError'))
           return;
@@ -108,7 +109,7 @@
       },
 
       saveToDb(account) {
-        account.label = this.label;
+        account.label = this.label || 'Ledger Wallet';
         const that = this;
         const wallet = {
           type: WALLET_TYPE.HardwareWallet,
@@ -118,11 +119,13 @@
         dbService.insert(wallet, function (err, newDoc) {
           if (err) {
             console.log(err)
-            that.$message.warning(that.$t('common.existLocal'))
-            return;
+            // that.$message.warning(that.$t('common.existLocal'))
+            // return;
           }
-          that.$message.success(that.$t('common.importLedgerSuccess'))
-          that.$router.push({name: 'Wallets'})
+          // that.$message.success(that.$t('common.importLedgerSuccess'))
+          // that.$router.push({name: 'Wallets'})
+          sessionStorage.setItem('currentWallet', JSON.stringify(wallet))
+          that.$router.push({name: 'Dashboard'})
         })
       },
       cancel() {

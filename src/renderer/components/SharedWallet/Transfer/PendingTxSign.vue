@@ -73,7 +73,7 @@
 
 <script>
 import {mapState} from 'vuex'
-import {OntAssetTxBuilder, Crypto, TransactionBuilder, Transaction, RestClient} from 'ontology-ts-sdk'
+import {OntAssetTxBuilder, Crypto, TransactionBuilder, Transaction, RestClient, utils} from 'ontology-ts-sdk'
 import {ONT_PASS_NODE, ONT_PASS_NODE_PRD, ONT_PASS_URL, DEFAULT_SCRYPT, TEST_NET, MAIN_NET} from '../../../../core/consts'
 import axios from 'axios'
 import dbService from '../../../../core/dbService'
@@ -163,6 +163,13 @@ export default {
                         if(res.Error === 0) {
                             this.$message.success(this.$t('common.transSentSuccess'))
                             this.$emit('submitEvent')
+                            const title = this.$t('common.transSentSuccess')
+                            setTimeout(() => {
+                                this.$success({
+                                    title: title,
+                                    content: 'Transaction hash: ' + utils.reverseHex(tx.getHash())
+                                })
+                            }, 100)
                             return;
                         } else if(res.Error === -1) {
                             alert(res.Result)
