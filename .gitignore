@@ -14,3 +14,4 @@ release/
 dist/
 static/userData/*
 static/keystore.db
+package-lock.json
