@@ -85,27 +85,33 @@
     font-size: 14px;
   }
 
+
+  /* Button CSS */
+  .btn-container {
+    width: 540px;
+    margin: 25px auto;
+  }
+
+  .btn-next,
   .btn-cancel {
-    width: 120px !important;
-    height: 44px !important;
+    width: 6.25rem !important;
+    height: 2.13rem !important;
+    font-family: AvenirNext-Medium !important;
+    font-size: 14px !important;
+    text-align: center !important;
+  }
+
+  .btn-cancel {
     background: #F5F7FB !important;
-    text-align: center;
     border-radius: 0 !important;
-    font-size: 1.13rem !important;
     color: #5E6369 !important;
-    font-family: 'AvenirNext-Bold' !important;
     border: none !important;
   }
 
   .btn-next {
-    width: 120px !important;
-    height: 44px !important;
     background: #196BD8 !important;
     color: #ffffff !important;
-    text-align: center !important;
     border-radius: 0 !important;
-    font-size: 1.13rem !important;
-    font-family: 'AvenirNext-Bold' !important;
     border: none !important;
   }
 

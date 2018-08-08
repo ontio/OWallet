@@ -159,11 +159,6 @@
     z-index: 1000;
   }
 
-  .btn-container {
-    width: 540px;
-    margin: 20px auto;
-  }
-
   .basic-pk-btns button:first-child {
     float: left;
   }

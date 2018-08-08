@@ -2,7 +2,8 @@
   <div class="container json-import-container">
     <ul class="nav nav-pills import-json-nav-pills" id="pills-tab" role="tablist">
       <li class="nav-item">
-        <a class="nav-link active" id="import-json-private-key-pills-tab" data-toggle="pill" href="#import-json-private-key-pills"
+        <a class="nav-link active" id="import-json-private-key-pills-tab" data-toggle="pill"
+           href="#import-json-private-key-pills"
            role="tab"
            aria-controls="import-json-private-key-pills" aria-selected="true" @click="activeTab('pk')">{{ $t('createJsonWallet.privateKey') }}</a>
       </li>
@@ -38,15 +39,18 @@
         <a-input type="password" class="input input-repassword"
                  v-validate="{required: true, min:6, is:pkPassword}" data-vv-as="password confirmation" name="pkRePassword"
                  v-model="pkRePassword" :placeholder="$t('createJsonWallet.rePassword')"></a-input>
-        <span class="v-validate-span-errors" v-show="errors.has('pkRePassword')">{{ errors.first('pkRePassword') }}</span>
+        <span class="v-validate-span-errors"
+              v-show="errors.has('pkRePassword')">{{ errors.first('pkRePassword') }}</span>
       </div>
 
       <div class="tab-pane fade" id="import-json-dat-pills" role="tabpanel"
            aria-labelledby="import-json-dat-pills-tab">
         <a-input class="input" :placeholder="$t('importJsonWallet.label')" v-model="datLabel" name="datLabel"
-        v-validate="{required: true}" ></a-input>
+                 v-validate="{required: true}"></a-input>
         <span class="v-validate-span-errors" v-show="errors.has('datLabel')">{{ errors.first('datLabel') }}</span>
-        <input type="file" @change="onFileChange" id="datFile">
+        <a class="upload-dat-file">{{ datPath }}
+          <input type="file" @change="onFileChange" id="datFile">
+        </a>
 
         <a-input type="password" class="input"
                  v-validate="{required: true}" data-vv-as="password" name="datPassword"
@@ -68,9 +72,11 @@
                  v-model="wifPassword" :placeholder="$t('importJsonWallet.password')"></a-input>
         <span class="v-validate-span-errors" v-show="errors.has('wifPassword')">{{ errors.first('wifPassword') }}</span>
         <a-input type="password" class="input input-repassword"
-                 v-validate="{required: true ,min:6, is:wifPassword}" data-vv-as="password confirmation" name="wifRePassword"
+                 v-validate="{required: true ,min:6, is:wifPassword}" data-vv-as="password confirmation"
+                 name="wifRePassword"
                  v-model="wifRePassword" :placeholder="$t('importJsonWallet.rePassword')"></a-input>
-        <span class="v-validate-span-errors" v-show="errors.has('wifRePassword')">{{ errors.first('wifRePassword') }}</span>
+        <span class="v-validate-span-errors"
+              v-show="errors.has('wifRePassword')">{{ errors.first('wifRePassword') }}</span>
       </div>
 
       <div class="tab-pane fade" id="import-json-mnemonic-pills" role="tabpanel"
@@ -78,7 +84,7 @@
         <a-input class="input" :placeholder="$t('importJsonWallet.label')" v-model="mnemonicLabel"></a-input>
 
         <textarea class="import-json-mnemonic" id="import-json-mnemonic" rows="6"
-                  v-validate="{required: true} "data-vv-as="mnemonic" name="mnemonic"
+                  v-validate="{required: true} " data-vv-as="mnemonic" name="mnemonic"
                   :placeholder="$t('importJsonWallet.mnemonic')" v-model="mnemonic"></textarea>
         <span class="v-validate-span-errors" v-show="errors.has('mnemonic')">{{ errors.first('mnemonic') }}</span>
 
@@ -87,7 +93,8 @@
                  v-model="mnemonicPassword" :placeholder="$t('importJsonWallet.password')"></a-input>
         <span class="v-validate-span-errors" v-show="errors.has('mnemonicPassword')">{{ errors.first('mnemonicPassword') }}</span>
         <a-input type="password" class="input input-repassword"
-                 v-validate="{required: true ,min:6, is:mnemonicPassword}" data-vv-as="password confirmation" name="mnemonicRePassword"
+                 v-validate="{required: true ,min:6, is:mnemonicPassword}" data-vv-as="password confirmation"
+                 name="mnemonicRePassword"
                  v-model="mnemonicRePassword" :placeholder="$t('importJsonWallet.rePassword')"></a-input>
         <span class="v-validate-span-errors" v-show="errors.has('mnemonicRePassword')">{{ errors.first('mnemonicRePassword') }}</span>
       </div>
@@ -107,7 +114,8 @@
   import {Wallet, Account, Crypto} from "ontology-ts-sdk"
   import FileHelper from "../../../../core/fileHelper"
   import dbService from '../../../../core/dbService'
-import { DEFAULT_SCRYPT } from '../../../../core/consts';
+  import {DEFAULT_SCRYPT} from '../../../../core/consts'
+  import $ from 'jquery'
 
   export default {
     name: 'BasicInfo',
@@ -120,6 +128,7 @@ import { DEFAULT_SCRYPT } from '../../../../core/consts';
         pkPassword: '',
         pkRePassword: '',
 
+        datPath: this.$t('importJsonWallet.datFile'),
         dat: '',
         datLabel: '',
         datPassword: '',
@@ -198,6 +207,13 @@ import { DEFAULT_SCRYPT } from '../../../../core/consts';
         })
       },
       onFileChange() {
+        // Custom upload button copywriting.
+        let uploadFile = $("#datFile").val();
+        $(".fileerrorTip").html("").hide();
+        let arr = uploadFile.split('\\');
+        let fileName = arr[arr.length - 1];
+        this.datPath = this.$t('importJsonWallet.selectedDatFile') + fileName
+
         let files = document.getElementById("datFile").files
         this.dat = files[0]
       },
@@ -215,7 +231,7 @@ import { DEFAULT_SCRYPT } from '../../../../core/consts';
 
           try {
             enc.decrypt(this.datPassword, address, account.salt, DEFAULT_SCRYPT)
-          } catch(err) {
+          } catch (err) {
             console.log(err)
             this.$store.dispatch('hideLoadingModals')
             this.$message.error(this.$t('common.pwdErr'))
@@ -308,14 +324,46 @@ import { DEFAULT_SCRYPT } from '../../../../core/consts';
     border-bottom: #196BD8 solid 1px;
   }
 
-  .input-wif {
-    margin-top: 30px;
+  .upload-dat-file {
+    margin-top: 25px;
+    position: relative;
+    display: inline-block;
+    background: #FBE45A;
+    border: 1px solid #FBE45A;
+    padding: 4px 12px;
+    overflow: hidden;
+    color: black !important;
+    text-decoration: none;
+    text-indent: 0;
+    line-height: 1.5rem;
+    height: 2.13rem;
   }
 
-  #datFile {
-    width: 100%;
-    height: 34px;
-    margin-top: 15px;
+  .upload-dat-file input {
+    background: #FBE45A;
+    border: 1px solid #FBE45A;
+    color: black !important;;
+    position: absolute;
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    margin-top: 0;
+    opacity: 0;
+    line-height: 1.5rem;
+    height: 2.13rem;
+  }
+
+  .upload-dat-file input:hover,
+  .upload-dat-file:hover {
+    background: #FBE45A;
+    border-color: black;
+    color: black !important;;
+    text-decoration: none;
+    cursor: pointer !important;;
+  }
+
+  .input-wif {
+    margin-top: 30px;
   }
 
   .input-password {
@@ -349,11 +397,6 @@ import { DEFAULT_SCRYPT } from '../../../../core/consts';
     background: #FFFFFF;
     box-shadow: 0 -1px 6px 0 #F2F2F2;
     z-index: 1000;
-  }
-
-  .btn-container {
-    width: 540px;
-    margin: 20px auto;
   }
 
   .basic-pk-btns button:first-child {
