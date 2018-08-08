@@ -6,11 +6,12 @@
     <div class="div-ledger-info">
       <div class="div-ledger-info-tit"><strong>{{$t('ledgerWallet.info')}}</strong></div>
 
-      <div class="title" style="margin-bottom: 15px;">{{$t('ledgerWallet.connectApp')}}</div>
+      <div class="font-bold" style="margin-bottom: 15px;">{{$t('ledgerWallet.connectApp')}}</div>
 
-      <p style="color: red;margin-top: 30px;">
-        <strong style="color: black">{{$t('ledgerWallet.status')}}: </strong>{{ ledgerStatus }}
-      </p>
+      <div class="ledger-status">
+          <span class="font-medium-black">{{$t('ledgerWallet.status')}}: </span>
+          <span class="font-medium">{{ledgerStatus}} </span>
+      </div>
 
     </div>
 
@@ -76,11 +77,11 @@
         }).catch(err => {
           console.log(err)
           if (err === 'NOT_FOUND') {
-            this.ledgerStatus = 'Ledger not open.'
+            this.ledgerStatus = this.$t('ledgerNotOpen')
           } else if (err === 'NOT_SUPPORT') {
-            this.ledgerStatus = 'Ledger not supported.'
+            this.ledgerStatus = this.$t('ledgerNotSupported')
           } else {
-            this.ledgerStatus = 'Please plugin device to login.'
+            this.ledgerStatus = this.$t('common.pluginDevice')
           }
         })
       },
@@ -88,7 +89,7 @@
         getPublicKey().then(res => {
           console.log('pk info: ' + res);
           this.publicKey = res
-          this.ledgerStatus = 'Ready to join'
+          this.ledgerStatus = this.$t('common.readyToImport')
         }).catch(err => {
           this.ledgerStatus = err.message
         })
@@ -117,10 +118,10 @@
         dbService.insert(wallet, function (err, newDoc) {
           if (err) {
             console.log(err)
-            that.$message.warning('The wallet already exists in local.')
+            that.$message.warning(that.$t('common.existLocal'))
             return;
           }
-          that.$message.success('Import ledger wallet succeessfully!')
+          that.$message.success(that.$t('common.importLedgerSuccess'))
           that.$router.push({name: 'Wallets'})
         })
       },
