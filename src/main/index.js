@@ -94,7 +94,13 @@ let template = [
           focusedWindow.reload()
         }
       }
-    }]
+    },
+      {
+        label: 'Quit ( 粘贴 )',
+        accelerator: 'CmdOrCtrl+Q',
+        role: 'quit'
+      },
+  ]
   },
   {
     label: 'Window ( 窗口 )',
