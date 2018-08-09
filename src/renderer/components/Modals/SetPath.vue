@@ -63,7 +63,7 @@
 
   .modal-dialog {
     width: 25rem;
-    height: 15rem;
+    /* height: 15rem; */
     border-radius: 0;
   }
 
