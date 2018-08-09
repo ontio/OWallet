@@ -38,6 +38,8 @@ yarn run dev
 yarn run package
 ```
 
+> 不要使用“npm run package”，否则windows下app会有问题。
+
 ## 安装发布的客户端
 
 请下载适合于您的操作系统的最新版本客户端。

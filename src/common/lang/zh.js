@@ -21,7 +21,8 @@ export default {
     waitForSign: '等待签名',
     readyToImport: '可以连接Ledger钱包',
     existLocal: '本地已有此钱包',
-    importLedgerSuccess: '导入Ledger钱包成功'
+    importLedgerSuccess: '导入Ledger钱包成功',
+    readyToLogin: '可以登录'
   },
 
   TopNav: {
@@ -128,7 +129,8 @@ export default {
     createFailed: '错误，请稍后重试。',
     createSuccess: '创建共享钱包成功',
     create: '创建共享钱包',
-    walletNameErr: '钱包名称长度不可超过12个字符。'
+    walletNameErr: '钱包名称长度不可超过12个字符。',
+    emptyLabel: '钱包名称不能为空.'
   },
 
   importSharedWallet: {
@@ -162,7 +164,8 @@ export default {
 
   importLedgerWallet: {
     import: '连接Ledger钱包',
-    label: '钱包名称'
+    label: '钱包名称',
+    next: '连接'
   },
 
   sharedWalletHome: {

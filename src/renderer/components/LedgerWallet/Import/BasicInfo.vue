@@ -18,7 +18,7 @@
     <div class="basic-pk-btns">
       <div class="btn-container">
         <a-button type="default" @click="cancel" class="btn-cancel">{{$t('importJsonWallet.cancel')}}</a-button>
-        <a-button type="primary" @click="next" class="btn-next">{{$t('importJsonWallet.next')}}</a-button>
+        <!-- <a-button type="primary" @click="next" class="btn-next">{{$t('importLedgerWallet.next')}}</a-button> -->
       </div>
     </div>
   </div>
@@ -46,7 +46,7 @@
     data() {
       return {
         intervalId: '',
-        interval: 3000,
+        interval: 1000,
         label: '',
         ledgerStatus: ''
       }
@@ -91,6 +91,7 @@
           console.log('pk info: ' + res);
           this.publicKey = res
           this.ledgerStatus = this.$t('common.readyToImport')
+          this.next();
         }).catch(err => {
           this.ledgerStatus = err.message
         })
@@ -116,6 +117,7 @@
           address: account.address,
           wallet: account
         }
+        
         dbService.insert(wallet, function (err, newDoc) {
           if (err) {
             console.log(err)
@@ -124,9 +126,9 @@
           }
           // that.$message.success(that.$t('common.importLedgerSuccess'))
           // that.$router.push({name: 'Wallets'})
-          sessionStorage.setItem('currentWallet', JSON.stringify(wallet))
-          that.$router.push({name: 'Dashboard'})
         })
+        sessionStorage.setItem('currentWallet', JSON.stringify(account))
+        that.$router.push({name: 'Dashboard'})
       },
       cancel() {
         this.$router.push({name: 'Wallets'})

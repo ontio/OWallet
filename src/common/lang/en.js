@@ -21,7 +21,8 @@ export default {
     waitForSign: 'Waiting for sign',
     readyToImport: 'Ready to connect',
     existLocal: 'The wallet is already in local',
-    importLedgerSuccess: 'Import ledger wallet successfully.'
+    importLedgerSuccess: 'Import ledger wallet successfully.',
+    readyToLogin: 'Ready to login'
   },
 
   TopNav: {
@@ -53,7 +54,7 @@ export default {
     importLedgerWallet: 'Connect Ledger',
     ledger: 'Ledger Wallet',
     comingSoon: 'Coming soon...',
-    ledgerHelpLink: 'How to use ONT app on ledger?'
+    ledgerHelpLink: 'How to use?'
   },
 
   dashboard: {
@@ -98,7 +99,7 @@ export default {
     datRePassword: 'Repeat New password',
     password: 'Password',
     rePassword: 'Repeat password',
-    next: 'Connect',
+    next: 'Import',
     cancel: 'Cancel',
     back: 'Back',
     details: '',
@@ -129,7 +130,8 @@ export default {
     createFailed: 'Failed. Please try later.',
     createSuccess: 'Create shared wallet successfully.',
     create: 'Create Shared Wallet',
-    walletNameErr: 'Wallet name can not be more than 12 chars'
+    walletNameErr: 'Wallet name can not be more than 12 characters',
+    emptyLabel: 'Wallet name can not be empty'
   },
 
   importSharedWallet: {
@@ -163,7 +165,8 @@ export default {
 
   importLedgerWallet: {
     import: 'Connect Ledger Wallet',
-    label: 'Name of Ledger Wallet'
+    label: 'Name of Ledger Wallet',
+    next: 'Connect'
   },
 
   sharedWalletHome: {

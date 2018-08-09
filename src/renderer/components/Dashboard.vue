@@ -326,7 +326,7 @@
             <span class="asset-label">ONT</span>
             <span class="asset-amount">{{balance.ont}}</span>
           </div>
-          <div class="asset-value">${{balance.ontValue}}</div>
+          <!-- <div class="asset-value">${{balance.ontValue}}</div> -->
 
           <div class="asset-ong">
             <span class="asset-label">ONG</span>
