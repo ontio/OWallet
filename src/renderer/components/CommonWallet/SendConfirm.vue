@@ -173,8 +173,7 @@
                 <p v-if="ledgerStatus">
                    <span class="font-medium-black">{{$t('ledgerWallet.status')}}: </span> 
                     <span class="font-medium">{{ledgerStatus}}</span>
-
-                    </p>
+                </p>
             </div>
         </div>
 

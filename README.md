@@ -37,6 +37,8 @@ yarn run dev
 yarn run package
 ```
 
+> Do not use "npm run package" here, or the app will have problem in windows.
+
 ## Install released app
 
 Please download the latest version that is compatiable with your platform.

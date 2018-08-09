@@ -7,9 +7,11 @@
         </router-link>
         <div class="doc">
           <div class="title">Login with Ledger</div>
-          <button :disabled="ledgerStatus!==''" @click="login">Login</button>
-          <br><br>
-          <p style="color: red;">{{ ledgerStatus }}</p>
+          <p class="font-medium" >{{$t('ledgerWallet.connectApp')}}</p>
+            <p>
+                <span class="font-medium-black">{{$t('ledgerWallet.status')}}: </span> 
+                <span class="font-medium">{{ledgerStatus}}</span>
+            </p>
         </div>
       </div>
     </main>
@@ -19,7 +21,7 @@
 <script>
   import {getDeviceInfo, getPublicKey} from '../../../core/ontLedger'
 
-  const interval = 3000;
+  const interval = 1000;
   export default {
     name: 'LoginLedger',
     mounted: function () {
@@ -66,8 +68,9 @@
       getPublicKey() {
         getPublicKey().then(res => {
           console.log('pk info: ' + res);
-          this.publicKey = res
-          this.ledgerStatus = ''
+          this.publicKey = res;
+          this.ledgerStatus = this.$t('common.readyToLogin')
+          this.login();
         }).catch(err => {
           this.ledgerStatus = err.message
         })
@@ -123,7 +126,6 @@
   }
 
   main > div {
-    flex-basis: 50%;
   }
 
   .left-side {
@@ -142,7 +144,7 @@
     color: #2c3e50;
     font-size: 20px;
     font-weight: bold;
-    margin-bottom: 6px;
+    margin-bottom: 15px;
   }
 
   .title.alt {
@@ -156,11 +158,11 @@
   }
 
   .doc button {
-    font-size: .8em;
+    font-size: 16px;
     cursor: pointer;
     outline: none;
-    padding: 0.75em 2em;
-    border-radius: 0.1em;
+    padding: 8px 20px;
+    border-radius: 0;
     min-width: 120px;
     display: inline-block;
     color: #fff;
@@ -171,6 +173,6 @@
   }
 
   .backBtn {
-
+    font-size: 16px;
   }
 </style>

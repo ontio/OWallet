@@ -72,6 +72,10 @@ export default {
             this.pks = pks;
         },
         validateLabel() {
+            if(!this.label) {
+                this.validLabel = false;
+                return;
+            }
             const length = this.label.split('').length;
             if(length > 12) {
                 this.$message.error(this.$t('createSharedWallet.walletNameErr'))
@@ -100,6 +104,10 @@ export default {
             return true;
         },
         next() {
+            if(!this.label) {
+                this.$message.error(this.$t('createSharedWallet.emptyLabel'))
+                return;
+            }
             if(this.validInput()) {
                 const copayers = this.pks.map(p => {
                     return {
