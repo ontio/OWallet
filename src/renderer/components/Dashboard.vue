@@ -311,10 +311,10 @@
       <div class="left-half">
         <div class="wallet-info">
           <p>{{$t('sharedWalletHome.address')}}: {{this.address}}</p>
-          <div>
+          <!-- <div>
             <span>{{$t('sharedWalletHome.publicKey')}}:</span>
             <span class="wallet-pk">{{this.publicKey}}</span>
-          </div>
+          </div> -->
         </div>
         <div class="wallet-balance">
           <span>{{$t('sharedWalletHome.balance')}}</span>

@@ -8,6 +8,8 @@
         <span class="circle">{{index+1}}</span>
         <span class="copayer-name">{{pk.name}}</span>
         <span class="copayer-address">{{pk.address}}</span>
+        <span class="copayer-publicKey">{{pk.publickey}}</span>
+        
       </div>
     </div>
     <p class="confirm-label wallet-label">{{$t('createSharedWallet.requiredSigNum')}}</p>
@@ -27,16 +29,11 @@
 <script>
   import {mapState} from 'vuex'
   import {Crypto} from 'ontology-ts-sdk'
-  import en from '../../../../common/lang/en'
-  import zh from '../../../../common/lang/zh'
 
   export default {
     name: 'ConfirmSigNum',
     data() {
-      const langType = localStorage.getItem('user_lang') || 'en';
-      const lang = langType === 'en' ? en : zh;
       return {
-        lang: lang,
         processing: false
       }
     },
@@ -89,16 +86,16 @@
         this.$store.dispatch('createSharedWallet', body).then(res => {
           this.processing = false;
           if (res === 0) {
-            this.$message.success(this.lang.createSedWallet.createSuccess);
+            this.$message.success(this.$t('createSharedWallet.createSuccess'));
             this.$store.commit('CLEAR_CREATE_SHARED_STATE')
             this.$router.push({name: 'Wallets'})
           } else if (res === 61002) { //重复创建
-            this.$message.error(this.lang.createSharedWallet.duplicateCreate)
+            this.$message.error(this.$t('createSharedWallet.duplicateCreate'));
             this.$store.commit('CLEAR_CREATE_SHARED_STATE')
             this.$router.push({name: 'Wallets'})
           }
         }, err => {
-          this.$message.success(this.lang.createSharedWallet.createFailed)
+          this.$message.success(this.$t('createSharedWallet.createFailed'))
           console.log(err)
         })
         // this.$store.commit('ADD_CURRENT_STEP')
@@ -169,6 +166,9 @@
     font-family: 'AvenirNext-Medium';
     font-size: 14px;
     color: #5E6369;
+    float: right;
+  }
+  .copayer-publicKey {
     float: right;
   }
 

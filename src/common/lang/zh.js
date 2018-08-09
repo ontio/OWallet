@@ -37,7 +37,7 @@ export default {
 
   SetPaths: {
     name: '钱包文件存储路径',
-    tips: '* 钱包文件keystore.db保存着您的加密私钥，请确保您的PC安全和做好keystore.db文件的备份。',
+    tips: '* 钱包文件keystore.db保存着您的加密私钥，请确保您的PC安全和做好keystore.db文件的备份。您需要设置keystore文件的保存路径。',
     close: '关闭',
     enter: '去设置'
   },
