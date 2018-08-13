@@ -39,9 +39,6 @@
         processing: false
       }
     },
-    mounted() {
-      this.downloadWallet()
-    },
     computed: {
       ...mapState({
         label: state => state.CreateJsonWallet.label,

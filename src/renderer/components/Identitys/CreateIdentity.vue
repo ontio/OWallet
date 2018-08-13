@@ -1,6 +1,6 @@
 <template>
   <div>
-    <breadcrumb :current="$t('createAccount.create')" v-on:backEvent="back"></breadcrumb>
+    <breadcrumb :current="$t('createIdentity.create')" v-on:backEvent="back"></breadcrumb>
     <div class="shared-container">
       <a-steps :current="current" class="create-steps">
         <a-step v-for="item in steps" :key="item.title"/>
@@ -21,21 +21,21 @@
   import {mapState} from 'vuex';
 
   export default {
-    name: 'CreateAccount',
+    name: 'createIdentity',
     data() {
       return {
         steps: [{
-          title: this.$t('createAccount.basicInfo'),
+          title: this.$t('createIdentity.basicInfo'),
           content: 'First-content',
         }, {
-          title: this.$t('createAccount.confirmInfo'),
+          title: this.$t('createIdentity.confirmInfo'),
           content: 'Second-content',
         }]
       }
     },
     computed: {
       ...mapState({
-        current: state => state.CreateAccount.currentStep,
+        current: state => state.CreateIdentity.currentStep,
       })
     },
     components: {
@@ -45,7 +45,7 @@
     },
     methods: {
       back() {
-        this.$router.push({name: 'Accounts'})
+        this.$router.push({name: 'Identitys'})
       }
     }
   }

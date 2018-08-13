@@ -1,26 +1,26 @@
 <template>
   <div>
     <div class="basic-label">
-      <a-input class="input" :placeholder="$t('createAccount.label')" v-model="label"
+      <a-input class="input" :placeholder="$t('createIdentity.label')" v-model="label"
           v-validate="{required: true}" name="label"
       ></a-input>
       <span class="v-validate-span-errors" v-show="errors.has('label')">{{ errors.first('label') }}</span>
       
       <a-input type="password" class="input input-password"
                v-validate="{required: true ,min:6}" name="password"
-               v-model="password" :placeholder="$t('createAccount.password')"></a-input>
+               v-model="password" :placeholder="$t('createIdentity.password')"></a-input>
       <span class="v-validate-span-errors" v-show="errors.has('password')">{{ errors.first('password') }}</span>
 
       <a-input type="password" class="input input-repassword"
                v-validate="{required: true , min:6, is:password}" data-vv-as="password confirmation" name="rePassword"
-               v-model="rePassword" :placeholder="$t('createAccount.rePassword')"></a-input>
+               v-model="rePassword" :placeholder="$t('createIdentity.rePassword')"></a-input>
       <span class="v-validate-span-errors" v-show="errors.has('rePassword')">{{ errors.first('rePassword') }}</span>
     </div>
 
     <div class="basic-pk-btns">
       <div class="btn-container">
-        <a-button type="default" @click="cancel" class="btn-cancel">{{$t('createAccount.cancel')}}</a-button>
-        <a-button type="primary" @click="next" class="btn-next">{{$t('createAccount.next')}}</a-button>
+        <a-button type="default" @click="cancel" class="btn-cancel">{{$t('createIdentity.cancel')}}</a-button>
+        <a-button type="primary" @click="next" class="btn-next">{{$t('createIdentity.next')}}</a-button>
       </div>
     </div>
   </div>
@@ -52,7 +52,7 @@
               privateKey: privateKey,
               password: this.password
             }
-            this.$store.dispatch('createAccountWithPrivateKey', body).then(res => {
+            this.$store.dispatch('createIdentityWithPrivateKey', body).then(res => {
               // console.log(res)
             })
 

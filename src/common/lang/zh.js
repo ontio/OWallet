@@ -42,13 +42,13 @@ export default {
     enter: '去设置'
   },
 
-  accounts: {
+  identitys: {
     pageTit: 'ONT ID账户',
-    createAccount: '创建ONT ID账户',
-    importAccount: '导入ONT ID账户'
+    createIdentity: '创建ONT ID账户',
+    importIdentity: '导入ONT ID账户'
   },
 
-  createAccount: {
+  createIdentity: {
     create: '创建ONT ID账户',
     basicInfo: '基本信息',
     confirmInfo: '确认信息',

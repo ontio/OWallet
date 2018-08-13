@@ -11,9 +11,9 @@ export default new Router({
       component: require('@/components/Dashboard').default
     },
     {
-      path: '/accounts',
-      name: 'Accounts',
-      component: require('@/components/Accounts').default
+      path: '/identitys',
+      name: 'Identitys',
+      component: require('@/components/Identitys').default
     },
     {
       path: '/Wallets',
@@ -40,9 +40,9 @@ export default new Router({
       component: require('@/components/Home').default
     },
     {
-      path: '/createAccount',
-      name: 'CreateAccount',
-      component: require('@/components/Accounts/CreateAccount').default
+      path: '/createIdentity',
+      name: 'CreateIdentity',
+      component: require('@/components/Identitys/CreateIdentity').default
     },
     {
       path: '/createMultiSignAddr',

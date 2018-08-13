@@ -42,17 +42,17 @@ export default {
     enter: 'Set file path'
   },
 
-  accounts: {
-    pageTit: 'Accounts (ONT ID)',
-    createAccount: 'Create Account',
-    importAccount: 'Import Account'
+  identitys: {
+    pageTit: 'Identitys (ONT ID)',
+    createIdentity: 'Create Identity',
+    importIdentity: 'Import Identity'
   },
 
-  createAccount: {
-    create: 'Create Accounts (ONT ID)',
+  createIdentity: {
+    create: 'Create Identitys (ONT ID)',
     basicInfo: 'Basic info',
     confirmInfo: 'Confirm info',
-    label: 'Name of Accounts (ONT ID)',
+    label: 'Name of Identitys (ONT ID)',
     password: 'Password',
     rePassword: 'Repeat password',
     cancel: 'Cancel',
