@@ -11,7 +11,6 @@
     <div class="tab-content" id="pills-tabContent">
       <div class="tab-pane fade show active" id="import-identity-keystore-pills" role="tabpanel"
            aria-labelledby="import-identity-keystore-pills-tab">
-        <a-input class="input" :placeholder="$t('createIdentity.label')" v-model="keystoreLabel"></a-input>
 
         <textarea class="import-identity-keystore" id="import-identity-keystore" rows="6"
                   v-validate="{required: true} " data-vv-as="keystore" name="keystore"
@@ -36,21 +35,29 @@
 
 <script>
   import {mapState} from 'vuex'
-  import {Wallet, Account, Crypto} from "ontology-ts-sdk"
+  import {Wallet, Account, Crypto, Identity, OntidContract, RestClient} from "ontology-ts-sdk"
   import FileHelper from "../../../../core/fileHelper"
   import dbService from '../../../../core/dbService'
-  import {DEFAULT_SCRYPT} from '../../../../core/consts'
+  import {DEFAULT_SCRYPT, TEST_NET, MAIN_NET} from '../../../../core/consts'
   import $ from 'jquery'
 
   export default {
     name: 'BasicInfo',
     data() {
+      const net = localStorage.getItem('net');
+      let url = ''
+      if (net === 'TEST_NET') {
+          url = TEST_NET + ':20334'
+      } else {
+          url = MAIN_NET + ':20334'
+      }
       return {
         tabName: 'keystore', // keystore
 
         keystore: '',
         keystoreLabel: '',
-        keystorePassword: ''
+        keystorePassword: '',
+        nodeUrl: url
       }
     },
     methods: {
@@ -73,27 +80,45 @@
       importIdentityForKeystore() {
         // TODO 需要填充的逻辑部分
         console.log('keystore:[' + this.keystore + ']; keystorePassword:[' + this.keystorePassword + ']')
-        // let body = {
-        //   label: this.keystoreLabel,
-        //   privateKey: new Crypto.PrivateKey(this.keystore),
-        //   password: this.keystorePassword
-        // }
-        // TODO 和创建Identity账户使用的同样的dispatch
-        // this.$store.dispatch('createIdentityWithPrivateKey', body).then(res => {
-        //   this.saveToDb(res) // TODO 后续逻辑也未完成改完
-        // })
+        //import identity
+        const keystore = JSON.parse(this.keystore)
+        let identity = new Identity();
+        try {
+            const encryptedPrivateKeyObj = new Crypto.PrivateKey(keystore.key);
+            const addr = new Crypto.Address(keystore.address);
+            const label = keystore.label
+            const salt = keystore.salt
+            let password = Ont.SDK.transformPassword(this.keystorePassword)
+            identity = Identity.importIdentity(label, encryptedPrivateKeyObj, password, addr, salt);
+        } catch (err) {
+            this.$message.error(this.$t('importIdentity.passError'))
+            this.$store.dispatch('hideLoadingModals')
+            return;
+        }
+        const tx = OntidContract.buildGetDDOTx(identity.ontid)
+        const restClient = new RestClient(this.nodeUrl)
+        restClient.sendRawTransaction(tx.serialize(), true).then(res => {
+          if(res.Result) {
+            this.saveToDb(identity)
+          } else {
+            this.$message.error(this.$t('importIdentity.ontidNotExist'))
+            this.$store.dispatch('hideLoadingModals')            
+            return;
+          }
+        })
       },
       saveToDb(identity) {
         const that = this;
         const wallet = {
-          type: 'CommonWallet',
-          address: identity.address,
+          type: 'Identity',
+          address: identity.ontid,
           wallet: identity
         }
         dbService.insert(wallet, function (err, newDoc) {
           if (err) {
             console.log(err)
             that.$message.warning('The identity already exists in local.')
+            this.$store.dispatch('hideLoadingModals')
             return;
           }
 

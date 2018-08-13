@@ -73,7 +73,9 @@ export default {
     import: 'Import Identity (ONT ID)',
     basicInfo: 'Basic info',
     keystore: 'Keystore',
-    label: ''
+    label: '',
+    passError: 'Password error',
+    ontidNotExist: 'The ONT ID to import does not exist on the blockchain'
   },
 
   wallets: {
