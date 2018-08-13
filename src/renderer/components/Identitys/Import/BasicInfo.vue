@@ -102,7 +102,7 @@
         })
       },
       cancel() {
-        this.$router.push({name: 'Wallets'})
+        this.$router.push({name: 'Identitys'})
       }
     }
   }
