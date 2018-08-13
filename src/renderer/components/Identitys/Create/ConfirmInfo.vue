@@ -1,16 +1,9 @@
 <template>
   <div class="container json-confirm-container">
-    <p><b>{{$t('createJsonWallet.labelN')}}: </b> {{label}}</p>
-    <p><b>{{$t('createJsonWallet.addressN')}}: </b> {{ address }}</p>
-    <p><b>{{$t('createJsonWallet.pubKeyN')}}: </b> {{publicKey}}</p>
-    <p><b>{{$t('createJsonWallet.signatureSchemeN')}}: </b> SHA256withECDSA </p>
+    <p><b>{{$t('createIdentity.label')}}: </b> {{label}}</p>
+    <p><b>{{$t('createIdentity.ontid')}}: </b> {{ ontid }}</p>
 
-    <div class="backup-text">
-      <p class="font-medium-black">
-        <span></span>
-         <a-icon type="warning" />{{$t('createJsonWallet.backupWallet')}}</p>
-         <a-button type="primary" @click="downloadWallet">{{$t('createJsonWallet.download')}}</a-button>
-    </div>
+   
     <div class="confirm-btns">
       <div class="confirm-btn-container">
         <a-button type="default" class="btn-cancel" @click="back">{{ $t('createJsonWallet.back') }}</a-button>
@@ -41,11 +34,10 @@
     },
     computed: {
       ...mapState({
-        label: state => state.CreateJsonWallet.label,
-        account: state => state.CreateJsonWallet.account,
-        downloadContent: state => state.CreateJsonWallet.downloadContent,
-        address: state => state.CreateJsonWallet.address,
-        publicKey: state => state.CreateJsonWallet.publicKey
+        label: state => state.CreateIdentity.label,
+        ontid: state => state.CreateIdentity.ontid,
+        identity: state => state.CreateIdentity.identity,
+        tx: state => state.CreateIdentity.tx
       })
     },
     methods: {
@@ -63,17 +55,14 @@
       },
       next() {
         this.$store.dispatch('showLoadingModals')
-
-        
-
         //Download file
         // FileHelper.downloadFile(this.downloadContent)
 
         //save to db
         const wallet = {
-          type : WALLET_TYPE.CommonWallet,
-          address: this.address,
-          wallet: this.account
+          type : 'Identity',
+          address: this.ontid,
+          wallet: this.identity
         }
         dbService.insert(wallet, function (err, newDoc) {
           if (err) {
@@ -82,12 +71,9 @@
           // console.log(newDoc)
         })
 
-        localStorage.setItem('publicKey', this.publicKey);
-        localStorage.setItem('address', this.address)
-
-        this.$store.commit('INIT_JSON_WALLET')
-        this.$message.success(this.$t('createJsonWallet.createSuccess'))
-        this.$router.push({name: 'Wallets'})
+        this.$store.commit('INIT_CREATE_IDENTITY')
+        this.$message.success(this.$t('createIdentity.createSuccess'))
+        this.$router.push({name: 'Identitys'})
       }
     }
   }

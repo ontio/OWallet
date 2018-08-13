@@ -1,12 +1,11 @@
-import { Wallet, Account, Crypto } from "ontology-ts-sdk";
-
+import { Wallet, Identity, Crypto, OntidContract, TransactionBuilder } from "ontology-ts-sdk";
+import {GAS_PRICE, GAS_LIMIT} from '../../../core/consts'
 const state = {
   currentStep: 0,
   label: '',
-  address: '',
-  publicKey: '',
-  account: '',
-  downloadContent: '',
+  ontid: '',
+  identity: '',
+  tx: ''
 }
 
 const mutations = {
@@ -18,49 +17,45 @@ const mutations = {
       state.currentStep -= 1;
     }
   },
-  CREATE_JSON_WALLET(state, payload) {
+  CREATE_IDENTITY(state, payload) {
     state.label = payload.label
-    state.account = payload.account
-    state.downloadContent = payload.content
-    state.address = payload.account.address
-    state.publicKey = payload.account.publicKey
+    state.ontid = payload.ontid
+    state.identity = payload.identity,
+    state.tx = payload.tx
   },
-  INIT_JSON_WALLET(state, payload) {
+  INIT_CREATE_IDENTITY(state, payload) {
     state.currentStep = 0
     state.label = ''
-    state.account = ''
-    state.downloadContent = ''
-    state.address = ''
-    state.publicKey = ''
+    state.ontid = ''
+    state.identity = '',
+    state.tx = ''
   }
 }
 
 const actions = {
   createIdentityWithPrivateKey({commit}, body) {
-    let wallet = Wallet.create(body.label || "")
-    wallet.scrypt.n = 16384;
+    // wallet.scrypt.n = 16384;
 
-    let params = {
-      cost: 16384,
-      blockSize: 8,
-      parallel: 8,
-      size: 64
-    };
+    // let params = {
+    //   cost: 16384,
+    //   blockSize: 8,
+    //   parallel: 8,
+    //   size: 64
+    // };
 
-    let account = Account.create(body.privateKey, body.password, body.label, params)
-    account.isDefault = true;
-
-    // 生成下载钱包的内容
-    wallet.addAccount(account);
-    
-    account = account.toJsonObj();
-    commit('CREATE_JSON_WALLET', {
+    let identity = Identity.create(body.privateKey, body.password, body.label)
+    const publicKey = body.privateKey.getPublicKey();
+    const tx = OntidContract.buildRegisterOntidTx(identity.ontid, publicKey, GAS_PRICE, GAS_LIMIT);
+    TransactionBuilder.signTransaction(tx, body.privateKey);
+    identity = identity.toJsonObj();
+    commit('CREATE_IDENTITY', {
       label: body.label,
-      account: account,
-      content: wallet.toJsonObj(),
+      ontid: identity.ontid,
+      identity,
+      tx: tx
     })
 
-    return account
+    return tx
   }
 }
 
