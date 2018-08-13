@@ -42,6 +42,23 @@ export default {
     enter: '去设置'
   },
 
+  accounts: {
+    pageTit: 'ONT ID账户',
+    createAccount: '创建ONT ID账户',
+    importAccount: '导入ONT ID账户'
+  },
+
+  createAccount: {
+    create: '创建ONT ID账户',
+    basicInfo: '基本信息',
+    confirmInfo: '确认信息',
+    label: 'ONT ID账户昵称',
+    password: '账户密码',
+    rePassword: '确认密码',
+    cancel: '取消',
+    next: '继续'
+  },
+
   wallets: {
     all: '全部钱包',
     common: '普通钱包',

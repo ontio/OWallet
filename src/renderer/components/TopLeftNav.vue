@@ -5,64 +5,58 @@
         <img class="logo-img" src="./../assets/logo.png" alt="">
       </router-link>
 
-      <!-- <div class="nav-wallets" @click="goToWallet"></div> -->
-
-      <router-link  :to="{name:'Wallets'}" active-class="nav-wallets-active">
+      <router-link :to="{name:'Wallets'}" active-class="nav-wallets-active">
         <div class="nav-wallets"></div>
       </router-link>
 
-      <router-link  :to="{name:'Setting'}" active-class="nav-setting-active">
+      <router-link :to="{name:'Accounts'}" active-class="nav-accounts-active">
+        <div class="nav-accounts"></div>
+      </router-link>
+
+      <router-link :to="{name:'Setting'}" active-class="nav-setting-active">
         <div class="setting-img"></div>
       </router-link>
 
-        <!-- <div class="setting-img" alt="" @click="toSetting"></div> -->
       <div class="nav-help" @click="toHelp"></div>
 
-      <div class="nav-network">
-        {{network}}
-      </div>
+      <div class="nav-network">{{network}}</div>
     </div>
   </div>
 </template>
 
 <script>
-const {BrowserWindow} = require('electron').remote
-	export default {
+  const {BrowserWindow} = require('electron').remote;
+
+  export default {
     name: "TopLeftNav",
     computed: {
       network: {
         get() {
-          const net = this.$store.state.Setting.network
+          const net = this.$store.state.Setting.network;
           return net === 'TEST_NET' ? 'TestNet' : 'MainNet'
         }
       }
     },
     methods: {
-      goToWallet() {
-        this.$router.push({name:'Wallets'})
-      },
-      toSetting() {
-        this.$router.push({name:'Setting'})
-      },
       toHelp() {
-        const lang = localStorage.getItem('user_lang')
-        let url = ''
-        if(lang === 'zh') {
+        const lang = localStorage.getItem('user_lang');
+        let url = '';
+        if (lang === 'zh') {
           url = 'https://ontfans.io/?/article/36'
         } else {
           url = 'https://ontfans.io/article_39.html'
         }
-        
-        let win = new BrowserWindow({width: 800, height: 600, center:true})
+
+        let win = new BrowserWindow({width: 800, height: 600, center: true});
         win.on('closed', () => {
           win = null
         })
-        
+
         // Load a remote URL
         win.loadURL(url)
       }
-		}
-	}
+    }
+  }
 </script>
 
 <style scoped>
@@ -73,10 +67,12 @@ const {BrowserWindow} = require('electron').remote
     left: 0;
     background-color: #373A42;
   }
-  .logo-img{
+
+  .logo-img {
     height: 4rem;
     width: 4rem;
   }
+
   .logo-div {
     height: 4rem;
     width: 4rem;
@@ -90,16 +86,18 @@ const {BrowserWindow} = require('electron').remote
   }
 
   .nav-setting-active div {
-    background:url('../assets/selectsetting.png') center center;
+    background: url('../assets/selectsetting.png') center center;
   }
 
   .setting-img {
     background: url('../assets/settingunselect.png') center center;
-    background-size:contain;
+    background-size: contain;
   }
+
   .setting-img:hover {
-    background:url('../assets/selectsetting.png') center center;
+    background: url('../assets/selectsetting.png') center center;
   }
+
   .setting-img {
     cursor: pointer;
     position: fixed;
@@ -112,40 +110,63 @@ const {BrowserWindow} = require('electron').remote
   }
 
   .nav-help {
-    width:1.5rem;
+    width: 1.5rem;
     height: 1.5rem;
-    position:absolute;
-    bottom:8rem;
+    position: absolute;
+    bottom: 8rem;
     left: 1.25rem;
-    background:url('../assets/helpunselected.png') center center;
+    background: url('../assets/helpunselected.png') center center;
     cursor: pointer;
   }
+
   .nav-help:hover {
-    background:url('../assets/helpselect.png')
+    background: url('../assets/helpselect.png')
   }
+
   .nav-network {
     position: absolute;
-    bottom:10px;
+    bottom: 10px;
     left: 0;
     text-align: center;
     font-family: PingFangSC-Regular;
     font-size: 12px;
     color: #FFFFFF;
-    width:100%;
+    width: 100%;
+  }
+
+  .nav-accounts {
+    width: 24px;
+    height: 24px;
+    margin: 67px auto;
+    background: url('../assets/accounts.png');
+    background-size: cover;
+    cursor: pointer;
+  }
+
+  .nav-accounts-active div {
+    background: url('../assets/account-hover.png');
+    background-size: cover;
+  }
+
+  .nav-accounts:hover {
+    background: url('../assets/account-hover.png');
+    background-size: cover;
   }
 
   .nav-wallets {
-    width:24px;
+    width: 24px;
     height: 18px;
     margin: 67px auto;
     background: url('../assets/unselectwallet.png') center center;
-    background-size:cover;
+    background-size: cover;
     cursor: pointer;
   }
+
   .nav-wallets-active div {
     background: url('../assets/selectwallet.png') center center;
   }
+
   .nav-wallets:hover {
-    background:url('../assets/selectwallet.png') center center;
+    background: url('../assets/selectwallet.png') center center;
   }
 </style>
