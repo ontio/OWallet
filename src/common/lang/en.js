@@ -45,7 +45,9 @@ export default {
   identitys: {
     pageTit: 'Identitys (ONT ID)',
     createIdentity: 'Create Identity',
-    importIdentity: 'Import Identity'
+    importIdentity: 'Import Identity',
+    identity: 'Identity',
+    ontid: 'ONT ID'
   },
 
   createIdentity: {
@@ -56,7 +58,15 @@ export default {
     password: 'Password',
     rePassword: 'Repeat password',
     cancel: 'Cancel',
-    next: 'Next'
+    next: 'Next',
+    ontid: 'ONT ID',
+    selectWallet: 'Select Wallet to pay for the transaction fee',
+    commonWallet: 'Individual Wallet',
+    ledgerWallet: 'Ledger Wallet',
+    payerPassword: 'Input the password of your selected wallet',
+    selectCommonWallet: 'Select local individual wallet',
+    selectOneWallet: 'Please select one individual wallet',
+    enterPassword: 'Please enter the password of your selected wallet'
   },
 
   importIdentity: {
@@ -270,5 +280,13 @@ export default {
     status: 'Device Status',
     labelEmpty: 'Label can not be empty.',
     deviceError: 'Can not connect to device.Please try again.'
+  },
+
+  ledgerStatus : {
+    NOT_FOUND: 'Ledger not open',
+    NOT_SUPPORT: 'Ledger not supported',
+    NO_DEVICE: 'Please plugin the device and login.',
+    READY: 'Ledger is Ready',
+    NOT_OPEN: 'The ONT app on ledger is not open.'
   }
 }

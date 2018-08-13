@@ -11,9 +11,9 @@
 
       <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
         <div class="d-flex flex-wrap align-content-start center">
-          <!--<div class="normalWallet" v-for="w in allIdentitys" :key="w.ontid">-->
-            <!--<json-wallet-details :wallet="w"></json-wallet-details>-->
-          <!--</div>-->
+          <div class="normalWallet" v-for="w in allIdentitys" :key="w.address">
+            <identity-view :identity="w"></identity-view>
+          </div>
 
           <div class="div-create-wallet" :class="[viewBtn?'div-create-wallet-bg-color':'']"
                v-on:mouseenter="viewAllBtn(true)" v-on:mouseleave="viewAllBtn(false)">
@@ -33,8 +33,14 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
+import IdentityView from './Identitys/IdentityView'
+
 	export default {
-		name: "Identitys",
+    name: "Identitys",
+    components:{
+      IdentityView
+    },
     data() {
       const net = localStorage.getItem('net')
       const network = net === 'TEST_NET' ? this.$t('common.testNet') : this.$t('common.mainNet');
@@ -45,7 +51,12 @@
       }
     },
     mounted() {
-      // this.$store.dispatch('fetchIdentitysFromDb')
+      this.$store.dispatch('fetchIdentitiesFromDb')
+    },
+    computed: {
+      ...mapState({
+        allIdentitys : state => state.Identities.Identities
+      })
     },
     methods: {
       copyAddress(wallet) {
