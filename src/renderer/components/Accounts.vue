@@ -1,0 +1,154 @@
+<template>
+  <div>
+    <ul class="nav nav-pills wallets-nav-pills" id="pills-tab" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab"
+           aria-controls="pills-home" aria-selected="true">{{ $t('accounts.pageTit') }}</a>
+      </li>
+    </ul>
+
+    <div class="tab-content" id="pills-tabContent">
+
+      <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+        <div class="d-flex flex-wrap align-content-start center">
+          <!--<div class="normalWallet" v-for="w in allAccounts" :key="w.ontid">-->
+            <!--<json-wallet-details :wallet="w"></json-wallet-details>-->
+          <!--</div>-->
+
+          <div class="div-create-wallet" :class="[viewBtn?'div-create-wallet-bg-color':'']"
+               v-on:mouseenter="viewAllBtn(true)" v-on:mouseleave="viewAllBtn(false)">
+            <div class="div-create" v-show="viewBtn">
+              <router-link class="btn btn-default btn-create" to="CreateAccount">{{$t('accounts.createAccount')}}</router-link>
+            </div>
+            <div class="div-join" v-show="viewBtn">
+              <router-link class="btn btn-default btn-create" to="CreateAccount">{{$t('accounts.importAccount')}}</router-link>
+            </div>
+            <img class="img-wallet-create" v-show="!viewBtn" src="./../assets/add.png" alt="">
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</template>
+
+<script>
+	export default {
+		name: "Accounts",
+    data() {
+      const net = localStorage.getItem('net')
+      const network = net === 'TEST_NET' ? this.$t('common.testNet') : this.$t('common.mainNet');
+
+      return {
+        network: network,
+        viewBtn: false,
+      }
+    },
+    mounted() {
+      // this.$store.dispatch('fetchAccountsFromDb')
+    },
+    methods: {
+      copyAddress(wallet) {
+        this.$copyText(wallet.address)
+      },
+      viewAllBtn(bool) {
+        this.viewBtn = bool
+      }
+    }
+	}
+</script>
+
+<style scoped>
+  .nav-item > a {
+    color: #DFE2E9;
+  }
+
+  .nav-item > a:hover {
+    color: #196BD8;
+  }
+
+  .wallets-nav-pills .nav-link.active {
+    color: #196BD8;
+    background-color: transparent;
+    border-radius: 0;
+  }
+
+  .wallets-nav-pills {
+    line-height: 4rem;
+    font-family: AvenirNext-Medium;
+    font-size: 0.88rem;
+    padding: 0 1.7rem;
+  }
+
+  .nav-link {
+    padding: 0 1.7rem;
+  }
+
+  .nav-pills .show > .nav-link {
+    color: #196BD8;
+    background-color: transparent;
+  }
+
+  .center {
+    padding: 1.88rem 3rem;
+    position: relative;
+  }
+
+  .normalWallet,
+  .div-create-wallet {
+    width: 21.63rem;
+    height: 13.19rem;
+    margin-right: 3.75rem;
+    margin-bottom: 2.75rem;
+  }
+
+  .normalWallet {
+    background-color: #F5F7FB;
+    padding-left: 1.25rem;
+    position: relative;
+  }
+
+  .normalWallet:hover {
+    cursor: pointer;
+  }
+
+  .div-create-wallet {
+    background-color: #F5F7FB;
+    font-family: AvenirNext-Medium;
+    position: relative;
+  }
+
+  .div-create-wallet-bg-color {
+    background-color: #498FEF;
+  }
+
+  .img-wallet-create {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -30px;
+    margin-top: -30px;
+  }
+
+  .div-create-wallet > div > a {
+    font-size: 0.88rem;
+  }
+
+  .btn-create {
+    width: 8.25rem;
+    height: 2.13rem;
+    color: white;
+    border: white solid 1px;
+    border-radius: 0;
+  }
+
+  .div-create {
+    padding-top: 3rem;
+    padding-left: 6.48rem;
+  }
+
+  .div-join {
+    padding-top: 1.88rem;
+    padding-left: 6.48rem;
+  }
+</style>

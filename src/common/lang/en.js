@@ -42,6 +42,23 @@ export default {
     enter: 'Set file path'
   },
 
+  accounts: {
+    pageTit: 'Accounts (ONT ID)',
+    createAccount: 'Create Account',
+    importAccount: 'Import Account'
+  },
+
+  createAccount: {
+    create: 'Create Accounts (ONT ID)',
+    basicInfo: 'Basic info',
+    confirmInfo: 'Confirm info',
+    label: 'Name of Accounts (ONT ID)',
+    password: 'Password',
+    rePassword: 'Repeat password',
+    cancel: 'Cancel',
+    next: 'Next'
+  },
+
   wallets: {
     all: 'All Wallets',
     common: 'Individual Wallet',

@@ -11,6 +11,11 @@ export default new Router({
       component: require('@/components/Dashboard').default
     },
     {
+      path: '/accounts',
+      name: 'Accounts',
+      component: require('@/components/Accounts').default
+    },
+    {
       path: '/Wallets',
       name: 'Wallets',
       component: require('@/components/Wallets').default
@@ -33,6 +38,11 @@ export default new Router({
       path: '/',
       name: 'Home',
       component: require('@/components/Home').default
+    },
+    {
+      path: '/createAccount',
+      name: 'CreateAccount',
+      component: require('@/components/Accounts/CreateAccount').default
     },
     {
       path: '/createMultiSignAddr',
