@@ -28,8 +28,8 @@
       }
     },
     methods: {
-      copyAddress(wallet) {
-        this.$copyText(wallet.address)
+      copyAddress(identity) {
+        this.$copyText(identity.ontid)
         this.addressCopied = true
         this.$nextTick(function () {
           setInterval(this.addressCopiedDisabled, 3000);

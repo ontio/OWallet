@@ -60,6 +60,7 @@
   import FileHelper from "../../../../core/fileHelper"
   import dbService from '../../../../core/dbService'
   import {DEFAULT_SCRYPT, TEST_NET, MAIN_NET} from '../../../../core/consts'
+import {legacySignWithLedger} from '../../../../core/ontLedger'
 
   export default {
     name: 'BasicInfo',
@@ -150,8 +151,8 @@
               } else {
                 if(this.ledgerPk) {
                   this.$store.dispatch('showLoadingModals')
-                  tx.payer = new Address(this.ledgerWallet.address)
-                  const pk = new Ont.Crypto.PublicKey(this.ledgerWallet.publicKey);
+                  tx.payer = new Crypto.Address(this.ledgerWallet.address)
+                  const pk = new Crypto.PublicKey(this.ledgerWallet.publicKey);
                   const txSig = new Ont.TxSignature();
                   txSig.M = 1;
                   txSig.pubKeys = [pk];
@@ -163,7 +164,6 @@
                   tx.sigs = [txSig];
                   this.sendTx(tx);
                   }, err => {
-                      this.sending = false;
                       this.ledgerStatus = '';
                       alert(err.message)
                   }) 
