@@ -49,14 +49,21 @@ export default {
   },
 
   createIdentity: {
-    create: 'Create Identitys (ONT ID)',
+    create: 'Create Identity (ONT ID)',
     basicInfo: 'Basic info',
     confirmInfo: 'Confirm info',
-    label: 'Name of Identitys (ONT ID)',
+    label: 'Name of Identity (ONT ID)',
     password: 'Password',
     rePassword: 'Repeat password',
     cancel: 'Cancel',
     next: 'Next'
+  },
+
+  importIdentity: {
+    import: 'Import Identity (ONT ID)',
+    basicInfo: 'Basic info',
+    keystore: 'Keystore',
+    label: ''
   },
 
   wallets: {

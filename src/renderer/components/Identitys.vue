@@ -21,7 +21,7 @@
               <router-link class="btn btn-default btn-create" to="CreateIdentity">{{$t('identitys.createIdentity')}}</router-link>
             </div>
             <div class="div-join" v-show="viewBtn">
-              <router-link class="btn btn-default btn-create" to="CreateIdentity">{{$t('identitys.importIdentity')}}</router-link>
+              <router-link class="btn btn-default btn-create" to="ImportIdentity">{{$t('identitys.importIdentity')}}</router-link>
             </div>
             <img class="img-wallet-create" v-show="!viewBtn" src="./../assets/add.png" alt="">
           </div>
