@@ -3,7 +3,7 @@
     <ul class="nav nav-pills wallets-nav-pills" id="pills-tab" role="tablist">
       <li class="nav-item">
         <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab"
-           aria-controls="pills-home" aria-selected="true">{{ $t('accounts.pageTit') }}</a>
+           aria-controls="pills-home" aria-selected="true">{{ $t('identitys.pageTit') }}</a>
       </li>
     </ul>
 
@@ -11,17 +11,17 @@
 
       <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
         <div class="d-flex flex-wrap align-content-start center">
-          <!--<div class="normalWallet" v-for="w in allAccounts" :key="w.ontid">-->
+          <!--<div class="normalWallet" v-for="w in allIdentitys" :key="w.ontid">-->
             <!--<json-wallet-details :wallet="w"></json-wallet-details>-->
           <!--</div>-->
 
           <div class="div-create-wallet" :class="[viewBtn?'div-create-wallet-bg-color':'']"
                v-on:mouseenter="viewAllBtn(true)" v-on:mouseleave="viewAllBtn(false)">
             <div class="div-create" v-show="viewBtn">
-              <router-link class="btn btn-default btn-create" to="CreateAccount">{{$t('accounts.createAccount')}}</router-link>
+              <router-link class="btn btn-default btn-create" to="CreateIdentity">{{$t('identitys.createIdentity')}}</router-link>
             </div>
             <div class="div-join" v-show="viewBtn">
-              <router-link class="btn btn-default btn-create" to="CreateAccount">{{$t('accounts.importAccount')}}</router-link>
+              <router-link class="btn btn-default btn-create" to="CreateIdentity">{{$t('identitys.importIdentity')}}</router-link>
             </div>
             <img class="img-wallet-create" v-show="!viewBtn" src="./../assets/add.png" alt="">
           </div>
@@ -34,7 +34,7 @@
 
 <script>
 	export default {
-		name: "Accounts",
+		name: "Identitys",
     data() {
       const net = localStorage.getItem('net')
       const network = net === 'TEST_NET' ? this.$t('common.testNet') : this.$t('common.mainNet');
@@ -45,7 +45,7 @@
       }
     },
     mounted() {
-      // this.$store.dispatch('fetchAccountsFromDb')
+      // this.$store.dispatch('fetchIdentitysFromDb')
     },
     methods: {
       copyAddress(wallet) {

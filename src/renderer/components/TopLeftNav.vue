@@ -9,7 +9,7 @@
         <div class="nav-wallets"></div>
       </router-link>
 
-      <router-link :to="{name:'Accounts'}" active-class="nav-accounts-active">
+      <router-link :to="{name:'Identitys'}" active-class="nav-accounts-active">
         <div class="nav-accounts"></div>
       </router-link>
 

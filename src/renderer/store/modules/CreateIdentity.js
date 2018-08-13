@@ -36,7 +36,7 @@ const mutations = {
 }
 
 const actions = {
-  createAccountWithPrivateKey({commit}, body) {
+  createIdentityWithPrivateKey({commit}, body) {
     let wallet = Wallet.create(body.label || "")
     wallet.scrypt.n = 16384;
 
