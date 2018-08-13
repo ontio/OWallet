@@ -290,5 +290,8 @@ export default {
     NO_DEVICE: 'Please plugin the device and login.',
     READY: 'Ledger is Ready',
     NOT_OPEN: 'The ONT app on ledger is not open.'
+  },
+  nodeStake: {
+    iHaveKnown: 'I Have Known'
   }
 }
