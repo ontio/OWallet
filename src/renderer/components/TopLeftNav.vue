@@ -17,6 +17,11 @@
         <div class="setting-img"></div>
       </router-link>
 
+      <router-link :to="{name:'NodeStakeIntro'}" >
+        <div>Node</div>
+      </router-link>
+
+        <!-- <div class="setting-img" alt="" @click="toSetting"></div> -->
       <div class="nav-help" @click="toHelp"></div>
 
       <div class="nav-network">{{network}}</div>
