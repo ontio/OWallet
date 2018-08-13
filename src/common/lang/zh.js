@@ -59,6 +59,12 @@ export default {
     next: '继续'
   },
 
+  importIdentity: {
+    import: '导入ONT ID',
+    basicInfo: '基本信息',
+    keystore: 'Keystore'
+  },
+
   wallets: {
     all: '全部钱包',
     common: '普通钱包',

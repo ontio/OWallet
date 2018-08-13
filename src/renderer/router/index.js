@@ -45,6 +45,11 @@ export default new Router({
       component: require('@/components/Identitys/CreateIdentity').default
     },
     {
+      path: '/importIdentity',
+      name: 'ImportIdentity',
+      component: require('@/components/Identitys/ImportIdentity').default
+    },
+    {
       path: '/createMultiSignAddr',
       name: 'CreateMultiSignAddr',
       component: require('@/components/CreateMultiSignAddr').default
