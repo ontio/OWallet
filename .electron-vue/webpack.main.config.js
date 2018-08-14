@@ -5,7 +5,6 @@ process.env.BABEL_ENV = 'main'
 const path = require('path')
 const { dependencies } = require('../package.json')
 const webpack = require('webpack')
-const FlowWebpackPlugin = require('flow-webpack-plugin')
 
 const BabiliWebpackPlugin = require('babili-webpack-plugin')
 
@@ -63,7 +62,6 @@ let mainConfig = {
  */
 if (process.env.NODE_ENV !== 'production') {
   mainConfig.plugins.push(
-    new FlowWebpackPlugin(),
     new webpack.DefinePlugin({
       '__static': `"${path.join(__dirname, '../static').replace(/\\/g, '\\\\')}"`
     })

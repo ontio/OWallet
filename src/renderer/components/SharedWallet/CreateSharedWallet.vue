@@ -35,41 +35,40 @@ import en from '../../../common/lang/en'
 import zh from '../../../common/lang/zh'
 import BasicInfo from './Create/BasicInfo'
 import ConfirmSigNum from './Create/ConfirmSigNum'
-import CreateSuccess from './Create/CreateSuccess'
 import Breadcrumb from '../Breadcrumb'
-import { mapState } from 'vuex';
+import { mapState } from 'vuex'
 
-  export default {
-    name: 'CreateSharedWallet',
-    data() {
-        const langType = localStorage.getItem('user_lang') || 'en';
-        const lang = langType === 'en' ? en : zh;
-      return {
-        lang: lang,
-        steps: [{
-          title: lang.createSharedWallet.basicInfo,
-          content: 'First-content',
-        }, {
-          title: lang.createSharedWallet.copayers,
-          content: 'Second-content',
-        }]
-      }
-    },
-    computed : {
-        ...mapState({
-            current: state => state.CreateSharedWallet.currentStep,
-        })
-    },
-    components: {
-        BasicInfo,
-        ConfirmSigNum,
-        Breadcrumb
-    },
-    methods: {
-      back(){
-        this.$router.push({name:'Wallets'})
-      }
+export default {
+  name: 'CreateSharedWallet',
+  data () {
+    const langType = localStorage.getItem('user_lang') || 'en'
+    const lang = langType === 'en' ? en : zh
+    return {
+      lang: lang,
+      steps: [{
+        title: lang.createSharedWallet.basicInfo,
+        content: 'First-content'
+      }, {
+        title: lang.createSharedWallet.copayers,
+        content: 'Second-content'
+      }]
+    }
+  },
+  computed: {
+    ...mapState({
+      current: state => state.CreateSharedWallet.currentStep
+    })
+  },
+  components: {
+    BasicInfo,
+    ConfirmSigNum,
+    Breadcrumb
+  },
+  methods: {
+    back () {
+      this.$router.push({name: 'Wallets'})
     }
   }
+}
 </script>
 

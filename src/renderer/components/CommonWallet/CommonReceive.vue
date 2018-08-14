@@ -80,46 +80,46 @@
 import Breadcrumb from '../Breadcrumb'
 import VueQrcode from '@xkeshi/vue-qrcode'
 export default {
-    name:'CommonReceive',
-    components:{
-        Breadcrumb,
-        VueQrcode
-    },
-    data() {
-        const type = this.$route.params.walletType
-        let wallet, walletName, routes, address, pk;
-        if(type === 'commonWallet') {
-            wallet = JSON.parse(sessionStorage.getItem('currentWallet'))
-            walletName = wallet.label
-            routes = [{name: walletName, path:'/dashboard'}]
-            address = wallet.address
-            pk = wallet.publicKey
-        } else {
-            wallet = JSON.parse(sessionStorage.getItem('sharedWallet'))
-            walletName = wallet.sharedWalletName
-            routes = [{name: walletName, path:'/sharedWallet/home'}]
-            address = wallet.sharedWalletAddress
-            pk = ''
-        }
-
-        return {
-            address,
-            pk,
-            walletName,
-            routes,
-        }
-    },
-    mounted() {
-
-    },
-    methods: {
-        backToWallets() {
-            this.$router.push({name:'Wallets'})
-        },
-        copy(value) {
-            this.$copyText(value);
-            this.$message.success(this.$t('common.copied'))
-        }
+  name: 'CommonReceive',
+  components: {
+    Breadcrumb,
+    VueQrcode
+  },
+  data () {
+    const type = this.$route.params.walletType
+    let wallet, walletName, routes, address, pk
+    if (type === 'commonWallet') {
+      wallet = JSON.parse(sessionStorage.getItem('currentWallet'))
+      walletName = wallet.label
+      routes = [{name: walletName, path: '/dashboard'}]
+      address = wallet.address
+      pk = wallet.publicKey
+    } else {
+      wallet = JSON.parse(sessionStorage.getItem('sharedWallet'))
+      walletName = wallet.sharedWalletName
+      routes = [{name: walletName, path: '/sharedWallet/home'}]
+      address = wallet.sharedWalletAddress
+      pk = ''
     }
+
+    return {
+      address,
+      pk,
+      walletName,
+      routes
+    }
+  },
+  mounted () {
+
+  },
+  methods: {
+    backToWallets () {
+      this.$router.push({name: 'Wallets'})
+    },
+    copy (value) {
+      this.$copyText(value)
+      this.$message.success(this.$t('common.copied'))
+    }
+  }
 }
 </script>

@@ -12,7 +12,7 @@
 
 <script>
   export default {
-    name: "loading-modals"
+    name: 'loading-modals'
   }
   /**
    * 【 Usage 】

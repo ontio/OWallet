@@ -210,7 +210,7 @@ export default {
     receive: '接收',
     walletQrCode: '钱包地址二维码',
     walletAddress: '钱包地址',
-    publicKey :'公钥',
+    publicKey: '公钥',
     redeemCharge: '提取ONG需要支付0.01ONG',
     inputPass: '请输入钱包密码',
     emptyPass: '密码不能为空',
@@ -221,7 +221,7 @@ export default {
   transfer: {
     inputValidAmount: '请输入有效的转账金额。',
     inputValidAddress: '请输入有效的转账地址。',
-    exceedBalance : '转账金额不能超余额'
+    exceedBalance: '转账金额不能超余额'
   },
   setting: {
     name: '设置',

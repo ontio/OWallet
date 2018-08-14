@@ -1,3 +1,5 @@
+# Commented sections below can be used to run tests on the CI server
+# https://simulatedgreg.gitbooks.io/electron-vue/content/en/testing.html#on-the-subject-of-ci-testing
 version: 0.1.{build}
 
 branches:
@@ -24,6 +26,7 @@ install:
   - node --version
 
 build_script:
+  #- yarn test
   - yarn build
 
 test: off

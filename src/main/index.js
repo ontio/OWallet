@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, shell, BrowserWindow, Menu } from 'electron'
+import {app, BrowserWindow, Menu} from 'electron'
 
 /**
  * Set `__static` path to static files in production
@@ -15,7 +15,7 @@ const winURL = process.env.NODE_ENV === 'development'
   ? `http://localhost:9080`
   : `file://${__dirname}/index.html`
 
-function createWindow() {
+function createWindow () {
   /**
    * Initial window options
    */
@@ -30,7 +30,6 @@ function createWindow() {
 
   const menu = Menu.buildFromTemplate(template)
   Menu.setApplicationMenu(menu)
-
 
   mainWindow.loadURL(winURL)
 
@@ -52,7 +51,6 @@ app.on('activate', () => {
     createWindow()
   }
 })
-
 
 /**
  * 注册键盘快捷键
@@ -95,12 +93,12 @@ let template = [
         }
       }
     },
-      {
-        label: 'Quit ( 粘贴 )',
-        accelerator: 'CmdOrCtrl+Q',
-        role: 'quit'
-      },
-  ]
+    {
+      label: 'Quit ( 粘贴 )',
+      accelerator: 'CmdOrCtrl+Q',
+      role: 'quit'
+    }
+    ]
   },
   {
     label: 'Window ( 窗口 )',
@@ -132,4 +130,3 @@ let template = [
     }]
   }
 ]
-

@@ -27,25 +27,22 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex'
-  import {Wallet, Account, Crypto} from "ontology-ts-sdk"
-  import FileHelper from "../../../../core/fileHelper"
-  import dbService from '../../../../core/dbService'
+  import {Crypto} from 'ontology-ts-sdk'
 
   export default {
     name: 'BasicInfo',
-    data() {
+    data () {
       return {
-        label: "",
-        password: "",
-        rePassword: "",
+        label: '',
+        password: '',
+        rePassword: '',
         createSuccess: false
       }
     },
     methods: {
-      next() {
+      next () {
         this.$validator.validateAll().then(result => {
-          if(result) {
+          if (result) {
             let privateKey = Crypto.PrivateKey.random()
             let body = {
               label: this.label,
@@ -60,7 +57,7 @@
           }
         })
       },
-      cancel() {
+      cancel () {
         this.$router.push({name: 'Wallets'})
       }
     }

@@ -22,24 +22,24 @@
 
 <script>
   import {mapState} from 'vuex'
-  import {Crypto, Wallet, Account} from 'ontology-ts-sdk'
-  import FileHelper from "../../../../core/fileHelper"
+  import {Wallet, Account} from 'ontology-ts-sdk'
+  import FileHelper from '../../../../core/fileHelper'
   import dbService from '../../../../core/dbService'
-  import {WALLET_TYPE,DEFAULT_SCRYPT} from '../../../../core/consts'
+  import {WALLET_TYPE} from '../../../../core/consts'
   import en from '../../../../common/lang/en'
   import zh from '../../../../common/lang/zh'
 
   export default {
     name: 'ConfirmInfo',
-    data() {
-      const langType = localStorage.getItem('user_lang') || 'en';
-      const lang = langType === 'en' ? en : zh;
+    data () {
+      const langType = localStorage.getItem('user_lang') || 'en'
+      const lang = langType === 'en' ? en : zh
       return {
         lang: lang,
         processing: false
       }
     },
-    mounted() {
+    mounted () {
       this.downloadWallet()
     },
     computed: {
@@ -52,29 +52,27 @@
       })
     },
     methods: {
-      back() {
+      back () {
         this.$store.commit('SUB_CREATE_JSON_STEP')
       },
-      downloadWallet() {
+      downloadWallet () {
         const commonWallet = this.account
-        let wallet = Wallet.create(commonWallet.label || "")
+        let wallet = Wallet.create(commonWallet.label || '')
         console.log(wallet)
-        wallet.scrypt.n = 16384;
+        wallet.scrypt.n = 16384
         const account = Account.parseJsonObj(commonWallet)
         wallet.addAccount(account)
-        FileHelper.downloadFile(wallet.toJsonObj(), commonWallet.label);
+        FileHelper.downloadFile(wallet.toJsonObj(), commonWallet.label)
       },
-      next() {
+      next () {
         this.$store.dispatch('showLoadingModals')
 
-        
-
-        //Download file
+        // Download file
         // FileHelper.downloadFile(this.downloadContent)
 
-        //save to db
+        // save to db
         const wallet = {
-          type : WALLET_TYPE.CommonWallet,
+          type: WALLET_TYPE.CommonWallet,
           address: this.address,
           wallet: this.account
         }
@@ -85,7 +83,7 @@
           // console.log(newDoc)
         })
 
-        localStorage.setItem('publicKey', this.publicKey);
+        localStorage.setItem('publicKey', this.publicKey)
         localStorage.setItem('address', this.address)
 
         this.$store.commit('INIT_JSON_WALLET')

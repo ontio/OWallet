@@ -6,26 +6,28 @@ import App from './App'
 import router from './router'
 import store from './store'
 
-import $ from 'jquery'
 import 'font-awesome/css/font-awesome.css'
-import {Button, message, Steps, Input , Form, Icon, Select, Spin, Alert, Modal, Slider,
-  Row, Col, InputNumber, Layout, Menu, Breadcrumb, Checkbox} from 'vue-antd-ui'
+import {
+  Button, message, Steps, Input, Form, Icon, Select, Spin, Alert, Modal, Slider,
+  Row, Col, InputNumber, Layout, Menu, Breadcrumb, Checkbox
+} from 'vue-antd-ui'
 
 import VueClipboard from 'vue-clipboard2'
-VueClipboard.config.autoSetContainer = true // add this line
-Vue.use(VueClipboard)
 
 import VeeValidate from 'vee-validate'
-Vue.use(VeeValidate)
 
 import VueI18n from 'vue-i18n'
 import LangStorage from '../core/lang'
 import zh from '../common/lang/zh'
 import en from '../common/lang/en'
 
+VueClipboard.config.autoSetContainer = true // add this line
+Vue.use(VueClipboard)
+Vue.use(VeeValidate)
+
 Vue.use(VueI18n)
 const i18n = new VueI18n({
-  locale: LangStorage.getLang('en'),  // 语言标识
+  locale: LangStorage.getLang('en'), // 语言标识
   messages: {
     'zh': zh,
     'en': en
@@ -37,7 +39,7 @@ Vue.http = Vue.prototype.$http = axios
 Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
 
-//vue-antd-ui
+// vue-antd-ui
 Vue.component(Button.name, Button)
 Vue.component(Steps.name, Steps)
 Vue.component(Steps.Step.name, Steps.Step)
@@ -74,7 +76,7 @@ Vue.prototype.$success = Modal.success
 
 /* eslint-disable no-new */
 new Vue({
-  components: { App },
+  components: {App},
   router,
   store,
   i18n,

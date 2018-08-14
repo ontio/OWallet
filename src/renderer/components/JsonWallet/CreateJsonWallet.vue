@@ -20,27 +20,27 @@
   import BasicInfo from './Create/BasicInfo'
   import ConfirmInfo from './Create/ConfirmInfo'
   import Breadcrumb from '../Breadcrumb'
-  import {mapState} from 'vuex';
+  import {mapState} from 'vuex'
 
-  export default {
+export default {
     name: 'CreateJsonWallet',
-    data() {
-      const langType = localStorage.getItem('user_lang') || 'en';
-      const lang = langType === 'en' ? en : zh;
+    data () {
+      const langType = localStorage.getItem('user_lang') || 'en'
+      const lang = langType === 'en' ? en : zh
       return {
         lang: lang,
         steps: [{
           title: lang.createJsonWallet.basicInfo,
-          content: 'First-content',
+          content: 'First-content'
         }, {
           title: lang.createJsonWallet.confirmInfo,
-          content: 'Second-content',
+          content: 'Second-content'
         }]
       }
     },
     computed: {
       ...mapState({
-        current: state => state.CreateJsonWallet.currentStep,
+        current: state => state.CreateJsonWallet.currentStep
       })
     },
     components: {
@@ -49,7 +49,7 @@
       Breadcrumb
     },
     methods: {
-      back() {
+      back () {
         this.$router.push({name: 'Wallets'})
       }
     }
