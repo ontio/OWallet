@@ -20,21 +20,21 @@
 </template>
 
 <script>
-  import {Wallet, Account} from 'ontology-ts-sdk';
-  import FileHelper from "../../../../core/fileHelper"
-	export default {
-    name: "JsonWalletDetails",
+  import {Wallet, Account} from 'ontology-ts-sdk'
+import FileHelper from '../../../../core/fileHelper'
+export default {
+    name: 'JsonWalletDetails',
     props: ['wallet'],
-    data() {
+    data () {
       return {
         addressCopied: false,
-        isCommonWallet: this.wallet.key ? true: false
+        isCommonWallet: !!this.wallet.key
       }
     },
     methods: {
-      toWalletHome(wallet) {
-        if(this.isCommonWallet) {
-          localStorage.setItem('publicKey', wallet.publicKey);
+      toWalletHome (wallet) {
+        if (this.isCommonWallet) {
+          localStorage.setItem('publicKey', wallet.publicKey)
           localStorage.setItem('address', wallet.address)
           sessionStorage.setItem('currentWallet', JSON.stringify(wallet))
           this.$router.push({name: 'Dashboard'})
@@ -42,26 +42,25 @@
           sessionStorage.setItem('currentWallet', JSON.stringify(wallet))
           this.$router.push({name: 'LoginLedger'})
         }
-        
       },
-      copyAddress(wallet) {
+      copyAddress (wallet) {
         this.$copyText(wallet.address)
         this.addressCopied = true
         this.$nextTick(function () {
-          setInterval(this.addressCopiedDisabled, 3000);
+          setInterval(this.addressCopiedDisabled, 3000)
         })
       },
-      addressCopiedDisabled() {
+      addressCopiedDisabled () {
         this.addressCopied = false
       },
-      exportWallet(commonWallet) {
+      exportWallet (commonWallet) {
         console.log(commonWallet)
-        let wallet = Wallet.create(commonWallet.label || "")
+        let wallet = Wallet.create(commonWallet.label || '')
         console.log(wallet)
-        wallet.scrypt.n = 16384;
+        wallet.scrypt.n = 16384
         const account = Account.parseJsonObj(commonWallet)
         wallet.addAccount(account)
-        FileHelper.downloadFile(wallet.toJsonObj(), commonWallet.label);
+        FileHelper.downloadFile(wallet.toJsonObj(), commonWallet.label)
       }
     }
   }

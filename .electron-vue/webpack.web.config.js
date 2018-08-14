@@ -9,7 +9,6 @@ const BabiliWebpackPlugin = require('babili-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const FlowWebpackPlugin = require('flow-webpack-plugin')
 
 let webConfig = {
   devtool: '#cheap-module-eval-source-map',
@@ -25,8 +24,7 @@ let webConfig = {
         use: {
           loader: 'eslint-loader',
           options: {
-            formatter: require('eslint-friendly-formatter'),
-            emitError: true
+            formatter: require('eslint-friendly-formatter')
           }
         }
       },
@@ -121,7 +119,6 @@ if (process.env.NODE_ENV === 'production') {
   webConfig.devtool = ''
 
   webConfig.plugins.push(
-    new FlowWebpackPlugin(),
     new BabiliWebpackPlugin(),
     new CopyWebpackPlugin([
       {

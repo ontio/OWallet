@@ -1,44 +1,28 @@
-[中文版](./README_cn.md)
+# ont-wallet
+
+> OWallet is a comprehensive Ontology desktop wallet. OWallet supports standard wallet management, shared wallet management based on multi-signature technology, and will also connect with various hard wallets such as Ledger, Trezor, and so on. In the next phase, OWallet will integrate more applications, providing developers with smart contract compilation, invocation, and other comprehensive services.
+
+#### Build Setup
+
+``` bash
+# install dependencies
+npm install
+
+# serve with hot reload at localhost:9080
+npm run dev
+
+# build electron application for production
+npm run build
+
+# run unit & end-to-end tests
+npm test
 
 
-
-<h1 align="center">OWallet - a comprehensive Ontology desktop wallet</h1>
-<h4 align="center">Version 0.8.0</h4>
-
-## Introduction
-
-OWallet is a comprehensive Ontology desktop wallet. OWallet supports standard wallet management, shared wallet management based on multi-signature technology, and will also connect with various hard wallets such as Ledger, Trezor, and so on. In the next phase, OWallet will integrate more applications, providing developers with smart contract compilation, invocation, and other comprehensive services.
-
-Welcome to join [our community on Discord](https://discord.gg/4TQujHj).
-
-## Get started
-
-1. Clone the repo
-
-```
-git clone https://github.com/ontio/OWallet.git
-```
-
-2. Install packages
-**yarn** is recommended.
-```
-yarn install
-```
-
-3. Run in Development
+# lint all JS/Vue component files in `src/`
+npm run lint
 
 ```
-yarn run dev
-```
 
-4. Build
+---
 
-```
-yarn run package
-```
-
-> Do not use "npm run package" here, or the app will have problem in windows.
-
-## Install released app
-
-Please download the latest version that is compatiable with your platform.
+This project was generated with [electron-vue](https://github.com/SimulatedGREG/electron-vue) using [vue-cli](https://github.com/vuejs/vue-cli). Documentation about the original structure can be found [here](https://simulatedgreg.gitbooks.io/electron-vue/content/index.html).

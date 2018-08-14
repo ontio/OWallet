@@ -27,42 +27,42 @@
 
 <script>
 const {BrowserWindow} = require('electron').remote
-	export default {
-    name: "TopLeftNav",
-    computed: {
-      network: {
-        get() {
-          const net = this.$store.state.Setting.network
-          return net === 'TEST_NET' ? 'TestNet' : 'MainNet'
-        }
+export default {
+  name: 'TopLeftNav',
+  computed: {
+    network: {
+      get () {
+        const net = this.$store.state.Setting.network
+        return net === 'TEST_NET' ? 'TestNet' : 'MainNet'
       }
+    }
+  },
+  methods: {
+    goToWallet () {
+      this.$router.push({name: 'Wallets'})
     },
-    methods: {
-      goToWallet() {
-        this.$router.push({name:'Wallets'})
-      },
-      toSetting() {
-        this.$router.push({name:'Setting'})
-      },
-      toHelp() {
-        const lang = localStorage.getItem('user_lang')
-        let url = ''
-        if(lang === 'zh') {
-          url = 'https://ontfans.io/?/article/36'
-        } else {
-          url = 'https://ontfans.io/article_39.html'
-        }
-        
-        let win = new BrowserWindow({width: 800, height: 600, center:true})
-        win.on('closed', () => {
-          win = null
-        })
-        
-        // Load a remote URL
-        win.loadURL(url)
+    toSetting () {
+      this.$router.push({name: 'Setting'})
+    },
+    toHelp () {
+      const lang = localStorage.getItem('user_lang')
+      let url = ''
+      if (lang === 'zh') {
+        url = 'https://ontfans.io/?/article/36'
+      } else {
+        url = 'https://ontfans.io/article_39.html'
       }
-		}
-	}
+
+      let win = new BrowserWindow({width: 800, height: 600, center: true})
+      win.on('closed', () => {
+        win = null
+      })
+
+      // Load a remote URL
+      win.loadURL(url)
+    }
+  }
+}
 </script>
 
 <style scoped>

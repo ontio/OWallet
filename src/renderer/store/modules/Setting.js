@@ -1,14 +1,12 @@
-import dbService, { findWallet } from '../../../core/dbService';
-
-const net = localStorage.getItem('net');
+const net = localStorage.getItem('net')
 const state = {
-    network:net
+  network: net
 }
 
 const mutations = {
-    UPDATE_SETTING_NETWORK(state, payload) {
-        state.network = payload.network
-    }
+  UPDATE_SETTING_NETWORK (state, payload) {
+    state.network = payload.network
+  }
 }
 
 const actions = {
@@ -16,7 +14,7 @@ const actions = {
 }
 
 export default {
-    state,
-    mutations,
-    actions
+  state,
+  mutations,
+  actions
 }

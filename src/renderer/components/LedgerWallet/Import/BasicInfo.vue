@@ -25,25 +25,23 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex'
-  import {Wallet, Account, Crypto} from "ontology-ts-sdk"
   import dbService from '../../../../core/dbService'
-  import {WALLET_TYPE}  from '../../../../core/consts'
+  import {WALLET_TYPE} from '../../../../core/consts'
   import {getDeviceInfo, getPublicKey} from '../../../../core/ontLedger'
 
   export default {
     name: 'BasicInfo',
     mounted: function () {
-      let that = this;
+      let that = this
       that.getDevice()
       this.intervalId = setInterval(() => {
         that.getDevice()
       }, this.interval)
     },
-    beforeDestroy(){
+    beforeDestroy () {
       clearInterval(this.intervalId)
     },
-    data() {
+    data () {
       return {
         intervalId: '',
         interval: 1000,
@@ -52,28 +50,28 @@
       }
     },
     methods: {
-      next() {
+      next () {
         // if(!this.label) {
         //   this.$message.error(this.$t('ledgerWallet.labelEmpty'))
         //   return;
         // }
-        if(!this.publicKey) {
+        if (!this.publicKey) {
           this.$message.error(this.$t('ledgerWallet.deviceError'))
-          return;
+          return
         }
-        if(this.publicKey) {
+        if (this.publicKey) {
           this.$store.dispatch('createLedgerWalletWithPk', this.publicKey).then(res => {
-            if(res) {
+            if (res) {
               this.saveToDb(res)
             }
           })
         }
       },
 
-      getDevice() {
+      getDevice () {
         getDeviceInfo().then(res => {
           console.log('device: ' + res)
-          this.device = res;
+          this.device = res
           this.getPublicKey()
         }).catch(err => {
           console.log(err)
@@ -86,38 +84,38 @@
           }
         })
       },
-      getPublicKey() {
+      getPublicKey () {
         getPublicKey().then(res => {
-          console.log('pk info: ' + res);
+          console.log('pk info: ' + res)
           this.publicKey = res
           this.ledgerStatus = this.$t('common.readyToImport')
-          this.next();
+          this.next()
         }).catch(err => {
           this.ledgerStatus = err.message
         })
       },
-      login() {
+      login () {
         if (!this.device || !this.publicKey) {
           console.log('no device.')
-          return;
+          return
         }
         this.$store.dispatch('loginWithLedger', this.publicKey).then(res => {
           if (res) {
             console.log(res)
             // this.$router.push({name: 'Dashboard'})
           }
-        });
+        })
       },
 
-      saveToDb(account) {
-        account.label = this.label || 'Ledger Wallet';
-        const that = this;
+      saveToDb (account) {
+        account.label = this.label || 'Ledger Wallet'
+        const that = this
         const wallet = {
           type: WALLET_TYPE.HardwareWallet,
           address: account.address,
           wallet: account
         }
-        
+  
         dbService.insert(wallet, function (err, newDoc) {
           if (err) {
             console.log(err)
@@ -130,7 +128,7 @@
         sessionStorage.setItem('currentWallet', JSON.stringify(account))
         that.$router.push({name: 'Dashboard'})
       },
-      cancel() {
+      cancel () {
         this.$router.push({name: 'Wallets'})
       }
     }
