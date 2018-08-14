@@ -37,7 +37,7 @@ export default {
 
   SetPaths: {
     name: 'Keystore File Path',
-    tips: '*The keystore.db file stores your encrypted private keys. Please make sure your computer is safe and make a backup of your ketstore.db file. You need to set a file path for your keystore.',
+    tips: '*The keystore.db file stores your encrypted private keys. Please make sure your computer is safe and make a backup of your keystore.db file. You need to set a file path for your keystore.',
     close: 'Close',
     enter: 'Set file path'
   },
