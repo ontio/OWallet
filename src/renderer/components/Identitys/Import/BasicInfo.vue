@@ -119,7 +119,7 @@
           if (err) {
             console.log(err)
             that.$message.warning('The identity already exists in local.')
-            this.$store.dispatch('hideLoadingModals')
+            that.$store.dispatch('hideLoadingModals')
             return;
           }
 
