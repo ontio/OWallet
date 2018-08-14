@@ -51,7 +51,7 @@
                 <div v-if="payerWalletType === 'ledgerWallet'">
 
                     <div class="payer-ledger-status">
-                    <div class="font-bold" style="margin-bottom: 15px;">{{$t('ledgerWallet.connectApp')}}</div>
+                    <div class="font-bold" style="margin-bottom: 10px;">{{$t('ledgerWallet.connectApp')}}</div>
                     <span class="font-medium-black">{{$t('ledgerWallet.status')}}: </span>
                     <span class="font-medium">{{ledgerStatus}} </span>
                     </div>
@@ -157,11 +157,14 @@ export default {
             return;
         }
      //get qualified state
-     let address = ''
+     let address = '',
+        stakeWallet = ''
      if(this.payerWalletType === 'commonWallet' && this.payerWallet){
         address = this.payerWallet.address
+        stakeWallet = this.payerWallet
      } else {
          address = this.ledgerWallet.address
+         stakeWallet = this.ledgerWallet
      }
      const net = localStorage.getItem('net')
      const ontPassNode = net === 'TEST_NET' ? ONT_PASS_NODE : ONT_PASS_NODE_PRD
@@ -174,7 +177,7 @@ export default {
          if(res.data.QualifiedState === 0) {
              localStorage.setItem('StakeOntid', this.stakeIdentity.ontid);
              this.$store.commit('UPDATE_STAKE_IDENTITY', {stakeIdentity: this.stakeIdentity})
-             this.$store.commit('UPDATE_STAKE_WALLET', {stakeWallet: this.stakeWallet})             
+             this.$store.commit('UPDATE_STAKE_WALLET', {stakeWallet: stakeWallet})             
          } else if(res.data.QualifiedState === 1) {
              this.$message.error(this.$t('nodeStake.invalidOntid'))
              return;

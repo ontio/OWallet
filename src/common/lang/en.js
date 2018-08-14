@@ -314,6 +314,8 @@ export default {
     password: 'Enter Password',
     signWithOntid: 'Sign with ONT ID',
     signWithWallet: 'Sign with stake wallet',
-    enterOntidPass: 'Please enter the password of your ONT ID'
+    enterOntidPass: 'Please enter the password of your ONT ID',
+    enterWalletPass: 'Please enter the password of your stake wallet'
+    
   }
 }

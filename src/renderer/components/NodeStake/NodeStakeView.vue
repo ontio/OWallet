@@ -77,10 +77,26 @@
         :visible="ontidPassModal"
         @ok="handleOntidSignOK"
         @cancel="handleOntidSignCancel">
-        <div>
-            <p>{{$t('nodeStake.enterOntidPass')}}</p>
-            <a-input class="input" v-model="ontidPassword" :plaecholder="$t('nodeStake.password')" type="password"></a-input>
-        </div>
+          <div>
+              <p>{{$t('nodeStake.enterOntidPass')}}</p>
+              <a-input class="input" v-model="ontidPassword" :plaecholder="$t('nodeStake.password')" type="password"></a-input>
+          </div>
+        </a-modal>
+
+        <a-modal 
+        :title="$t('nodeStake.signWithWallet')"
+        :visible="walletPassModal"
+        @ok="handleWalletSignOK"
+        @cancel="handleWalletSignCancel">
+          <div v-if="stakeWallet.key">
+              <p>{{$t('nodeStake.enterWalletPass')}}</p>
+              <a-input class="input" v-model="ontidPassword" :plaecholder="$t('nodeStake.password')" type="password"></a-input>
+          </div>
+          <div v-if="!stakeWallet.key">
+            <div class="font-bold" style="margin-bottom: 10px;">{{$t('ledgerWallet.connectApp')}}</div>
+                    <span class="font-medium-black">{{$t('ledgerWallet.status')}}: </span>
+                    <span class="font-medium">{{ledgerStatus}} </span>
+          </div>
         </a-modal>
     </div>
 </template>
@@ -89,15 +105,25 @@
 import Breadcrumb from "../Breadcrumb";
 import { mapState } from "vuex";
 import { GAS_PRICE, GAS_LIMIT } from "../../../core/consts";
-import { Crypto, TransactionBuilder } from "ontology-ts-sdk";
+import { Crypto, TransactionBuilder, RestClient } from "ontology-ts-sdk";
 
 export default {
   name: "NodeStakeView",
   components: {
     Breadcrumb
   },
+  beforeDestroy(){
+    this.$store.dispatch('stopGetLedgerStatus')
+  },
   data() {
     const nodeStakeOntid = localStorage.getItem("nodeStakeOntid") || "";
+    const net = localStorage.getItem('net');
+    let url = ''
+    if (net === 'TEST_NET') {
+        url = TEST_NET + ':20334'
+    } else {
+        url = MAIN_NET + ':20334'
+    }
     return {
       nodeStakeOntid,
       localOntid: [],
@@ -118,18 +144,23 @@ export default {
         transactionhash:
           "364a945fc0e0fbbb05b09ededbbf4b22e1357653c924341cc210906cbd5305e0",
         status: 3
-      }
+      },
+      nodeUrl : url
     };
   },
   mounted() {
     //fetch node stake details
+    this.$store.dispatch('getLedgerStatus')
     this.$store.dispatch("fetchStakeDetail", this.stakeIdentity.ontid);
   },
   computed: {
     ...mapState({
       stakeIdentity: state => state.NodeStake.stakeIdentity,
-      stakeWallet: state => state.NodeStake.stakeWallet
+      stakeWallet: state => state.NodeStake.stakeWallet,
       // detail: state => state.NodeStake.detail
+      ledgerStatus: state => state.LedgerConnector.ledgerStatus,
+        ledgerPk : state => state.LedgerConnector.publicKey,
+        ledgerWallet: state => state.LedgerConnector.ledgerWallet
     })
   },
   methods: {
@@ -161,26 +192,99 @@ export default {
       this.ontidPassModal = true;
     },
     handleOntidSignOK() {
+      this.walletPassModal = true;
+      if(!this.ontidPassword) {
+        this.$message.error(this.$t('nodeStake.passwordEmpty'))
+        return;
+      }
       if (this.ontidPassword) {
         const enc = new Crypto.PrivateKey(this.stakeIdentity.controls[0].key);
         let pri;
         try {
           pri = enc.decrypt(
-            this.password,
-            new Crypto.Address(this.currentWallet.address),
-            this.currentWallet.salt,
-            DEFAULT_SCRYPT
+            this.ontidPassword,
+            new Crypto.Address(this.stakeIdentity.controls[0].address),
+            this.stakeIdentity.controls[0].salt
           );
         } catch (err) {
-          this.sending = false;
           console.log(err);
           this.$message.error(this.$t("common.pwdErr"));
           return;
         }
         TransactionBuilder.signTransaction(tx, pri);
+        this.tx = tx;
+        this.ontidPassModal = false;
+        this.walletPassModal = true;
       }
     },
-    handleOntidSignCancel() {}
+    handleOntidSignCancel() {
+      this.ontidPassModal = false;
+    },
+    handleWalletSignOK(){
+      if(this.stakeWallet.key && !this.walletPassword) { //common wallet
+        this.$message.error(this.$t('nodeStake.passwordEmpty'))
+        return;
+      }
+      if(this.stakeWallet.key) {
+        const enc = new Crypto.PrivateKey(this.stakeWallet.key);
+        let pri;
+        try {
+          pri = enc.decrypt(
+            this.walletPassword,
+            new Crypto.Address(this.stakeWallet.address),
+            this.stakeWallet.salt
+          );
+        } catch (err) {
+          console.log(err);
+          this.$message.error(this.$t("common.pwdErr"));
+          return;
+        }
+        TransactionBuilder.address(tx, pri);
+      } else { //ledger sign
+        if(this.ledgerWallet.address) {
+            this.$store.dispatch('showLoadingModals')
+            const pk = new Ont.Crypto.PublicKey(this.ledgerWallet.publicKey);
+            const txSig = new Ont.TxSignature();
+            txSig.M = 1;
+            txSig.pubKeys = [pk];
+            tx.payer = from;
+            const txData = tx.serializeUnsignedData();
+            legacySignWithLedger(txData, this.publicKey).then(res => {
+            // console.log('txSigned: ' + res);
+            const sign = '01' + res; //ECDSAwithSHA256
+            txSig.sigData = [sign]
+            tx.sigs.push(txSig);
+            this.sendTx(tx);
+            }, err => {
+                this.sending = false;
+                this.ledgerStatus = '';
+                alert(err.message)
+            }) 
+        } else {
+            this.$message.warning(this.$t('ledgerWallet.connectApp'))
+        }
+
+      }
+    },
+    handleWalletSignCancel() {
+      this.walletPassModal = false;
+    },
+
+    sendTx(tx) {
+      const restClient = new RestClient(this.nodeUrl);
+          restClient.sendRawTransaction(tx.serialize()).then(res => {
+          console.log(res)
+          if (res.Error === 0) {
+            this.$message.success(this.$t('common.transSentSuccess'))
+          } else if (res.Error === -1) {
+            this.$message.error(this.$t('common.ongNoEnough'))
+          } else {
+            this.$message.error(res.Result)
+          }
+          this.$router.push({name: 'NodeStakeInfo'})
+      })
   }
-};
+
+  }
+}
 </script>

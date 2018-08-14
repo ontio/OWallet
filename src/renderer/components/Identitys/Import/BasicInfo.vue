@@ -88,6 +88,7 @@
             const addr = new Crypto.Address(keystore.address);
             const label = keystore.label
             const salt = keystore.salt
+            //must call if use 
             let password = Ont.SDK.transformPassword(this.keystorePassword)
             identity = Identity.importIdentity(label, encryptedPrivateKeyObj, password, addr, salt);
             identity = identity.toJsonObj();
