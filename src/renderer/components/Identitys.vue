@@ -71,7 +71,7 @@ import IdentityView from './Identitys/IdentityView'
 
 <style scoped>
   .nav-item > a {
-    color: #DFE2E9;
+    color: #A5A7A9;
   }
 
   .nav-item > a:hover {
