@@ -90,6 +90,7 @@
             const salt = keystore.salt
             let password = Ont.SDK.transformPassword(this.keystorePassword)
             identity = Identity.importIdentity(label, encryptedPrivateKeyObj, password, addr, salt);
+            identity = identity.toJsonObj();
         } catch (err) {
             this.$message.error(this.$t('importIdentity.passError'))
             this.$store.dispatch('hideLoadingModals')
