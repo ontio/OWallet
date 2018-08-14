@@ -292,6 +292,28 @@ export default {
     NOT_OPEN: 'The ONT app on ledger is not open.'
   },
   nodeStake: {
-    iHaveKnown: 'I Have Known'
+    iHaveKnown: 'I Have Known',
+    ontid: 'ONT ID',
+    nodeStake: 'Node Stake',
+    stakeWalletAddress: 'Stake Wallet Address',
+    nodePk: 'Node Public Key',
+    contract: 'Contract',
+    commitmentQuantity: 'Commitment Quantity',
+    stakeQuantity: 'Stake Quantity',
+    stake: 'Stake',
+    feeTip: 'Stake needs 500 ONG for service fee',
+    selectOntid: 'Select ONT ID',
+    selectStakeWallet:'Select stake wallet',  
+    next: 'Next',
+    selectIdentity:'Please select your ONT ID',
+    selectIndividualWallet: 'Please select your individual wallet',
+    selectLedgerWallet: 'Please connect your ledger and open ONT app on it.',
+    invalidOntid: 'Invalid ONT ID ',
+    invalidAddress: 'Invalid stake wallet address',
+    stakeQuantityEmpty: 'Please enter valid stake quantity',
+    password: 'Enter Password',
+    signWithOntid: 'Sign with ONT ID',
+    signWithWallet: 'Sign with stake wallet',
+    enterOntidPass: 'Please enter the password of your ONT ID'
   }
 }
