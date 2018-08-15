@@ -246,6 +246,17 @@
     border-radius: 0;
     background: rgba(0,0,0,0.1);
 }
+.copy-icon {
+    width:18px;
+    height:18px;
+    display: inline-block;
+    margin-left: 10px;
+    background: url('../../assets/copy.png') center center;
+    background-size: cover;
+    cursor: pointer;
+    position: relative;
+    top: 5px;
+}
 </style>
 <template>
     <div class="home-container">
@@ -254,7 +265,10 @@
         <div class="content-container">
             <div class="left-half">
                 <div class="wallet-info">
-                    <p>{{$t('sharedWalletHome.walletAddress')}}: {{this.sharedWallet.sharedWalletAddress}}</p>
+                    <p>
+                        <span>{{$t('sharedWalletHome.walletAddress')}}: {{this.sharedWallet.sharedWalletAddress}}</span>
+                        <span class="copy-icon" @click="copy()"></span>
+                    </p>
 
                 </div>
                 <div class="wallet-balance">
@@ -438,7 +452,7 @@ export default {
             restClient.getBalance(from).then(res => {
             this.balance.ont = res.Result.ont
             this.balance.ong = new BigNumber(res.Result.ong).div(1e9).toFixed(9)
-            this.getExchangeCurrency()
+            // this.getExchangeCurrency()
             })
         },
         getExchangeCurrency() {
@@ -545,6 +559,10 @@ export default {
             url += '/testnet'
         }
         window.location.href = url;
+      },
+      copy() {
+            this.$copyText(this.sharedWallet.sharedWalletAddress);
+            this.$message.success(this.$t('common.copied'))
       }
     }
 }

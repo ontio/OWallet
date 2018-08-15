@@ -261,15 +261,17 @@
       },
       importAccountForMnemonic() {
         // 助记词导入
-        const res = Ont.SDK.importAccountMnemonic(this.mnemonicLabel, this.mnemonic, this.mnemonicPassword);
-        if (res.error === 0) {
-          this.mnemonicAccount = JSON.parse(res.result)
-          this.saveToDb(this.mnemonicAccount)
-        } else if (res.error === 42002) {
-          this.$message.error(this.$t('basicInfo.InvalidMnemonic'));
+        let account
+        try {
+          account = Ont.Account.importWithMnemonic(this.mnemonicLabel, this.mnemonic, this.mnemonicPassword, DEFAULT_SCRYPT)
+        } catch (err) {
+          this.message.error(this.t('basicInfo.InvalidMnemonic'))
         }
+        this.mnemonicAccount = account.toJsonObj()
+        this.saveToDb(this.mnemonicAccount)
       },
       saveToDb(account) {
+        account.isDefault = true;
         const that = this;
         const wallet = {
           type: 'CommonWallet',
