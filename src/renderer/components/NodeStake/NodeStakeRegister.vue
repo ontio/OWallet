@@ -67,7 +67,7 @@
         </div>
         <div class="footer-btns">
             <div class="btn-stake">
-                <p class="font-medium"><a-icon type="warning" /> {{$t('nodeStake.feeTip')}}</p>
+                <p class="font-medium"><a-icon type="info-circle-o" /> {{$t('nodeStake.feeTip')}}</p>
                 <a-button type="primary" class="btn-next" @click="handleStake">{{$t('nodeStake.stake')}}</a-button>
             </div>
             
@@ -104,11 +104,13 @@
 <script>
 import Breadcrumb from "../Breadcrumb";
 import { mapState } from "vuex";
-import { GAS_PRICE, GAS_LIMIT } from "../../../core/consts";
-import { Crypto, TransactionBuilder, RestClient } from "ontology-ts-sdk";
+import { GAS_PRICE, GAS_LIMIT, TEST_NET, MAIN_NET, ONT_PASS_NODE, ONT_PASS_NODE_PRD, ONT_PASS_URL } from "../../../core/consts";
+import { Crypto, TransactionBuilder, RestClient, utils } from "ontology-ts-sdk";
+import axios from 'axios'
+import {legacySignWithLedger} from '../../../core/ontLedger'
 
 export default {
-  name: "NodeStakeView",
+  name: "NodeStakeRegister",
   components: {
     Breadcrumb
   },
@@ -127,24 +129,24 @@ export default {
     return {
       nodeStakeOntid,
       localOntid: [],
-      stakeQuantity: 10,
+      stakeQuantity: 0,
       ontidPassModal: false,
       walletPassModal: false,
       ontidPassword: "",
       walletPassword: "",
       tx: "",
-      detail: {
-        ontid: "did:ont:AKbC3ZaSBQ1GuNKsbcqWxi3uL2oyf9F8vK",
-        stakewalletaddress: "AazEvfQPcQ2GEFFPLF1ZLwQ7K5jDn81hve",
-        publickey:
-          "035384561673e76c7e3003e705e4aa7aee67714c8b68d62dd1fb3221f48c5d3da0",
-        contract: "testcontractname",
-        commitmentquantity: 100000,
-        stakequantity: 10,
-        transactionhash:
-          "364a945fc0e0fbbb05b09ededbbf4b22e1357653c924341cc210906cbd5305e0",
-        status: 3
-      },
+      // detail: {
+      //   ontid: "did:ont:AKbC3ZaSBQ1GuNKsbcqWxi3uL2oyf9F8vK",
+      //   stakewalletaddress: "AazEvfQPcQ2GEFFPLF1ZLwQ7K5jDn81hve",
+      //   publickey:
+      //     "035384561673e76c7e3003e705e4aa7aee67714c8b68d62dd1fb3221f48c5d3da0",
+      //   contract: "testcontractname",
+      //   commitmentquantity: 100000,
+      //   stakequantity: 10,
+      //   transactionhash:
+      //     "364a945fc0e0fbbb05b09ededbbf4b22e1357653c924341cc210906cbd5305e0",
+      //   status: 3
+      // },
       nodeUrl : url
     };
   },
@@ -157,7 +159,7 @@ export default {
     ...mapState({
       stakeIdentity: state => state.NodeStake.stakeIdentity,
       stakeWallet: state => state.NodeStake.stakeWallet,
-      // detail: state => state.NodeStake.detail
+      detail: state => state.NodeStake.detail,
       ledgerStatus: state => state.LedgerConnector.ledgerStatus,
         ledgerPk : state => state.LedgerConnector.publicKey,
         ledgerWallet: state => state.LedgerConnector.ledgerWallet
@@ -192,7 +194,6 @@ export default {
       this.ontidPassModal = true;
     },
     handleOntidSignOK() {
-      this.walletPassModal = true;
       if(!this.ontidPassword) {
         this.$message.error(this.$t('nodeStake.passwordEmpty'))
         return;
@@ -211,8 +212,7 @@ export default {
           this.$message.error(this.$t("common.pwdErr"));
           return;
         }
-        TransactionBuilder.signTransaction(tx, pri);
-        this.tx = tx;
+        TransactionBuilder.signTransaction(this.tx, pri);
         this.ontidPassModal = false;
         this.walletPassModal = true;
       }
@@ -239,10 +239,13 @@ export default {
           this.$message.error(this.$t("common.pwdErr"));
           return;
         }
-        TransactionBuilder.address(tx, pri);
+        TransactionBuilder.addSign(this.tx, pri);
+        this.delegateSendTx(this.tx);
       } else { //ledger sign
+      this.$router.push({name: 'NodeStakeInfo'}) //for test, to delete
         if(this.ledgerWallet.address) {
             this.$store.dispatch('showLoadingModals')
+            const tx = this.tx;
             const pk = new Ont.Crypto.PublicKey(this.ledgerWallet.publicKey);
             const txSig = new Ont.TxSignature();
             txSig.M = 1;
@@ -254,7 +257,7 @@ export default {
             const sign = '01' + res; //ECDSAwithSHA256
             txSig.sigData = [sign]
             tx.sigs.push(txSig);
-            this.sendTx(tx);
+            this.delegateSendTx(tx);
             }, err => {
                 this.sending = false;
                 this.ledgerStatus = '';
@@ -269,21 +272,26 @@ export default {
     handleWalletSignCancel() {
       this.walletPassModal = false;
     },
-
-    sendTx(tx) {
-      const restClient = new RestClient(this.nodeUrl);
-          restClient.sendRawTransaction(tx.serialize()).then(res => {
-          console.log(res)
-          if (res.Error === 0) {
-            this.$message.success(this.$t('common.transSentSuccess'))
-          } else if (res.Error === -1) {
-            this.$message.error(this.$t('common.ongNoEnough'))
-          } else {
-            this.$message.error(res.Result)
-          }
+    delegateSendTx(tx){
+      const body = {
+        ontid: this.stakeIdentity.ontid,
+        stakewalletaddress: this.stakeWallet.address,
+        transactionhash: utils.reverseHex(tx.getHash()),
+        transactionbodyhash: tx.serialized()
+      }
+      const net = localStorage.getItem('net')
+      const ontPassNode = net === 'TEST_NET' ? ONT_PASS_NODE : ONT_PASS_NODE_PRD
+      axios.post(ontid + ONT_PASS_URL.DelegateSendTx, body).then(res => {
+        const params = {
+          ontid: this.stakeIdentity.ontid,
+          stakewalletaddress: this.stakeWallet.address,
+          stakequantity: this.stakeIdentity
+        }
+        axios.post(ontid + ONT_PASS_URL.SetStakeInfo, params).then(res => {
           this.$router.push({name: 'NodeStakeInfo'})
+        })
       })
-  }
+    }
 
   }
 }

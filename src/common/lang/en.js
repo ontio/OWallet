@@ -315,7 +315,35 @@ export default {
     signWithOntid: 'Sign with ONT ID',
     signWithWallet: 'Sign with stake wallet',
     enterOntidPass: 'Please enter the password of your ONT ID',
-    enterWalletPass: 'Please enter the password of your stake wallet'
+    enterWalletPass: 'Please enter the password of your stake wallet',
+    back: 'Back',
+    recall: 'Recall',
+    refund: 'Refound',
+    quitNode: 'Quit Node',
+    newStake: 'New Stake',
+    passwordEmpty: 'Password can not be empty'
     
+  },
+  nodeStakeStatus : {
+    transfering: 'Transfering',
+    transfered: 'Transfered',
+    transferFailed: 'Transfer Failed',
+    audit: 'Audit',
+    auditing: 'Auditing',
+    auditFailed: 'Audit Failed',
+    stake: 'Stake',
+    staked: 'Staked',
+    nodeExited: 'Node Exited',
+    refund: 'Refund',
+    refunding: 'Refunding',
+    refunded: 'Refunded',
+    refundFailed: 'Refund Failed',
+    stakeExited: 'Stake Exited',
+    quitStake: 'Quit Stake',
+    transferNeedTime: 'Transfer needs a period of time',
+    serviceFee: 'Stake needs 500 ONG for service fee',
+    auditNeedTime: 'Audit needs a period of time',
+    refundNeedTime: 'Refund needs a period of time',
+
   }
 }
