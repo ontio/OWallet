@@ -302,6 +302,17 @@
     color: #5E6369;
     border: none;
   }
+  .copy-icon {
+    width:18px;
+    height:18px;
+    display: inline-block;
+    margin-left: 10px;
+    background: url('../assets/copy.png') center center;
+    background-size: cover;
+    cursor: pointer;
+    position: relative;
+    top: 5px;
+}
 </style>
 <template>
   <div class="home-container">
@@ -310,7 +321,10 @@
     <div class="content-container">
       <div class="left-half">
         <div class="wallet-info">
-          <p>{{$t('sharedWalletHome.address')}}: {{this.address}}</p>
+          <p>
+            <span>{{$t('sharedWalletHome.address')}}: {{this.address}}</span>
+            <span class="copy-icon" @click="copy(address)"></span>
+          </p>
           <!-- <div>
             <span>{{$t('sharedWalletHome.publicKey')}}:</span>
             <span class="wallet-pk">{{this.publicKey}}</span>
@@ -543,7 +557,7 @@ import { BigNumber } from 'bignumber.js';
                 this.balance.ont = r.Balance;
               }
             }
-            this.getExchangeCurrency()
+            // this.getExchangeCurrency()
           }
         })
 
@@ -688,6 +702,10 @@ import { BigNumber } from 'bignumber.js';
           url += '/testnet'
         }
         window.location.href = url;
+      },
+      copy(value) {
+            this.$copyText(value);
+            this.$message.success(this.$t('common.copied'))
       }
     }
   }
