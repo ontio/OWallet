@@ -26,27 +26,27 @@ import InputPass from './Import/InputPass'
 import {mapState} from 'vuex'
 import Breadcrumb from '../Breadcrumb'
 export default {
-  name: 'ImportSharedWallet',
-  data () {
-    return {
+    name: 'ImportSharedWallet',
+    data() {
+        return {
 
+        }
+    },
+    computed:{
+        ...mapState({
+            current: state => state.ImportSharedWallet.currentStep
+        })
+    },
+    components: {
+        QuerySharedWallet,
+        InputPass,
+        Breadcrumb
+    },
+    methods:{
+        back(){
+            this.$router.push({name:'Wallets'})
+        }
     }
-  },
-  computed: {
-    ...mapState({
-      current: state => state.ImportSharedWallet.currentStep
-    })
-  },
-  components: {
-    QuerySharedWallet,
-    InputPass,
-    Breadcrumb
-  },
-  methods: {
-    back () {
-      this.$router.push({name: 'Wallets'})
-    }
-  }
 }
 </script>
 

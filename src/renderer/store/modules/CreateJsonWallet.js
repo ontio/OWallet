@@ -1,4 +1,4 @@
-import { Account, Wallet } from 'ontology-ts-sdk'
+import { Wallet, Account, Crypto } from "ontology-ts-sdk";
 
 const state = {
   currentStep: 0,
@@ -6,26 +6,26 @@ const state = {
   address: '',
   publicKey: '',
   account: '',
-  downloadContent: ''
+  downloadContent: '',
 }
 
 const mutations = {
-  ADD_CREATE_JSON_STEP (state, payload) {
-    state.currentStep += 1
+  ADD_CREATE_JSON_STEP(state, payload) {
+    state.currentStep += 1;
   },
-  SUB_CREATE_JSON_STEP (state, payload) {
-    if (state.currentStep > 0) {
-      state.currentStep -= 1
+  SUB_CREATE_JSON_STEP(state, payload) {
+    if(state.currentStep > 0) {
+      state.currentStep -= 1;
     }
   },
-  CREATE_JSON_WALLET (state, payload) {
+  CREATE_JSON_WALLET(state, payload) {
     state.label = payload.label
     state.account = payload.account
     state.downloadContent = payload.content
     state.address = payload.account.address
     state.publicKey = payload.account.publicKey
   },
-  INIT_JSON_WALLET (state, payload) {
+  INIT_JSON_WALLET(state, payload) {
     state.currentStep = 0
     state.label = ''
     state.account = ''
@@ -36,28 +36,28 @@ const mutations = {
 }
 
 const actions = {
-  createJsonWalletWithPrivateKey ({commit}, body) {
-    let wallet = Wallet.create(body.label || '')
-    wallet.scrypt.n = 16384
+  createJsonWalletWithPrivateKey({commit}, body) {
+    let wallet = Wallet.create(body.label || "")
+    wallet.scrypt.n = 16384;
 
     let params = {
       cost: 16384,
       blockSize: 8,
       parallel: 8,
       size: 64
-    }
+    };
 
     let account = Account.create(body.privateKey, body.password, body.label, params)
-    account.isDefault = true
+    account.isDefault = true;
 
     // 生成下载钱包的内容
-    wallet.addAccount(account)
-
-    account = account.toJsonObj()
+    wallet.addAccount(account);
+    
+    account = account.toJsonObj();
     commit('CREATE_JSON_WALLET', {
       label: body.label,
       account: account,
-      content: wallet.toJsonObj()
+      content: wallet.toJsonObj(),
     })
 
     return account

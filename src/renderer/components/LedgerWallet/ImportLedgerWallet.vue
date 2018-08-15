@@ -15,17 +15,18 @@
   import zh from '../../../common/lang/zh'
   import BasicInfo from './Import/BasicInfo'
   import Breadcrumb from '../Breadcrumb'
+  import {mapState} from 'vuex';
 
   export default {
     name: 'ImportLedgerWallet',
-    data () {
-      const langType = localStorage.getItem('user_lang') || 'en'
-      const lang = langType === 'en' ? en : zh
+    data() {
+      const langType = localStorage.getItem('user_lang') || 'en';
+      const lang = langType === 'en' ? en : zh;
       return {
         lang: lang,
         steps: [{
           title: lang.importJsonWallet.basicInfo,
-          content: 'First-content'
+          content: 'First-content',
         }]
       }
     },
@@ -34,7 +35,7 @@
       Breadcrumb
     },
     methods: {
-      back () {
+      back() {
         this.$router.push({name: 'Wallets'})
       }
     }
