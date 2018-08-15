@@ -32,6 +32,8 @@
 .stake-status-tip {
     text-align: center;
     font-size:12px;
+    height:20px;
+    margin:0;
 }
 .btn-stake {
     width:540px;
@@ -91,7 +93,9 @@
             </div>
         </div>
         <div class="footer-btns">
-            <p class="font-medium stake-status-tip" v-if="statusTip"><a-icon type="info-circle-o" /> {{statusTip}}</p>
+            <p class="font-medium stake-status-tip" >
+              <span v-if="statusTip"><a-icon type="info-circle-o"/> {{statusTip}}</span>
+              </p>
             <div class="btn-stake">
                 <a-button @click="handleBack" type="default" class="btn-cancel">{{$t('nodeStake.back')}}</a-button>
                 <a-button @click="handleRecall" class="btn-next" v-if="detail.status ===2">{{$t('nodeStake.recall')}}</a-button>
@@ -147,7 +151,7 @@ export default {
       nodeStakeOntid,
       localOntid: [],
       intervalId: "",
-      interval: 100000,
+      interval: 5000,
     //   detail: {
     //     ontid: "did:ont:AKbC3ZaSBQ1GuNKsbcqWxi3uL2oyf9F8vK",
     //     stakewalletaddress: "AazEvfQPcQ2GEFFPLF1ZLwQ7K5jDn81hve",
@@ -171,9 +175,10 @@ export default {
     const intervalId = setInterval(() => {
       this.$store.dispatch("fetchStakeDetail", this.stakeIdentity.ontid);
     }, this.interval);
+    this.intervalId = intervalId
   },
   beforeDestroy() {
-    clearInterval(this.interval);
+    clearInterval(this.intervalId);
   },
   computed: {
     ...mapState({
@@ -204,6 +209,7 @@ export default {
       this.walletPassModal = true;
     },
     handleWalletSignOK() {
+      const tx = this.tx;
       if (this.stakeWallet.key && !this.walletPassword) {
         //common wallet
         this.$message.error(this.$t("nodeStake.passwordEmpty"));
@@ -235,7 +241,7 @@ export default {
           const txSig = new Ont.TxSignature();
           txSig.M = 1;
           txSig.pubKeys = [pk];
-          tx.payer = from;
+          tx.payer = new Crypto.Address(this.ledgerWallet.address);;
           const txData = tx.serializeUnsignedData();
           legacySignWithLedger(txData, this.publicKey).then(res => {
               // console.log('txSigned: ' + res);
@@ -261,20 +267,25 @@ export default {
         ontid: this.stakeIdentity.ontid,
         stakewalletaddress: this.stakeWallet.address,
         transactionhash: utils.reverseHex(tx.getHash()),
-        transactionbodyhash: tx.serialized()
+        transactionbodyhash: tx.serialize()
       };
       const net = localStorage.getItem("net");
       const ontPassNode =
         net === "TEST_NET" ? ONT_PASS_NODE : ONT_PASS_NODE_PRD;
-      axios.post(ontid + ONT_PASS_URL.DelegateSendTx, body).then(res => {
+      axios.post(ontPassNode + ONT_PASS_URL.DelegateSendTx, body).then(res => {
         this.walletPassModal = false;
         this.walletPassword = ''
         this.tx = ''
+        this.$store.dispatch("hideLoadingModals");
+        this.$store.dispatch("fetchStakeDetail", this.stakeIdentity.ontid);
+      }).catch(err=>{
+        this.$store.dispatch("hideLoadingModals");
+        this.$message.error(this.$t('common.networkErr'))
       });
     },
     handleRecall() {
       const userAddr = new Crypto.Address(this.stakeWallet.address);
-      const peerPubkey = new Crypto.PublicKey(this.stakeWallet.publicKey);
+      const peerPubkey = this.stakeWallet.publicKey;
       const payer = userAddr;
       const tx = Ont.GovernanceTxBuilder.makeUnregisterCandidateTx(
         userAddr,
@@ -289,8 +300,8 @@ export default {
 
     handleRefund() {
         const userAddr = new Crypto.Address(this.stakeWallet.address);
-        const peerPubkeys = [new Crypto.PublicKey(this.stakeWallet.publicKey)]
-        const withdrawList = [this.detail.stakeQuantity]
+        const peerPubkeys = [this.stakeWallet.publicKey]
+        const withdrawList = [this.detail.stakequantity]
         const payer = userAddr
         const tx = Ont.GovernanceTxBuilder.makeWithdrawTx(userAddr, peerPubkeys, withdrawList, payer, GAS_PRICE, GAS_LIMIT)
         this.tx = tx;
@@ -298,7 +309,7 @@ export default {
     },
     handleQuitNode() {
         const userAddr = new Crypto.Address(this.stakeWallet.address);
-        const peerPubkey = new Crypto.PublicKey(this.stakeWallet.publicKey);
+        const peerPubkey = this.stakeWallet.publicKey;
         const payer = userAddr;   
         const tx = Ont.GovernanceTxBuilder.makeQuitNodeTx(userAddr, peerPubkey, payer, GAS_PRICE, GAS_LIMIT)
         this.tx = tx;

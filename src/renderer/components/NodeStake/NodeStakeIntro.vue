@@ -210,7 +210,7 @@ export default {
         this.payerWallet = this.normalWallet.find((v)=>{return v.address === value})
     },
     changeIdentity(value) {
-        this.stakeIdentity = this.identities.find(v => v.ontid === v.value)
+        this.stakeIdentity = this.identities.find(v => v.ontid === value)
     }
   }
 };

@@ -142,7 +142,7 @@ export default {
         return;
       }
       const ontid = this.detail.ontid;
-      const peerPubkey = new Crypto.PublicKey(this.detail.publickey);
+      const peerPubkey = this.detail.publickey;
       const keyNo = 1;
       const userAddr = new Crypto.Address(this.detail.stakewalletaddress);
       const initPos = parseInt(this.stakeQuantity);

@@ -78,7 +78,7 @@ function getStatus(status) {
              status1 = formatStatusText('nodeExited')
              status2 = formatStatusText('refund')
              status3 = formatStatusText('quitStake')
-             statusTip = ''
+             statusTip = formatStatusText('unfrozenToRefund')
              current = 0
             break;
         case 5:
@@ -105,19 +105,19 @@ function getStatus(status) {
         case 8:
              status1 = formatStatusText('transfered')
              status2 = formatStatusText('audited')
-             status3 = formatStatusText('stake')
-             current = 1
+             status3 = formatStatusText('staked')
+             current = 2
             statusTip = ''
             break;
         case 9:
-             status1 = formatStatusText('nodeExiting')
+             status1 = formatStatusText('nodeExited')
              status2 = formatStatusText('refund')
              status3 = formatStatusText('quitStake')
              current = 0
             statusTip = ''
             break;
         case 10:
-             status1 = formatStatusText('nodeExiting')
+            status1 = formatStatusText('nodeExited')
              status2 = formatStatusText('refund')
              status3 = formatStatusText('quitStake')
              current = 0

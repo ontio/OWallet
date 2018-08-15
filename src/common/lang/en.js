@@ -7,7 +7,7 @@ export default {
     confirmTips: 'Please confirm the transfer.',
     transSentSuccess: 'Transaction has been sent successfully!',
     pwdErr: 'Password error',
-    ongNoEnough: 'No enough ong to pay for the transfer fee.',
+    ongNoEnough: 'Not enough ONG for the transaction fee.',
     transferFailed: 'Transfer failed. ',
     networkErr: 'Network error!',
     normalWallet: 'Individual Wallet',
@@ -233,7 +233,7 @@ export default {
     createTime: 'Creation Time',
     balance: 'Balance',
     confirmation: 'Confirmation',
-    agreeToSend: 'I agreed to send assets',
+    agreeToSend: 'I confirm the asset amount and recipient address are correct.',
     signSequence: 'Sign sequence',
     sign: 'Sign',
     checkMore: 'Check More',
@@ -330,6 +330,7 @@ export default {
     transferFailed: 'Transfer Failed',
     audit: 'Audit',
     auditing: 'Auditing',
+    audited: 'Audited',
     auditFailed: 'Audit Failed',
     stake: 'Stake',
     staked: 'Staked',
@@ -340,10 +341,12 @@ export default {
     refundFailed: 'Refund Failed',
     stakeExited: 'Stake Exited',
     quitStake: 'Quit Stake',
+    nodeExited: 'Node Exited',
+    unfrozenToRefund: 'Unfreeze successfully, you can refund now',
     transferNeedTime: 'Transfer needs a period of time',
     serviceFee: 'Stake needs 500 ONG for service fee',
     auditNeedTime: 'Audit needs a period of time',
-    refundNeedTime: 'Refund needs a period of time',
+    refundNeedTime: 'Refund needs a period of time'
 
   }
 }

@@ -175,7 +175,7 @@ export default {
         return;
       }
       const ontid = this.detail.ontid;
-      const peerPubkey = new Crypto.PublicKey(this.detail.publickey);
+      const peerPubkey = this.detail.publickey;
       const keyNo = 1;
       const userAddr = new Crypto.Address(this.detail.stakewalletaddress);
       const initPos = parseInt(this.stakeQuantity);
@@ -242,7 +242,6 @@ export default {
         TransactionBuilder.addSign(this.tx, pri);
         this.delegateSendTx(this.tx);
       } else { //ledger sign
-      this.$router.push({name: 'NodeStakeInfo'}) //for test, to delete
         if(this.ledgerWallet.address) {
             this.$store.dispatch('showLoadingModals')
             const tx = this.tx;
@@ -250,7 +249,7 @@ export default {
             const txSig = new Ont.TxSignature();
             txSig.M = 1;
             txSig.pubKeys = [pk];
-            tx.payer = from;
+            tx.payer = new Crypto.Address(this.ledgerWallet.address);
             const txData = tx.serializeUnsignedData();
             legacySignWithLedger(txData, this.publicKey).then(res => {
             // console.log('txSigned: ' + res);
@@ -260,7 +259,6 @@ export default {
             this.delegateSendTx(tx);
             }, err => {
                 this.sending = false;
-                this.ledgerStatus = '';
                 alert(err.message)
             }) 
         } else {
@@ -277,17 +275,17 @@ export default {
         ontid: this.stakeIdentity.ontid,
         stakewalletaddress: this.stakeWallet.address,
         transactionhash: utils.reverseHex(tx.getHash()),
-        transactionbodyhash: tx.serialized()
+        transactionbodyhash: tx.serialize()
       }
       const net = localStorage.getItem('net')
       const ontPassNode = net === 'TEST_NET' ? ONT_PASS_NODE : ONT_PASS_NODE_PRD
-      axios.post(ontid + ONT_PASS_URL.DelegateSendTx, body).then(res => {
+      axios.post(ontPassNode + ONT_PASS_URL.DelegateSendTx, body).then(res => {
         const params = {
           ontid: this.stakeIdentity.ontid,
           stakewalletaddress: this.stakeWallet.address,
-          stakequantity: this.stakeIdentity
+          stakequantity: this.stakeQuantity
         }
-        axios.post(ontid + ONT_PASS_URL.SetStakeInfo, params).then(res => {
+        axios.post(ontPassNode + ONT_PASS_URL.SetStakeInfo, params).then(res => {
           this.$router.push({name: 'NodeStakeInfo'})
         })
       })
