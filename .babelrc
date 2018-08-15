@@ -1,21 +1,13 @@
 {
   "comments": false,
   "env": {
-    "test": {
-      "presets": [
-        ["env", {
-          "targets": { "node": 7 }
-        }],
-        "stage-0"
-      ],
-      "plugins": ["istanbul"]
-    },
     "main": {
       "presets": [
         ["env", {
           "targets": { "node": 7 }
         }],
-        "stage-0"
+        "stage-0",
+        "flow"
       ]
     },
     "renderer": {
@@ -35,5 +27,17 @@
       ]
     }
   },
-  "plugins": ["transform-runtime"]
+  "plugins": ["transform-runtime",
+    "babel-plugin-transform-class-properties",
+    "babel-plugin-syntax-flow",
+    "babel-plugin-transform-flow-strip-types",
+    [
+      "import",
+      {
+        "libraryName": "vue-antd-ui",
+        "libraryDirectory": "es",
+        "style": "css"
+      }
+    ]
+  ]
 }

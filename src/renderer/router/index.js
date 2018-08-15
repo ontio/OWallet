@@ -92,7 +92,7 @@ export default new Router({
         {
           path: '/sharedWallet/home',
           name: 'SHaredWalletHome',
-          component: require('@/components/SharedWallet/SharedWalletHome').default
+          component: require('@/components/SharedWallet/SharedWalletHome').default,
         },
         {
           path: '/sharedWallet/sendTransfer',
@@ -105,7 +105,7 @@ export default new Router({
         {
           path: '/sharedWallet/copayers',
           name: 'SharedWalletCopayer',
-          component: require('@/components/SharedWallet/View/SharedWalletCopayer').default
+          component: require('@/components/SharedWallet/View/SharedWalletCopayer').default,
         }
       ]
     },

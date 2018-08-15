@@ -26,34 +26,34 @@ import PendingConfirm from './Transfer/PendingConfirm'
 import PendingTxSign from './Transfer/PendingTxSign'
 
 export default {
-  name: 'PendingTxHome',
-  data () {
-    const sharedWallet = JSON.parse(sessionStorage.getItem('sharedWallet'))
-    const routes = [{name: sharedWallet.sharedWalletName, path: '/sharedWallet/home'}]
-    return {
-      routes,
-      showInputPass: false
+    name:'PendingTxHome',
+    data() {
+        const sharedWallet = JSON.parse(sessionStorage.getItem('sharedWallet'));
+        const routes = [{name: sharedWallet.sharedWalletName, path:'/sharedWallet/home'}]
+        return {
+            routes,
+            showInputPass:false
+        }
+    },
+    components: {
+        Breadcrumb,
+        PendingConfirm,
+        PendingTxSign
+    },
+    methods: {
+        backToWallets() {
+            this.$router.push({name:'Wallets'})
+        },
+        handleSignEvent() {
+            this.showInputPass = true;
+        },
+        handleBackEvent() {
+            this.showInputPass = false;
+        },
+        handleSubmitEvent(){
+            this.$router.push({path:'/sharedWallet/home'})
+            //this.$store.dispatch('fetchPendingTx')
+        }
     }
-  },
-  components: {
-    Breadcrumb,
-    PendingConfirm,
-    PendingTxSign
-  },
-  methods: {
-    backToWallets () {
-      this.$router.push({name: 'Wallets'})
-    },
-    handleSignEvent () {
-      this.showInputPass = true
-    },
-    handleBackEvent () {
-      this.showInputPass = false
-    },
-    handleSubmitEvent () {
-      this.$router.push({path: '/sharedWallet/home'})
-      // this.$store.dispatch('fetchPendingTx')
-    }
-  }
 }
 </script>

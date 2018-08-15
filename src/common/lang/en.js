@@ -80,8 +80,8 @@ export default {
     mnemonic: 'Mnemonic',
     privateKey: 'Private Key',
     backupWallet: 'Please download the .dat file and keep it safe.',
-    createSuccess: 'Create individual wallet successfully.',
-    download: 'Download'
+    createSuccess:'Create individual wallet successfully.',
+    download: "Download"
   },
 
   importJsonWallet: {
@@ -184,7 +184,7 @@ export default {
     to: 'To',
     recipient: 'Recipient Address',
     cancel: 'Cancel',
-    next: 'Next',
+    next: "Next",
     back: 'Back',
     submit: 'Submit',
     asset: 'Asset',

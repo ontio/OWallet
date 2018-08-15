@@ -110,15 +110,16 @@
 </template>
 
 <script>
-  import {Crypto} from 'ontology-ts-sdk'
-  import FileHelper from '../../../../core/fileHelper'
+  import {mapState} from 'vuex'
+  import {Wallet, Account, Crypto} from "ontology-ts-sdk"
+  import FileHelper from "../../../../core/fileHelper"
   import dbService from '../../../../core/dbService'
   import {DEFAULT_SCRYPT} from '../../../../core/consts'
   import $ from 'jquery'
 
   export default {
     name: 'BasicInfo',
-    data () {
+    data() {
       return {
         tabName: 'pk', // dat | pk | wif | mnemonic
 
@@ -145,10 +146,10 @@
       }
     },
     methods: {
-      activeTab (tabName) {
+      activeTab(tabName) {
         this.tabName = tabName
       },
-      next () {
+      next() {
         if (this.tabName === 'pk') {
           this.$validator.validateAll({
             pk: this.pk,
@@ -195,7 +196,7 @@
           })
         }
       },
-      importAccountForPK () {
+      importAccountForPK() {
         let body = {
           label: this.pkLabel,
           privateKey: new Crypto.PrivateKey(this.pk),
@@ -205,18 +206,18 @@
           this.saveToDb(res)
         })
       },
-      onFileChange () {
+      onFileChange() {
         // Custom upload button copywriting.
-        let uploadFile = $('#datFile').val()
-        $('.fileerrorTip').html('').hide()
-        let arr = uploadFile.split('\\')
-        let fileName = arr[arr.length - 1]
+        let uploadFile = $("#datFile").val();
+        $(".fileerrorTip").html("").hide();
+        let arr = uploadFile.split('\\');
+        let fileName = arr[arr.length - 1];
         this.datPath = this.$t('importJsonWallet.selectedDatFile') + fileName
 
-        let files = document.getElementById('datFile').files
+        let files = document.getElementById("datFile").files
         this.dat = files[0]
       },
-      importAccountForDat () {
+      importAccountForDat() {
         /**
          * 打开的文件：this.dat
          * 打开文件的密码： this.datPassword
@@ -225,7 +226,7 @@
         FileHelper.readWalletFile(this.dat).then(res => {
           const wallet = JSON.parse(res)
           const account = wallet.accounts[0]
-          const enc = new Crypto.PrivateKey(account.key)
+          const enc = new Crypto.PrivateKey(account.key);
           const address = new Crypto.Address(account.address)
 
           try {
@@ -234,19 +235,19 @@
             console.log(err)
             this.$store.dispatch('hideLoadingModals')
             this.$message.error(this.$t('common.pwdErr'))
-            return
+            return;
           }
-          account.label = this.datLabel
-          this.saveToDb(account)
+          account.label = this.datLabel;
+          this.saveToDb(account);
         })
       },
-      importAccountForWif () {
-        let privateKey
+      importAccountForWif() {
+        let privateKey;
         try {
-          privateKey = Crypto.PrivateKey.deserializeWIF(this.wif)
+          privateKey = Crypto.PrivateKey.deserializeWIF(this.wif);
         } catch (err) {
           this.$message.error(this.$t('basicInfo.errWif'))
-          return
+          return;
         }
 
         let body = {
@@ -258,18 +259,18 @@
           this.saveToDb(res)
         })
       },
-      importAccountForMnemonic () {
+      importAccountForMnemonic() {
         // 助记词导入
-        const res = Ont.SDK.importAccountMnemonic(this.mnemonicLabel, this.mnemonic, this.mnemonicPassword)
+        const res = Ont.SDK.importAccountMnemonic(this.mnemonicLabel, this.mnemonic, this.mnemonicPassword);
         if (res.error === 0) {
           this.mnemonicAccount = JSON.parse(res.result)
           this.saveToDb(this.mnemonicAccount)
         } else if (res.error === 42002) {
-          this.$message.error(this.$t('basicInfo.InvalidMnemonic'))
+          this.$message.error(this.$t('basicInfo.InvalidMnemonic'));
         }
       },
-      saveToDb (account) {
-        const that = this
+      saveToDb(account) {
+        const that = this;
         const wallet = {
           type: 'CommonWallet',
           address: account.address,
@@ -279,7 +280,7 @@
           if (err) {
             console.log(err)
             that.$message.warning('The wallet already exists in local.')
-            return
+            return;
           }
           // console.log(newDoc)
           that.$store.commit('INIT_JSON_WALLET')
@@ -287,7 +288,7 @@
           that.$router.push({name: 'Wallets'})
         })
       },
-      cancel () {
+      cancel() {
         this.$router.push({name: 'Wallets'})
       }
     }
