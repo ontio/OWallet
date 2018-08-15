@@ -114,7 +114,7 @@
         @cancel="handleWalletSignCancel">
           <div v-if="stakeWallet.key">
               <p>{{$t('nodeStake.enterWalletPass')}}</p>
-              <a-input class="input" v-model="ontidPassword" :plaecholder="$t('nodeStake.password')" type="password"></a-input>
+              <a-input class="input" v-model="walletPassword" :plaecholder="$t('nodeStake.password')" type="password"></a-input>
           </div>
           <div v-if="!stakeWallet.key">
             <div class="font-bold" style="margin-bottom: 10px;">{{$t('ledgerWallet.connectApp')}}</div>
@@ -137,7 +137,8 @@ import {
   ONT_PASS_NODE_PRD,
   ONT_PASS_URL,
   GAS_PRICE,
-  GAS_LIMIT
+  GAS_LIMIT,
+  DEFAULT_SCRYPT
 } from "../../../core/consts";
 
 export default {
@@ -171,6 +172,9 @@ export default {
   },
   mounted() {
     //fetch node stake details
+    if(!this.stakeWallet.key) {//common wallet
+      this.$store.dispatch('getLedgerStatus')
+    }
     this.$store.dispatch("fetchStakeDetail", this.stakeIdentity.ontid);
     const intervalId = setInterval(() => {
       this.$store.dispatch("fetchStakeDetail", this.stakeIdentity.ontid);
@@ -179,6 +183,7 @@ export default {
   },
   beforeDestroy() {
     clearInterval(this.intervalId);
+    this.$store.dispatch('stopGetLedgerStatus')
   },
   computed: {
     ...mapState({
@@ -206,7 +211,7 @@ export default {
     },
     handleWalletSignCancel() {
       this.tx = "";
-      this.walletPassModal = true;
+      this.walletPassModal = false;
     },
     handleWalletSignOK() {
       const tx = this.tx;
@@ -223,7 +228,8 @@ export default {
           pri = enc.decrypt(
             this.walletPassword,
             new Crypto.Address(this.stakeWallet.address),
-            this.stakeWallet.salt
+            this.stakeWallet.salt,
+            DEFAULT_SCRYPT
           );
         } catch (err) {
           console.log(err);

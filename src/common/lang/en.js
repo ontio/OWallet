@@ -346,7 +346,7 @@ export default {
     transferNeedTime: 'Transfer needs a period of time',
     serviceFee: 'Stake needs 500 ONG for service fee',
     auditNeedTime: 'Audit needs a period of time',
-    refundNeedTime: 'Refund needs a period of time'
-
+    refundNeedTime: 'Refund needs a period of time',
+    txFailed: 'Transaction failed.'
   }
 }

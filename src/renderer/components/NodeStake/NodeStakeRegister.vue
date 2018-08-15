@@ -90,7 +90,7 @@
         @cancel="handleWalletSignCancel">
           <div v-if="stakeWallet.key">
               <p>{{$t('nodeStake.enterWalletPass')}}</p>
-              <a-input class="input" v-model="ontidPassword" :plaecholder="$t('nodeStake.password')" type="password"></a-input>
+              <a-input class="input" v-model="walletPassword" :plaecholder="$t('nodeStake.password')" type="password"></a-input>
           </div>
           <div v-if="!stakeWallet.key">
             <div class="font-bold" style="margin-bottom: 10px;">{{$t('ledgerWallet.connectApp')}}</div>
@@ -104,7 +104,7 @@
 <script>
 import Breadcrumb from "../Breadcrumb";
 import { mapState } from "vuex";
-import { GAS_PRICE, GAS_LIMIT, TEST_NET, MAIN_NET, ONT_PASS_NODE, ONT_PASS_NODE_PRD, ONT_PASS_URL } from "../../../core/consts";
+import { GAS_PRICE, GAS_LIMIT, TEST_NET, MAIN_NET, ONT_PASS_NODE, ONT_PASS_NODE_PRD, ONT_PASS_URL, DEFAULT_SCRYPT } from "../../../core/consts";
 import { Crypto, TransactionBuilder, RestClient, utils } from "ontology-ts-sdk";
 import axios from 'axios'
 import {legacySignWithLedger} from '../../../core/ontLedger'
@@ -152,7 +152,9 @@ export default {
   },
   mounted() {
     //fetch node stake details
-    this.$store.dispatch('getLedgerStatus')
+    if(!this.stakeWallet.key) {//common wallet
+      this.$store.dispatch('getLedgerStatus')
+    }
     this.$store.dispatch("fetchStakeDetail", this.stakeIdentity.ontid);
   },
   computed: {
@@ -206,7 +208,7 @@ export default {
             this.ontidPassword,
             new Crypto.Address(this.stakeIdentity.controls[0].address),
             this.stakeIdentity.controls[0].salt
-          );
+          );// ontid use 4096 as n
         } catch (err) {
           console.log(err);
           this.$message.error(this.$t("common.pwdErr"));
@@ -232,7 +234,8 @@ export default {
           pri = enc.decrypt(
             this.walletPassword,
             new Crypto.Address(this.stakeWallet.address),
-            this.stakeWallet.salt
+            this.stakeWallet.salt,
+            DEFAULT_SCRYPT
           );
         } catch (err) {
           console.log(err);
@@ -279,6 +282,7 @@ export default {
       }
       const net = localStorage.getItem('net')
       const ontPassNode = net === 'TEST_NET' ? ONT_PASS_NODE : ONT_PASS_NODE_PRD
+      this.$store.dispatch('showLoadingModals')
       axios.post(ontPassNode + ONT_PASS_URL.DelegateSendTx, body).then(res => {
         const params = {
           ontid: this.stakeIdentity.ontid,
@@ -288,6 +292,11 @@ export default {
         axios.post(ontPassNode + ONT_PASS_URL.SetStakeInfo, params).then(res => {
           this.$router.push({name: 'NodeStakeInfo'})
         })
+      }).catch(err => {
+        this.$store.dispatch('hideLoadingModals')
+        console.log(err)
+        this.$message.error(this.$t('nodeStake.txFailed'))
+        this.walletPassModal = false;
       })
     }
 

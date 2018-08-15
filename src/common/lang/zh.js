@@ -340,7 +340,8 @@ export default {
     transferNeedTime: '转账需要一定时间',
     serviceFee: '质押需要收取500ONG作为服务费',
     auditNeedTime: '审核需要一定时间',
-    refundNeedTime: '退款需要一定时间'
+    refundNeedTime: '退款需要一定时间',
+    txFailed: '交易失败'
 
   }
 
