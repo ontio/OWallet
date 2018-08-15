@@ -145,9 +145,9 @@ export default new Router({
       component: require('@/components/NodeStake/NodeStakeIntro').default
     },
     {
-      path: '/nodeStakeView',
-      name: 'NodeStakeView',
-      component: require('@/components/NodeStake/NodeStakeView').default
+      path: '/nodeStakeRegister',
+      name: 'NodeStakeRegister',
+      component: require('@/components/NodeStake/NodeStakeRegister').default
     },
     {
       path: '/nodeStakeInfo',

@@ -143,7 +143,7 @@ export default {
       this.$router.go(-1);
     },
     next() {
-        this.$router.push({ name: "NodeStakeView" });        
+        // this.$router.push({ name: "NodeStakeView" });        
         if(!this.stakeIdentity) {
             this.$message.error(this.$t('nodeStake.selectIdentity'))
             return;
@@ -193,7 +193,7 @@ export default {
              if(res.data.status) {
                  this.$router.push({name: 'NodeStakeInfo'})
              } else {
-                 this.$router.push({name: 'NodeStakeView'})
+                 this.$router.push({name: 'NodeStakeRegister'})
              }
          })
      }).catch(err => {

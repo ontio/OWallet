@@ -1,58 +1,73 @@
 <style scoped>
 .nodeStake-container {
-    width: 540px;
-    margin:20px auto;
+  width: 540px;
+  margin: 20px auto;
 }
 .detail-item {
-    margin-bottom:15px;
+  margin-bottom: 15px;
 }
 .detail-item p {
-    margin-bottom:5px;
+  margin-bottom: 5px;
 }
 .select-ontid {
-    width:100%;
+  width: 100%;
 }
 
 .step-item-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom:15px;
+  /* padding-left: 50px;
+    padding-right: 50px; */
+}
+
+.step-item-container div {
+  width: 30%;
+  text-align: center;
+  font-size:14px;
+
+}
+.stake-status-tip {
+    text-align: center;
+    font-size:12px;
+}
+.btn-stake {
+    width:540px;
+    margin-left: auto;
+    margin-right: auto;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: flex-start;
-    /* padding-left: 50px;
-    padding-right: 50px; */
 }
-.step-item-container div {
-    width:30%;
-    text-align: center;
-}
-
 </style>
 <template>
     <div >
         <breadcrumb  :current="$t('nodeStake.nodeStake')" v-on:backEvent="handleRouteBack"></breadcrumb>
         <div class="nodeStake-container">
             <div>
-                <a-steps progressDot :current="1">
+                <a-steps progressDot :current="current">
                     <a-step ></a-step>
                     <a-step ></a-step>
                     <a-step ></a-step>                    
                 </a-steps>
                 <div class="step-item-container">
                     <div>
-                        Transfering
+                        {{status1}}
                     </div>
                     <div>
-                        Audit
+                        {{status2}}
                     </div>
                     <div>
-                        Stake
+                        {{status3}}
                     </div>
                 </div>
             </div>
 
             <div class="detail-item">
                 <p class="font-medium-black" for="">{{$t('nodeStake.ontid')}}</p>
-                <a-select class="select-ontid"></a-select>
+                <p>{{detail.ontid}}</p>
             </div>
             <div class="detail-item">
                 <p class="font-medium-black" for="">{{$t('nodeStake.stakeWalletAddress')}}</p>
@@ -72,59 +87,226 @@
             </div>
             <div class="detail-item">
                 <p class="font-medium-black" for="">{{$t('nodeStake.stakeQuantity')}}</p>
-                <a-input class="input" v-model="detail.stakequantity"></a-input>
+                <p>{{detail.stakequantity}}</p>
             </div>
         </div>
         <div class="footer-btns">
-            <div class="btn-stake" v-if="detail.status">
-                <p>{{$t('nodeStake.feeTip')}}</p>
-                <a-button>{{$t('nodeStake.stake')}}</a-button>
+            <p class="font-medium stake-status-tip" v-if="statusTip"><a-icon type="info-circle-o" /> {{statusTip}}</p>
+            <div class="btn-stake">
+                <a-button @click="handleBack" type="default" class="btn-cancel">{{$t('nodeStake.back')}}</a-button>
+                <a-button @click="handleRecall" class="btn-next" v-if="detail.status ===2">{{$t('nodeStake.recall')}}</a-button>
+                <a-button @click="handleRefund" class="btn-next" v-if="detail.status ===4 || detail.status ===3 || detail.status ===7 ">{{$t('nodeStake.refund')}}</a-button>
+                <a-button @click="handleQuitNode" class="btn-next" v-if="detail.status ===8">{{$t('nodeStake.quitNode')}}</a-button>
+                <a-button @click="handleNewStake" class="btn-next" v-if="detail.status ===6 || detail.status ===1">{{$t('nodeStake.newStake')}}</a-button>
+                
             </div>
             
         </div>
+
+        <a-modal 
+        :title="$t('nodeStake.signWithWallet')"
+        :visible="walletPassModal"
+        @ok="handleWalletSignOK"
+        @cancel="handleWalletSignCancel">
+          <div v-if="stakeWallet.key">
+              <p>{{$t('nodeStake.enterWalletPass')}}</p>
+              <a-input class="input" v-model="ontidPassword" :plaecholder="$t('nodeStake.password')" type="password"></a-input>
+          </div>
+          <div v-if="!stakeWallet.key">
+            <div class="font-bold" style="margin-bottom: 10px;">{{$t('ledgerWallet.connectApp')}}</div>
+                    <span class="font-medium-black">{{$t('ledgerWallet.status')}}: </span>
+                    <span class="font-medium">{{ledgerStatus}} </span>
+          </div>
+        </a-modal>
     </div>
 </template>
 
 <script>
-import Breadcrumb from '../Breadcrumb'
-import {mapState} from 'vuex'
+import Breadcrumb from "../Breadcrumb";
+import { mapState } from "vuex";
+import { Crypto, TransactionBuilder, utils } from "ontology-ts-sdk";
+import {legacySignWithLedger} from '../../../core/ontLedger'
+
+import axios from "axios";
+import {
+  ONT_PASS_NODE,
+  ONT_PASS_NODE_PRD,
+  ONT_PASS_URL,
+  GAS_PRICE,
+  GAS_LIMIT
+} from "../../../core/consts";
+
 export default {
-    name: 'NodeStakeView',
-    components:{
-        Breadcrumb
+  name: "NodeStakeInfo",
+  components: {
+    Breadcrumb
+  },
+  data() {
+    const nodeStakeOntid = localStorage.getItem("nodeStakeOntid") || "";
+    return {
+      nodeStakeOntid,
+      localOntid: [],
+      intervalId: "",
+      interval: 100000,
+    //   detail: {
+    //     ontid: "did:ont:AKbC3ZaSBQ1GuNKsbcqWxi3uL2oyf9F8vK",
+    //     stakewalletaddress: "AazEvfQPcQ2GEFFPLF1ZLwQ7K5jDn81hve",
+    //     publickey:
+    //       "035384561673e76c7e3003e705e4aa7aee67714c8b68d62dd1fb3221f48c5d3da0",
+    //     contract: "testcontractname",
+    //     commitmentquantity: 100000,
+    //     stakequantity: 10,
+    //     transactionhash:
+    //       "364a945fc0e0fbbb05b09ededbbf4b22e1357653c924341cc210906cbd5305e0",
+    //     status: 3
+    //   },
+      walletPassModal: false,
+      walletPassword: "",
+      tx: ""
+    };
+  },
+  mounted() {
+    //fetch node stake details
+    this.$store.dispatch("fetchStakeDetail", this.stakeIdentity.ontid);
+    const intervalId = setInterval(() => {
+      this.$store.dispatch("fetchStakeDetail", this.stakeIdentity.ontid);
+    }, this.interval);
+  },
+  beforeDestroy() {
+    clearInterval(this.interval);
+  },
+  computed: {
+    ...mapState({
+      stakeIdentity: state => state.NodeStake.stakeIdentity,
+      stakeWallet: state => state.NodeStake.stakeWallet,
+      ledgerStatus: state => state.LedgerConnector.ledgerStatus,
+      ledgerPk : state => state.LedgerConnector.publicKey,
+      ledgerWallet: state => state.LedgerConnector.ledgerWallet,
+      detail: state => state.NodeStake.detail,
+      // detail: state => state.NodeStake.detail
+      status1: state => state.NodeStake.status1,
+      status2: state => state.NodeStake.status2,
+      status3: state => state.NodeStake.status3,
+      current: state => state.NodeStake.current,
+      statusTip: state => state.NodeStake.statusTip,
+      btnText: state => state.NodeStake.btnText
+    })
+  },
+  methods: {
+    handleRouteBack() {
+      this.$router.go(-1);
     },
-    data() {
-        const nodeStakeOntid = localStorage.getItem('nodeStakeOntid') || ''
-        return  {
-            nodeStakeOntid,
-            localOntid:[],
-            detail: {
-                "ontid": "did:ont:AKbC3ZaSBQ1GuNKsbcqWxi3uL2oyf9F8vK",
-                "stakewalletaddress": "AazEvfQPcQ2GEFFPLF1ZLwQ7K5jDn81hve",
-                "publickey": "035384561673e76c7e3003e705e4aa7aee67714c8b68d62dd1fb3221f48c5d3da0",
-                "contract": "testcontractname",
-                "commitmentquantity": 100000,
-                "stakequantity": 10,
-                "transactionhash": "364a945fc0e0fbbb05b09ededbbf4b22e1357653c924341cc210906cbd5305e0",
-                "status": 3
+    handleBack() {
+      this.$router.go(-1);
+    },
+    handleWalletSignCancel() {
+      this.tx = "";
+      this.walletPassModal = true;
+    },
+    handleWalletSignOK() {
+      if (this.stakeWallet.key && !this.walletPassword) {
+        //common wallet
+        this.$message.error(this.$t("nodeStake.passwordEmpty"));
+        return;
+      }
+      if (this.stakeWallet.key) {
+        this.$store.dispatch("showLoadingModals");
+        const enc = new Crypto.PrivateKey(this.stakeWallet.key);
+        let pri;
+        try {
+          pri = enc.decrypt(
+            this.walletPassword,
+            new Crypto.Address(this.stakeWallet.address),
+            this.stakeWallet.salt
+          );
+        } catch (err) {
+          console.log(err);
+          this.$store.dispatch("hideLoadingModals");
+          this.$message.error(this.$t("common.pwdErr"));
+          return;
+        }
+        TransactionBuilder.signTransaction(tx, pri);
+        this.delegateSendTx(tx);
+      } else {
+        //ledger sign
+        if (this.ledgerWallet.address) {
+          this.$store.dispatch("showLoadingModals");
+          const pk = new Ont.Crypto.PublicKey(this.ledgerWallet.publicKey);
+          const txSig = new Ont.TxSignature();
+          txSig.M = 1;
+          txSig.pubKeys = [pk];
+          tx.payer = from;
+          const txData = tx.serializeUnsignedData();
+          legacySignWithLedger(txData, this.publicKey).then(res => {
+              // console.log('txSigned: ' + res);
+              const sign = "01" + res; //ECDSAwithSHA256
+              txSig.sigData = [sign];
+              tx.sigs = [txSig];
+              this.delegateSendTx(tx);
+            },
+            err => {
+              this.sending = false;
+              this.ledgerStatus = "";
+              alert(err.message);
             }
+          );
+        } else {
+         this.$store.dispatch("hideLoadingModals");
+          this.$message.warning(this.$t("ledgerWallet.connectApp"));
         }
+      }
     },
-    mounted(){
-        //fetch node stake details
-        this.$store.dispatch('fetchStakeDetail', this.stakeIdentity.ontid)
+    delegateSendTx(tx) {
+      const body = {
+        ontid: this.stakeIdentity.ontid,
+        stakewalletaddress: this.stakeWallet.address,
+        transactionhash: utils.reverseHex(tx.getHash()),
+        transactionbodyhash: tx.serialized()
+      };
+      const net = localStorage.getItem("net");
+      const ontPassNode =
+        net === "TEST_NET" ? ONT_PASS_NODE : ONT_PASS_NODE_PRD;
+      axios.post(ontid + ONT_PASS_URL.DelegateSendTx, body).then(res => {
+        this.walletPassModal = false;
+        this.walletPassword = ''
+        this.tx = ''
+      });
     },
-    computed: {
-        ...mapState({
-            stakeIdentity: state => state.NodeStake.stakeIdentity,
-            stakeWallet: state => state.NodeStake.stakeWallet,
-            // detail: state => state.NodeStake.detail
-        })
+    handleRecall() {
+      const userAddr = new Crypto.Address(this.stakeWallet.address);
+      const peerPubkey = new Crypto.PublicKey(this.stakeWallet.publicKey);
+      const payer = userAddr;
+      const tx = Ont.GovernanceTxBuilder.makeUnregisterCandidateTx(
+        userAddr,
+        peerPubkey,
+        payer,
+        GAS_PRICE,
+        GAS_LIMIT
+      );
+      this.tx = tx;
+      this.walletPassModal = true;
     },
-    methods: {
-        handleRouteBack() {
-            this.$router.go(-1)
-        }
+
+    handleRefund() {
+        const userAddr = new Crypto.Address(this.stakeWallet.address);
+        const peerPubkeys = [new Crypto.PublicKey(this.stakeWallet.publicKey)]
+        const withdrawList = [this.detail.stakeQuantity]
+        const payer = userAddr
+        const tx = Ont.GovernanceTxBuilder.makeWithdrawTx(userAddr, peerPubkeys, withdrawList, payer, GAS_PRICE, GAS_LIMIT)
+        this.tx = tx;
+        this.walletPassModal = true;
+    },
+    handleQuitNode() {
+        const userAddr = new Crypto.Address(this.stakeWallet.address);
+        const peerPubkey = new Crypto.PublicKey(this.stakeWallet.publicKey);
+        const payer = userAddr;   
+        const tx = Ont.GovernanceTxBuilder.makeQuitNodeTx(userAddr, peerPubkey, payer, GAS_PRICE, GAS_LIMIT)
+        this.tx = tx;
+        this.walletPassModal = true;
+    },
+    handleNewStake() {
+      this.$router.push({ name: "NodeStakeRegister" });
     }
-}
+  }
+};
 </script>
