@@ -11,6 +11,11 @@ export default new Router({
       component: require('@/components/Dashboard').default
     },
     {
+      path: '/identitys',
+      name: 'Identitys',
+      component: require('@/components/Identitys').default
+    },
+    {
       path: '/Wallets',
       name: 'Wallets',
       component: require('@/components/Wallets').default
@@ -33,6 +38,16 @@ export default new Router({
       path: '/',
       name: 'Home',
       component: require('@/components/Home').default
+    },
+    {
+      path: '/createIdentity',
+      name: 'CreateIdentity',
+      component: require('@/components/Identitys/CreateIdentity').default
+    },
+    {
+      path: '/importIdentity',
+      name: 'ImportIdentity',
+      component: require('@/components/Identitys/ImportIdentity').default
     },
     {
       path: '/createMultiSignAddr',
@@ -123,6 +138,21 @@ export default new Router({
       path: '/commonWalletRedeem/:walletType',
       name: 'CommonRedeem',
       component: require('@/components/CommonWallet/CommonRedeem').default
+    },
+    {
+      path: '/nodeStakeIntro',
+      name: 'NodeStakeIntro',
+      component: require('@/components/NodeStake/NodeStakeIntro').default
+    },
+    {
+      path: '/nodeStakeRegister',
+      name: 'NodeStakeRegister',
+      component: require('@/components/NodeStake/NodeStakeRegister').default
+    },
+    {
+      path: '/nodeStakeInfo',
+      name: 'NodeStakeInfo',
+      component: require('@/components/NodeStake/NodeStakeInfo').default
     }
   ]
 })

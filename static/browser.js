@@ -60789,7 +60789,7 @@ function makeRegisterCandidateTx(ontid, peerPubKey, keyNo, userAddr, initPos, pa
         ontid = Object(_utils__WEBPACK_IMPORTED_MODULE_4__["str2hexstr"])(ontid);
     }
     const struct = new _abi_struct__WEBPACK_IMPORTED_MODULE_6__["default"]();
-    struct.add(peerPubKey.serializeHex(), userAddr.serialize(), initPos, ontid, keyNo);
+    struct.add(Object(_utils__WEBPACK_IMPORTED_MODULE_4__["str2hexstr"])(peerPubKey), userAddr.serialize(), initPos, ontid, keyNo);
     const params = Object(_abi_nativeVmParamsBuilder__WEBPACK_IMPORTED_MODULE_5__["buildNativeCodeScript"])([struct]);
     return Object(_transaction_transactionBuilder__WEBPACK_IMPORTED_MODULE_3__["makeNativeContractTx"])('registerCandidate', params, contractAddress, gasPrice, gasLimit, payer);
 }
@@ -60803,7 +60803,7 @@ function makeRegisterCandidateTx(ontid, peerPubKey, keyNo, userAddr, initPos, pa
  */
 function makeUnregisterCandidateTx(userAddr, peerPubKey, payer, gasPrice, gasLimit) {
     const struct = new _abi_struct__WEBPACK_IMPORTED_MODULE_6__["default"]();
-    struct.add(peerPubKey.serializeHex(), userAddr.serialize());
+    struct.add(Object(_utils__WEBPACK_IMPORTED_MODULE_4__["str2hexstr"])(peerPubKey), userAddr.serialize());
     const params = Object(_abi_nativeVmParamsBuilder__WEBPACK_IMPORTED_MODULE_5__["buildNativeCodeScript"])([struct]);
     return Object(_transaction_transactionBuilder__WEBPACK_IMPORTED_MODULE_3__["makeNativeContractTx"])('unRegisterCandidate', params, contractAddress, gasPrice, gasLimit, payer);
 }
@@ -60816,7 +60816,7 @@ function makeUnregisterCandidateTx(userAddr, peerPubKey, payer, gasPrice, gasLim
  */
 function makeApproveCandidateTx(peerPubKey, payer, gasPrice, gasLimit) {
     const struct = new _abi_struct__WEBPACK_IMPORTED_MODULE_6__["default"]();
-    struct.add(peerPubKey.serializeHex());
+    struct.add(Object(_utils__WEBPACK_IMPORTED_MODULE_4__["str2hexstr"])(peerPubKey));
     const params = Object(_abi_nativeVmParamsBuilder__WEBPACK_IMPORTED_MODULE_5__["buildNativeCodeScript"])([struct]);
     return Object(_transaction_transactionBuilder__WEBPACK_IMPORTED_MODULE_3__["makeNativeContractTx"])('approveCandidate', params, contractAddress, gasPrice, gasLimit, payer);
 }
@@ -60829,7 +60829,7 @@ function makeApproveCandidateTx(peerPubKey, payer, gasPrice, gasLimit) {
  */
 function makeRejectCandidateTx(peerPubKey, payer, gasPrice, gasLimit) {
     const struct = new _abi_struct__WEBPACK_IMPORTED_MODULE_6__["default"]();
-    struct.add(peerPubKey.serializeHex());
+    struct.add(Object(_utils__WEBPACK_IMPORTED_MODULE_4__["str2hexstr"])(peerPubKey));
     const params = Object(_abi_nativeVmParamsBuilder__WEBPACK_IMPORTED_MODULE_5__["buildNativeCodeScript"])([struct]);
     return Object(_transaction_transactionBuilder__WEBPACK_IMPORTED_MODULE_3__["makeNativeContractTx"])('rejectCandidate', params, contractAddress, gasPrice, gasLimit, payer);
 }
@@ -60852,7 +60852,7 @@ function makeVoteForPeerTx(userAddr, peerPubKeys, posList, payer, gasPrice, gasL
     struct.add(userAddr.serialize());
     struct.add(peerPubKeys.length);
     for (const p of peerPubKeys) {
-        struct.add(p.serializeHex());
+        struct.add(Object(_utils__WEBPACK_IMPORTED_MODULE_4__["str2hexstr"])(p));
     }
     struct.add(posList.length);
     for (const n of posList) {
@@ -60879,7 +60879,7 @@ function makeUnvoteForPeerTx(userAddr, peerPubKeys, posList, payer, gasPrice, ga
     struct.add(userAddr.serialize());
     struct.add(peerPubKeys.length);
     for (const p of peerPubKeys) {
-        struct.add(p.serializeHex());
+        struct.add(Object(_utils__WEBPACK_IMPORTED_MODULE_4__["str2hexstr"])(p));
     }
     struct.add(posList.length);
     for (const n of posList) {
@@ -60903,7 +60903,7 @@ function makeWithdrawTx(userAddr, peerPubKeys, withdrawList, payer, gasPrice, ga
     struct.add(userAddr.serialize());
     struct.add(peerPubKeys.length);
     for (const p of peerPubKeys) {
-        struct.add(p.serializeHex());
+        struct.add(Object(_utils__WEBPACK_IMPORTED_MODULE_4__["str2hexstr"])(p));
     }
     struct.add(withdrawList.length);
     for (const w of withdrawList) {
@@ -60917,7 +60917,7 @@ function makeWithdrawTx(userAddr, peerPubKeys, withdrawList, payer, gasPrice, ga
  */
 function makeQuitNodeTx(userAddr, peerPubKey, payer, gasPrice, gasLimit) {
     const struct = new _abi_struct__WEBPACK_IMPORTED_MODULE_6__["default"]();
-    struct.add(peerPubKey.serializeHex(), userAddr.serialize());
+    struct.add(Object(_utils__WEBPACK_IMPORTED_MODULE_4__["str2hexstr"])(peerPubKey), userAddr.serialize());
     const params = Object(_abi_nativeVmParamsBuilder__WEBPACK_IMPORTED_MODULE_5__["buildNativeCodeScript"])([struct]);
     return Object(_transaction_transactionBuilder__WEBPACK_IMPORTED_MODULE_3__["makeNativeContractTx"])('quitNode', params, contractAddress, gasPrice, gasLimit, payer);
 }

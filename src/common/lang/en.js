@@ -42,6 +42,42 @@ export default {
     enter: 'Set file path'
   },
 
+  identitys: {
+    pageTit: 'Identitys (ONT ID)',
+    createIdentity: 'Create Identity',
+    importIdentity: 'Import Identity',
+    identity: 'Identity',
+    ontid: 'ONT ID'
+  },
+
+  createIdentity: {
+    create: 'Create Identity (ONT ID)',
+    basicInfo: 'Basic info',
+    confirmInfo: 'Confirm info',
+    label: 'Name of Identity (ONT ID)',
+    password: 'Password',
+    rePassword: 'Repeat password',
+    cancel: 'Cancel',
+    next: 'Next',
+    ontid: 'ONT ID',
+    selectWallet: 'Select Wallet to pay for the transaction fee',
+    commonWallet: 'Individual Wallet',
+    ledgerWallet: 'Ledger Wallet',
+    payerPassword: 'Input the password of your selected wallet',
+    selectCommonWallet: 'Select local individual wallet',
+    selectOneWallet: 'Please select one individual wallet',
+    enterPassword: 'Please enter the password of your selected wallet'
+  },
+
+  importIdentity: {
+    import: 'Import Identity (ONT ID)',
+    basicInfo: 'Basic info',
+    keystore: 'Keystore',
+    label: '',
+    passError: 'Password error',
+    ontidNotExist: 'The ONT ID to import does not exist on the blockchain'
+  },
+
   wallets: {
     all: 'All Wallets',
     common: 'Individual Wallet',
@@ -246,5 +282,71 @@ export default {
     status: 'Device Status',
     labelEmpty: 'Label can not be empty.',
     deviceError: 'Can not connect to device.Please try again.'
+  },
+
+  ledgerStatus : {
+    NOT_FOUND: 'Ledger not open',
+    NOT_SUPPORT: 'Ledger not supported',
+    NO_DEVICE: 'Please plugin the device and login.',
+    READY: 'Ledger is Ready',
+    NOT_OPEN: 'The ONT app on ledger is not open.'
+  },
+  nodeStake: {
+    iHaveKnown: 'I Have Known',
+    ontid: 'ONT ID',
+    nodeStake: 'Node Stake',
+    stakeWalletAddress: 'Stake Wallet Address',
+    nodePk: 'Node Public Key',
+    contract: 'Contract',
+    commitmentQuantity: 'Commitment Quantity',
+    stakeQuantity: 'Stake Quantity',
+    stake: 'Stake',
+    feeTip: 'Stake needs 500 ONG for service fee',
+    selectOntid: 'Select ONT ID',
+    selectStakeWallet:'Select stake wallet',  
+    next: 'Next',
+    selectIdentity:'Please select your ONT ID',
+    selectIndividualWallet: 'Please select your individual wallet',
+    selectLedgerWallet: 'Please connect your ledger and open ONT app on it.',
+    invalidOntid: 'Invalid ONT ID ',
+    invalidAddress: 'Invalid stake wallet address',
+    stakeQuantityEmpty: 'Please enter valid stake quantity',
+    password: 'Enter Password',
+    signWithOntid: 'Sign with ONT ID',
+    signWithWallet: 'Sign with stake wallet',
+    enterOntidPass: 'Please enter the password of your ONT ID',
+    enterWalletPass: 'Please enter the password of your stake wallet',
+    back: 'Back',
+    recall: 'Recall',
+    refund: 'Refound',
+    quitNode: 'Quit Node',
+    newStake: 'New Stake',
+    passwordEmpty: 'Password can not be empty'
+    
+  },
+  nodeStakeStatus : {
+    transfering: 'Transfering',
+    transfered: 'Transfered',
+    transferFailed: 'Transfer Failed',
+    audit: 'Audit',
+    auditing: 'Auditing',
+    audited: 'Audited',
+    auditFailed: 'Audit Failed',
+    stake: 'Stake',
+    staked: 'Staked',
+    nodeExited: 'Node Exited',
+    refund: 'Refund',
+    refunding: 'Refunding',
+    refunded: 'Refunded',
+    refundFailed: 'Refund Failed',
+    stakeExited: 'Stake Exited',
+    quitStake: 'Quit Stake',
+    nodeExited: 'Node Exited',
+    unfrozenToRefund: 'Unfreeze successfully, you can refund now',
+    transferNeedTime: 'Transfer needs a period of time',
+    serviceFee: 'Stake needs 500 ONG for service fee',
+    auditNeedTime: 'Audit needs a period of time',
+    refundNeedTime: 'Refund needs a period of time',
+    txFailed: 'Transaction failed.'
   }
 }
