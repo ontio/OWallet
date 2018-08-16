@@ -363,6 +363,7 @@
           </div>
           <a-button type="default" class="btn-redeem" :disabled="unboundOng == 0"
           @click="redeemOng">{{$t('commonWalletHome.redeem')}}</a-button>
+          <redeem-info-icon></redeem-info-icon>
         </div>
 
 
@@ -411,11 +412,12 @@
   import axios from 'axios';
   import Breadcrumb from './Breadcrumb'
 import { BigNumber } from 'bignumber.js';
-
+import RedeemInfoIcon from './RedeemInfoIcon'
   export default {
     name: 'Dashboard',
     components: {
-      Breadcrumb
+      Breadcrumb,
+      RedeemInfoIcon
     },
     data() {
       const publicKey = localStorage.getItem('publicKey');
@@ -584,6 +586,10 @@ import { BigNumber } from 'bignumber.js';
 
       },
       sendAsset() {
+        if(Number(this.balance.ong) < 0.01) {
+          this.$message.warning(this.$t('common.ongNoEnough'))
+          return;
+        }
         this.$store.commit('CLEAR_CURRENT_TRANSFER');
         this.$store.commit('UPDATE_TRANSFER_BALANCE', {balance: this.balance})
         this.$router.push({name: 'CommonSendHome'})

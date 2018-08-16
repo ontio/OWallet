@@ -348,5 +348,11 @@ export default {
     auditNeedTime: 'Audit needs a period of time',
     refundNeedTime: 'Refund needs a period of time',
     txFailed: 'Transaction failed.'
+  },
+  redeemInfo: {
+    claimableOng: `Claimable ONG is the amount of ONG you can claim for a 0.01 ONG fee. This balance will update each time a transaction is made in your wallet address.`,
+    unboundOng: `Unbound ONG is an amount of ONG which has not been added to your claimable ONG balance yet (since it only updates each you make a transaction in your wallet address). When a transaction is made in your address, the claimable ONG balance will update (adding your unbound ONG amount to your claimable ONG amount).`,
+    claimableOngName: 'Claimable ONG: ',
+    unboundOngName: 'Unbound ONG: '
   }
 }

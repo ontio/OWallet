@@ -343,6 +343,12 @@ export default {
     refundNeedTime: '退款需要一定时间',
     txFailed: '交易失败'
 
+  },
+  redeemInfo: {
+    claimableOng:'可提取ONG是您可以提取的ONG的数量，手续费为0.01个ONG。每次钱包中完成一笔交易后，该余额会更新。',
+    unboundOng: '已解绑的ONG是指尚未添加到您的可提取ONG余额（仅会在您钱包做出一笔ONT交易后更新）中的ONG。当您的地址完成一笔交易后，您可提取的ONG余额将会更新（即将已解绑的ONG数额将添加到您可提取的ONG余额中去。）',
+    claimableOngName: '可提取ONG：',
+    unboundOngName: '已解绑的ONG：'
   }
 
 }
