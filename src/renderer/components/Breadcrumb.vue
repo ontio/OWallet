@@ -26,7 +26,7 @@
         line-height: 1.7rem;    
     }
     .breadcrumb-routes a {
-        color: #DFE2E9;
+        color: #A5A7A9;
         font-size:14px;
         font-family: AvenirNext-Bold;
 
@@ -42,7 +42,7 @@
     }
     .left-icon {
         font-size: 20px;
-        color: #dfe2e9;
+        color: #A5A7A9;
         margin-left: 10px;
     }
 </style>

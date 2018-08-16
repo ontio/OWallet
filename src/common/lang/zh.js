@@ -42,6 +42,40 @@ export default {
     enter: '去设置'
   },
 
+  identitys: {
+    pageTit: 'ONT ID账户',
+    createIdentity: '创建ONT ID账户',
+    importIdentity: '导入ONT ID账户'
+  },
+
+  createIdentity: {
+    create: '创建ONT ID账户',
+    basicInfo: '基本信息',
+    confirmInfo: '确认信息',
+    label: 'ONT ID账户昵称',
+    password: '账户密码',
+    rePassword: '确认密码',
+    cancel: '取消',
+    next: '继续',
+    ontid: 'ONT ID',
+    selectWallet: '请选择钱包来支付交易费用',
+    commonWallet: '普通钱包',
+    ledgerWallet: 'Ledger钱包',
+    payerPassword: '输入所选钱包的密码',
+    selectCommonWallet: '选择本地普通钱包',
+    selectOneWallet: '请选择一个本地钱包',
+    enterPassword: '请输入钱包密码'
+  },
+
+  importIdentity: {
+    import: '导入ONT ID',
+    basicInfo: '基本信息',
+    keystore: 'Keystore',
+    label: '',
+    passError: '密码错误',
+    ontidNotExist: '要导入的ONT ID不存在于区块链上'
+  },
+
   wallets: {
     all: '全部钱包',
     common: '普通钱包',
@@ -243,5 +277,72 @@ export default {
     status: '设备状态',
     labelEmpty: '钱包名称不能为空.',
     deviceError: '不能连接到设备，请重试.'
+  },
+  ledgerStatus: {
+    NOT_FOUND: 'Ledger没有打开',
+    NOT_SUPPORT: 'Ledger不支持',
+    NO_DEVICE: '请连接Ledger并打开',
+    READY: 'Ledger准备就绪',
+    NOT_OPEN: 'Ledger上的ONT app没有打开'
+  },
+  nodeStake: {
+    iHaveKnown: '我已知晓',
+    ontid: 'ONT ID',
+    nodeStake: '节点质押',
+    stakeWalletAddress: '质押钱包地址',
+    nodePk: '节点公钥',
+    contract: '质押合约',
+    commitmentQuantity: '承诺质押数量',
+    stakeQuantity: '实际质押数量',
+    stake: '质押',
+    feeTip: '质押需要收取500ONG作为服务费',
+    selectOntid: '选择ONT ID',
+    selectStakeWallet: '选择质押钱包',
+    next: '下一步',
+    selectIdentity: '选择你的ONT ID',
+    selectIndividualWallet: '请选择普通钱包',
+    selectLedgerWallet: '请连接您的ledger设备并打开ONT',
+    invalidOntid: '无效的ONT ID',
+    invalidAddress: '无效的质押钱包地址',
+    stakeQuantityEmpty: '请输入质押数量',
+    password: '输入密码',
+    signWithOntid: '使用ONT ID签名',
+    signWithWallet: '使用质押钱包签名',
+    enterOntidPass: '请输入ONT ID的密码',
+    enterWalletPass: '请输入质押钱包的密码',
+    back: '返回',
+    recall: '撤销',
+    refund: '退款',
+    quitNode: '推出节点',
+    newStake: '新质押',
+    passwordEmpty: '密码不能为空'
+
+  },
+  nodeStakeStatus: {
+    transfering: '转账中',
+    transfered: '转账完成',
+    transferFailed: '转账失败',
+    audit: '审核',
+    auditing: '审核中',
+    audited: '审核完成',
+    auditFailed: '审核失败',
+    stake: '质押',
+    staked: '质押完成',
+    nodeExited: '节点退出',
+    refund: '退款',
+    refunding: '退款中',
+    refunded: '退款完成',
+    refundFailed: '退款失败',
+    stakeExited: '质押退出',
+    quitStake: '退出质押',
+    nodeExited: '退出节点',
+    unfrozenToRefund: '解除冻结成功，可以申请退款',
+    transferNeedTime: '转账需要一定时间',
+    serviceFee: '质押需要收取500ONG作为服务费',
+    auditNeedTime: '审核需要一定时间',
+    refundNeedTime: '退款需要一定时间',
+    txFailed: '交易失败'
+
   }
+
 }
