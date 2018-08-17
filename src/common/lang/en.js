@@ -22,7 +22,11 @@ export default {
     readyToImport: 'Ready to connect',
     existLocal: 'The wallet is already in local',
     importLedgerSuccess: 'Import ledger wallet successfully.',
-    readyToLogin: 'Ready to login'
+    readyToLogin: 'Ready to login',
+    walletAddress: 'Wallet Address',
+    authentication: 'Authentication',
+    enterWalletPassword: 'Please enter your wallet password',
+    password: 'Password'
   },
 
   TopNav: {
@@ -92,7 +96,11 @@ export default {
     importLedgerWallet: 'Connect Ledger',
     ledger: 'Ledger Wallet',
     comingSoon: 'Coming soon...',
-    ledgerHelpLink: 'How to use?'
+    ledgerHelpLink: 'How to use?',
+    deleteSucceess: 'Delete wallet successfully.',
+    deleteFailed: 'Delete wallet failed.',
+    deleteingWallet: 'You are about to delete wallet with address: ',
+    exportingWallet: 'You are about to export wallet with address; ',
   },
 
   dashboard: {

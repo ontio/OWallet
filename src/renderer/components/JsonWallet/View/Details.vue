@@ -7,28 +7,54 @@
       <div class="div-wallet-name">{{wallet.label}}</div>
       <!--<img class="img-wallet-edit" src="./../assets/edit.png" alt="">-->
       <div class="div-wallet-address">
-        <div>Wallet Address:</div>
+        <div>{{$t('common.walletAddress')}}:</div>
         {{wallet.address}}
       </div>
     </div>
     <div v-show="addressCopied" class="copied-label">Copied</div>
     <img class="img-wallet-copy" src="../../../assets/copy.png" @click="copyAddress(wallet)" alt="">
-    <a-button type="primary" class="common-export-btn" @click="exportWallet(wallet)" v-if="isCommonWallet"
-    >{{$t('common.export')}}</a-button>
+    <!-- <a-button type="primary" class="common-export-btn" @click="exportWallet(wallet)" v-if="isCommonWallet"
+    >{{$t('common.export')}}</a-button> -->
+    <div class="common-topRight-btns">
+      <span class="common-delete-icon" @click="deleteWallet()" ></span>
+      <span class="common-download-icon" @click="handleExportWallet()" v-if="isCommonWallet"></span>      
+    </div>
 
+    <a-modal 
+        :title="$t('common.authentication')"
+        :visible="passModal"
+        @ok="handleValidatePassword"
+        @cancel="handleCancel">
+          <div>
+              <p class="font-medium">
+                {{option==='TO_DELETE' ? $t('wallets.deleteingWallet') : $t('wallets.exportingWallet') }}
+                 {{wallet.address}}</p>
+              <div v-if="isCommonWallet">
+                <p>{{$t('common.enterWalletPassword')}}</p>
+                <a-input class="input" v-model="password" :plaecholder="$t('common.password')" type="password"></a-input>
+              </div>   
+              
+          </div>
+    </a-modal>
   </div>
 </template>
 
 <script>
   import {Wallet, Account} from 'ontology-ts-sdk';
   import FileHelper from "../../../../core/fileHelper"
+  import {DEFAULT_SCRYPT} from '../../../../core/consts'
+  import {Crypto} from 'ontology-ts-sdk'
+  import dbService from '../../../../core/dbService'
 	export default {
     name: "JsonWalletDetails",
     props: ['wallet'],
     data() {
       return {
         addressCopied: false,
-        isCommonWallet: this.wallet.key ? true: false
+        isCommonWallet: this.wallet.key ? true: false,
+        passModal: false,
+        password: '',
+        option: ''
       }
     },
     methods: {
@@ -54,7 +80,9 @@
       addressCopiedDisabled() {
         this.addressCopied = false
       },
+
       exportWallet(commonWallet) {
+        this.$store.dispatch('hideLoadingModals')
         console.log(commonWallet)
         let wallet = Wallet.create(commonWallet.label || "")
         console.log(wallet)
@@ -62,6 +90,62 @@
         const account = Account.parseJsonObj(commonWallet)
         wallet.addAccount(account)
         FileHelper.downloadFile(wallet.toJsonObj(), commonWallet.label);
+      },
+      handleExportWallet() {
+        this.passModal = true;
+        this.option = 'TO_EXPORT'
+      },
+      deleteWallet() {
+        this.passModal = true;
+        this.option = 'TO_DELETE'
+      },
+      handleValidatePassword() {
+        if(!this.isCommonWallet) {
+          this.handleDelete();
+          return;
+        }
+        if(!this.password && this.isCommonWallet) {
+          this.$message.error(this.$t('common.enterWalletPassword'))
+          return;
+        }
+        this.$store.dispatch('showLoadingModals')
+        const enc = new Crypto.PrivateKey(this.wallet.key)
+        let pri;
+        try {
+          pri = enc.decrypt(this.password, new Crypto.Address(this.wallet.address), this.wallet.salt, DEFAULT_SCRYPT)
+        } catch (err) {
+          console.log(err);
+          this.$store.dispatch('hideLoadingModals')
+          this.$message.error(this.$t('common.pwdErr'))
+          return;
+        }
+        if(this.option === 'TO_DELETE') {
+          this.handleDelete();
+        } else if (this.option === 'TO_EXPORT') {
+          this.passModal = false;         
+          this.exportWallet(this.wallet)
+        }
+      },
+      handleDelete() {      
+        // remove from db
+        const that = this;
+        const type = this.isCommonWallet ? 'CommonWallet' : 'HardwareWallet'
+        const commitType = this.isCommonWallet ? 'DELETE_COMMON_WALLET' : 'DELETE_HARDWARE_WALLET'
+        dbService.remove({type:type, address: this.wallet.address}, {}, function(err, numRemoved) {
+          if(err) {
+            that.$store.dispatch('hideLoadingModals')
+            that.$message.error(that.$t('wallets.deleteFailed'));
+            return;
+          }
+           // remove from store
+          that.$store.commit(commitType, {address: that.wallet.address})
+          that.$store.dispatch('hideLoadingModals')
+          that.$message.success(that.$t('wallets.deleteSucceess'))
+        })
+      },
+      handleCancel() {
+        this.passModal = false;
+        this.password = '';
       }
     }
   }
@@ -128,5 +212,28 @@
     position: absolute;
     top: 0px;
     right: 20px;
+  }
+  .common-topRight-btns {
+    position: absolute;
+    top: 0px;
+    right:20px;
+    text-align: right;
+  }
+  .common-delete-icon {
+    width:24px;
+    height: 24px;
+    display: inline-block;
+    cursor: pointer;
+    background:url('../../../assets/delete.png') center center;
+    background-repeat:no-repeat;
+    
+  }
+  .common-download-icon {
+    width:24px;
+    height: 24px;
+    display: inline-block;
+    cursor: pointer;
+    background:url('../../../assets/download.png') center center no-repeat;
+    margin-left: 24px;
   }
 </style>

@@ -22,7 +22,11 @@ export default {
     readyToImport: '可以连接Ledger钱包',
     existLocal: '本地已有此钱包',
     importLedgerSuccess: '导入Ledger钱包成功',
-    readyToLogin: '可以登录'
+    readyToLogin: '可以登录',
+    walletAddress: '钱包地址',
+    authentication: 'Authentication',
+    enterWalletPassword: '请输入钱包密码',
+    password: '密码'
   },
 
   TopNav: {
@@ -92,7 +96,11 @@ export default {
     importLedgerWallet: '连接Ledger钱包',
     ledger: 'Ledger钱包',
     comingSoon: '敬请期待',
-    ledgerHelpLink: '如何使用'
+    ledgerHelpLink: '如何使用',
+    deleteSucceess: '删除钱包成功.',
+    deleteFailed: '删除钱包失败.',
+    deleteingWallet: '您正在删除钱包，钱包地址是：',
+    exportingWallet: '您正在导出钱包，钱包地址是：'
   },
 
   dashboard: {

@@ -11,6 +11,24 @@ const mutations = {
         state.NormalWallet = payload.NormalWallet;
         state.SharedWallet = payload.SharedWallet;
         state.HardwareWallet = payload.HardwareWallet;
+    },
+    DELETE_COMMON_WALLET(state, payload) {
+        const normalWallet = state.NormalWallet.slice();
+        const index = normalWallet.findIndex((w) => w.address === payload.address )
+        normalWallet.splice(index,1)
+        state.NormalWallet = normalWallet;
+    },
+    DELETE_SHARED_WALLET(state, payload) {
+        const normalWallet = state.SharedWallet.slice();
+        const index = normalWallet.findIndex((w) => w.address === payload.address)
+        normalWallet.splice(index, 1)
+        state.SharedWallet = normalWallet;
+    },
+    DELETE_HARDWARE_WALLET(state, payload) {
+        const normalWallet = state.HardwareWallet.slice();
+        const index = normalWallet.findIndex((w) => w.address === payload.address)
+        normalWallet.splice(index, 1)
+        state.HardwareWallet = normalWallet;
     }
 }
 
