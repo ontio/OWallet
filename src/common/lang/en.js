@@ -43,15 +43,15 @@ export default {
   },
 
   identitys: {
-    pageTit: 'Identitys (ONT ID)',
-    createIdentity: 'Create Identity',
-    importIdentity: 'Import Identity',
+    pageTit: 'ONT ID',
+    createIdentity: 'Create ONT ID',
+    importIdentity: 'Import ONT ID',
     identity: 'Identity',
     ontid: 'ONT ID'
   },
 
   createIdentity: {
-    create: 'Create Identity (ONT ID)',
+    create: 'Create ONT ID',
     basicInfo: 'Basic info',
     confirmInfo: 'Confirm info',
     label: 'Name of Identity (ONT ID)',
@@ -70,12 +70,14 @@ export default {
   },
 
   importIdentity: {
-    import: 'Import Identity (ONT ID)',
+    import: 'Import ONT ID',
     basicInfo: 'Basic info',
-    keystore: 'Keystore',
+    keystore: 'ONT ID Keystore',
+    ontidPassword: 'ONT ID Password',
     label: '',
     passError: 'Password error',
-    ontidNotExist: 'The ONT ID to import does not exist on the blockchain'
+    ontidNotExist: 'The ONT ID to import does not exist on the blockchain',
+    keystoreImport: 'ONT ID Keystore Import'
   },
 
   wallets: {

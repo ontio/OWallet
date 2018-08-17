@@ -9,7 +9,7 @@ import store from './store'
 import $ from 'jquery'
 import 'font-awesome/css/font-awesome.css'
 import {Button, message, Steps, Input , Form, Icon, Select, Spin, Alert, Modal, Slider,Radio,
-  Row, Col, InputNumber, Layout, Menu, Breadcrumb, Checkbox} from 'vue-antd-ui'
+  Row, Col, InputNumber, Layout, Menu, Breadcrumb, Checkbox, Tooltip} from 'vue-antd-ui'
 
 import VueClipboard from 'vue-clipboard2'
 VueClipboard.config.autoSetContainer = true // add this line
@@ -71,6 +71,7 @@ Vue.component(Checkbox.name, Checkbox)
 Vue.component(Radio.name, Radio)
 Vue.component(Radio.Group.name, Radio.Group)
 Vue.component(Radio.Button.name, Radio.Button)
+Vue.component(Tooltip.name, Tooltip)
 Vue.prototype.$message = message
 Vue.prototype.$confirm = Modal.confirm
 Vue.prototype.$success = Modal.success
