@@ -5,24 +5,37 @@
         <img class="logo-img" src="./../assets/logo.png" alt="">
       </router-link>
 
-      <router-link :to="{name:'Wallets'}" active-class="nav-wallets-active">
-        <div class="nav-wallets"></div>
-      </router-link>
+      
+
+        <router-link :to="{name:'Wallets'}" active-class="nav-wallets-active">
+          <a-tooltip placement="right" title="Wallet">
+              <div class="nav-wallets"></div>
+          </a-tooltip>
+        </router-link>
 
       <router-link :to="{name:'Identitys'}" active-class="nav-accounts-active">
-        <div class="nav-accounts"></div>
+        <a-tooltip placement="right" title="ONT ID">
+              <div class="nav-accounts"></div>
+          </a-tooltip>
       </router-link>
 
       <router-link :to="{name:'Setting'}" active-class="nav-setting-active">
-        <div class="setting-img"></div>
+        <a-tooltip placement="right" title="Setting">
+               <div class="setting-img"></div>
+          </a-tooltip>
       </router-link>
 
       <router-link :to="{name:'NodeStakeIntro'}" active-class="node-stake-active" >
-        <div class="node-stake-icon"></div>
+        <a-tooltip placement="right" title="Node Stake">
+               <div class="node-stake-icon"></div>
+          </a-tooltip>
       </router-link>
 
         <!-- <div class="setting-img" alt="" @click="toSetting"></div> -->
-      <div class="nav-help" @click="toHelp"></div>
+      
+      <a-tooltip placement="right" title="Help">
+               <div class="nav-help" @click="toHelp"></div>
+          </a-tooltip>
 
       <div class="nav-network">{{network}}</div>
     </div>
@@ -176,7 +189,7 @@
 
   .nav-wallets {
     width: 24px;
-    height: 18px;
+    height: 24px;
     margin: 67px auto;
     background: url('../assets/unselectwallet.png') center center;
     background-size: cover;

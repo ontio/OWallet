@@ -4,7 +4,7 @@
       <li class="nav-item active">
         <a class="nav-link" id="import-identity-keystore-pills-tab" data-toggle="pill" href="#import-identity-keystore-pills"
            role="tab"
-           aria-controls="import-identity-keystore-pills" aria-selected="false" @click="activeTab('keystore')">{{ $t('importIdentity.keystore') }}</a>
+           aria-controls="import-identity-keystore-pills" aria-selected="false" @click="activeTab('keystore')">{{ $t('importIdentity.keystoreImport') }}</a>
       </li>
     </ul>
 
@@ -19,7 +19,7 @@
 
         <a-input type="password" class="input input-password"
                  v-validate="{required: true ,min:6}" data-vv-as="password" name="keystorePassword"
-                 v-model="keystorePassword" :placeholder="$t('createIdentity.password')"></a-input>
+                 v-model="keystorePassword" :placeholder="$t('importIdentity.ontidPassword')"></a-input>
         <span class="v-validate-span-errors" v-show="errors.has('keystorePassword')">{{ errors.first('keystorePassword') }}</span>
       </div>
     </div>

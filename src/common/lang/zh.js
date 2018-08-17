@@ -43,9 +43,11 @@ export default {
   },
 
   identitys: {
-    pageTit: 'ONT ID账户',
+    pageTit: 'ONT ID',
     createIdentity: '创建ONT ID账户',
-    importIdentity: '导入ONT ID账户'
+    importIdentity: '导入ONT ID账户',
+    identity: 'Identity',
+    ontid: 'ONT ID'
   },
 
   createIdentity: {
@@ -70,10 +72,12 @@ export default {
   importIdentity: {
     import: '导入ONT ID',
     basicInfo: '基本信息',
-    keystore: 'Keystore',
+    keystore: 'ONT ID Keystore',
+    ontidPassword: 'ONT ID 密码',
     label: '',
     passError: '密码错误',
-    ontidNotExist: '要导入的ONT ID不存在于区块链上'
+    ontidNotExist: '要导入的ONT ID不存在于区块链上',
+    keystoreImport: '导入ONT ID Keystore'
   },
 
   wallets: {
