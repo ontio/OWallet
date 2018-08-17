@@ -71,7 +71,7 @@
   .div-wallet-address {
     margin-top: 4.25rem;
     font-family: AvenirNext-Regular;
-    font-size: 14px;
+    font-size: 13px;
     color: #B2B2B3;
   }
 

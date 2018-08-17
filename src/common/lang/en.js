@@ -245,6 +245,7 @@ export default {
     unboundOng: 'Unbound ONG',
     redeem: 'Redeem',
     receive: 'Receive',
+    swap: 'Swap',
     walletQrCode: 'Wallet QR Code',
     walletAddress: 'Wallet Address',
     publicKey: 'Public Key',
@@ -252,7 +253,16 @@ export default {
     inputPass: 'Please input your wallet password',
     emptyPass: 'Password can not be empty',
     cancel: 'Cancel',
-    submit: 'Submit'
+    submit: 'Submit',
+    swapText: 'Here you can perform the MainNet ONT token swap.Users can exchange Nep-5 ONT for ONT for ONT on the Ontology MainNet.Swap takes up to 24 hours, you can check the status on https://swap.ont.io',
+    stepFollow: 'Just do as follows:',
+    step1: '1. Import your private key(from your NEO wallet) to create a wallet',
+    step2: '2. Press [Swap] button to start the swap',
+    step3: '3. View the status of your token swap',
+    swapAmount: 'Swap Amount',
+    nep5Balance: 'Balance of NEP-5 ONT:',
+    password: 'Password',
+    validAmount: 'Please input valid amount'
   },
 
   transfer: {
@@ -318,7 +328,7 @@ export default {
     enterWalletPass: 'Please enter the password of your stake wallet',
     back: 'Back',
     recall: 'Recall',
-    refund: 'Refound',
+    refund: 'Refund',
     quitNode: 'Quit Node',
     newStake: 'New Stake',
     passwordEmpty: 'Password can not be empty'

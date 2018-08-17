@@ -140,6 +140,11 @@ export default new Router({
       component: require('@/components/CommonWallet/CommonRedeem').default
     },
     {
+      path: '/commonTokenSwap',
+      name: 'CommonTokenSwap',
+      component: require('@/components/CommonWallet/CommonTokenSwap').default
+    },
+    {
       path: '/nodeStakeIntro',
       name: 'NodeStakeIntro',
       component: require('@/components/NodeStake/NodeStakeIntro').default

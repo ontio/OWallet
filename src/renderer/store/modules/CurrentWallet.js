@@ -32,7 +32,8 @@ const state = {
     redeem: {
         claimableOng: 0,
         balanceOng: 0
-    }
+    },
+    nep5Ont: 0
 }
 
 const mutations = {
@@ -71,6 +72,9 @@ const mutations = {
     },
     UPDATE_CURRENT_REDEEM(state, payload) {
         state.redeem = payload.redeem
+    },
+    UPDATE_NEP5_ONT(state, payload) {
+        state.nep5Ont = payload.nep5Ont
     }
 
 }
