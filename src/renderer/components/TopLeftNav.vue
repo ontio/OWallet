@@ -17,8 +17,8 @@
         <div class="setting-img"></div>
       </router-link>
 
-      <router-link :to="{name:'NodeStakeIntro'}" >
-        <div>Node</div>
+      <router-link :to="{name:'NodeStakeIntro'}" active-class="node-stake-active" >
+        <div class="node-stake-icon"></div>
       </router-link>
 
         <!-- <div class="setting-img" alt="" @click="toSetting"></div> -->
@@ -122,6 +122,22 @@
     left: 1.25rem;
     background: url('../assets/helpunselected.png') center center;
     cursor: pointer;
+  }
+
+  .node-stake-icon {
+    width: 24px;
+    height: 24px;
+    margin: 67px auto;
+    background: url('../assets/node.png');
+    background-size: cover;
+    cursor: pointer;
+  }
+
+  .node-stake-active div {
+    background: url('../assets/nodeSelect.png') center center;
+  }
+  .node-stake-icon:hover {
+    background: url('../assets/nodeSelect.png') center center;    
   }
 
   .nav-help:hover {

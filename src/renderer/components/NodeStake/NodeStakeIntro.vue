@@ -93,7 +93,6 @@ export default {
   mounted() {
     this.$store.dispatch("fetchWalletsFromDb");
     this.$store.dispatch("fetchIdentitiesFromDb");
-    this.$store.dispatch('getLedgerStatus')
   },
   beforeDestroy(){
       this.$store.dispatch('stopGetLedgerStatus')
@@ -205,6 +204,9 @@ export default {
     },
     changePayerWallet(e) {
         this.payerWalletType = e.target.value
+        if(e.target.value === 'ledgerWallet') {
+            this.$store.dispatch('getLedgerStatus')
+        }
       },
     handleChangePayer(value) {
         this.payerWallet = this.normalWallet.find((v)=>{return v.address === value})

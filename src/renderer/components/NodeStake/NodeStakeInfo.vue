@@ -99,7 +99,8 @@
             <div class="btn-stake">
                 <a-button @click="handleBack" type="default" class="btn-cancel">{{$t('nodeStake.back')}}</a-button>
                 <a-button @click="handleRecall" class="btn-next" v-if="detail.status ===2">{{$t('nodeStake.recall')}}</a-button>
-                <a-button @click="handleRefund" class="btn-next" v-if="detail.status ===4 || detail.status ===3 || detail.status ===7 ">{{$t('nodeStake.refund')}}</a-button>
+                <a-button @click="handleRefund" class="btn-next" v-if="detail.status ===4 || detail.status ===3 || detail.status ===7 "
+                :disabled="refundClicked">{{$t('nodeStake.refund')}}</a-button>
                 <a-button @click="handleQuitNode" class="btn-next" v-if="detail.status ===8">{{$t('nodeStake.quitNode')}}</a-button>
                 <a-button @click="handleNewStake" class="btn-next" v-if="detail.status ===6 || detail.status ===1">{{$t('nodeStake.newStake')}}</a-button>
                 
@@ -153,6 +154,7 @@ export default {
       localOntid: [],
       intervalId: "",
       interval: 5000,
+      refundClicked: false,
     //   detail: {
     //     ontid: "did:ont:AKbC3ZaSBQ1GuNKsbcqWxi3uL2oyf9F8vK",
     //     stakewalletaddress: "AazEvfQPcQ2GEFFPLF1ZLwQ7K5jDn81hve",
@@ -220,6 +222,7 @@ export default {
         this.$message.error(this.$t("nodeStake.passwordEmpty"));
         return;
       }
+      this.refundClicked = true;
       if (this.stakeWallet.key) {
         this.$store.dispatch("showLoadingModals");
         const enc = new Crypto.PrivateKey(this.stakeWallet.key);
@@ -233,6 +236,7 @@ export default {
           );
         } catch (err) {
           console.log(err);
+          this.refundClicked = false;
           this.$store.dispatch("hideLoadingModals");
           this.$message.error(this.$t("common.pwdErr"));
           return;
@@ -263,6 +267,7 @@ export default {
             }
           );
         } else {
+          this.refundClicked = false;
          this.$store.dispatch("hideLoadingModals");
           this.$message.warning(this.$t("ledgerWallet.connectApp"));
         }
@@ -288,10 +293,13 @@ export default {
         this.$store.dispatch("hideLoadingModals");
         this.$message.error(this.$t('common.networkErr'))
       });
+      setTimeout(() => {
+        this.refundClicked = false;
+      }, 5000)
     },
     handleRecall() {
       const userAddr = new Crypto.Address(this.stakeWallet.address);
-      const peerPubkey = this.stakeWallet.publicKey;
+      const peerPubkey = this.detail.publickey;
       const payer = userAddr;
       const tx = Ont.GovernanceTxBuilder.makeUnregisterCandidateTx(
         userAddr,
@@ -306,7 +314,7 @@ export default {
 
     handleRefund() {
         const userAddr = new Crypto.Address(this.stakeWallet.address);
-        const peerPubkeys = [this.stakeWallet.publicKey]
+        const peerPubkeys = [this.detail.publickey]
         const withdrawList = [this.detail.stakequantity]
         const payer = userAddr
         const tx = Ont.GovernanceTxBuilder.makeWithdrawTx(userAddr, peerPubkeys, withdrawList, payer, GAS_PRICE, GAS_LIMIT)
@@ -315,7 +323,7 @@ export default {
     },
     handleQuitNode() {
         const userAddr = new Crypto.Address(this.stakeWallet.address);
-        const peerPubkey = this.stakeWallet.publicKey;
+        const peerPubkey = this.detail.publickey;
         const payer = userAddr;   
         const tx = Ont.GovernanceTxBuilder.makeQuitNodeTx(userAddr, peerPubkey, payer, GAS_PRICE, GAS_LIMIT)
         this.tx = tx;

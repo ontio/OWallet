@@ -509,8 +509,10 @@ export default {
             this.$router.push({name:'Dashboard'})
         },
         showTransferBox() {
-            // this.showTransfer = true;
-            // this.transferStep = 1;
+            if(Number(this.balance.ong) < 0.01) {
+                this.$message.warning(this.$t('common.ongNoEnough'))
+                return;
+            }
             this.$store.commit('CLEAR_CURRENT_TRANSFER');
             this.$store.commit('UPDATE_TRANSFER_BALANCE', {balance: this.balance})
             this.$router.push({path:'/sharedWallet/sendTransfer'})

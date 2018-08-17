@@ -289,9 +289,7 @@
     float: left;
   }
 
-  .btn-redeem {
-    float: left;
-    margin-left: 30px;
+  .commonWallet-btn {
     width: 70px;
     height: 28px;
     border-radius: 0;
@@ -301,6 +299,13 @@
     font-size: 14px;
     color: #5E6369;
     border: none;
+  }
+  .btn-swap {
+    margin-left: 30px;
+  }
+  .btn-redeem {
+    float: left;
+    margin-left: 30px;
   }
   .copy-icon {
     width:18px;
@@ -312,6 +317,13 @@
     cursor: pointer;
     position: relative;
     top: 5px;
+}
+.nep5-label :first-child{
+  display: block;
+  height:16px;
+}
+.nep5-label :last-child {
+  font-size: 12px;
 }
 </style>
 <template>
@@ -347,6 +359,16 @@
             <span class="asset-amount">{{balance.ong}}</span>
           </div>
           <!-- <div class="asset-value">{{'$900'}}</div> -->
+          <div class="asset-ong" v-if="currentWallet.key">
+            <div class="asset-label nep5-label">
+              <span>ONT</span>
+              <span>(NEP-5)</span>
+            </div>
+            <span class="asset-amount">{{nep5Ont}}</span>
+            <a-button type="default" class="commonWallet-btn btn-swap" 
+          @click="toSwap">{{$t('commonWalletHome.swap')}}</a-button>
+          </div>
+
         </div>
 
         <div class="claim-ong-container clearfix">
@@ -361,8 +383,9 @@
               <span>{{waitBoundOng}}</span>
             </div>
           </div>
-          <a-button type="default" class="btn-redeem" :disabled="unboundOng == 0"
+          <a-button type="default" class="commonWallet-btn btn-redeem" :disabled="unboundOng == 0"
           @click="redeemOng">{{$t('commonWalletHome.redeem')}}</a-button>
+          <redeem-info-icon></redeem-info-icon>
         </div>
 
 
@@ -411,11 +434,12 @@
   import axios from 'axios';
   import Breadcrumb from './Breadcrumb'
 import { BigNumber } from 'bignumber.js';
-
+import RedeemInfoIcon from './RedeemInfoIcon'
   export default {
     name: 'Dashboard',
     components: {
-      Breadcrumb
+      Breadcrumb,
+      RedeemInfoIcon
     },
     data() {
       const publicKey = localStorage.getItem('publicKey');
@@ -446,7 +470,7 @@ import { BigNumber } from 'bignumber.js';
         waitBoundOng: 0,
         completedTx: [],
         intervalId: '',
-        interval:2000,
+        interval:3000,
       }
     },
     mounted: function () {
@@ -455,7 +479,13 @@ import { BigNumber } from 'bignumber.js';
         this.intervalId = setInterval(() => {
             that.getBalance();
             that.getTransactions();
+            that.getNep5Balance();
         }, this.interval)
+    },
+    computed: {
+      ...mapState({
+        nep5Ont : state => state.CurrentWallet.nep5Ont
+      })
     },
     beforeDestroy(){
         clearInterval(this.intervalId)
@@ -562,6 +592,15 @@ import { BigNumber } from 'bignumber.js';
         })
 
       },
+      getNep5Balance() {
+        const NEO_TRAN = 100000000;
+        Ont.SDK.getNeoBalance(this.currentWallet.address).then(res => {
+          if(res.result) {
+            const nep5Ont = res.result / NEO_TRAN
+            this.$store.commit('UPDATE_NEP5_ONT', {nep5Ont})
+          }
+        })
+      },
       getExchangeCurrency() {
         const currency = 'ont'
         const goaltype = 'USD'
@@ -581,9 +620,13 @@ import { BigNumber } from 'bignumber.js';
         }, 100)
         this.getBalance();
         this.getTransactions();
-
+        this.getNep5Balance();
       },
       sendAsset() {
+        if(Number(this.balance.ong) < 0.01) {
+          this.$message.warning(this.$t('common.ongNoEnough'))
+          return;
+        }
         this.$store.commit('CLEAR_CURRENT_TRANSFER');
         this.$store.commit('UPDATE_TRANSFER_BALANCE', {balance: this.balance})
         this.$router.push({name: 'CommonSendHome'})
@@ -706,6 +749,9 @@ import { BigNumber } from 'bignumber.js';
       copy(value) {
             this.$copyText(value);
             this.$message.success(this.$t('common.copied'))
+      },
+      toSwap() {
+        this.$router.push({name: 'CommonTokenSwap'})
       }
     }
   }

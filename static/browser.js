@@ -60136,7 +60136,7 @@ class SDK {
     /**
      * Neo transfer
      */
-    static neoTransfer(from, to, value, encryptedPrivateKey, password, salt, callback) {
+    static neoTransfer(from, to, value, encryptedPrivateKey, password, salt, callback, params) {
         password = this.transformPassword(password);
         const recv = new _crypto__WEBPACK_IMPORTED_MODULE_5__["Address"](to);
         const addr = new _crypto__WEBPACK_IMPORTED_MODULE_5__["Address"](from);
@@ -60149,7 +60149,7 @@ class SDK {
         const encryptedPrivateKeyObj = new _crypto__WEBPACK_IMPORTED_MODULE_5__["PrivateKey"](encryptedPrivateKey);
         try {
             const saltHex = Buffer.from(salt, 'base64').toString('hex');
-            privateKey = encryptedPrivateKeyObj.decrypt(password, addr, saltHex);
+            privateKey = encryptedPrivateKeyObj.decrypt(password, addr, saltHex, params);
         } catch (err) {
             const result = this.getDecryptError(err);
             if (callback) {
@@ -60172,12 +60172,13 @@ class SDK {
                 result: ''
             };
             if (res.result) {
-                result.result = tx.getHash();
+                result.result = Object(_utils__WEBPACK_IMPORTED_MODULE_20__["reverseHex"])(tx.getHash());
                 callback && Object(_utils__WEBPACK_IMPORTED_MODULE_20__["sendBackResult2Native"])(JSON.stringify(result), callback);
             } else {
                 result.error = _error__WEBPACK_IMPORTED_MODULE_6__["ERROR_CODE"].NETWORK_ERROR;
                 callback && Object(_utils__WEBPACK_IMPORTED_MODULE_20__["sendBackResult2Native"])(JSON.stringify(result), callback);
             }
+            return result;
         });
     }
     static getNeoBalance(address, callback) {

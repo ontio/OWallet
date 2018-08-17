@@ -242,6 +242,7 @@ export default {
     unboundOng: '未绑定的ONG',
     redeem: '提取',
     receive: '接收',
+    swap: '映射',
     walletQrCode: '钱包地址二维码',
     walletAddress: '钱包地址',
     publicKey :'公钥',
@@ -249,7 +250,16 @@ export default {
     inputPass: '请输入钱包密码',
     emptyPass: '密码不能为空',
     cancel: '取消',
-    submit: '提交'
+    submit: '提交',
+    swapText: '欢迎使用“一站式”主网ONT切换。用户可以在这里将NEP-5 ONT映射成主网ONT。映射将在24小时内完成，您可以登录swap.ont.io查询映射状态。',
+    stepFollow: '您只需要使用以下步骤执行操作：',
+    step1: '导入NEO钱包的私钥创建钱包',
+    step2: '点击映射按钮发起映射',
+    step3: '查看映射进度',
+    swapAmount: '映射数额',
+    nep5Balance: 'NEP-5 ONT 余额:',
+    password: '密码',
+    validAmount: "请输入正确数额"
   },
 
   transfer: {
@@ -343,6 +353,12 @@ export default {
     refundNeedTime: '退款需要一定时间',
     txFailed: '交易失败'
 
+  },
+  redeemInfo: {
+    claimableOng:'可提取ONG是您可以提取的ONG的数量，手续费为0.01个ONG。每次钱包中完成一笔交易后，该余额会更新。',
+    unboundOng: '已解绑的ONG是指尚未添加到您的可提取ONG余额（仅会在您钱包做出一笔ONT交易后更新）中的ONG。当您的地址完成一笔交易后，您可提取的ONG余额将会更新（即将已解绑的ONG数额将添加到您可提取的ONG余额中去。）',
+    claimableOngName: '可提取ONG：',
+    unboundOngName: '已解绑的ONG：'
   }
 
 }

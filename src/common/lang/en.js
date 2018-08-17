@@ -245,6 +245,7 @@ export default {
     unboundOng: 'Unbound ONG',
     redeem: 'Redeem',
     receive: 'Receive',
+    swap: 'Swap',
     walletQrCode: 'Wallet QR Code',
     walletAddress: 'Wallet Address',
     publicKey: 'Public Key',
@@ -252,7 +253,16 @@ export default {
     inputPass: 'Please input your wallet password',
     emptyPass: 'Password can not be empty',
     cancel: 'Cancel',
-    submit: 'Submit'
+    submit: 'Submit',
+    swapText: 'Here you can perform the MainNet ONT token swap.Users can exchange Nep-5 ONT for ONT for ONT on the Ontology MainNet.Swap takes up to 24 hours, you can check the status on https://swap.ont.io',
+    stepFollow: 'Just do as follows:',
+    step1: '1. Import your private key(from your NEO wallet) to create a wallet',
+    step2: '2. Press [Swap] button to start the swap',
+    step3: '3. View the status of your token swap',
+    swapAmount: 'Swap Amount',
+    nep5Balance: 'Balance of NEP-5 ONT:',
+    password: 'Password',
+    validAmount: 'Please input valid amount'
   },
 
   transfer: {
@@ -318,7 +328,7 @@ export default {
     enterWalletPass: 'Please enter the password of your stake wallet',
     back: 'Back',
     recall: 'Recall',
-    refund: 'Refound',
+    refund: 'Refund',
     quitNode: 'Quit Node',
     newStake: 'New Stake',
     passwordEmpty: 'Password can not be empty'
@@ -348,5 +358,11 @@ export default {
     auditNeedTime: 'Audit needs a period of time',
     refundNeedTime: 'Refund needs a period of time',
     txFailed: 'Transaction failed.'
+  },
+  redeemInfo: {
+    claimableOng: `Claimable ONG is the amount of ONG you can claim for a 0.01 ONG fee. This balance will update each time a transaction is made in your wallet address.`,
+    unboundOng: `Unbound ONG is an amount of ONG which has not been added to your claimable ONG balance yet (since it only updates each you make a transaction in your wallet address). When a transaction is made in your address, the claimable ONG balance will update (adding your unbound ONG amount to your claimable ONG amount).`,
+    claimableOngName: 'Claimable ONG: ',
+    unboundOngName: 'Unbound ONG: '
   }
 }

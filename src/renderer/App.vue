@@ -68,6 +68,12 @@
   }
 
   .font-medium {
+    font-family: 'AvenirNext-Regular';
+    color: #000000;
+    font-size: 0.88rem;
+  }
+
+  .font-medium {
     font-family: 'AvenirNext-Medium';
     color: #5E6369;
     font-size: 0.88rem;

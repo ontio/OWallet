@@ -44,3 +44,5 @@ export const DEFAULT_SCRYPT = {
   parallel: 8,
   size: 64
 };
+
+export const SWAP_ADDRESS = 'AFmseVrdL9f9oyCzZefL9tG6UbvhPbdYzM'
