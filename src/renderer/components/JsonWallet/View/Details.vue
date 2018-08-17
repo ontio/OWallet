@@ -141,6 +141,7 @@
           that.$store.commit(commitType, {address: that.wallet.address})
           that.$store.dispatch('hideLoadingModals')
           that.$message.success(that.$t('wallets.deleteSucceess'))
+          that.passModal = false;
         })
       },
       handleCancel() {

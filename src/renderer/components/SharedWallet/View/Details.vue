@@ -72,6 +72,7 @@ import dbService from '../../../../core/dbService'
           that.$store.commit('DELETE_SHARED_WALLET', {address: that.wallet.sharedWalletAddress})
           that.$store.dispatch('hideLoadingModals')
           that.$message.success(that.$t('wallets.deleteSucceess'))
+          that.showModal = false;
         })
       },
       handleCancel() {
