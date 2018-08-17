@@ -50,31 +50,6 @@ export default new Router({
       component: require('@/components/Identitys/ImportIdentity').default
     },
     {
-      path: '/createMultiSignAddr',
-      name: 'CreateMultiSignAddr',
-      component: require('@/components/CreateMultiSignAddr').default
-    },
-    {
-      path: '/joinSharedWallet',
-      name: 'JoinSharedWallet',
-      component: require('@/components/JoinSharedWallet').default
-    },
-    {
-      path: '/createMultiSignTx',
-      name: 'CreateMultiSignTx',
-      component: require('@/components/CreateMultiSignTx').default
-    },
-    {
-      path: '/signMultiAddrTx',
-      name: 'SignMultiAddrTx',
-      component: require('@/components/SignMultiAddrTx').default
-    },
-    {
-      path: '/sendTransaction',
-      name: 'SendTransaction',
-      component: require('@/components/SendTransaction').default
-    },
-    {
       path: '/createJsonWallet',
       name: 'CreateJsonWallet',
       component: require('@/components/JsonWallet/CreateJsonWallet').default
