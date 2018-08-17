@@ -334,7 +334,7 @@
       <div class="left-half">
         <div class="wallet-info">
           <p>
-            <span>{{$t('sharedWalletHome.address')}}: {{this.address}}</span>
+            <span>{{$t('sharedWalletHome.address')}}: {{address}}</span>
             <span class="copy-icon" @click="copy(address)"></span>
           </p>
           <!-- <div>
@@ -442,8 +442,6 @@ import RedeemInfoIcon from './RedeemInfoIcon'
       RedeemInfoIcon
     },
     data() {
-      const publicKey = localStorage.getItem('publicKey');
-      const address = localStorage.getItem('address');
       const currentWallet = JSON.parse(sessionStorage.getItem('currentWallet'));
       const net = localStorage.getItem('net');
       const network = net && net === 'TEST_NET' ? this.$t('common.testNet') : this.$t('common.mainNet');
@@ -457,8 +455,8 @@ import RedeemInfoIcon from './RedeemInfoIcon'
 
       return {
         currentWallet,
-        publicKey: publicKey,
-        address: address,
+        publicKey: currentWallet.publicKey,
+        address: currentWallet.address,
         amount: 0,
         toAddress: '',
         balance: {ont: 0, ong: 0.0000, ontValue: 0},

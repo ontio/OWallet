@@ -92,39 +92,6 @@
           </div>
         </div>
       </div>
-
-      <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-        <div class="center">
-          <div class="boxBtns">
-            <router-link to="CreateMultiSignAddr">
-              Create Multi Sign Address
-            </router-link>
-          </div>
-          <div class="boxBtns">
-            <router-link to="CreateMultiSignTx">
-              Create Multi Sign Transaction
-            </router-link>
-          </div>
-          <div class="boxBtns">
-            <router-link to="SignMultiAddrTx">
-              Sign Multi address Transaction
-            </router-link>
-          </div>
-          <div class="boxBtns">
-            <router-link to="SendTransaction">
-              SendTransaction
-            </router-link>
-          </div>
-
-          <div class="ledgerBtn" @click="ledgerLogin">
-            <div class="ledgerBtnInner">
-              <span class="ledgerBtnText1">Log in with</span>
-              <span class="ledgerBtnText2">Ledger</span>
-            </div>
-          </div>
-
-        </div>
-      </div>
     </div>
 
     <set-path-modal></set-path-modal>
@@ -234,10 +201,14 @@ const {BrowserWindow} = require('electron').remote
 
   .normalWallet,
   .div-create-wallet {
-    width: 21.63rem;
+    width: 23.63rem;
     height: 13.19rem;
     margin-right: 3.75rem;
     margin-bottom: 2.75rem;
+  }
+
+  .div-create-wallet {
+    border:1px solid #dddddd;
   }
 
   .normalWallet {

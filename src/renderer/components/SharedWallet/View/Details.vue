@@ -11,16 +11,33 @@
     </div>
     <div v-show="addressCopied" class="copied-label">Copied</div>
     <img class="img-wallet-copy" src="../../../assets/copy.png" @click="copyAddress(wallet)" alt="">
+    <div class="common-topRight-btns">
+      <span class="common-delete-icon" @click="deleteWallet()" ></span>   
+    </div>
+
+    <a-modal 
+        :title="$t('common.authentication')"
+        :visible="showModal"
+        @ok="handleDelete"
+        @cancel="handleCancel">
+          <div>
+              <p class="font-medium">
+                {{$t('wallets.deleteingWallet') }}
+                 {{wallet.sharedWalletAddress}}</p>
+          </div>
+    </a-modal>
   </div>
 </template>
 
 <script>
+import dbService from '../../../../core/dbService'
 	export default {
 		name: "SharedWalletDetails",
     props: ['wallet'],
     data() {
       return {
-        addressCopied: false
+        addressCopied: false,
+        showModal : false
       }
     },
     methods: {
@@ -29,7 +46,7 @@
         this.$router.push({path: '/sharedWallet/home'})
       },
       copyAddress(wallet) {
-        this.$copyText(wallet.address)
+        this.$copyText(wallet.sharedWalletAddress)
         this.addressCopied = true
         this.$nextTick(function () {
           setInterval(this.addressCopiedDisabled, 3000);
@@ -37,6 +54,29 @@
       },
       addressCopiedDisabled() {
         this.addressCopied = false
+      },
+      deleteWallet() {
+        this.showModal = true;
+      },
+      handleDelete() {      
+        // remove from db
+        this.$store.dispatch('showLoadingModals')
+        const that = this;
+        dbService.remove({type:'SharedWallet', address: this.wallet.sharedWalletAddress}, {}, function(err, numRemoved) {
+          if(err) {
+            that.$store.dispatch('hideLoadingModals')
+            that.$message.error(that.$t('wallets.deleteFailed'));
+            return;
+          }
+           // remove from store
+          that.$store.commit('DELETE_SHARED_WALLET', {address: that.wallet.sharedWalletAddress})
+          that.$store.dispatch('hideLoadingModals')
+          that.$message.success(that.$t('wallets.deleteSucceess'))
+          that.showModal = false;
+        })
+      },
+      handleCancel() {
+        this.showModal = false;
       }
     }
 	}
@@ -88,4 +128,18 @@
     font-weight: 100;
     color: white;
   }
+  .common-topRight-btns {
+    position: absolute;
+    top: 20px;
+    right: 1.29rem;
+  }
+  .common-delete-icon {
+    width:24px;
+    height: 24px;
+    display: inline-block;
+    cursor: pointer;
+    background:url('../../../assets/delete.png') center center;
+    background-repeat:no-repeat;
+  }
+
 </style>
