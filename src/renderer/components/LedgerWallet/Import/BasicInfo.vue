@@ -96,18 +96,6 @@
           this.ledgerStatus = err.message
         })
       },
-      login() {
-        if (!this.device || !this.publicKey) {
-          console.log('no device.')
-          return;
-        }
-        this.$store.dispatch('loginWithLedger', this.publicKey).then(res => {
-          if (res) {
-            console.log(res)
-            // this.$router.push({name: 'Dashboard'})
-          }
-        });
-      },
 
       saveToDb(account) {
         account.label = this.label || 'Ledger Wallet';

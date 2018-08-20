@@ -7,6 +7,7 @@ const state = {
   publicKey: '',
   account: '',
   downloadContent: '',
+  wif: ''
 }
 
 const mutations = {
@@ -23,7 +24,8 @@ const mutations = {
     state.account = payload.account
     state.downloadContent = payload.content
     state.address = payload.account.address
-    state.publicKey = payload.account.publicKey
+    state.publicKey = payload.account.publicKey,
+    state.wif = payload.wif
   },
   INIT_JSON_WALLET(state, payload) {
     state.currentStep = 0
@@ -31,7 +33,8 @@ const mutations = {
     state.account = ''
     state.downloadContent = ''
     state.address = ''
-    state.publicKey = ''
+    state.publicKey = '',
+    state.wif = ''
   }
 }
 
@@ -58,6 +61,7 @@ const actions = {
       label: body.label,
       account: account,
       content: wallet.toJsonObj(),
+      wif: body.wif
     })
 
     return account
