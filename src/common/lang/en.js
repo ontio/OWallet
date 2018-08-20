@@ -70,7 +70,8 @@ export default {
     payerPassword: 'Input the password of your selected wallet',
     selectCommonWallet: 'Select local individual wallet',
     selectOneWallet: 'Please select one individual wallet',
-    enterPassword: 'Please enter the password of your selected wallet'
+    enterPassword: 'Please enter the password of your selected wallet',
+    createSuccess: 'Create ONT ID successfully!'
   },
 
   importIdentity: {
@@ -127,7 +128,7 @@ export default {
     privateKey: 'Private Key',
     backupWallet: 'Please make a backup of these data and save the .dat file.',
     createSuccess:'Create individual wallet successfully.',
-    download: "Download",
+    download: "Download .dat",
     privateKey64Hex: 'Private Key(64 Hex)',
     priavteKeywif: 'Private Key(WIF)',
     keystoreDat: 'Keystore(.dat)'

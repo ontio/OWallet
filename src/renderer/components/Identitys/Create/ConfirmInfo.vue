@@ -40,6 +40,10 @@
         tx: state => state.CreateIdentity.tx
       })
     },
+    beforeDestroy() {
+      console.log('clear')
+      this.$store.commit('INIT_CREATE_IDENTITY')
+    },
     methods: {
       back() {
         this.$store.commit('SUB_CREATE_JSON_STEP')

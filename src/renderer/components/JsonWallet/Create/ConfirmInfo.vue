@@ -43,6 +43,10 @@
     mounted() {
       this.downloadWallet()
     },
+    beforeDestroy() {
+      console.log('clear')
+      this.$store.commit('INIT_JSON_WALLET')
+    },
     computed: {
       ...mapState({
         label: state => state.CreateJsonWallet.label,
@@ -98,6 +102,8 @@
 <style scoped>
   .json-confirm-container {
     width: 36rem;
+    padding: 15px;
+    border:1px solid #dddddd;
   }
 
   .confirm-btns {
@@ -121,12 +127,12 @@
   }
   .backup-text {
     text-align: center;
-    padding: 20px;
-    border: 1px solid #dddddd;
+    /* padding: 20px; */
+    /* border: 1px solid #dddddd; */
     font-size: 16px;
   }
   .backup-text p {
-    margin:0;
+    margin-bottom: 15px;
     font-size:16px !important;
   }
 

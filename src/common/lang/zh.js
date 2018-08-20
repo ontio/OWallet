@@ -24,7 +24,7 @@ export default {
     importLedgerSuccess: '导入Ledger钱包成功',
     readyToLogin: '可以登录',
     walletAddress: '钱包地址',
-    authentication: 'Authentication',
+    authentication: '验证',
     enterWalletPassword: '请输入钱包密码',
     password: '密码'
   },
@@ -70,7 +70,8 @@ export default {
     payerPassword: '输入所选钱包的密码',
     selectCommonWallet: '选择本地普通钱包',
     selectOneWallet: '请选择一个本地钱包',
-    enterPassword: '请输入钱包密码'
+    enterPassword: '请输入钱包密码',
+    createSuccess: '创建ONT ID成功！'
   },
 
   importIdentity: {
@@ -125,9 +126,9 @@ export default {
     wif: 'WIF',
     mnemonic: '助记词',
     privateKey: '私钥',
-    backupWallet: '请下载.dat文件并做好备份',
+    backupWallet: '请备份好以上数据并保存好.dat文件。',
     createSuccess: '创建普通钱包成功！',
-    download: '下载',
+    download: '下载.dat文件',
     privateKey64Hex: '私钥(64 Hex格式)',
     priavteKeywif: '私钥(WIF格式)',
     keystoreDat: 'Keystore(.dat)'

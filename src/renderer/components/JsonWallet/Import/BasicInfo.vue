@@ -145,6 +145,10 @@
         mnemonicAccount: ''
       }
     },
+    beforeDestroy() {
+      console.log('clear')
+      this.$store.commit('INIT_JSON_WALLET')
+    },
     methods: {
       activeTab(tabName) {
         this.tabName = tabName
