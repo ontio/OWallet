@@ -127,14 +127,17 @@ export default {
     privateKey: '私钥',
     backupWallet: '请下载.dat文件并做好备份',
     createSuccess: '创建普通钱包成功！',
-    download: '下载'
+    download: '下载',
+    privateKey64Hex: '私钥(64 Hex格式)',
+    priavteKeywif: '私钥(WIF格式)',
+    keystoreDat: 'Keystore(.dat)'
   },
 
   importJsonWallet: {
     datFile: '选择文件',
     selectedDatFile: '已选择文件： ',
     dat: '.dat文件',
-    datImportPassword: '解锁dat文件的密码',
+    datImportPassword: '解密keystore文件(.dat)的密码',
     create: '导入普通钱包',
     basicInfo: '基本信息',
     label: '钱包名称',
@@ -367,10 +370,12 @@ export default {
 
   },
   redeemInfo: {
+    info: '提取ONG',
     claimableOng:'可提取ONG是您可以提取的ONG的数量，手续费为0.01个ONG。每次钱包中完成一笔交易后，该余额会更新。',
     unboundOng: '已解绑的ONG是指尚未添加到您的可提取ONG余额（仅会在您钱包做出一笔ONT交易后更新）中的ONG。当您的地址完成一笔交易后，您可提取的ONG余额将会更新（即将已解绑的ONG数额将添加到您可提取的ONG余额中去。）',
     claimableOngName: '可提取ONG：',
-    unboundOngName: '已解绑的ONG：'
+    unboundOngName: '已解绑的ONG：',
+    noClaimableOng: '您没有可提取的ONG。当您地址上完成一笔ONT转出交易后，可提取的ONG余额将会更新。'
   }
 
 }
