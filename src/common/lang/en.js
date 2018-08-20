@@ -127,14 +127,17 @@ export default {
     privateKey: 'Private Key',
     backupWallet: 'Please download the .dat file and keep it safe.',
     createSuccess:'Create individual wallet successfully.',
-    download: "Download"
+    download: "Download",
+    privateKey64Hex: 'Private Key(64 Hex)',
+    priavteKeywif: 'Private Key(WIF)',
+    keystoreDat: 'Keystore(.dat)'
   },
 
   importJsonWallet: {
     datFile: 'Select the file',
     selectedDatFile: 'Selected file: ',
     dat: '.dat File',
-    datImportPassword: 'Open .dat file password',
+    datImportPassword: 'Password to decrypt keystore(.dat)',
     create: 'Import Individual Wallet',
     basicInfo: 'Basic info',
     label: 'Name of Individual Wallet',
@@ -370,9 +373,11 @@ export default {
     txFailed: 'Transaction failed.'
   },
   redeemInfo: {
+    info: 'Redeem Info',
     claimableOng: `Claimable ONG is the amount of ONG you can claim for a 0.01 ONG fee. This balance will update each time a transaction is made in your wallet address.`,
     unboundOng: `Unbound ONG is an amount of ONG which has not been added to your claimable ONG balance yet (since it only updates each you make a transaction in your wallet address). When a transaction is made in your address, the claimable ONG balance will update (adding your unbound ONG amount to your claimable ONG amount).`,
     claimableOngName: 'Claimable ONG: ',
-    unboundOngName: 'Unbound ONG: '
+    unboundOngName: 'Unbound ONG: ',
+    noClaimableOng: 'Your claimable ONG is 0. When a transaction of ONT is made in your address, the claimable ONG balance will update'
   }
 }

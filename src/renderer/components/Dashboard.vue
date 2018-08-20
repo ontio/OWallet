@@ -383,7 +383,7 @@
               <span>{{waitBoundOng}}</span>
             </div>
           </div>
-          <a-button type="default" class="commonWallet-btn btn-redeem" :disabled="unboundOng == 0"
+          <a-button type="default" class="commonWallet-btn btn-redeem"
           @click="redeemOng">{{$t('commonWalletHome.redeem')}}</a-button>
           <redeem-info-icon></redeem-info-icon>
         </div>
@@ -422,6 +422,14 @@
 
       </div>
     </div>
+
+    <a-modal
+        :title="$t('redeemInfo.info')"
+        v-model="redeemInfoVisible"
+        @ok="handleModalOk"
+        >
+          <p class="font-regular"><span class="font-medium"></span> {{$t('redeemInfo.noClaimableOng')}}</p>
+      </a-modal>
 
   </div>
 </template>
@@ -469,6 +477,7 @@ import RedeemInfoIcon from './RedeemInfoIcon'
         completedTx: [],
         intervalId: '',
         interval:3000,
+        redeemInfoVisible: false
       }
     },
     mounted: function () {
@@ -633,7 +642,10 @@ import RedeemInfoIcon from './RedeemInfoIcon'
         this.$router.push({path: '/commonWalletReceive/commonWallet'})
       },
       redeemOng() {
-        
+          if(this.unboundOng == 0) {
+            this.redeemInfoVisible = true;
+            return;
+          }
           const redeem = {
               claimableOng : this.unboundOng,
               balance: this.balance.ong
@@ -750,6 +762,9 @@ import RedeemInfoIcon from './RedeemInfoIcon'
       },
       toSwap() {
         this.$router.push({name: 'CommonTokenSwap'})
+      },
+      handleModalOk() {
+        this.redeemInfoVisible = false;
       }
     }
   }

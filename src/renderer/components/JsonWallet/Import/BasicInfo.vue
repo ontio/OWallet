@@ -5,17 +5,17 @@
         <a class="nav-link active" id="import-json-private-key-pills-tab" data-toggle="pill"
            href="#import-json-private-key-pills"
            role="tab"
-           aria-controls="import-json-private-key-pills" aria-selected="true" @click="activeTab('pk')">{{ $t('createJsonWallet.privateKey') }}</a>
+           aria-controls="import-json-private-key-pills" aria-selected="true" @click="activeTab('pk')">{{ $t('createJsonWallet.privateKey64Hex') }}</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" id="import-json-dat-pills-tab" data-toggle="pill" href="#import-json-dat-pills"
            role="tab"
-           aria-controls="import-json-dat-pills" aria-selected="true" @click="activeTab('dat')">{{ $t('importJsonWallet.dat') }}</a>
+           aria-controls="import-json-dat-pills" aria-selected="true" @click="activeTab('dat')">{{ $t('createJsonWallet.keystoreDat') }}</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" id="import-json-wif-pills-tab" data-toggle="pill" href="#import-json-wif-pills"
            role="tab"
-           aria-controls="import-json-wif-pills" aria-selected="true" @click="activeTab('wif')">{{ $t('createJsonWallet.wif') }}</a>
+           aria-controls="import-json-wif-pills" aria-selected="true" @click="activeTab('wif')">{{ $t('createJsonWallet.priavteKeywif') }}</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" id="import-json-mnemonic-pills-tab" data-toggle="pill" href="#import-json-mnemonic-pills"
@@ -299,7 +299,7 @@
 
 <style>
   .json-import-container {
-    width: 36rem;
+    width: 48rem;
   }
 
   .import-json-nav-pills > li.nav-item {
