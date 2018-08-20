@@ -125,7 +125,7 @@ export default {
     wif: 'WIF',
     mnemonic: 'Mnemonic',
     privateKey: 'Private Key',
-    backupWallet: 'Please download the .dat file and keep it safe.',
+    backupWallet: 'Please make a backup of these data and save the .dat file.',
     createSuccess:'Create individual wallet successfully.',
     download: "Download",
     privateKey64Hex: 'Private Key(64 Hex)',

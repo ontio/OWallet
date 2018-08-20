@@ -4,11 +4,12 @@
     <p><b>{{$t('createJsonWallet.addressN')}}: </b> {{ address }}</p>
     <p><b>{{$t('createJsonWallet.pubKeyN')}}: </b> {{publicKey}}</p>
     <p><b>{{$t('createJsonWallet.signatureSchemeN')}}: </b> SHA256withECDSA </p>
+    <p><b>{{$t('createJsonWallet.wif')}}: </b> {{wif}}</p>
 
     <div class="backup-text">
       <p class="font-medium-black">
         <span></span>
-         <a-icon type="warning" />{{$t('createJsonWallet.backupWallet')}}</p>
+         <a-icon type="warning" /> {{$t('createJsonWallet.backupWallet')}}</p>
          <a-button type="primary" @click="downloadWallet">{{$t('createJsonWallet.download')}}</a-button>
     </div>
     <div class="confirm-btns">
@@ -48,7 +49,8 @@
         account: state => state.CreateJsonWallet.account,
         downloadContent: state => state.CreateJsonWallet.downloadContent,
         address: state => state.CreateJsonWallet.address,
-        publicKey: state => state.CreateJsonWallet.publicKey
+        publicKey: state => state.CreateJsonWallet.publicKey,
+        wif: state => state.CreateJsonWallet.wif
       })
     },
     methods: {
@@ -84,9 +86,6 @@
           }
           // console.log(newDoc)
         })
-
-        localStorage.setItem('publicKey', this.publicKey);
-        localStorage.setItem('address', this.address)
 
         this.$store.commit('INIT_JSON_WALLET')
         this.$message.success(this.$t('createJsonWallet.createSuccess'))

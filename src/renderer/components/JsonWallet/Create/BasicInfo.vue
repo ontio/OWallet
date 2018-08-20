@@ -47,10 +47,12 @@
         this.$validator.validateAll().then(result => {
           if(result) {
             let privateKey = Crypto.PrivateKey.random()
+            const wif = privateKey.serializeWIF();
             let body = {
               label: this.label,
               privateKey: privateKey,
-              password: this.password
+              password: this.password,
+              wif: wif
             }
             this.$store.dispatch('createJsonWalletWithPrivateKey', body).then(res => {
               // console.log(res)

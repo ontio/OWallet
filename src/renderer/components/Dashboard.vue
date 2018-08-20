@@ -501,43 +501,6 @@ import RedeemInfoIcon from './RedeemInfoIcon'
       handleBack() {
         this.$router.push({name: 'Wallets'})
       },
-      goSetting() {
-        this.$router.push({name: 'Setting'})
-      },
-      ledgerLogin() {
-        this.$router.push({name: 'LoginLedger'})
-      },
-      setSavePath() {
-        dialog.showOpenDialog({properties: ['openDirectory']}, (filePath) => {
-          if (filePath === undefined) {
-            alert('You did not set the path')
-            return;
-          }
-          console.log(filePath);
-          localStorage.setItem('savePath', filePath);
-          return;
-        })
-      },
-      toWalletHome(wallet) {
-        localStorage.setItem('publicKey', wallet.publicKey);
-        localStorage.setItem('address', wallet.address)
-        this.$router.push({name: 'Home'})
-
-      },
-      toSharedWalletHome(wallet) {
-        const walletObj = {
-          address: wallet.sharedWalletAddress,
-          coPayers: wallet.coPayers,
-          requiredNumber: wallet.requiredNumber,
-          totalNumber: wallet.totalNumber
-        }
-        // this.$store.commit('UPDATE_CURRENT_WALLET',{wallet: walletObj})
-        sessionStorage.setItem('sharedWallet', JSON.stringify(walletObj))
-        this.$router.push({name: 'SharedWalletHome'})
-      },
-      createSharedWallet() {
-        this.$router.push({name: 'CreateSharedWallet'})
-      },
       getTransactions() {
         const url = this.network === 'TestNet' ? 'https://polarisexplorer.ont.io' : 'https://explorer.ont.io';
         this.axios.get(url + '/api/v1/explorer/address/' + this.address + '/10/1').then(response => {
@@ -657,90 +620,8 @@ import RedeemInfoIcon from './RedeemInfoIcon'
             this.$router.push({path: '/commonWalletRedeem/hardwareWallet'})            
         }
       },
-      claimOng() {
-        // makeWithdrawOngTx(addressObj, addressObj, value, new Address(payer), gasPrice, gasLimit)
-        const from = new Crypto.Address(this.address);
-        const to = from;
-        const value = new BigNumber(this.unclaimOng).multipliedBy(1e9);
-        const tx = OntAssetTxBuilder.makeWithdrawOngTx(from, to, value, from, '500', '20000');
-        const pk = new Ont.Crypto.PublicKey(this.publicKey);
-        const txSig = new Ont.TxSignature();
-        txSig.M = 1;
-        txSig.pubKeys = [pk];
-        tx.payer = from;
-
-        const txData = tx.serializeUnsignedData();
-        legacySignWithLedger(txData, this.publicKey).then(res => {
-          // console.log('txSigned: ' + res);
-          const sign = '01' + res; //ECDSAwithSHA256
-          txSig.sigData = [sign]
-          tx.sigs = [txSig];
-          const txSerialized = tx.serialize();
-          // console.log('txSerialized: ' + txSerialized);
-
-          //send tx
-          restClient.sendRawTransaction(txSerialized).then(resp => {
-            console.log('send tx resp: ' + JSON.stringify(resp));
-            if (resp.Error === 0) {
-              alert('Transaction has been sent successfully.')
-            } else {
-              alert('Transfer failed. ' + resp.Result)
-            }
-          })
-        }, err => {
-          alert(err.message)
-        })
-      },
-      send() {
-        if (!this.address || !this.toAddress || !this.amount) {
-          return;
-        }
-        if (this.asset === 'ONT' && Number(this.amount) > this.balance.ont ||
-          this.asset === 'ONG' && Number(this.amount) > this.balance.ong) {
-          alert('Balance is not enough.')
-          return;
-        }
-        const restClient = new Ont.RestClient(this.nodeUrl);
-        const from = new Ont.Crypto.Address(this.address);
-        const to = new Ont.Crypto.Address(this.toAddress);
-        const amount = this.asset === 'ONT' ? this.amount : new BigNumber(this.amount).multipliedBy(1e9);
-        const tx = Ont.OntAssetTxBuilder.makeTransferTx(this.asset, from, to, amount, '500', '20000');
-        const pk = new Ont.Crypto.PublicKey(this.publicKey);
-        const txSig = new Ont.TxSignature();
-        txSig.M = 1;
-        txSig.pubKeys = [pk];
-        tx.payer = from;
-
-        const txData = tx.serializeUnsignedData();
-        legacySignWithLedger(txData, this.publicKey).then(res => {
-          // console.log('txSigned: ' + res);
-          const sign = '01' + res; //ECDSAwithSHA256
-          txSig.sigData = [sign]
-          tx.sigs = [txSig];
-          const txSerialized = tx.serialize();
-          // console.log('txSerialized: ' + txSerialized);
-
-          //send tx
-          restClient.sendRawTransaction(txSerialized).then(resp => {
-            console.log('send tx resp: ' + JSON.stringify(resp));
-            this.amount = 0;
-            this.toAddress = '';
-            if (resp.Error === 0) {
-              alert('Transaction has been sent successfully.')
-            } else {
-              alert('Transfer failed. ' + resp.Result)
-            }
-          })
-        }, err => {
-          alert(err.message)
-        })
-        // console.log('send tx: ' + txData);
-      },
       goBack() {
         this.$router.push({name: 'Wallets'})
-      },
-      showTransferBox() {
-
       },
       checkMoreTx() {
         let url = `https://explorer.ont.io/address/${this.address}/10/1`
