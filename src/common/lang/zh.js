@@ -26,7 +26,8 @@ export default {
     walletAddress: '钱包地址',
     authentication: '验证',
     enterWalletPassword: '请输入钱包密码',
-    password: '密码'
+    password: '密码',
+    invalidLedger: '当前Ledger设备与要打开的钱包不匹配，请尝试正确的ledger设备。'
   },
 
   TopNav: {

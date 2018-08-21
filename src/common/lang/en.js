@@ -26,7 +26,8 @@ export default {
     walletAddress: 'Wallet Address',
     authentication: 'Authentication',
     enterWalletPassword: 'Please enter your wallet password',
-    password: 'Password'
+    password: 'Password',
+    invalidLedger: 'The current ledger dose not match with the wallet.Please try with another ledger device.'
   },
 
   TopNav: {

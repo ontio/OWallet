@@ -83,6 +83,8 @@
         this.$store.dispatch('loginWithLedger', this.publicKey).then(res => {
           if (res) {
             this.$router.push({name: 'Dashboard'})
+          } else {
+            this.ledgerStatus = this.$t('common.invalidLedger')
           }
         });
       }
