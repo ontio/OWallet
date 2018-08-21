@@ -9,10 +9,10 @@ const state = {
 }
 
 const mutations = {
-  ADD_CREATE_JSON_STEP(state, payload) {
+  ADD_CREATE_IDENTITY_STEP(state, payload) {
     state.currentStep += 1;
   },
-  SUB_CREATE_JSON_STEP(state, payload) {
+  SUB_CREATE_IDENTITY_STEP(state, payload) {
     if(state.currentStep > 0) {
       state.currentStep -= 1;
     }

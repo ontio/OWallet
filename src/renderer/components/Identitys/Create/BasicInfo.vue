@@ -188,7 +188,7 @@ import {legacySignWithLedger} from '../../../../core/ontLedger'
           } else {
             this.$message.error(res.Result)
           }
-          this.$store.commit('ADD_CREATE_JSON_STEP')
+          this.$store.commit('ADD_CREATE_IDENTITY_STEP')
           // const title = this.$t('common.transSentSuccess')
           // setTimeout(() => {
           //     this.$success({
