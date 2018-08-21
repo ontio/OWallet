@@ -23,9 +23,15 @@ const actions = {
         const publicKeyEncoded = wallet.getPublicKeyEncoded(pk);
         const account = new wallet.Account(publicKeyEncoded);
         localStorage.setItem('publicKey', publicKeyEncoded);
-        localStorage.setItem('address', account.address);        
-        commit('LOGIN_WITH_LEDGER', {publicKeyEncoded, address: account.address})
-        return true;
+        localStorage.setItem('address', account.address);  
+        const currentWallet = JSON.parse(sessionStorage.getItem('currentWallet'))
+        if(currentWallet.address !== account.address) {
+            return false;
+        } else {
+            commit('LOGIN_WITH_LEDGER', { publicKeyEncoded, address: account.address })
+            return true;
+        }
+        
     },
     createLedgerWalletWithPk({commit}, pk) {
         const publicKeyEncoded = wallet.getPublicKeyEncoded(pk);
