@@ -46,7 +46,7 @@
     },
     methods: {
       back() {
-        this.$store.commit('SUB_CREATE_JSON_STEP')
+        this.$store.commit('SUB_CREATE_IDENTITY_STEP')
       },
       downloadWallet() {
         const commonWallet = this.account
