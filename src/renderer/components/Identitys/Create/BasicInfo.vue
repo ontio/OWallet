@@ -116,12 +116,19 @@ import {legacySignWithLedger} from '../../../../core/ontLedger'
                 })
         },
       next() {
-        if(this.payerWallet === 'commonWallet' && !this.payerWallet) {
+        if(this.payerWalletType === 'commonWallet' && !this.payerWallet) {
           this.$message.error(this.$t('createIdentity.selectOneWallet'))
           return;
         }
-        if(this.payerWallet === 'commonWallet' && this.payerWallet && !this.payerPassword) {
+        if(this.payerWalletType === 'commonWallet' && this.payerWallet && !this.payerPassword) {
           this.$message.error(this.$t('createIdentity.enterPassword'))
+          return;
+        }
+        let payer;
+        if(this.payerWalletType === 'commonWallet') {
+          payer = new Crypto.Address(this.payerWallet.address)
+        } else {
+          payer = new Crypto.Address(this.ledgerWallet.address)
         }
         this.$validator.validateAll().then(result => {
           if(result) {
@@ -129,14 +136,14 @@ import {legacySignWithLedger} from '../../../../core/ontLedger'
             let body = {
               label: this.label,
               privateKey: privateKey,
-              password: this.password
+              password: this.password,
+              payer: payer
             }
             this.$store.dispatch('createIdentityWithPrivateKey', body).then(res => {
               // console.log(res)
               const tx = res
               this.$store.dispatch('showLoadingModals')
               if(this.payerWalletType === 'commonWallet') {
-                tx.payer = new Crypto.Address(this.payerWallet.address)
                 const enc = new Crypto.PrivateKey(this.payerWallet.key)
                 let pri;
                 try {
@@ -146,12 +153,11 @@ import {legacySignWithLedger} from '../../../../core/ontLedger'
                   this.$message.error(this.$t('common.pwdErr'))
                   return;
                 }
-                TransactionBuilder.signTransaction(tx, pri);
+                TransactionBuilder.addSign(tx, pri);
                 this.sendTx(tx)
               } else {
                 if(this.ledgerPk) {
                   this.$store.dispatch('showLoadingModals')
-                  tx.payer = new Crypto.Address(this.ledgerWallet.address)
                   const pk = new Crypto.PublicKey(this.ledgerWallet.publicKey);
                   const txSig = new Ont.TxSignature();
                   txSig.M = 1;
@@ -161,7 +167,7 @@ import {legacySignWithLedger} from '../../../../core/ontLedger'
                   // console.log('txSigned: ' + res);
                   const sign = '01' + res; //ECDSAwithSHA256
                   txSig.sigData = [sign]
-                  tx.sigs = [txSig];
+                  tx.sigs.push(txSig);
                   this.sendTx(tx);
                   }, err => {
                       this.ledgerStatus = '';
@@ -181,12 +187,15 @@ import {legacySignWithLedger} from '../../../../core/ontLedger'
         const restClient = new Ont.RestClient(this.nodeUrl);
           restClient.sendRawTransaction(tx.serialize()).then(res => {
           console.log(res)
+          this.$store.dispatch('hideLoadingModals')
           if (res.Error === 0) {
             this.$message.success(this.$t('common.transSentSuccess'))
           } else if (res.Error === -1) {
             this.$message.error(this.$t('common.ongNoEnough'))
+            return;
           } else {
             this.$message.error(res.Result)
+            return;
           }
           this.$store.commit('ADD_CREATE_IDENTITY_STEP')
           // const title = this.$t('common.transSentSuccess')
