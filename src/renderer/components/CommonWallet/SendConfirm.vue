@@ -286,8 +286,10 @@ export default {
             this.$message.success(this.$t('common.transSentSuccess'))
           } else if (res.Error === -1) {
             this.$message.error(this.$t('common.ongNoEnough'))
+            return;
           } else {
             this.$message.error(res.Result)
+            return;
           }
           this.$emit('sendConfirmSubmit')
           const title = this.$t('common.transSentSuccess')

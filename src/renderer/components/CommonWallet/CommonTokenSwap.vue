@@ -98,10 +98,10 @@ export default {
                 this.validAmount = false;
                 return;
             }
-            if(Number(this.amount) > Number(this.nep5Ont)) {
-                this.validatePass = false;
-                return;
-            }
+            // if(Number(this.amount) > Number(this.nep5Ont)) {
+            //     this.validAmount = false;
+            //     return;
+            // }
             this.validAmount = true;
         },
         validatePass(){

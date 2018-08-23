@@ -46,6 +46,7 @@ const actions = {
     let identity = Identity.create(body.privateKey, body.password, body.label)
     const publicKey = body.privateKey.getPublicKey();
     const tx = OntidContract.buildRegisterOntidTx(identity.ontid, publicKey, GAS_PRICE, GAS_LIMIT);
+    tx.payer = body.payer;
     TransactionBuilder.signTransaction(tx, body.privateKey);
     identity = identity.toJsonObj();
     commit('CREATE_IDENTITY', {

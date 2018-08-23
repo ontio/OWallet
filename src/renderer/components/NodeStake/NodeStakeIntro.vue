@@ -165,6 +165,7 @@ export default {
          address = this.ledgerWallet.address
          stakeWallet = this.ledgerWallet
      }
+     this.$store.dispatch('showLoadingModals')
      const net = localStorage.getItem('net')
      const ontPassNode = net === 'TEST_NET' ? ONT_PASS_NODE : ONT_PASS_NODE_PRD
      axios.get(ontPassNode + ONT_PASS_URL.GetQualifiedState, {
