@@ -25,7 +25,7 @@
           </a-tooltip>
       </router-link>
 
-      <router-link :to="{name:'NodeStakeIntro'}" active-class="node-stake-active" >
+      <router-link :to="{name:'NodeManagement'}" active-class="node-stake-active" >
         <a-tooltip placement="right" title="Node Stake">
                <div class="node-stake-icon"></div>
           </a-tooltip>

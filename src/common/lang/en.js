@@ -381,5 +381,36 @@ export default {
     claimableOngName: 'Claimable ONG: ',
     unboundOngName: 'Unbound ONG: ',
     noClaimableOng: 'Your claimable ONG is 0. When a transaction of ONT is made in your address, the claimable ONG balance will update'
+  },
+
+  nodeMgmt: {
+    nodeUser: 'Your are a node, here you can stake and manage stake.',
+    nodeStakeMgmt: 'Node Stake Management',
+    normalUser: 'You are a user, want to participate stake authorization.',
+    stakeAuthorizaton: 'Stake Authorization',
+    nodeStake: 'Node Stake',
+    userStakeAuthorization: 'User Stake Authorization',
+    newStake: 'Submit A New Stake',
+    allowStakes: 'Allow stakes from other users',
+    deny: 'Deny',
+    permit: 'Permit',
+    stakeAmount: 'Your node stake amount',
+    stakeLimit: 'Total max stake limit',
+    userNumber: 'Current number of users staking',
+    userStake: 'Current total stake of these users',
+    rewardsPerMonth: 'Estimate total rewards per month',
+    rewardsTip: 'Estimate total rewards per month includes your rewards and the rewards of other uesrs staking.',
+    rewardProportion: 'Reward proportion for yourself',
+    current: 'current',
+    rewardsProportionTip: '0% indicates the node will share all rewards to stake authorized users.',
+    confirm: 'Confirm',
+    changesTakeEffect: ' Changes will take effect in two consensus rounds (each round is approximately every 30 days). ',
+    stakeAuthorization: 'Stake Authorization',
+    toNextRound: 'To next round',
+    rank: 'Rank',
+    name: 'Name',
+    currentStake: 'Current Stake',
+    process: 'Process',
+    changes: 'Changes'
   }
 }

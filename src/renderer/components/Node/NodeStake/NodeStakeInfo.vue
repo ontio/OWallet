@@ -46,7 +46,7 @@
 </style>
 <template>
     <div >
-        <breadcrumb  :current="$t('nodeStake.nodeStake')" v-on:backEvent="handleRouteBack"></breadcrumb>
+        <!-- <breadcrumb  :current="$t('nodeStake.nodeStake')" v-on:backEvent="handleRouteBack"></breadcrumb> -->
         <div class="nodeStake-container">
             <div>
                 <a-steps progressDot :current="current">
@@ -127,10 +127,10 @@
 </template>
 
 <script>
-import Breadcrumb from "../Breadcrumb";
+import Breadcrumb from "../../Breadcrumb";
 import { mapState } from "vuex";
 import { Crypto, TransactionBuilder, utils } from "ontology-ts-sdk";
-import {legacySignWithLedger} from '../../../core/ontLedger'
+import {legacySignWithLedger} from '../../../../core/ontLedger'
 
 import axios from "axios";
 import {
@@ -140,7 +140,7 @@ import {
   GAS_PRICE,
   GAS_LIMIT,
   DEFAULT_SCRYPT
-} from "../../../core/consts";
+} from "../../../../core/consts";
 
 export default {
   name: "NodeStakeInfo",
@@ -148,9 +148,7 @@ export default {
     Breadcrumb
   },
   data() {
-    const nodeStakeOntid = localStorage.getItem("nodeStakeOntid") || "";
     return {
-      nodeStakeOntid,
       localOntid: [],
       intervalId: "",
       interval: 5000,
