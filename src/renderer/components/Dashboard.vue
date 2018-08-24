@@ -496,6 +496,7 @@ import RedeemInfoIcon from './RedeemInfoIcon'
     },
     beforeDestroy(){
         clearInterval(this.intervalId)
+        this.$store.commit('INIT_CURRENT_WALLET')
     },
     methods: {
       handleBack() {
