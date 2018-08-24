@@ -566,10 +566,11 @@ import RedeemInfoIcon from './RedeemInfoIcon'
       getNep5Balance() {
         const NEO_TRAN = 100000000;
         Ont.SDK.getNeoBalance(this.currentWallet.address).then(res => {
+          let nep5Ont = 0;
           if(res.result) {
-            const nep5Ont = res.result / NEO_TRAN
-            this.$store.commit('UPDATE_NEP5_ONT', {nep5Ont})
-          }
+            nep5Ont = res.result / NEO_TRAN
+          } 
+          this.$store.commit('UPDATE_NEP5_ONT', {nep5Ont})
         })
       },
       getExchangeCurrency() {
