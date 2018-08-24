@@ -75,18 +75,30 @@ export default {
             password:'',
             sending:false,
             validAmount:true,
-            validPassword:true
+            validPassword:true,
+            nep5Ont: 0
         }
     },
     components: {
         Breadcrumb
     },
     computed: {
-        ...mapState({
-            nep5Ont : state => state.CurrentWallet.nep5Ont
-        })
+    },
+    mounted(){
+        this.getNep5Balance();
     },
     methods: {
+        getNep5Balance() {
+            const NEO_TRAN = 100000000;
+            Ont.SDK.getNeoBalance(this.currentWallet.address).then(res => {
+                if(res.result) {
+                    const nep5Ont = res.result / NEO_TRAN
+                    this.nep5Ont = nep5Ont;
+                } else {
+                    this.nep5Ont = 0;
+                }
+            })
+        },
         backToWallets() {
             this.$router.push({name: 'Wallets'})
         },
