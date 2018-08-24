@@ -496,7 +496,7 @@ import RedeemInfoIcon from './RedeemInfoIcon'
     },
     beforeDestroy(){
         clearInterval(this.intervalId)
-        this.$store.commit('INIT_CURRENT_WALLET')
+        this.$store.commit('UPDATE_NEP5_ONT', {nep5Ont:0})
     },
     methods: {
       handleBack() {
