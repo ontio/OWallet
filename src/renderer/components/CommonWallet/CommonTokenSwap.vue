@@ -98,10 +98,10 @@ export default {
                 this.validAmount = false;
                 return;
             }
-            // if(Number(this.amount) > Number(this.nep5Ont)) {
-            //     this.validAmount = false;
-            //     return;
-            // }
+            if(Number(this.amount) > Number(this.nep5Ont)) {
+                this.validAmount = false;
+                return;
+            }
             this.validAmount = true;
         },
         validatePass(){
@@ -112,10 +112,10 @@ export default {
             this.validPassword = true;
         },
         submit() {
-            // if(!this.amount || !this.validAmount) {
-            //     this.$message.error(this.$t('commonWalletHome.validAmount'))
-            //     return;
-            // } 
+            if(!this.amount || !this.validAmount) {
+                this.$message.error(this.$t('commonWalletHome.validAmount'))
+                return;
+            } 
             if(!this.password) {
                 this.$message.error(this.$t('commonWalletHome.emptyPass'))
                 return;
@@ -125,7 +125,8 @@ export default {
             const value = this.amount;
             const encKey = this.currentWallet.key;
             const salt = this.currentWallet.salt;
-            const password = this.password;
+            // must transform password to base when call Ont.SDK's api
+            const password = Buffer.from(this.password).toString('base64');
             const params = DEFAULT_SCRYPT;
             const resp =  Ont.SDK.neoTransfer(from, to, value, encKey,password,salt,'', params)
             if(resp.then) {
