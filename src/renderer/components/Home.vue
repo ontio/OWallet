@@ -86,7 +86,7 @@
       </div>
 
       <div class="div-footer-version">
-        <p>Version: 0.8.5</p>
+        <p>Version: 0.8.6</p>
         <p>Powered by Ontology</p>
       </div>
     </div>
