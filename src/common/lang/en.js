@@ -411,6 +411,7 @@ export default {
     name: 'Name',
     currentStake: 'Current Stake',
     process: 'Process',
-    changes: 'Changes'
+    changes: 'Changes',
+    userParticipate: 'Make sure you are a user who wants to participate stake authorization'
   }
 }

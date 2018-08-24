@@ -153,6 +153,11 @@ export default new Router({
       path: '/node/nodeList',
       name: 'NodeList',
       component: require('@/components/Node/NodeAuthorize/NodeList').default
+    },
+    {
+      path: '/node/authorizeLogin',
+      name: 'AuthorizeLogin',
+      component: require('@/components/Node/NodeAuthorize/AuthorizeLogin').default
     }
   ]
 })

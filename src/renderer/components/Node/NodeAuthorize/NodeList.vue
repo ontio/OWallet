@@ -21,9 +21,10 @@
             </div>
         </div>
         <a-table :columns="columns"
-        :dataSource="data">
-        <span slot="action">
-            go
+        :dataSource="data"
+        :customRow="customRow">
+        <span slot="action" slot-scope="text, record">
+            <a-icon type="arrow-right" />
         </span>
         </a-table>
     </div>
@@ -81,6 +82,15 @@ export default {
     methods: {
         handleRouteBack() {
             this.$router.go(-1);
+        },
+        customRow(record) {
+            return {
+                on: {
+                    click: () => {
+                        this.$router.push({name: 'AuthorizeLogin'})
+                    }
+                }
+            }
         }
     }
 }
