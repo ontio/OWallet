@@ -75,29 +75,6 @@ const mutations = {
     },
     UPDATE_NEP5_ONT(state, payload) {
         state.nep5Ont = payload.nep5Ont
-    },
-    INIT_CURRENT_WALLET(state, payload) {
-        state.transfer = {
-            balance: {
-                ont: 0,
-                ong: 0
-            },
-            from: '',
-            to: '',
-            amount: 0,
-            asset: 'ONT',
-            gas: 0.01,
-            coPayers: [],
-            sponsorPayer: ''
-        };
-        state.pendingTx = {};
-        state.currentSigner = '';
-        state.localCopayers = [];
-        state.redeem = {
-            claimableOng: 0,
-            balanceOng: 0
-        }
-        state.nep5Ont = 0;
     }
 
 }
