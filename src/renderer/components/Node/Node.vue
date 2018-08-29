@@ -50,7 +50,7 @@ export default {
     name: 'NodeManagement',
     methods: {
         handleNodeStake() {
-            this.$router.push({name: 'NodeStakeManagement'})
+            this.$router.push({name: 'NodeStakeIntro'})
         },
         handleAuthorization() {
             this.$router.push({name: 'NodeList'})

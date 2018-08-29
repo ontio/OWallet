@@ -3,7 +3,13 @@
     width:200px !important;
     float: right;
     margin-right: 10px;
+    top: -50px;
 }
+.node-stake-info {
+    padding-bottom: 5rem;
+    overflow-y:auto;
+}
+
 </style>
 <template>
     <div>
@@ -11,10 +17,13 @@
         <a-menu v-model="current" mode="horizontal" @click="handleSelect">
             <a-menu-item key="Node_Stake">{{$t('nodeMgmt.nodeStake')}}</a-menu-item>
             <a-menu-item key="Node_Authorization">{{$t('nodeMgmt.userStakeAuthorization')}}</a-menu-item>
-            <a-button class="btn-next btn-new-stake">{{$t('nodeMgmt.newStake')}}</a-button>
         </a-menu>
         <div>
-            <node-stake-info v-if="current[0] === 'Node_Stake'"></node-stake-info>
+            <div v-if="current[0] === 'Node_Stake'" class="node-stake-info">
+                <node-stake-info :showPosBtn="true" :breadcrumb="true"></node-stake-info>
+                
+            </div>
+
             <node-stake-authorization v-if="current[0] === 'Node_Authorization'"></node-stake-authorization>
         </div>
     </div>
@@ -43,6 +52,9 @@ export default {
         },
         handleSelect({item, key, keyPath}){
             this.current[0] = key
+        },
+        newStake() {
+            this.$router.push({name: 'NodeStakeIntro'})
         }
     }
 }

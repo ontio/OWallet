@@ -76,41 +76,79 @@
 .btn-confirm p {
     margin-bottom: 5px;
 }
+.error-input {
+    border-color:red !important;
+}
+.unit-input {
+    width:100px;
+    height:30px !important;
+    margin-right: 20px;
+}
+.allowed-stake {
+    margin:10px 15px; 
+}
+.redeem-btn {
+    width: 100px;
+    height: 36px;
+    border-radius: 0;
+    background: #FBE45A;
+    padding: 0;
+    font-family: AvenirNext-Medium;
+    font-size: 14px;
+    color: #5E6369;
+    border: none;
+    margin-bottom:15px;
+  }
+  .redeem-profit {
+      margin-top: 20px;
+  }
+  .redeem-profit p {
+      margin-bottom: 5px;
+  }
+  .label {
+      font-size: 16px;
+  }
+
 </style>
 <template>
     <div class="content-container">
         <div class="font-medium-black header-text">{{$t('nodeMgmt.allowStakes')}}</div>
+        <div class="allowed-stake">
+            <span class="font-medium">{{$t('nodeMgmt.allowedStakeUnits')}}: </span>
+            <a-input class="input unit-input" :class="validUnit?'':'error-input' " v-model="unit" 
+            @change="validateUnit"
+            ></a-input>
+            <span class="font-medium">{{$t('nodeMgmt.allowedStakeAmount')}}: </span>
+            <span>{{unit*500}} ONT</span>
+            <span class="font-medium" style="margin-left:20px;">({{$t('nodeMgmt.current')}} {{peer_attrs.maxAuthorizeStr}} ONT)</span>
+            <p class="authorize-tip">
+                <a-icon type="info-circle" /> 
+                <span class="font-regular">{{$t('nodeMgmt.stakeAmountTip')}}</span>
+            </p>
+            <a-button type="primary" class="btn-next" @click="confirmChangeAuthorization">{{$t('nodeMgmt.confirm')}}</a-button>
+        </div>
         <div class="stake-content">
-            <a-radio-group @change="changeIfAuthorize" v-model="ifAuthorize" class="change-ifAuthorize-radio">
-                <a-radio value="1" class="status-radio-item">{{$t('nodeMgmt.permit')}}</a-radio>
-                <a-radio value="0" class="status-radio-item">{{$t('nodeMgmt.deny')}}</a-radio>
-            </a-radio-group>
             <div class="content-row">
                 <div class="content-column">
-                    <span>{{$t('nodeMgmt.stakeAmount')}}</span>
-                    <span>{{'1,00,000 ONT'}}</span>
+                    <span>{{$t('nodeMgmt.yourStakeAmount')}}</span>
+                    <span>{{current_peer.initPosStr}} ONT</span>
                 </div>
                 <div class="content-column">
                     <span>{{$t('nodeMgmt.stakeLimit')}}</span>
-                    <span>{{'1,000,000'}}</span>
+                    <span>{{maxStakeLimit}} ONT</span>
                 </div>
             </div>
             <div class="content-row">
-                <div class="content-column">
-                    <span>{{$t('nodeMgmt.userNumber')}}</span>
-                    <span>{{'1,00,000'}}</span>
-                </div>
                 <div class="content-column">
                     <span>{{$t('nodeMgmt.userStake')}}</span>
-                    <span>{{'1,000,000'}}</span>
+                    <span>{{current_peer.totalPosStr}} ONT</span>
                 </div>
-            </div>
-            <div class="content-row">
-                <div class="content-column">
+                <!-- <div class="content-column">
                     <span>{{$t('nodeMgmt.rewardsPerMonth')}}</span>
                     <span>{{'1,00,000 ONT'}}</span>
-                </div>
+                </div> -->
             </div>
+            
             <div class="rewardsTip">
                 <a-icon type="exclamation-circle-o" />
                 <span class="font-regular">{{$t('nodeMgmt.rewardsTip')}}</span>
@@ -121,53 +159,169 @@
             <span class="rewardProportionTip font-medium">{{$t('nodeMgmt.rewardProportion')}}</span>
             <a-slider :min="0" :max="100" v-model="peerCost" :step="1" class="reward-slider"/>
             <a-input-number
-                :min="1"
-                :max="20"
+                :min="0"
+                :max="100"
                 class="reward-input"
                 v-model="peerCost"
             /> %
-             <span class="font-medium current-proportion"> ({{$t('nodeMgmt.current')}}: 40%) </span>
+             <span class="font-medium current-proportion"> ({{$t('nodeMgmt.current')}}: {{peer_attrs.oldPeerCost}}%) </span>
         </div>
-        <div>
+        <div style="margin-bottom:10px;">
             <a-icon type="exclamation-circle-o" />
             <span>{{$t('nodeMgmt.rewardsProportionTip')}}</span>
         </div>
-        <div class="footer-btns">
-            <div class="btn-confirm">
-                <p class="font-medium">{{$t('nodeMgmt.changesTakeEffect')}}</p>
-                <a-button type="primary" class="btn-next" @click="confirm">{{$t('nodeMgmt.confirm')}}</a-button>
-            </div>
+        <a-button type="primary" class="btn-next" @click="confirmChangeCost">{{$t('nodeMgmt.confirm')}}</a-button>
+        <div style="margin-top:10px;">
+            <a-icon type="exclamation-circle-o" />
+            <span>{{$t('nodeMgmt.changesTakeEffect')}}</span>
         </div>
+
+        <div class="redeem-profit">
+            <p>
+                <span class="font-medium-black label">{{$t('nodeMgmt.profit')}}: </span>
+                <span class="font-medium">{{splitFee.amount}} ONG</span>
+            </p>
+                <a-button type="primary" class="redeem-btn" @click="redeemRewards">{{$t('nodeMgmt.redeem')}}</a-button>
+        </div>
+       
+        <sign-send-tx :visible="signVisible" :tx="tx"  :wallet="stakeWallet"
+        v-on:signClose="handleCancel"
+        v-on:txSent="handleTxSent"
+        ></sign-send-tx>
     </div>
 </template>
 <script>
 import {mapState} from 'vuex'
+import {varifyPositiveInt} from '../../../../core/utils.js'
+import {GAS_PRICE, GAS_LIMIT} from '../../../../core/consts'
+import numeral from 'numeral'
+import SignSendTx from '../../Common/SignSendTx'
+import {Crypto} from 'ontology-ts-sdk'
 export default {
     name: 'NodeStakeAuthorization',
+    components: {
+        SignSendTx
+    },
     data(){
         return {
-            ifAuthorize:1,
-            peerCost:0
+            peerCost:0,
+            validUnit:true,
+            unit:0,
+            intervalId:0,
+            signVisible: false,
+            tx: ''
         }
     },
-    mouted: {
+    mounted() {
+        this.peerCost = this.peer_attrs.newPeerCost;
         //fetch stake info
+        this.refresh()
+        this.intervalId = setInterval(()=>{
+            this.refresh()
+        }, 5000)
     },
     beforeDestroy(){
-
+        clearInterval(this.intervalId)
     },
     computed: {
         ...mapState({
-
-        })
+            current_peer: state => state.NodeAuthorization.current_peer,
+            peer_attrs: state => state.NodeAuthorization.peer_attrs,
+            stakeIdentity: state => state.NodeStake.stakeIdentity,
+            stakeWallet: state => state.NodeStake.stakeWallet,
+            ledgerStatus: state => state.LedgerConnector.ledgerStatus,
+            ledgerPk : state => state.LedgerConnector.publicKey,
+            ledgerWallet: state => state.LedgerConnector.ledgerWallet,
+            stakeDetail: state => state.NodeStake.detail,
+            splitFee: state => state.NodeAuthorization.splitFee,
+        }),
+        maxStakeLimit: {
+            get(){
+                const initPos = this.$store.state.NodeAuthorization.current_peer.initPos;
+                return numeral(20 * initPos).format('0,0');
+            }
+        }
     },
     methods:{
-        changeIfAuthorize(){
-
+        confirmChangeAuthorization() {
+            if(!this.unit || !this.validUnit) {
+                this.$message.error(this.$t('nodeMgmt.invalidInput'))
+                return;
+            }
+            if(parseInt(this.unit)*500 != this.peer_attrs.maxAuthorize) {
+                const tx = Ont.GovernanceTxBuilder.makeChangeAuthorizationTx(
+                    this.stakeDetail.publickey,
+                    new Crypto.Address(this.stakeWallet.address),
+                    parseInt(this.unit)*500,
+                    new Crypto.Address(this.stakeWallet.address),
+                    GAS_PRICE,
+                    GAS_LIMIT
+                )
+                this.tx = tx;
+                this.signVisible = true;
+            } else {
+                this.$message.warning(this.$t('nodeMgmt.noChange'))
+            }
         },
-        confirm() {
-
-        }
+        confirmChangeCost() {
+            if(this.peerCost != this.peer_attrs.newPeerCost) {
+                const tx = Ont.GovernanceTxBuilder.makeSetPeerCostTx(
+                    this.stakeDetail.publickey,
+                    new Crypto.Address(this.stakeWallet.address),
+                    parseInt(this.peerCost),
+                    new Crypto.Address(this.stakeWallet.address),
+                    GAS_PRICE,
+                    GAS_LIMIT
+                )
+                this.tx = tx;
+                this.signVisible = true;
+            } else {
+                this.$message.warning(this.$t('nodeMgmt.noChange'))
+            }
+        },
+        validateUnit(){
+            if(this.unit && !varifyPositiveInt(this.unit)) {
+                this.validUnit = false;
+                return;
+            }
+            if(this.unit && parseInt(this.unit)*500 > this.current_peer.initPos*20) {
+                this.validUnit = false;
+                this.$message.error(this.$t('nodeMgmt.notThanMax'))
+                return;
+            }
+            this.validUnit = true;
+        },
+        handleCancel() {
+            this.signVisible = false;
+            this.tx = ''
+        },
+        handleTxSent() {
+            this.signVisible = false;
+            this.tx = ''
+            this.unit = 0;
+            this.refresh();
+        },
+        refresh(){
+            const pk = this.stakeDetail.publickey
+            const address = this.stakeWallet.address;
+            this.$store.dispatch('fetchPeerItem', pk)
+            this.$store.dispatch('fetchPeerAttributes', pk)
+            this.$store.dispatch('fetchSplitFee', address)
+        },
+        redeemRewards() {
+            if(!this.splitFee.amount) {
+                this.$message.warning(this.$t('nodeMgmt.noRewards'))
+                return;
+            }
+            const tx = Ont.GovernanceTxBuilder.makeWithdrawFeeTx(
+                new Crypto.Address(this.stakeWallet.address),
+                new Crypto.Address(this.stakeWallet.address),
+                GAS_PRICE,
+                GAS_LIMIT
+            )
+            this.signVisible = true;
+            this.tx = tx;
+        },
     }
 }
 </script>

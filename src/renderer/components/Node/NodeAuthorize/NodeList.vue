@@ -1,36 +1,65 @@
 <style scoped>
 .block-clock {
     width:540px;
-    /* height:50px; */
+    height: 80px;
     margin:15px auto;
     border:1px solid #dddddd;
-    padding:20px 40px;
+}
+.countdown-img {
+    float: left;
+    height:80px;
+    line-height: 80px;
+}
+.countdown-img img {
+    width:60px;
+    height: 60px;
+}
+.countdown-text {
+    padding-right: 60px;
+    text-align: center;
+}
+.countdown-text p {
+    margin-bottom:10px;
+    font-family: 'AvenirNext-Medium';
+    color: #5E6369;
+    font-size: 16px;
+}
+.label {
+    font-size: 18px;
+    margin-left: 15px;
 }
 </style>
 <template>
     <div>
         <breadcrumb :current="$t('nodeMgmt.stakeAuthorization')" v-on:backEvent="handleRouteBack"></breadcrumb>
         <div class="block-clock">
-            <div></div>
             <div>
-                <p>{{$t('nodeMgmt.toNextRound')}}</p>
-                <div>
-                    <span>4319</span>
-                    <span>blocks</span>
+                <div class="countdown-img">
+                    <img src="../../../assets/countdown.svg" alt="">
+                </div>
+                <div class="countdown-text">
+                    <p>{{$t('nodeMgmt.toNextRound')}}</p>
+                    <span class="font-medium-black" style="font-size:20px;">{{countdown}}</span>
+                    <span class="font-medium label">blocks</span>
                 </div>
             </div>
         </div>
         <a-table :columns="columns"
-        :dataSource="data"
-        :customRow="customRow">
+        :dataSource="node_list"
+        >
+        <a slot="name" slot-scope="text" @click="handleNodeDetail(record)">{{text}}</a>
         <span slot="action" slot-scope="text, record">
-            <a-icon type="arrow-right" />
+            <a-icon type="arrow-right" @click="handleAuthorizeLogin(record)"/>
         </span>
+
         </a-table>
     </div>
 </template>
 <script>
 import Breadcrumb from '../../Breadcrumb'
+import {mapState} from 'vuex'
+const {BrowserWindow} = require('electron').remote;
+
 export default {
     name: 'NodeList',
     components: {
@@ -44,7 +73,8 @@ export default {
             },
             {
                 title: this.$t('nodeMgmt.name'),
-                dataIndex: 'name'
+                dataIndex: 'name',
+                scopedSlots: {customRender: 'name'}
             },
             {
                 title: this.$t('nodeMgmt.currentStake'),
@@ -55,43 +85,67 @@ export default {
                 dataIndex: 'process'
             },
             {
-                title: this.$t('nodeMgmt.changes'),
-                dataIndex: 'changes'
-            },
-            {
                 title: '',
                 key: 'action',
                 scopedSlots: {customRender:'action'}
             }
         ]
         const data = [
-            {rank:1, name: 'Node No1', currentStake: '444,333',process: '4.95%', changes:3},
-            {rank:2, name: 'Node No2', currentStake: '444,333',process: '4.95%', changes:3},
-            {rank:3, name: 'Node No3', currentStake: '444,333',process: '4.95%', changes:3},
-            {rank:4, name: 'Node No4', currentStake: '444,333',process: '4.95%', changes:3},
             
         ]
         return {
             columns,
-            data
+            intervalId:''
         }
     },
     mounted(){
         //loop to fetch data
+        this.$store.dispatch('fetchNodeList')
+        this.$store.dispatch('fetchBlockCountdown')
+        this.intervalId = setInterval(()=>{
+            this.$store.dispatch('fetchNodeList')
+            this.$store.dispatch('fetchBlockCountdown')
+        }, 5000)  
+    },
+    beforeDestroy(){
+        clearInterval(this.intervalId);
+    },
+    computed:{
+        ...mapState({
+            node_list: state => state.NodeAuthorization.node_list,
+            countdown: state => state.NodeAuthorization.countdown
+        })
     },
     methods: {
         handleRouteBack() {
             this.$router.go(-1);
         },
-        customRow(record) {
-            return {
-                on: {
-                    click: () => {
-                        this.$router.push({name: 'AuthorizeLogin'})
-                    }
-                }
-            }
-        }
+        handleAuthorizeLogin(record, item){
+            console.log(record)            
+            this.$store.commit('UPDATE_CURRENT_NODE', {current_node: record})
+            this.$router.push({name: 'AuthorizeLogin'})
+        },
+        handleNodeDetail(record) {
+            console.log('clicked')
+           let win = new BrowserWindow({width: 800, height: 600, center: true});
+            win.on('closed', () => {
+            win = null
+            })
+
+            // Load a remote URL
+            win.loadURL(url)
+        },
+        // customRow(record) {
+        //     return {
+        //         on: {
+        //             click: () => {
+        //                 console.log(record)
+        //                 this.$store.commit('UPDATE_CURRENT_NODE', {current_node: record})
+        //                 this.$router.push({name: 'AuthorizeLogin'})
+        //             }
+        //         }
+        //     }
+        // }
     }
 }
 </script>

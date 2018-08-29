@@ -188,8 +188,9 @@ export default {
                  ontid: this.stakeIdentity.ontid
              }
          }).then(res => {
+             this.$store.commit('UPDATE_STAKE_DETAIL', { detail:res.data})
              if(res.data.status) {
-                 this.$router.push({name: 'NodeStakeInfo'})
+                 this.$router.push({name: 'NodeStakeManagement'})
              } else {
                  this.$router.push({name: 'NodeStakeRegister'})
              }

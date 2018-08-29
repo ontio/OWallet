@@ -158,6 +158,16 @@ export default new Router({
       path: '/node/authorizeLogin',
       name: 'AuthorizeLogin',
       component: require('@/components/Node/NodeAuthorize/AuthorizeLogin').default
+    },
+    {
+      path: '/node/authorizationMgmt',
+      name: 'AuthorizationMgmt',
+      component: require('@/components/Node/NodeAuthorize/AuthorizationMgmt').default
+    },
+    {
+      path: '/node/newAuthorization',
+      name: 'NewAuthorization',
+      component: require('@/components/Node/NodeAuthorize/NewAuthorization').default
     }
   ]
 })

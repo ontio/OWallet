@@ -117,6 +117,13 @@ export default {
                 this.$message.error(this.$t('nodeStake.selectLedgerWallet'))
                 return;
             }
+            let stakeWallet = ''
+            if(this.payerWalletType === 'commonWallet' && this.payerWallet){
+                stakeWallet = this.payerWallet
+            } else {
+                stakeWallet = this.ledgerWallet
+            }
+            this.$store.commit('UPDATE_STAKE_WALLET', {stakeWallet: stakeWallet})             
             this.$router.push({name: 'AuthorizationMgmt'})
         }
     }
