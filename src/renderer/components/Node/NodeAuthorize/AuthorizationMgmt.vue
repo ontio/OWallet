@@ -97,7 +97,7 @@
                     </a-tooltip>
                     
                 </div>
-                <a-button type="primary" @click="newStakeAuthorization">{{$t('nodeMgmt.newStakeAuthorization')}}</a-button>
+                <a-button type="primary" class="btn-next new-stake" @click="newStakeAuthorization">{{$t('nodeMgmt.newStakeAuthorization')}}</a-button>
                 <div class="in-authorization">
                     <span class="label font-medium-black">{{$t('nodeMgmt.inAuthorization')}}: </span>
                     <span class="font-medium">{{authorizationInfo.inAuthorization}} ONT</span>

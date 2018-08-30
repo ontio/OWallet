@@ -446,6 +446,7 @@ export default {
     notLessTotalPos: '20 times of initial stake can not be less than the total authorization.',
     notThanMax: 'Allowed stake can not be more than the max stake limit.',
     refresh: 'Refresh',
-    totalStakeAmount: 'Total Authorization Amount'
+    totalStakeAmount: 'Total Authorization Amount',
+    blocks: 'Blocks'
   }
 }

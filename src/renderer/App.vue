@@ -100,7 +100,7 @@
 
   .btn-next,
   .btn-cancel {
-    width: 6.25rem !important;
+    min-width: 6.25rem !important;
     height: 2.13rem !important;
     font-family: AvenirNext-Medium !important;
     font-size: 14px !important;

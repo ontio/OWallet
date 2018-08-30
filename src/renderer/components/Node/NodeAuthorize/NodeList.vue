@@ -28,6 +28,13 @@
     font-size: 18px;
     margin-left: 15px;
 }
+.detail-link {
+    text-align: center;
+    cursor: pointer;
+}
+.detail-link i {
+    font-size:20px;
+}
 </style>
 <template>
     <div>
@@ -40,7 +47,7 @@
                 <div class="countdown-text">
                     <p>{{$t('nodeMgmt.toNextRound')}}</p>
                     <span class="font-medium-black" style="font-size:20px;">{{countdown}}</span>
-                    <span class="font-medium label">blocks</span>
+                    <span class="font-medium label">{{$t('nodeMgmt.blocks')}}</span>
                 </div>
             </div>
         </div>
@@ -48,9 +55,9 @@
         :dataSource="node_list"
         >
         <a slot="name" slot-scope="text" @click="handleNodeDetail(record)">{{text}}</a>
-        <span slot="action" slot-scope="text, record">
+        <div slot="action" slot-scope="text, record" class="detail-link">
             <a-icon type="arrow-right" @click="handleAuthorizeLogin(record)"/>
-        </span>
+        </div>
 
         </a-table>
     </div>
