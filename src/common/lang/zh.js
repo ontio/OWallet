@@ -282,7 +282,8 @@ export default {
   transfer: {
     inputValidAmount: '请输入有效的转账金额。',
     inputValidAddress: '请输入有效的转账地址。',
-    exceedBalance : '转账金额不能超余额'
+    exceedBalance : '转账金额不能超余额',
+    ongBalanceNotEnough: '您的ONG余额不足以支付转账和手续费。'
   },
   setting: {
     name: '设置',

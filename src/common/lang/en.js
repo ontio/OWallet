@@ -283,7 +283,8 @@ export default {
   transfer: {
     inputValidAmount: 'Please input valid transfer amount.',
     inputValidAddress: 'Please input valid receiver address.',
-    exceedBalance: 'Amount of transfer can not exceed your balance.'
+    exceedBalance: 'Amount of transfer can not exceed your balance.',
+    ongBalanceNotEnough: 'Your ONG balance is not enough for transfer and fee.'
   },
 
   setting: {

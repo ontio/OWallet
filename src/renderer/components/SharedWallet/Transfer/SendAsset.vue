@@ -145,7 +145,8 @@ export default {
             if(this.asset === 'ONT') {
                 this.amount = this.balance.ont;
             } else {
-                this.amount = this.balance.ong;
+                this.amount = this.balance.ong - this.gas;
+                this.validateAmount()
             }
         },
         cancel() {
@@ -159,6 +160,10 @@ export default {
             }
             if(!this.to || !this.validToAddress) {
                 this.$message.error(this.$t('transfer.inputValidAddress'))
+                return;
+            }
+            if(this.asset === 'ONG' && (this.gas + this.amount) > this.balance.ong) {
+                this.$message.error(this.$t('transfer.ongBalanceNotEnough'))
                 return;
             }
             if(this.amount && this.to) {
