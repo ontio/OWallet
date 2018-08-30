@@ -20,7 +20,7 @@ const mutations = {
     },
     DELETE_SHARED_WALLET(state, payload) {
         const normalWallet = state.SharedWallet.slice();
-        const index = normalWallet.findIndex((w) => w.address === payload.address)
+        const index = normalWallet.findIndex((w) => w.sharedWalletAddress === payload.address)
         normalWallet.splice(index, 1)
         state.SharedWallet = normalWallet;
     },

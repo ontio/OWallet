@@ -81,7 +81,7 @@
 
   .modal-content {
     width: 25rem;
-    height: 15rem;
+    height: 18rem;
     border-radius: 0;
   }
 

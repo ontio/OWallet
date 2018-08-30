@@ -163,14 +163,15 @@ export default {
     width:318px;
 }
 .delete-icon {
-    height: 34px;
-    width:34px;
+    height: 24px;
+    width:24px;
     /* display: inline-block; */
     background:url('../../../assets/delete.png') center center;
     background-size:contain;
     float: right;
     margin-right: 10px;
     cursor: pointer;
+    margin-top:3px;
 }
 .basic-pk-box {
     border:1px solid #dddddd;

@@ -1,27 +1,26 @@
 <template>
   <div>
     <ul class="nav nav-pills wallets-nav-pills" id="pills-tab" role="tablist">
-      <li class="nav-item">
-        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab"
-           aria-controls="pills-home" aria-selected="true">{{ $t('wallets.all') }}</a>
-      </li>
-      <li class="nav-item">
+      <li class="nav-item" @click="setActiveTab(1)">
         <a class="nav-link" id="pills-common-tab" data-toggle="pill" href="#pills-common" role="tab"
+          :class="activeTab == 1? 'active show' : ''"
            aria-controls="pills-common" aria-selected="false">{{ $t('wallets.common') }}</a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" @click="setActiveTab(2)">
         <a class="nav-link" id="pills-shared-tab" data-toggle="pill" href="#pills-shared" role="tab"
+          :class="activeTab == 2? 'active show' : ''"
            aria-controls="pills-shared" aria-selected="false">{{ $t('wallets.shared') }}</a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" @click="setActiveTab(3)">
         <a class="nav-link" id="pills-ledger-tab" data-toggle="pill" href="#pills-ledger" role="tab"
+          :class="activeTab == 3? 'active show' : ''"
            aria-controls="pills-ledger" aria-selected="false">{{ $t('wallets.ledger') }}</a>
       </li>
     </ul>
 
     <div class="tab-content" id="pills-tabContent">
 
-      <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+      <!-- <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
         <div class="d-flex flex-wrap align-content-start center">
           <div class="normalWallet" v-for="w in normalWallet" :key="w.address">
             <json-wallet-details :wallet="w"></json-wallet-details>
@@ -34,9 +33,9 @@
             <json-wallet-details :wallet="w"></json-wallet-details>
           </div>
         </div>
-      </div>
+      </div> -->
 
-      <div class="tab-pane fade" id="pills-common" role="tabpanel" aria-labelledby="pills-common-tab">
+      <div class="tab-pane fade" :class="activeTab == 1? 'active show' : ''" id="pills-common" role="tabpanel" aria-labelledby="pills-common-tab">
         <div class="d-flex flex-wrap align-content-start center">
           <div class="normalWallet" v-for="w in normalWallet" :key="w.address">
             <json-wallet-details :wallet="w"></json-wallet-details>
@@ -55,7 +54,7 @@
         </div>
       </div>
 
-      <div class="tab-pane fade" id="pills-shared" role="tabpanel" aria-labelledby="pills-shared-tab">
+      <div class="tab-pane fade" :class="activeTab == 2? 'active show' : ''" id="pills-shared" role="tabpanel" aria-labelledby="pills-shared-tab">
         <div class="d-flex flex-wrap align-content-start center">
           <div class="normalWallet" v-for="w in sharedWallet" :key="w.address">
             <shared-wallet-details :wallet="w"></shared-wallet-details>
@@ -74,7 +73,7 @@
         </div>
       </div>
 
-      <div class="tab-pane fade" id="pills-ledger" role="tabpanel" aria-labelledby="pills-ledger-tab">
+      <div class="tab-pane fade" :class="activeTab == 3? 'active show' : ''" id="pills-ledger" role="tabpanel" aria-labelledby="pills-ledger-tab">
         <div class="d-flex flex-wrap align-content-start center">
           <div class="ledger-help-link" @click="toLedgerHelp">
              {{$t('wallets.ledgerHelpLink')}}
@@ -110,10 +109,11 @@ const {BrowserWindow} = require('electron').remote
     data() {
       const net = localStorage.getItem('net')
       const network = net === 'TEST_NET' ? this.$t('common.testNet') : this.$t('common.mainNet');
-
+      const index = sessionStorage.getItem('Wallets_Tab') || 1;
       return {
         network: network,
         viewBtn: false,
+        activeTab: index
       }
     },
     computed: {
@@ -126,9 +126,6 @@ const {BrowserWindow} = require('electron').remote
     mounted() {
       this.$store.dispatch('fetchWalletsFromDb')
       this.isSetPath()
-      if(this.normalWallet.length === 0 && this.sharedWallet.length === 0 && this.hardwareWallet.length === 0) {
-        $('#pills-tab li:nth-child(2) a').tab('show')
-      }
     },
     methods: {
       isSetPath() {
@@ -144,6 +141,9 @@ const {BrowserWindow} = require('electron').remote
       },
       viewAllBtn(bool) {
         this.viewBtn = bool
+      },
+      setActiveTab(index) {
+        sessionStorage.setItem('Wallets_Tab', index);
       },
       toLedgerHelp() {
         let win = new BrowserWindow({width: 800, height: 600, center:true})
@@ -166,6 +166,7 @@ const {BrowserWindow} = require('electron').remote
 <style>
   .nav-item > a {
     color: #A5A7A9;
+    font-size:18px;
   }
 
   .nav-item > a:hover {
