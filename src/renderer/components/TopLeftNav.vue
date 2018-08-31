@@ -60,9 +60,11 @@
         const lang = localStorage.getItem('user_lang');
         let url = '';
         if (lang === 'zh') {
-          url = 'https://ontfans.io/?/article/36'
+          // url = 'https://ontfans.io/?/article/36'
+          url = 'https://medium.com/ontologynetwork/owallet-faq-7f4f96784253'
         } else {
-          url = 'https://ontfans.io/article_39.html'
+          // url = 'https://ontfans.io/?/article/39'
+          url = 'https://medium.com/ontology-cn/owallet%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98-d1b397c11662'          
         }
 
         let win = new BrowserWindow({width: 800, height: 600, center: true});
