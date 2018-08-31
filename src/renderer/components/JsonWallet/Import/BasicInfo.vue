@@ -1,3 +1,127 @@
+<style scoped>
+  .json-import-container {
+    width: 48rem;
+  }
+
+  .import-json-nav-pills > li.nav-item {
+    width: 25%;
+    text-align: center;
+    height: 2rem;
+    margin-bottom: 30px;
+    font-family: AvenirNext-Medium;
+    font-size: 14px;
+  }
+
+  .import-json-nav-pills > li.nav-item > a {
+    color: black;
+  }
+
+  .import-json-nav-pills .nav-link:hover {
+    color: #196BD8;
+  }
+
+  .import-json-nav-pills .nav-link.active {
+    color: #196BD8;
+    background-color: transparent;
+    border-radius: 0;
+    border-bottom: #196BD8 solid 1px;
+  }
+
+  .upload-dat-file {
+    margin-top: 25px;
+    position: relative;
+    display: inline-block;
+    background: #FBE45A;
+    border: 1px solid #FBE45A;
+    padding: 4px 12px;
+    overflow: hidden;
+    color: black !important;
+    text-decoration: none;
+    text-indent: 0;
+    line-height: 1.5rem;
+    height: 2.13rem;
+  }
+
+  .upload-dat-file input {
+    background: #FBE45A;
+    border: 1px solid #FBE45A;
+    color: black !important;;
+    position: absolute;
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    margin-top: 0;
+    opacity: 0;
+    line-height: 1.5rem;
+    height: 2.13rem;
+  }
+
+  .upload-dat-file input:hover,
+  .upload-dat-file:hover {
+    background: #FBE45A;
+    border-color: black;
+    color: black !important;;
+    text-decoration: none;
+    cursor: pointer !important;;
+  }
+
+  .input-wif {
+    margin-top: 30px;
+  }
+
+  .input-password {
+    margin-top: 30px;
+  }
+
+  .input-repassword {
+    margin-top: 6px;
+  }
+
+  .import-json-mnemonic {
+    width: 100%;
+    resize: none;
+    margin-top: 30px;
+    padding: 12px 20px;
+    border: 1px solid #DFE2E9;
+  }
+
+  textarea::-webkit-input-placeholder {
+    color: #C9CBCF;
+    font-family: AvenirNext-Regular;
+    font-size: 14px;
+  }
+
+  .basic-pk-btns {
+    position: fixed;
+    bottom: 0;
+    width: calc(100% - 4rem);
+    height: 85px;
+    left: 4rem;
+    background: #FFFFFF;
+    box-shadow: 0 -1px 6px 0 #F2F2F2;
+    z-index: 1000;
+  }
+
+  .basic-pk-btns button:first-child {
+    float: left;
+  }
+
+  .basic-pk-btns :nth-child(2) {
+    float: right;
+  }
+
+  .basic-pk-btns :nth-child(3) {
+    float: right;
+    margin-right: 20px;
+  }
+
+  .error-input {
+    border-color: red;
+  }
+  .nav-item a {
+    font-size:14px !important;
+  }
+</style>
 <template>
   <div class="container json-import-container">
     <ul class="nav nav-pills import-json-nav-pills" id="pills-tab" role="tablist">
@@ -301,125 +425,4 @@
   }
 </script>
 
-<style>
-  .json-import-container {
-    width: 48rem;
-  }
-
-  .import-json-nav-pills > li.nav-item {
-    width: 25%;
-    text-align: center;
-    height: 2rem;
-    margin-bottom: 30px;
-    font-family: AvenirNext-Medium;
-    font-size: 14px;
-  }
-
-  .import-json-nav-pills > li.nav-item > a {
-    color: black;
-  }
-
-  .import-json-nav-pills .nav-link:hover {
-    color: #196BD8;
-  }
-
-  .import-json-nav-pills .nav-link.active {
-    color: #196BD8;
-    background-color: transparent;
-    border-radius: 0;
-    border-bottom: #196BD8 solid 1px;
-  }
-
-  .upload-dat-file {
-    margin-top: 25px;
-    position: relative;
-    display: inline-block;
-    background: #FBE45A;
-    border: 1px solid #FBE45A;
-    padding: 4px 12px;
-    overflow: hidden;
-    color: black !important;
-    text-decoration: none;
-    text-indent: 0;
-    line-height: 1.5rem;
-    height: 2.13rem;
-  }
-
-  .upload-dat-file input {
-    background: #FBE45A;
-    border: 1px solid #FBE45A;
-    color: black !important;;
-    position: absolute;
-    font-size: 100px;
-    right: 0;
-    top: 0;
-    margin-top: 0;
-    opacity: 0;
-    line-height: 1.5rem;
-    height: 2.13rem;
-  }
-
-  .upload-dat-file input:hover,
-  .upload-dat-file:hover {
-    background: #FBE45A;
-    border-color: black;
-    color: black !important;;
-    text-decoration: none;
-    cursor: pointer !important;;
-  }
-
-  .input-wif {
-    margin-top: 30px;
-  }
-
-  .input-password {
-    margin-top: 30px;
-  }
-
-  .input-repassword {
-    margin-top: 6px;
-  }
-
-  .import-json-mnemonic {
-    width: 100%;
-    resize: none;
-    margin-top: 30px;
-    padding: 12px 20px;
-    border: 1px solid #DFE2E9;
-  }
-
-  textarea::-webkit-input-placeholder {
-    color: #C9CBCF;
-    font-family: AvenirNext-Regular;
-    font-size: 14px;
-  }
-
-  .basic-pk-btns {
-    position: fixed;
-    bottom: 0;
-    width: calc(100% - 4rem);
-    height: 85px;
-    left: 4rem;
-    background: #FFFFFF;
-    box-shadow: 0 -1px 6px 0 #F2F2F2;
-    z-index: 1000;
-  }
-
-  .basic-pk-btns button:first-child {
-    float: left;
-  }
-
-  .basic-pk-btns :nth-child(2) {
-    float: right;
-  }
-
-  .basic-pk-btns :nth-child(3) {
-    float: right;
-    margin-right: 20px;
-  }
-
-  .error-input {
-    border-color: red;
-  }
-</style>
 

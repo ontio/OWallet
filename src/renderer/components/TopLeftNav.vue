@@ -8,32 +8,32 @@
       
 
         <router-link :to="{name:'Wallets'}" active-class="nav-wallets-active">
-          <a-tooltip placement="right" title="Wallet">
+          <a-tooltip placement="right" :title="$t('setting.wallets')">
               <div class="nav-wallets"></div>
           </a-tooltip>
         </router-link>
 
       <router-link :to="{name:'Identitys'}" active-class="nav-accounts-active">
-        <a-tooltip placement="right" title="ONT ID">
+        <a-tooltip placement="right" :title="$t('setting.ontid')">
               <div class="nav-accounts"></div>
           </a-tooltip>
       </router-link>
 
       <router-link :to="{name:'Setting'}" active-class="nav-setting-active">
-        <a-tooltip placement="right" title="Setting">
+        <a-tooltip placement="right" :title="$t('setting.settings')">
                <div class="setting-img"></div>
           </a-tooltip>
       </router-link>
 
       <router-link :to="{name:'NodeManagement'}" active-class="node-stake-active" >
-        <a-tooltip placement="right" title="Node Stake">
+        <a-tooltip placement="right" :title="$t('setting.nodeStake')">
                <div class="node-stake-icon"></div>
           </a-tooltip>
       </router-link>
 
         <!-- <div class="setting-img" alt="" @click="toSetting"></div> -->
       
-      <a-tooltip placement="right" title="Help">
+      <a-tooltip placement="right" :title="$t('setting.help')">
                <div class="nav-help" @click="toHelp"></div>
           </a-tooltip>
 

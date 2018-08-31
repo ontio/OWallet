@@ -125,18 +125,18 @@ export default {
     pubKeyN: 'Public Key',
     signatureSchemeN: 'Signature Scheme',
     wif: 'WIF',
-    mnemonic: 'Mnemonic',
+    mnemonic: 'Mnemonic phrase',
     privateKey: 'Private Key',
     backupWallet: 'Please make a backup of these data and save the .dat file.',
     createSuccess:'Create individual wallet successfully.',
     download: "Download .dat",
-    privateKey64Hex: 'Private Key(64 Hex)',
-    priavteKeywif: 'Private Key(WIF)',
-    keystoreDat: 'Keystore(.dat)'
+    privateKey64Hex: 'Private key (64 Hex)',
+    priavteKeywif: 'Private key (WIF)',
+    keystoreDat: 'Keystore (.dat)'
   },
 
   importJsonWallet: {
-    datFile: 'Select the file',
+    datFile: 'Select file',
     selectedDatFile: 'Selected file: ',
     dat: '.dat File',
     datImportPassword: 'Password to decrypt keystore(.dat)',
@@ -144,8 +144,8 @@ export default {
     basicInfo: 'Basic info',
     label: 'Name of Individual Wallet',
     wif: 'WIF',
-    wifTip: 'Please enter 52-bit WIF text',
-    privateKeyTip: 'Please enter the private key with 64 bytes HEX format',
+    wifTip: 'Please enter 52-bit WIF',
+    privateKeyTip: 'Please enter private key with 64 byte hex format',
     datPassword: 'New Password',
     datRePassword: 'Repeat New password',
     password: 'Password',
@@ -155,7 +155,7 @@ export default {
     back: 'Back',
     details: '',
     confirmInfo: 'Confirm info',
-    mnemonic: 'Please use space to separate the mnemonic words.',
+    mnemonic: 'Please use a space to separate each of the words.',
     privateKey: 'Private Key',
     createSuccess: 'Create Individual wallet successfully!'
   },
@@ -298,7 +298,12 @@ export default {
     pathTit: 'Path: ',
     path: 'Save keystore file path',
     change: 'Change',
-    setNetworkSuccess: 'The network has been set to '
+    setNetworkSuccess: 'The network has been set to ',
+    wallets: 'Wallets',
+    ontid: 'ONT ID',
+    nodeStake: 'Node Stake',
+    help: 'Help',
+    settings: 'Settings'
   },
 
   ledgerWallet: {

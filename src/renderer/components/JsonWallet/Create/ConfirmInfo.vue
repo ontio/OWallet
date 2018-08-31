@@ -4,7 +4,7 @@
     <p><b>{{$t('createJsonWallet.addressN')}}: </b> {{ address }}</p>
     <p><b>{{$t('createJsonWallet.pubKeyN')}}: </b> {{publicKey}}</p>
     <p><b>{{$t('createJsonWallet.signatureSchemeN')}}: </b> SHA256withECDSA </p>
-    <p><b>{{$t('createJsonWallet.wif')}}: </b> {{wif}}</p>
+    <p><b>{{$t('createJsonWallet.priavteKeywif')}}: </b> {{wif}}</p>
 
     <div class="backup-text">
       <p class="font-medium-black">
