@@ -123,7 +123,7 @@ const {BrowserWindow} = require('electron').remote
         hardwareWallet: state => state.Wallets.HardwareWallet
       })
     },
-    mounted() {
+    mounted() {    
       this.$store.dispatch('fetchWalletsFromDb')
       this.isSetPath()
     },

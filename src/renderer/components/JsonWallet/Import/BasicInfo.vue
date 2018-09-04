@@ -223,6 +223,17 @@
         <span class="v-validate-span-errors" v-show="errors.has('mnemonicRePassword')">{{ errors.first('mnemonicRePassword') }}</span>
       </div>
     </div>
+    <a-modal 
+        :title="$t('importJsonWallet.confirmImport')"
+        :visible="confirmModal"
+        @ok="handleConfirmOk"
+        @cancel="handleConfirmCancel">
+          <div>
+              <p class="font-medium">
+                {{$t('importJsonWallet.confirmImportExist')}}
+              </p>
+          </div>
+    </a-modal>
 
     <div class="basic-pk-btns">
       <div class="btn-container">
@@ -266,7 +277,9 @@
         mnemonicLabel: '',
         mnemonicPassword: '',
         mnemonicRePassword: '',
-        mnemonicAccount: ''
+        mnemonicAccount: '',
+        confirmModal: false,
+        updatingWallet: ''
       }
     },
     beforeDestroy() {
@@ -409,17 +422,37 @@
         dbService.insert(wallet, function (err, newDoc) {
           if (err) {
             console.log(err)
-            that.$message.warning('The wallet already exists in local.')
+            // that.$message.warning('The wallet already exists in local.')
+            that.$store.dispatch('hideLoadingModals')
+            that.confirmModal = true;
+            that.updatingWallet = wallet;
             return;
           }
           // console.log(newDoc)
           that.$store.commit('INIT_JSON_WALLET')
-          that.$message.success('Import wallet succeessfully!')
+          that.$message.success(that.$t('importJsonWallet.success'))
           that.$router.push({name: 'Wallets'})
         })
       },
       cancel() {
         this.$router.push({name: 'Wallets'})
+      },
+      handleConfirmOk() {
+        if(this.updatingWallet) {
+          dbService.update({address: this.updatingWallet.address}, {$set:{wallet: this.updatingWallet.wallet}}, {}, 
+          (err,numReplaced) => {
+            if(err) {
+              this.$message.error(this.$t('importJsonWallet.saveDbFailed'))
+              return;
+            }
+            this.$store.commit('INIT_JSON_WALLET')
+            this.$message.success(this.$t('importJsonWallet.success'))
+            this.$router.push({name: 'Wallets'})
+          })
+        }
+      },
+      handleConfirmCancel() {
+        this.confirmModal = false;
       }
     }
   }
