@@ -73,10 +73,10 @@
 </template>
 
 <script>
-import Breadcrumb from "../Breadcrumb";
+import Breadcrumb from "../../Breadcrumb";
 import { mapState } from "vuex";
 import axios from 'axios'
-import {ONT_PASS_NODE, ONT_PASS_NODE_PRD, ONT_PASS_URL} from '../../../core/consts'
+import {ONT_PASS_NODE, ONT_PASS_NODE_PRD, ONT_PASS_URL} from '../../../../core/consts'
 export default {
   name: "NodeStakeIntro",
   data() {
@@ -141,8 +141,7 @@ export default {
     handleRouteBack() {
       this.$router.go(-1);
     },
-    next() {
-        // this.$router.push({ name: "NodeStakeView" });        
+    next() {     
         if(!this.stakeIdentity) {
             this.$message.error(this.$t('nodeStake.selectIdentity'))
             return;
@@ -175,7 +174,6 @@ export default {
          }
      }).then(res => {
          if(res.data.QualifiedState === 0) {
-             localStorage.setItem('StakeOntid', this.stakeIdentity.ontid);
              this.$store.commit('UPDATE_STAKE_IDENTITY', {stakeIdentity: this.stakeIdentity})
              this.$store.commit('UPDATE_STAKE_WALLET', {stakeWallet: stakeWallet})             
          } else if(res.data.QualifiedState === 1) {
@@ -190,8 +188,9 @@ export default {
                  ontid: this.stakeIdentity.ontid
              }
          }).then(res => {
+             this.$store.commit('UPDATE_STAKE_DETAIL', { detail:res.data})
              if(res.data.status) {
-                 this.$router.push({name: 'NodeStakeInfo'})
+                 this.$router.push({name: 'NodeStakeManagement'})
              } else {
                  this.$router.push({name: 'NodeStakeRegister'})
              }

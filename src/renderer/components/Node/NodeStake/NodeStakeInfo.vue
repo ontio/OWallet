@@ -1,7 +1,8 @@
 <style scoped>
 .nodeStake-container {
   width: 540px;
-  margin: 20px auto;
+  margin: 0px auto;
+  padding-top:20px;
 }
 .detail-item {
   margin-bottom: 15px;
@@ -43,10 +44,32 @@
     flex-direction: row;
     justify-content: space-between;
 }
+.initPos-btns {
+    margin:10px auto;
+    width:540px;
+}
+.initPos-btns button {
+    margin-right: 20px;
+}
+.add-initPos-btn {
+    width: 180px;
+    height: 36px;
+    border-radius: 0;
+    background: #FBE45A;
+    padding: 0;
+    font-family: AvenirNext-Medium;
+    font-size: 14px;
+    color: #5E6369;
+    border: none;
+    margin-bottom:15px;
+  }
+  .add-pos-input {
+    width:200px;
+  }
 </style>
 <template>
     <div >
-        <breadcrumb  :current="$t('nodeStake.nodeStake')" v-on:backEvent="handleRouteBack"></breadcrumb>
+        <breadcrumb  v-if="!breadcrumb" :current="$t('nodeStake.nodeStake')" v-on:backEvent="handleRouteBack"></breadcrumb>
         <div class="nodeStake-container">
             <div>
                 <a-steps progressDot :current="current">
@@ -89,7 +112,13 @@
             </div>
             <div class="detail-item">
                 <p class="font-medium-black" for="">{{$t('nodeStake.stakeQuantity')}}</p>
-                <p>{{detail.stakequantity}}</p>
+                <p>{{current_peer.initPos}}</p>
+            </div>
+            <div class="initPos-btns" v-if="showPosBtn">
+                    <a-button class="add-initPos-btn" @click="handleAddInitPos">{{$t('nodeMgmt.addInitPos')}}</a-button>
+                    <a-button class="add-initPos-btn" @click="handleReduceInitPos"
+                    v-if="current_peer.initPos> detail.commitmentquantity"
+                    >{{$t('nodeMgmt.reduceInitPos')}}</a-button>                    
             </div>
         </div>
         <div class="footer-btns">
@@ -105,8 +134,35 @@
                 <a-button @click="handleNewStake" class="btn-next" v-if="detail.status ===6 || detail.status ===1">{{$t('nodeStake.newStake')}}</a-button>
                 
             </div>
-            
         </div>
+
+        <a-modal 
+            :title="$t('nodeMgmt.addInitPos')"
+            :visible="addPosVisible"
+            @ok="handleAddPosOk"
+            @cancel="handleAddPosCancel">
+            <div>
+                <div>
+                    <span class="label font-medium-black">{{$t('nodeMgmt.amountToAdd')}}: </span>
+                    <a-input class="input add-pos-input" :class="validAddPos? '': 'error-input'"
+                    v-model="addPos" @change="validateAddPos"></a-input> ONT
+                </div>
+            </div>
+        </a-modal>
+
+        <a-modal 
+            :title="$t('nodeMgmt.reduceInitPos')"
+            :visible="reducePosVisible"
+            @ok="handleReducePosOk"
+            @cancel="handleReducePosCancel">
+            <div>
+                <div>
+                    <span class="label font-medium-black">{{$t('nodeMgmt.amountToReduce')}}: </span>
+                    <a-input class="input add-pos-input" :class="validReducePos? '': 'error-input'"
+                    v-model="reducePos" @change="validateReducePos"></a-input> ONT
+                </div>
+            </div>
+        </a-modal>
 
         <a-modal 
         :title="$t('nodeStake.signWithWallet')"
@@ -127,11 +183,11 @@
 </template>
 
 <script>
-import Breadcrumb from "../Breadcrumb";
+import Breadcrumb from "../../Breadcrumb";
 import { mapState } from "vuex";
 import { Crypto, TransactionBuilder, utils } from "ontology-ts-sdk";
-import {legacySignWithLedger} from '../../../core/ontLedger'
-
+import {legacySignWithLedger} from '../../../../core/ontLedger'
+import {varifyPositiveInt, getNodeUrl} from '../../../../core/utils.js'
 import axios from "axios";
 import {
   ONT_PASS_NODE,
@@ -140,36 +196,31 @@ import {
   GAS_PRICE,
   GAS_LIMIT,
   DEFAULT_SCRYPT
-} from "../../../core/consts";
+} from "../../../../core/consts";
 
 export default {
   name: "NodeStakeInfo",
+  props: ['showPosBtn','breadcrumb'],
   components: {
     Breadcrumb
   },
   data() {
-    const nodeStakeOntid = localStorage.getItem("nodeStakeOntid") || "";
     return {
-      nodeStakeOntid,
       localOntid: [],
       intervalId: "",
       interval: 5000,
       refundClicked: false,
-    //   detail: {
-    //     ontid: "did:ont:AKbC3ZaSBQ1GuNKsbcqWxi3uL2oyf9F8vK",
-    //     stakewalletaddress: "AazEvfQPcQ2GEFFPLF1ZLwQ7K5jDn81hve",
-    //     publickey:
-    //       "035384561673e76c7e3003e705e4aa7aee67714c8b68d62dd1fb3221f48c5d3da0",
-    //     contract: "testcontractname",
-    //     commitmentquantity: 100000,
-    //     stakequantity: 10,
-    //     transactionhash:
-    //       "364a945fc0e0fbbb05b09ededbbf4b22e1357653c924341cc210906cbd5305e0",
-    //     status: 3
-    //   },
       walletPassModal: false,
       walletPassword: "",
-      tx: ""
+      tx: "",
+
+      addPosVisible: false,
+      addPos: 0,
+      validAddPos: true,
+      reducePosVisible: false,
+      reducePos: 0,
+      validReducePos: true,
+      isDelegateSendTx:true
     };
   },
   mounted() {
@@ -178,8 +229,12 @@ export default {
       this.$store.dispatch('getLedgerStatus')
     }
     this.$store.dispatch("fetchStakeDetail", this.stakeIdentity.ontid);
+    this.$store.dispatch('fetchPeerItem', this.detail.publickey);
+    this.$store.dispatch('fetchPosLimit')
     const intervalId = setInterval(() => {
       this.$store.dispatch("fetchStakeDetail", this.stakeIdentity.ontid);
+      this.$store.dispatch('fetchPeerItem', this.detail.publickey);
+      this.$store.dispatch('fetchPosLimit')
     }, this.interval);
     this.intervalId = intervalId
   },
@@ -195,6 +250,8 @@ export default {
       ledgerPk : state => state.LedgerConnector.publicKey,
       ledgerWallet: state => state.LedgerConnector.ledgerWallet,
       detail: state => state.NodeStake.detail,
+      current_peer: state => state.NodeAuthorization.current_peer,
+      posLimit: state => state.NodeAuthorization.posLimit,
       // detail: state => state.NodeStake.detail
       status1: state => state.NodeStake.status1,
       status2: state => state.NodeStake.status2,
@@ -214,6 +271,7 @@ export default {
     handleWalletSignCancel() {
       this.tx = "";
       this.walletPassModal = false;
+      this.walletPassword = '';
     },
     handleWalletSignOK() {
       const tx = this.tx;
@@ -242,7 +300,11 @@ export default {
           return;
         }
         TransactionBuilder.signTransaction(tx, pri);
-        this.delegateSendTx(tx);
+        if(this.isDelegateSendTx) {
+          this.delegateSendTx(tx);
+        } else {
+          this.sendTx(tx);
+        }
       } else {
         //ledger sign
         if (this.ledgerWallet.address) {
@@ -258,7 +320,11 @@ export default {
               const sign = "01" + res; //ECDSAwithSHA256
               txSig.sigData = [sign];
               tx.sigs = [txSig];
-              this.delegateSendTx(tx);
+              if(this.isDelegateSendTx) {
+                this.delegateSendTx(tx);
+              } else {
+                this.sendTx(tx);
+              }
             },
             err => {
               this.sending = false;
@@ -297,6 +363,34 @@ export default {
         this.refundClicked = false;
       }, 5000)
     },
+    sendTx(tx){
+        const url = getNodeUrl();
+        const restClient = new Ont.RestClient(url);
+        restClient.sendRawTransaction(tx.serialize()).then(res => {
+        console.log(res)
+        this.isDelegateSendTx = true;
+        this.walletPassModal = false;
+        this.walletPassword = '';
+        this.$store.dispatch("hideLoadingModals");
+        if (res.Error === 0) {
+            this.$message.success(this.$t('common.transSentSuccess'))
+        } else if (res.Error === -1) {
+            this.$message.error(this.$t('common.ongNoEnough'))
+            return;
+        } else {
+            this.$message.error(res.Result)
+            return;
+        }
+        this.$emit('txSent')
+        const title = this.$t('common.transSentSuccess')
+        setTimeout(() => {
+            this.$success({
+                title: title,
+                content: 'Transaction hash: ' + utils.reverseHex(tx.getHash())
+            })
+        }, 100)
+        })
+    },
     handleRecall() {
       const userAddr = new Crypto.Address(this.stakeWallet.address);
       const peerPubkey = this.detail.publickey;
@@ -331,6 +425,80 @@ export default {
     },
     handleNewStake() {
       this.$router.push({ name: "NodeStakeRegister" });
+    },
+    handleAddInitPos() {
+      this.addPosVisible = true;
+    },
+    handleReduceInitPos() {
+      this.reducePosVisible = true;
+    },
+    validateAddPos() {
+      if(this.addPos && !varifyPositiveInt(this.addPos)) {
+        this.validAddPos = false;
+        return;
+      }
+      this.validAddPos = true;
+    },
+    validateReducePos() {
+      if(this.reducePos && !varifyPositiveInt(this.reducePos)) {
+        this.validReducePos = false;
+        return;
+      }
+      if(this.current_peer.totalPos === 0 && (this.current_peer.initPos - this.reducePos) <  detail.commitmentquantity) {
+        this.validReducePos = false;
+        this.$message.error(this.$t('nodeMgmt.notThanCommitment'))
+        return;
+      }
+      if(this.current_peer.totalPos && (this.current_peer.initPos - this.reducePos)* this.posLimit < this.current_peer.totalPos ) {
+        this.validaReducePos = false;
+        this.$message.error(this.$t('nodeMgmt.notLessTotalPos'))        
+        return;
+      }
+      this.validReducePos = true;
+    },
+    handleAddPosOk() {
+      if(!this.validAddPos) {
+        this.$message.error(this.$t('nodeMgmt.invalidInput'))
+        return;
+      }
+      this.addPosVisible = false;
+      const userAddr = new Crypto.Address(this.stakeWallet.address);      
+      const tx = Ont.GovernanceTxBuilder.makeAddInitPosTx(
+        this.detail.publickey,
+        userAddr,
+        parseInt(this.addPos),
+        userAddr,
+        GAS_PRICE,
+        GAS_LIMIT
+      )
+      this.tx = tx;
+      this.walletPassModal = true;
+      this.isDelegateSendTx = false;
+    },
+    handleAddPosCancel() {
+      this.addPosVisible = false;
+    },
+    handleReducePosOk() {
+      if(!this.validReducePos) {
+        this.$message.error(this.$t('nodeMgmt.invalidInput'))
+        return;
+      }
+      this.reducePosVisible = false;
+      const userAddr = new Crypto.Address(this.stakeWallet.address);      
+      const tx = Ont.GovernanceTxBuilder.makeReduceInitPosTx(
+        this.detail.publickey,
+        userAddr,
+        parseInt(this.reducePos),
+        userAddr,
+        GAS_PRICE,
+        GAS_LIMIT
+      )
+      this.tx = tx;
+      this.walletPassModal = true;
+      this.isDelegateSendTx = false;
+    },
+    handleReducePosCancel() {
+      this.reducePosVisible = false;
     }
   }
 };

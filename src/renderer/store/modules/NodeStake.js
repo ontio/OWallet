@@ -145,6 +145,7 @@ const actions = {
             commit('UPDATE_STAKE_DETAIL', { detail:res.data})
             const status = getStatus(res.data.status);
             commit('UPDATE_STAKE_STATUS', status)
+            return res.data;
         })
         // const status = getStatus(2);
         // commit('UPDATE_STAKE_STATUS', status)

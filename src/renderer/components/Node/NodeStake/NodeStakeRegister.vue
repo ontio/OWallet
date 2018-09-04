@@ -102,12 +102,12 @@
 </template>
 
 <script>
-import Breadcrumb from "../Breadcrumb";
+import Breadcrumb from "../../Breadcrumb";
 import { mapState } from "vuex";
-import { GAS_PRICE, GAS_LIMIT, TEST_NET, MAIN_NET, ONT_PASS_NODE, ONT_PASS_NODE_PRD, ONT_PASS_URL, DEFAULT_SCRYPT } from "../../../core/consts";
+import { GAS_PRICE, GAS_LIMIT, TEST_NET, MAIN_NET, ONT_PASS_NODE, ONT_PASS_NODE_PRD, ONT_PASS_URL, DEFAULT_SCRYPT } from "../../../../core/consts";
 import { Crypto, TransactionBuilder, RestClient, utils } from "ontology-ts-sdk";
 import axios from 'axios'
-import {legacySignWithLedger} from '../../../core/ontLedger'
+import {legacySignWithLedger} from '../../../../core/ontLedger'
 
 export default {
   name: "NodeStakeRegister",
@@ -118,7 +118,6 @@ export default {
     this.$store.dispatch('stopGetLedgerStatus')
   },
   data() {
-    const nodeStakeOntid = localStorage.getItem("nodeStakeOntid") || "";
     const net = localStorage.getItem('net');
     let url = ''
     if (net === 'TEST_NET') {
@@ -127,7 +126,6 @@ export default {
         url = MAIN_NET + ':20334'
     }
     return {
-      nodeStakeOntid,
       localOntid: [],
       stakeQuantity: 0,
       ontidPassModal: false,

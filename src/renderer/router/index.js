@@ -80,7 +80,7 @@ export default new Router({
       component: require('@/components/SharedWallet/SharedWalletDetail').default,
       children: [
         {
-          path: '/sharedWallet/home',
+          path: 'home',
           name: 'SHaredWalletHome',
           component: require('@/components/SharedWallet/SharedWalletHome').default,
         },
@@ -120,19 +120,54 @@ export default new Router({
       component: require('@/components/CommonWallet/CommonTokenSwap').default
     },
     {
-      path: '/nodeStakeIntro',
+      path: '/node/nodeStakeIntro',
       name: 'NodeStakeIntro',
-      component: require('@/components/NodeStake/NodeStakeIntro').default
+      component: require('@/components/Node/NodeStake/NodeStakeIntro').default
     },
     {
-      path: '/nodeStakeRegister',
+      path: '/node/nodeStakeRegister',
       name: 'NodeStakeRegister',
-      component: require('@/components/NodeStake/NodeStakeRegister').default
+      component: require('@/components/Node/NodeStake/NodeStakeRegister').default
     },
     {
-      path: '/nodeStakeInfo',
+      path: '/node/nodeStakeInfo',
       name: 'NodeStakeInfo',
-      component: require('@/components/NodeStake/NodeStakeInfo').default
+      component: require('@/components/Node/NodeStake/NodeStakeInfo').default
+    },
+    {
+      path: '/node',
+      name: 'NodeManagement',
+      component: require('@/components/Node/Node').default
+    },
+    {
+      path: '/node/nodeLogin',
+      name: 'NodeLogin',
+      component: require('@/components/Node/NodeManagement/NodeLogin').default
+    },
+    {
+      path: '/node/nodeStakeMgmt',
+      name: 'NodeStakeManagement',
+      component: require('@/components/Node/NodeManagement/NodeStakeManagement').default
+    },
+    {
+      path: '/node/nodeList',
+      name: 'NodeList',
+      component: require('@/components/Node/NodeAuthorize/NodeList').default
+    },
+    {
+      path: '/node/authorizeLogin',
+      name: 'AuthorizeLogin',
+      component: require('@/components/Node/NodeAuthorize/AuthorizeLogin').default
+    },
+    {
+      path: '/node/authorizationMgmt',
+      name: 'AuthorizationMgmt',
+      component: require('@/components/Node/NodeAuthorize/AuthorizationMgmt').default
+    },
+    {
+      path: '/node/newAuthorization',
+      name: 'NewAuthorization',
+      component: require('@/components/Node/NodeAuthorize/NewAuthorization').default
     }
   ]
 })

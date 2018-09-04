@@ -57390,6 +57390,12 @@ class TransactionNeo {
         const ProgramSha2562 = crypto_js__WEBPACK_IMPORTED_MODULE_0__["SHA256"](crypto_js__WEBPACK_IMPORTED_MODULE_0__["enc"].Hex.parse(ProgramSha256)).toString();
         return ProgramSha2562;
     }
+    getSignContent() {
+        return this.getHashData();
+    }
+    serializeUnsignedData() {
+        return this.getHashData();
+    }
     getHashData() {
         return this.serializeUnsigned();
     }
@@ -57655,16 +57661,16 @@ class RestClient {
             return res.data;
         });
     }
-    /**
+    /** Deprecated
      * Get the generation time for each block.
      * If the blockchain node runs in vbft, the result is null.
      */
-    getGenerateBlockTime() {
-        const url = this.url + _urlConsts__WEBPACK_IMPORTED_MODULE_3__["default"].Url_get_generate_block_time;
-        return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get(url).then(res => {
-            return res.data;
-        });
-    }
+    // getGenerateBlockTime(): Promise<any> {
+    //     const url = this.url + UrlConsts.Url_get_generate_block_time;
+    //     return axios.get(url).then((res) => {
+    //         return res.data;
+    //     });
+    // }
     /**
      * Get the nodes count of the blockchain.
      */
@@ -57983,16 +57989,16 @@ class RpcClient {
             return res.data;
         });
     }
-    /**
+    /** Deprecated
      * Get the generation time for each block.
      * If the blockchain node runs in vbft, the result is null cause the time is not fixed.
      */
-    getGenerateBlockTime() {
-        const req = this.makeRequest('getgenerateblocktime');
-        return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(this.url, req).then(res => {
-            return res.data;
-        });
-    }
+    // getGenerateBlockTime(): Promise<any> {
+    //     const req = this.makeRequest('getgenerateblocktime');
+    //     return axios.post(this.url, req).then((res) => {
+    //         return res.data;
+    //     });
+    // }
     /**
      * Get the nodes count.
      */
@@ -58134,11 +58140,59 @@ class RpcClient {
 
 /***/ }),
 
+/***/ "./src/network/websocket/deferred.ts":
+/*!*******************************************!*\
+  !*** ./src/network/websocket/deferred.ts ***!
+  \*******************************************/
+/*! exports provided: Deferred */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Deferred", function() { return Deferred; });
+/*
+ * Copyright (C) 2018 The ontology Authors
+ * This file is part of The ontology library.
+ *
+ * The ontology is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * The ontology is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
+ */
+// tslint:disable:variable-name
+class Deferred {
+    constructor() {
+        this.resolve = value => {
+            this._resolve(value);
+        };
+        this.reject = reason => {
+            this._reject(reason);
+        };
+        this._promise = new Promise((resolve, reject) => {
+            this._resolve = resolve;
+            this._reject = reject;
+        });
+    }
+    get promise() {
+        return this._promise;
+    }
+}
+
+/***/ }),
+
 /***/ "./src/network/websocket/websocketBuilder.ts":
 /*!***************************************************!*\
   !*** ./src/network/websocket/websocketBuilder.ts ***!
   \***************************************************/
-/*! exports provided: sendHeartBeat, sendSubscribe, sendRawTransaction, getRawTransaction, getRawTransactionJson, getGenerateBlockTime, getNodeCount, getBlockHeight, getBlock, getBlockJson, getBalance, getUnboundOng, getContract, getContractJson, getSmartCodeEvent, getBlockHeightByTxHash, getStorage, getMerkleProof, getAllowance */
+/*! exports provided: sendHeartBeat, sendSubscribe, sendRawTransaction, getRawTransaction, getRawTransactionJson, getNodeCount, getBlockHeight, getBlock, getBlockJson, getBalance, getUnboundOng, getContract, getContractJson, getSmartCodeEvent, getBlockHeightByTxHash, getStorage, getMerkleProof, getAllowance */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -58148,7 +58202,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sendRawTransaction", function() { return sendRawTransaction; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getRawTransaction", function() { return getRawTransaction; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getRawTransactionJson", function() { return getRawTransactionJson; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getGenerateBlockTime", function() { return getGenerateBlockTime; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getNodeCount", function() { return getNodeCount; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getBlockHeight", function() { return getBlockHeight; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getBlock", function() { return getBlock; });
@@ -58229,13 +58282,13 @@ function getRawTransactionJson(txHash) {
     };
     return param;
 }
-function getGenerateBlockTime() {
-    const param = {
-        Action: 'getgenerateblocktime',
-        Version: '1.0.0'
-    };
-    return param;
-}
+// export function getGenerateBlockTime() {
+//     const param = {
+//         Action: 'getgenerateblocktime',
+//         Version: '1.0.0'
+//     };
+//     return param;
+// }
 function getNodeCount() {
     const param = {
         Action: 'getconnectioncount',
@@ -58386,8 +58439,9 @@ function getAllowance(asset, from, to) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WebsocketClient", function() { return WebsocketClient; });
 /* harmony import */ var _consts__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../consts */ "./src/consts.ts");
-/* harmony import */ var _websocketBuilder__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./websocketBuilder */ "./src/network/websocket/websocketBuilder.ts");
-/* harmony import */ var _websocketSender__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./websocketSender */ "./src/network/websocket/websocketSender.ts");
+/* harmony import */ var _deferred__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./deferred */ "./src/network/websocket/deferred.ts");
+/* harmony import */ var _websocketBuilder__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./websocketBuilder */ "./src/network/websocket/websocketBuilder.ts");
+/* harmony import */ var _websocketSender__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./websocketSender */ "./src/network/websocket/websocketSender.ts");
 /*
  * Copyright (C) 2018 The ontology Authors
  * This file is part of The ontology library.
@@ -58408,6 +58462,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /**
  * Websocket client.
  *
@@ -58416,13 +58471,15 @@ __webpack_require__.r(__webpack_exports__);
 class WebsocketClient {
     constructor(url = _consts__WEBPACK_IMPORTED_MODULE_0__["TEST_ONT_URL"].SOCKET_URL, debug = false, autoClose = true) {
         this.autoClose = autoClose;
-        this.sender = new _websocketSender__WEBPACK_IMPORTED_MODULE_2__["WebsocketSender"](url, debug);
+        this.promises = new Map();
+        this.sender = new _websocketSender__WEBPACK_IMPORTED_MODULE_3__["WebsocketSender"](url, debug);
+        this.sender.addListener(this.notifyListener.bind(this));
     }
     /**
      * Send heart beat request
      */
     async sendHeartBeat() {
-        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_1__["sendHeartBeat"]();
+        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_2__["sendHeartBeat"]();
         return this.send(raw);
     }
     /**
@@ -58433,7 +58490,7 @@ class WebsocketClient {
      * @param subscribeBlockTxHashes
      */
     async sendSubscribe(subscribeEvent = false, subscribeJsonBlock = false, subscribeRawBlock = false, subscribeBlockTxHashes = false) {
-        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_1__["sendSubscribe"](subscribeEvent, subscribeJsonBlock, subscribeRawBlock, subscribeBlockTxHashes);
+        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_2__["sendSubscribe"](subscribeEvent, subscribeJsonBlock, subscribeRawBlock, subscribeBlockTxHashes);
         return this.send(raw);
     }
     /**
@@ -58443,21 +58500,18 @@ class WebsocketClient {
      * @param waitNotify Decides if client waits for notify from blockchain before closing
      */
     async sendRawTransaction(hexData, preExec = false, waitNotify = false) {
-        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_1__["sendRawTransaction"](hexData, preExec);
+        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_2__["sendRawTransaction"](hexData, preExec);
+        const sendResult = await this.send(raw, this.autoClose && !waitNotify);
+        if (sendResult.Error === -1) {
+            throw new Error('FAILED_TRANSACTION');
+        }
         if (waitNotify) {
-            return new Promise((resolve, reject) => {
-                this.sender.addListener(result => {
-                    if (result.Action === 'Notify') {
-                        if (this.autoClose) {
-                            this.sender.close();
-                        }
-                        resolve(result);
-                    }
-                });
-                this.send(raw, false);
-            });
+            const txHash = sendResult.Result;
+            const deferred = new _deferred__WEBPACK_IMPORTED_MODULE_1__["Deferred"]();
+            this.promises.set(txHash, deferred);
+            return deferred.promise;
         } else {
-            return this.send(raw);
+            return sendResult;
         }
     }
     /**
@@ -58466,7 +58520,7 @@ class WebsocketClient {
      * @param txHash Reversed transaction hash
      */
     async getRawTransaction(txHash) {
-        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_1__["getRawTransaction"](txHash);
+        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_2__["getRawTransaction"](txHash);
         return this.send(raw);
     }
     /**
@@ -58475,29 +58529,29 @@ class WebsocketClient {
      * @param txHash Reversed transaction hash
      */
     async getRawTransactionJson(txHash) {
-        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_1__["getRawTransactionJson"](txHash);
+        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_2__["getRawTransactionJson"](txHash);
         return this.send(raw);
     }
-    /**
+    /** Deprecated
      * Get the generation time for each block.
      * If the blockchain node runs in vbft, the result is null.
      */
-    async getGenerateBlockTime() {
-        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_1__["getGenerateBlockTime"]();
-        return this.send(raw);
-    }
+    // async getGenerateBlockTime(): Promise<any> {
+    //     const raw = Builder.getGenerateBlockTime();
+    //     return this.send(raw);
+    // }
     /**
      * Get Nodes count
      */
     async getNodeCount() {
-        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_1__["getNodeCount"]();
+        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_2__["getNodeCount"]();
         return this.send(raw);
     }
     /**
      * Get current block height
      */
     async getBlockHeight() {
-        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_1__["getBlockHeight"]();
+        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_2__["getBlockHeight"]();
         return this.send(raw);
     }
     /**
@@ -58506,7 +58560,7 @@ class WebsocketClient {
      * @param value Block's height or hash
      */
     async getBlock(value) {
-        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_1__["getBlock"](value);
+        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_2__["getBlock"](value);
         return this.send(raw);
     }
     /**
@@ -58515,7 +58569,7 @@ class WebsocketClient {
      * @param value Block's height or hash
      */
     async getBlockJson(value) {
-        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_1__["getBlockJson"](value);
+        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_2__["getBlockJson"](value);
         return this.send(raw);
     }
     /**
@@ -58524,7 +58578,7 @@ class WebsocketClient {
      * @param address Address
      */
     async getBalance(address) {
-        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_1__["getBalance"](address);
+        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_2__["getBalance"](address);
         return this.send(raw);
     }
     /**
@@ -58533,7 +58587,7 @@ class WebsocketClient {
      * @param address Address
      */
     async getUnboundong(address) {
-        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_1__["getUnboundOng"](address);
+        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_2__["getUnboundOng"](address);
         return this.send(raw);
     }
     /**
@@ -58542,7 +58596,7 @@ class WebsocketClient {
      * @param hash Contract's code hash.
      */
     async getContract(hash) {
-        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_1__["getContract"](hash);
+        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_2__["getContract"](hash);
         return this.send(raw);
     }
     /**
@@ -58551,7 +58605,7 @@ class WebsocketClient {
      * @param hash Contract's code hash
      */
     async getContractJson(hash) {
-        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_1__["getContractJson"](hash);
+        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_2__["getContractJson"](hash);
         return this.send(raw);
     }
     /**
@@ -58561,7 +58615,7 @@ class WebsocketClient {
      * @param value Reversed transaction hash or block's height
      */
     async getSmartCodeEvent(value) {
-        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_1__["getSmartCodeEvent"](value);
+        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_2__["getSmartCodeEvent"](value);
         return this.send(raw);
     }
     /**
@@ -58569,7 +58623,7 @@ class WebsocketClient {
      * @param hash Reversed transaction hash
      */
     async getBlockHeightByTxHash(hash) {
-        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_1__["getBlockHeightByTxHash"](hash);
+        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_2__["getBlockHeightByTxHash"](hash);
         return this.send(raw);
     }
     /**
@@ -58578,7 +58632,7 @@ class WebsocketClient {
      * @param key Key of stored value
      */
     async getStorage(codeHash, key) {
-        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_1__["getStorage"](codeHash, key);
+        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_2__["getStorage"](codeHash, key);
         return this.send(raw);
     }
     /**
@@ -58586,7 +58640,7 @@ class WebsocketClient {
      * @param hash Reversed transaction hash
      */
     async getMerkleProof(hash) {
-        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_1__["getMerkleProof"](hash);
+        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_2__["getMerkleProof"](hash);
         return this.send(raw);
     }
     /**
@@ -58596,7 +58650,7 @@ class WebsocketClient {
      * @param to Address of allowance's receiver.
      */
     async getAllowance(asset, from, to) {
-        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_1__["getAllowance"](asset, from, to);
+        const raw = _websocketBuilder__WEBPACK_IMPORTED_MODULE_2__["getAllowance"](asset, from, to);
         return this.send(raw);
     }
     /**
@@ -58625,6 +58679,24 @@ class WebsocketClient {
      */
     async send(raw, close = this.autoClose) {
         return this.sender.send(raw, close);
+    }
+    notifyListener(result) {
+        if (result.Action === 'Notify') {
+            const txHash = result.Result.TxHash;
+            if (txHash !== undefined) {
+                const promise = this.promises.get(txHash);
+                if (promise !== undefined) {
+                    this.promises.delete(txHash);
+                    promise.resolve(result);
+                } else {
+                    // tslint:disable-next-line:no-console
+                    console.warn('Received Notify event for unknown transaction');
+                }
+                if (this.autoClose) {
+                    this.sender.close();
+                }
+            }
+        }
     }
 }
 
@@ -59767,6 +59839,10 @@ class SDK {
     }
     static exportIdentityToQrcode(identityDataStr, callback) {
         const obj = _identity__WEBPACK_IMPORTED_MODULE_7__["Identity"].parseJson(identityDataStr);
+        let salt = obj.controls[0].salt;
+        if (!Object(_utils__WEBPACK_IMPORTED_MODULE_20__["isBase64"])(salt)) {
+            salt = Buffer.from(salt, 'hex').toString('base64');
+        }
         const result = {
             type: 'I',
             label: obj.label,
@@ -59778,7 +59854,7 @@ class SDK {
                 dkLen: 64
             },
             key: obj.controls[0].encryptedKey.key,
-            salt: obj.controls[0].salt,
+            salt,
             address: obj.controls[0].address.toBase58(),
             parameters: {
                 curve: 'secp256r1'
@@ -60579,7 +60655,7 @@ class Parameter {
         return this.value;
     }
     setValue(value) {
-        if (value.type === this.type && value.name === this.name && value.value) {
+        if (value.type === this.type && value.name === this.name && value.value != null) {
             this.value = value.value;
             return true;
         }
@@ -60722,12 +60798,11 @@ __webpack_require__.r(__webpack_exports__);
 /*!*******************************************************************!*\
   !*** ./src/smartcontract/nativevm/governanceContractTxBuilder.ts ***!
   \*******************************************************************/
-/*! exports provided: GOVERNANCE_CONTRACT, makeRegisterCandidateTx, makeUnregisterCandidateTx, makeApproveCandidateTx, makeRejectCandidateTx, makeVoteForPeerTx, makeUnvoteForPeerTx, makeWithdrawTx, makeQuitNodeTx, getPeerPoolMap */
+/*! exports provided: makeRegisterCandidateTx, makeUnregisterCandidateTx, makeApproveCandidateTx, makeRejectCandidateTx, makeVoteForPeerTx, makeUnvoteForPeerTx, makeWithdrawTx, makeQuitNodeTx, makeChangeAuthorizationTx, makeSetPeerCostTx, makeWithdrawFeeTx, makeAuthorizeForPeerTx, makeUnauthorizeForPeerTx, makeAddInitPosTx, makeReduceInitPosTx, getAttributes, getSplitFeeAddress, getAuthorizeInfo, getGovernanceView, getPeerPoolMap, getGlobalParam, GovernanceView, PeerPoolItem, PeerAttributes, SplitFeeAddress, AuthorizeInfo, GlobalParam */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GOVERNANCE_CONTRACT", function() { return GOVERNANCE_CONTRACT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "makeRegisterCandidateTx", function() { return makeRegisterCandidateTx; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "makeUnregisterCandidateTx", function() { return makeUnregisterCandidateTx; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "makeApproveCandidateTx", function() { return makeApproveCandidateTx; });
@@ -60736,14 +60811,33 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "makeUnvoteForPeerTx", function() { return makeUnvoteForPeerTx; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "makeWithdrawTx", function() { return makeWithdrawTx; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "makeQuitNodeTx", function() { return makeQuitNodeTx; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "makeChangeAuthorizationTx", function() { return makeChangeAuthorizationTx; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "makeSetPeerCostTx", function() { return makeSetPeerCostTx; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "makeWithdrawFeeTx", function() { return makeWithdrawFeeTx; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "makeAuthorizeForPeerTx", function() { return makeAuthorizeForPeerTx; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "makeUnauthorizeForPeerTx", function() { return makeUnauthorizeForPeerTx; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "makeAddInitPosTx", function() { return makeAddInitPosTx; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "makeReduceInitPosTx", function() { return makeReduceInitPosTx; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAttributes", function() { return getAttributes; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getSplitFeeAddress", function() { return getSplitFeeAddress; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAuthorizeInfo", function() { return getAuthorizeInfo; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getGovernanceView", function() { return getGovernanceView; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPeerPoolMap", function() { return getPeerPoolMap; });
-/* harmony import */ var _crypto__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../crypto */ "./src/crypto/index.ts");
-/* harmony import */ var _error__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../error */ "./src/error.ts");
-/* harmony import */ var _network_rest_restClient__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../network/rest/restClient */ "./src/network/rest/restClient.ts");
-/* harmony import */ var _transaction_transactionBuilder__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../transaction/transactionBuilder */ "./src/transaction/transactionBuilder.ts");
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../utils */ "./src/utils.ts");
-/* harmony import */ var _abi_nativeVmParamsBuilder__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../abi/nativeVmParamsBuilder */ "./src/smartcontract/abi/nativeVmParamsBuilder.ts");
-/* harmony import */ var _abi_struct__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../abi/struct */ "./src/smartcontract/abi/struct.ts");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getGlobalParam", function() { return getGlobalParam; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GovernanceView", function() { return GovernanceView; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PeerPoolItem", function() { return PeerPoolItem; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PeerAttributes", function() { return PeerAttributes; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SplitFeeAddress", function() { return SplitFeeAddress; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthorizeInfo", function() { return AuthorizeInfo; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GlobalParam", function() { return GlobalParam; });
+/* harmony import */ var _common_bigInt__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../common/bigInt */ "./src/common/bigInt.ts");
+/* harmony import */ var _crypto__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../crypto */ "./src/crypto/index.ts");
+/* harmony import */ var _error__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../error */ "./src/error.ts");
+/* harmony import */ var _network_rest_restClient__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../network/rest/restClient */ "./src/network/rest/restClient.ts");
+/* harmony import */ var _transaction_transactionBuilder__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../transaction/transactionBuilder */ "./src/transaction/transactionBuilder.ts");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../utils */ "./src/utils.ts");
+/* harmony import */ var _abi_nativeVmParamsBuilder__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../abi/nativeVmParamsBuilder */ "./src/smartcontract/abi/nativeVmParamsBuilder.ts");
+/* harmony import */ var _abi_struct__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../abi/struct */ "./src/smartcontract/abi/struct.ts");
 /*
 * Copyright (C) 2018 The ontology Authors
 * This file is part of The ontology library.
@@ -60768,8 +60862,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 const GOVERNANCE_CONTRACT = '0000000000000000000000000000000000000007';
-const contractAddress = new _crypto__WEBPACK_IMPORTED_MODULE_0__["Address"](GOVERNANCE_CONTRACT);
+const PEER_ATTRIBUTES = 'peerAttributes';
+const SPLIT_FEE_ADDRESS = 'splitFeeAddress';
+const AUTHORIZE_INFO_POOL = 'voteInfoPool';
+const GLOBAL_PARAM = 'globalParam';
+const contractAddress = new _crypto__WEBPACK_IMPORTED_MODULE_1__["Address"](GOVERNANCE_CONTRACT);
 /* TODO: Test */
 // tslint:disable:no-console
 /**
@@ -60785,14 +60884,14 @@ const contractAddress = new _crypto__WEBPACK_IMPORTED_MODULE_0__["Address"](GOVE
  * @param gasLimit Gas limit
  */
 function makeRegisterCandidateTx(ontid, peerPubKey, keyNo, userAddr, initPos, payer, gasPrice, gasLimit) {
-    Object(_utils__WEBPACK_IMPORTED_MODULE_4__["varifyPositiveInt"])(initPos);
+    Object(_utils__WEBPACK_IMPORTED_MODULE_5__["varifyPositiveInt"])(initPos);
     if (ontid.substr(0, 3) === 'did') {
-        ontid = Object(_utils__WEBPACK_IMPORTED_MODULE_4__["str2hexstr"])(ontid);
+        ontid = Object(_utils__WEBPACK_IMPORTED_MODULE_5__["str2hexstr"])(ontid);
     }
-    const struct = new _abi_struct__WEBPACK_IMPORTED_MODULE_6__["default"]();
-    struct.add(Object(_utils__WEBPACK_IMPORTED_MODULE_4__["str2hexstr"])(peerPubKey), userAddr.serialize(), initPos, ontid, keyNo);
-    const params = Object(_abi_nativeVmParamsBuilder__WEBPACK_IMPORTED_MODULE_5__["buildNativeCodeScript"])([struct]);
-    return Object(_transaction_transactionBuilder__WEBPACK_IMPORTED_MODULE_3__["makeNativeContractTx"])('registerCandidate', params, contractAddress, gasPrice, gasLimit, payer);
+    const struct = new _abi_struct__WEBPACK_IMPORTED_MODULE_7__["default"]();
+    struct.add(Object(_utils__WEBPACK_IMPORTED_MODULE_5__["str2hexstr"])(peerPubKey), userAddr.serialize(), initPos, ontid, keyNo);
+    const params = Object(_abi_nativeVmParamsBuilder__WEBPACK_IMPORTED_MODULE_6__["buildNativeCodeScript"])([struct]);
+    return Object(_transaction_transactionBuilder__WEBPACK_IMPORTED_MODULE_4__["makeNativeContractTx"])('registerCandidate', params, contractAddress, gasPrice, gasLimit, payer);
 }
 /**
  *
@@ -60803,10 +60902,10 @@ function makeRegisterCandidateTx(ontid, peerPubKey, keyNo, userAddr, initPos, pa
  * @param gasLimit Gas limit
  */
 function makeUnregisterCandidateTx(userAddr, peerPubKey, payer, gasPrice, gasLimit) {
-    const struct = new _abi_struct__WEBPACK_IMPORTED_MODULE_6__["default"]();
-    struct.add(Object(_utils__WEBPACK_IMPORTED_MODULE_4__["str2hexstr"])(peerPubKey), userAddr.serialize());
-    const params = Object(_abi_nativeVmParamsBuilder__WEBPACK_IMPORTED_MODULE_5__["buildNativeCodeScript"])([struct]);
-    return Object(_transaction_transactionBuilder__WEBPACK_IMPORTED_MODULE_3__["makeNativeContractTx"])('unRegisterCandidate', params, contractAddress, gasPrice, gasLimit, payer);
+    const struct = new _abi_struct__WEBPACK_IMPORTED_MODULE_7__["default"]();
+    struct.add(Object(_utils__WEBPACK_IMPORTED_MODULE_5__["str2hexstr"])(peerPubKey), userAddr.serialize());
+    const params = Object(_abi_nativeVmParamsBuilder__WEBPACK_IMPORTED_MODULE_6__["buildNativeCodeScript"])([struct]);
+    return Object(_transaction_transactionBuilder__WEBPACK_IMPORTED_MODULE_4__["makeNativeContractTx"])('unRegisterCandidate', params, contractAddress, gasPrice, gasLimit, payer);
 }
 /**
  * Creates transaction to approve candidate
@@ -60816,10 +60915,10 @@ function makeUnregisterCandidateTx(userAddr, peerPubKey, payer, gasPrice, gasLim
  * @param gasLimit Gas limit
  */
 function makeApproveCandidateTx(peerPubKey, payer, gasPrice, gasLimit) {
-    const struct = new _abi_struct__WEBPACK_IMPORTED_MODULE_6__["default"]();
-    struct.add(Object(_utils__WEBPACK_IMPORTED_MODULE_4__["str2hexstr"])(peerPubKey));
-    const params = Object(_abi_nativeVmParamsBuilder__WEBPACK_IMPORTED_MODULE_5__["buildNativeCodeScript"])([struct]);
-    return Object(_transaction_transactionBuilder__WEBPACK_IMPORTED_MODULE_3__["makeNativeContractTx"])('approveCandidate', params, contractAddress, gasPrice, gasLimit, payer);
+    const struct = new _abi_struct__WEBPACK_IMPORTED_MODULE_7__["default"]();
+    struct.add(Object(_utils__WEBPACK_IMPORTED_MODULE_5__["str2hexstr"])(peerPubKey));
+    const params = Object(_abi_nativeVmParamsBuilder__WEBPACK_IMPORTED_MODULE_6__["buildNativeCodeScript"])([struct]);
+    return Object(_transaction_transactionBuilder__WEBPACK_IMPORTED_MODULE_4__["makeNativeContractTx"])('approveCandidate', params, contractAddress, gasPrice, gasLimit, payer);
 }
 /**
  * Creates transaction to reject candidate
@@ -60829,10 +60928,10 @@ function makeApproveCandidateTx(peerPubKey, payer, gasPrice, gasLimit) {
  * @param gasLimit Gas limit
  */
 function makeRejectCandidateTx(peerPubKey, payer, gasPrice, gasLimit) {
-    const struct = new _abi_struct__WEBPACK_IMPORTED_MODULE_6__["default"]();
-    struct.add(Object(_utils__WEBPACK_IMPORTED_MODULE_4__["str2hexstr"])(peerPubKey));
-    const params = Object(_abi_nativeVmParamsBuilder__WEBPACK_IMPORTED_MODULE_5__["buildNativeCodeScript"])([struct]);
-    return Object(_transaction_transactionBuilder__WEBPACK_IMPORTED_MODULE_3__["makeNativeContractTx"])('rejectCandidate', params, contractAddress, gasPrice, gasLimit, payer);
+    const struct = new _abi_struct__WEBPACK_IMPORTED_MODULE_7__["default"]();
+    struct.add(Object(_utils__WEBPACK_IMPORTED_MODULE_5__["str2hexstr"])(peerPubKey));
+    const params = Object(_abi_nativeVmParamsBuilder__WEBPACK_IMPORTED_MODULE_6__["buildNativeCodeScript"])([struct]);
+    return Object(_transaction_transactionBuilder__WEBPACK_IMPORTED_MODULE_4__["makeNativeContractTx"])('rejectCandidate', params, contractAddress, gasPrice, gasLimit, payer);
 }
 /**
  * Creates transaction to vote for some peers.
@@ -60847,21 +60946,20 @@ function makeRejectCandidateTx(peerPubKey, payer, gasPrice, gasLimit) {
  */
 function makeVoteForPeerTx(userAddr, peerPubKeys, posList, payer, gasPrice, gasLimit) {
     if (peerPubKeys.length !== posList.length) {
-        throw _error__WEBPACK_IMPORTED_MODULE_1__["ERROR_CODE"].INVALID_PARAMS;
+        throw _error__WEBPACK_IMPORTED_MODULE_2__["ERROR_CODE"].INVALID_PARAMS;
     }
-    const struct = new _abi_struct__WEBPACK_IMPORTED_MODULE_6__["default"]();
+    const struct = new _abi_struct__WEBPACK_IMPORTED_MODULE_7__["default"]();
     struct.add(userAddr.serialize());
     struct.add(peerPubKeys.length);
     for (const p of peerPubKeys) {
-        struct.add(Object(_utils__WEBPACK_IMPORTED_MODULE_4__["str2hexstr"])(p));
+        struct.add(Object(_utils__WEBPACK_IMPORTED_MODULE_5__["str2hexstr"])(p));
     }
     struct.add(posList.length);
     for (const n of posList) {
         struct.add(n);
     }
-    const params = Object(_abi_nativeVmParamsBuilder__WEBPACK_IMPORTED_MODULE_5__["buildNativeCodeScript"])([struct]);
-    console.log('params: ' + params);
-    return Object(_transaction_transactionBuilder__WEBPACK_IMPORTED_MODULE_3__["makeNativeContractTx"])('voteForPeer', params, contractAddress, gasPrice, gasLimit, payer);
+    const params = Object(_abi_nativeVmParamsBuilder__WEBPACK_IMPORTED_MODULE_6__["buildNativeCodeScript"])([struct]);
+    return Object(_transaction_transactionBuilder__WEBPACK_IMPORTED_MODULE_4__["makeNativeContractTx"])('voteForPeer', params, contractAddress, gasPrice, gasLimit, payer);
 }
 /**
  * User unvotes peer nodes
@@ -60874,20 +60972,20 @@ function makeVoteForPeerTx(userAddr, peerPubKeys, posList, payer, gasPrice, gasL
  */
 function makeUnvoteForPeerTx(userAddr, peerPubKeys, posList, payer, gasPrice, gasLimit) {
     if (peerPubKeys.length !== posList.length) {
-        throw _error__WEBPACK_IMPORTED_MODULE_1__["ERROR_CODE"].INVALID_PARAMS;
+        throw _error__WEBPACK_IMPORTED_MODULE_2__["ERROR_CODE"].INVALID_PARAMS;
     }
-    const struct = new _abi_struct__WEBPACK_IMPORTED_MODULE_6__["default"]();
+    const struct = new _abi_struct__WEBPACK_IMPORTED_MODULE_7__["default"]();
     struct.add(userAddr.serialize());
     struct.add(peerPubKeys.length);
     for (const p of peerPubKeys) {
-        struct.add(Object(_utils__WEBPACK_IMPORTED_MODULE_4__["str2hexstr"])(p));
+        struct.add(Object(_utils__WEBPACK_IMPORTED_MODULE_5__["str2hexstr"])(p));
     }
     struct.add(posList.length);
     for (const n of posList) {
         struct.add(n);
     }
-    const params = Object(_abi_nativeVmParamsBuilder__WEBPACK_IMPORTED_MODULE_5__["buildNativeCodeScript"])([struct]);
-    return Object(_transaction_transactionBuilder__WEBPACK_IMPORTED_MODULE_3__["makeNativeContractTx"])('unVoteForPeer', params, contractAddress, gasPrice, gasLimit, payer);
+    const params = Object(_abi_nativeVmParamsBuilder__WEBPACK_IMPORTED_MODULE_6__["buildNativeCodeScript"])([struct]);
+    return Object(_transaction_transactionBuilder__WEBPACK_IMPORTED_MODULE_4__["makeNativeContractTx"])('unVoteForPeer', params, contractAddress, gasPrice, gasLimit, payer);
 }
 /**
  * Withdraw the unvote ONT
@@ -60898,46 +60996,205 @@ function makeUnvoteForPeerTx(userAddr, peerPubKeys, posList, payer, gasPrice, ga
  */
 function makeWithdrawTx(userAddr, peerPubKeys, withdrawList, payer, gasPrice, gasLimit) {
     if (peerPubKeys.length !== withdrawList.length) {
-        throw _error__WEBPACK_IMPORTED_MODULE_1__["ERROR_CODE"].INVALID_PARAMS;
+        throw _error__WEBPACK_IMPORTED_MODULE_2__["ERROR_CODE"].INVALID_PARAMS;
     }
-    const struct = new _abi_struct__WEBPACK_IMPORTED_MODULE_6__["default"]();
+    const struct = new _abi_struct__WEBPACK_IMPORTED_MODULE_7__["default"]();
     struct.add(userAddr.serialize());
     struct.add(peerPubKeys.length);
     for (const p of peerPubKeys) {
-        struct.add(Object(_utils__WEBPACK_IMPORTED_MODULE_4__["str2hexstr"])(p));
+        struct.add(Object(_utils__WEBPACK_IMPORTED_MODULE_5__["str2hexstr"])(p));
     }
     struct.add(withdrawList.length);
     for (const w of withdrawList) {
         struct.add(w);
     }
-    const params = Object(_abi_nativeVmParamsBuilder__WEBPACK_IMPORTED_MODULE_5__["buildNativeCodeScript"])([struct]);
-    return Object(_transaction_transactionBuilder__WEBPACK_IMPORTED_MODULE_3__["makeNativeContractTx"])('withdraw', params, contractAddress, gasPrice, gasLimit, payer);
+    const params = Object(_abi_nativeVmParamsBuilder__WEBPACK_IMPORTED_MODULE_6__["buildNativeCodeScript"])([struct]);
+    return Object(_transaction_transactionBuilder__WEBPACK_IMPORTED_MODULE_4__["makeNativeContractTx"])('withdraw', params, contractAddress, gasPrice, gasLimit, payer);
 }
 /** Quit node register
  * Need two signatures if userAddr and payer are not the same
  */
 function makeQuitNodeTx(userAddr, peerPubKey, payer, gasPrice, gasLimit) {
-    const struct = new _abi_struct__WEBPACK_IMPORTED_MODULE_6__["default"]();
-    struct.add(Object(_utils__WEBPACK_IMPORTED_MODULE_4__["str2hexstr"])(peerPubKey), userAddr.serialize());
-    const params = Object(_abi_nativeVmParamsBuilder__WEBPACK_IMPORTED_MODULE_5__["buildNativeCodeScript"])([struct]);
-    return Object(_transaction_transactionBuilder__WEBPACK_IMPORTED_MODULE_3__["makeNativeContractTx"])('quitNode', params, contractAddress, gasPrice, gasLimit, payer);
+    const struct = new _abi_struct__WEBPACK_IMPORTED_MODULE_7__["default"]();
+    struct.add(Object(_utils__WEBPACK_IMPORTED_MODULE_5__["str2hexstr"])(peerPubKey), userAddr.serialize());
+    const params = Object(_abi_nativeVmParamsBuilder__WEBPACK_IMPORTED_MODULE_6__["buildNativeCodeScript"])([struct]);
+    return Object(_transaction_transactionBuilder__WEBPACK_IMPORTED_MODULE_4__["makeNativeContractTx"])('quitNode', params, contractAddress, gasPrice, gasLimit, payer);
+}
+/**
+ * Peer change the status of authorization
+ * @param peerPubKey Peer's public key
+ * @param userAddr User's address
+ * @param maxAuthorize Allowed max amount of stake authorization
+ * @param payer Payer of the transaction fee
+ * @param gasPrice Gas price
+ * @param gasLimit Gas limit
+ */
+function makeChangeAuthorizationTx(peerPubKey, userAddr, maxAuthorize, payer, gasPrice, gasLimit) {
+    const struct = new _abi_struct__WEBPACK_IMPORTED_MODULE_7__["default"]();
+    struct.add(Object(_utils__WEBPACK_IMPORTED_MODULE_5__["str2hexstr"])(peerPubKey), userAddr.serialize(), maxAuthorize);
+    const params = Object(_abi_nativeVmParamsBuilder__WEBPACK_IMPORTED_MODULE_6__["buildNativeCodeScript"])([struct]);
+    return Object(_transaction_transactionBuilder__WEBPACK_IMPORTED_MODULE_4__["makeNativeContractTx"])('changeMaxAuthorization', params, contractAddress, gasPrice, gasLimit, payer);
+}
+/**
+ * Update allocation proportion of peer
+ * @param peerPubKey
+ * @param userAddr
+ * @param peerCost
+ * @param payer
+ * @param gasPrice
+ * @param gasLimit
+ */
+function makeSetPeerCostTx(peerPubKey, userAddr, peerCost, payer, gasPrice, gasLimit) {
+    const struct = new _abi_struct__WEBPACK_IMPORTED_MODULE_7__["default"]();
+    struct.add(Object(_utils__WEBPACK_IMPORTED_MODULE_5__["str2hexstr"])(peerPubKey), userAddr.serialize(), peerCost);
+    const params = Object(_abi_nativeVmParamsBuilder__WEBPACK_IMPORTED_MODULE_6__["buildNativeCodeScript"])([struct]);
+    return Object(_transaction_transactionBuilder__WEBPACK_IMPORTED_MODULE_4__["makeNativeContractTx"])('setPeerCost', params, contractAddress, gasPrice, gasLimit, payer);
+}
+/**
+ * Withdraw fee to user's address
+ * @param userAddr User's address
+ * @param payer
+ * @param gasPrice
+ * @param gasLimit
+ */
+function makeWithdrawFeeTx(userAddr, payer, gasPrice, gasLimit) {
+    const struct = new _abi_struct__WEBPACK_IMPORTED_MODULE_7__["default"]();
+    struct.add(userAddr.serialize());
+    const params = Object(_abi_nativeVmParamsBuilder__WEBPACK_IMPORTED_MODULE_6__["buildNativeCodeScript"])([struct]);
+    return Object(_transaction_transactionBuilder__WEBPACK_IMPORTED_MODULE_4__["makeNativeContractTx"])('withdrawFee', params, contractAddress, gasPrice, gasLimit, payer);
+}
+/**
+ * User authorize some peers
+ * @param userAddr
+ * @param peerPubKeyList
+ * @param posList
+ * @param payer
+ * @param gasPrice
+ * @param gasLimit
+ */
+function makeAuthorizeForPeerTx(userAddr, peerPubKeyList, posList, payer, gasPrice, gasLimit) {
+    const struct = new _abi_struct__WEBPACK_IMPORTED_MODULE_7__["default"]();
+    struct.add(userAddr.serialize());
+    struct.add(peerPubKeyList.length);
+    for (const p of peerPubKeyList) {
+        struct.add(Object(_utils__WEBPACK_IMPORTED_MODULE_5__["str2hexstr"])(p));
+    }
+    struct.add(posList.length);
+    for (const w of posList) {
+        struct.add(w);
+    }
+    const params = Object(_abi_nativeVmParamsBuilder__WEBPACK_IMPORTED_MODULE_6__["buildNativeCodeScript"])([struct]);
+    return Object(_transaction_transactionBuilder__WEBPACK_IMPORTED_MODULE_4__["makeNativeContractTx"])('authorizeForPeer', params, contractAddress, gasPrice, gasLimit, payer);
+}
+function makeUnauthorizeForPeerTx(userAddr, peerPubKeyList, posList, payer, gasPrice, gasLimit) {
+    const struct = new _abi_struct__WEBPACK_IMPORTED_MODULE_7__["default"]();
+    struct.add(userAddr.serialize());
+    struct.add(peerPubKeyList.length);
+    for (const p of peerPubKeyList) {
+        struct.add(Object(_utils__WEBPACK_IMPORTED_MODULE_5__["str2hexstr"])(p));
+    }
+    struct.add(posList.length);
+    for (const w of posList) {
+        struct.add(w);
+    }
+    const params = Object(_abi_nativeVmParamsBuilder__WEBPACK_IMPORTED_MODULE_6__["buildNativeCodeScript"])([struct]);
+    return Object(_transaction_transactionBuilder__WEBPACK_IMPORTED_MODULE_4__["makeNativeContractTx"])('unAuthorizeForPeer', params, contractAddress, gasPrice, gasLimit, payer);
+}
+function makeAddInitPosTx(peerPubkey, userAddr, pos, payer, gasPrice, gasLimit) {
+    const struct = new _abi_struct__WEBPACK_IMPORTED_MODULE_7__["default"]();
+    struct.add(Object(_utils__WEBPACK_IMPORTED_MODULE_5__["str2hexstr"])(peerPubkey), userAddr.serialize(), pos);
+    const params = Object(_abi_nativeVmParamsBuilder__WEBPACK_IMPORTED_MODULE_6__["buildNativeCodeScript"])([struct]);
+    return Object(_transaction_transactionBuilder__WEBPACK_IMPORTED_MODULE_4__["makeNativeContractTx"])('addInitPos', params, contractAddress, gasPrice, gasLimit, payer);
+}
+function makeReduceInitPosTx(peerPubkey, userAddr, pos, payer, gasPrice, gasLimit) {
+    const struct = new _abi_struct__WEBPACK_IMPORTED_MODULE_7__["default"]();
+    struct.add(Object(_utils__WEBPACK_IMPORTED_MODULE_5__["str2hexstr"])(peerPubkey), userAddr.serialize(), pos);
+    const params = Object(_abi_nativeVmParamsBuilder__WEBPACK_IMPORTED_MODULE_6__["buildNativeCodeScript"])([struct]);
+    return Object(_transaction_transactionBuilder__WEBPACK_IMPORTED_MODULE_4__["makeNativeContractTx"])('reduceInitPos', params, contractAddress, gasPrice, gasLimit, payer);
+}
+/**
+ * If not set ifAuthorize or cost before, query result will be empty.
+ * @param peerPubKey
+ * @param url
+ */
+async function getAttributes(peerPubKey, url) {
+    const restClient = new _network_rest_restClient__WEBPACK_IMPORTED_MODULE_3__["default"](url);
+    const codeHash = contractAddress.toHexString();
+    const key = Object(_utils__WEBPACK_IMPORTED_MODULE_5__["str2hexstr"])(PEER_ATTRIBUTES) + peerPubKey;
+    const res = await restClient.getStorage(codeHash, key);
+    const result = res.Result;
+    if (result) {
+        return PeerAttributes.deserialize(new _utils__WEBPACK_IMPORTED_MODULE_5__["StringReader"](result));
+    } else {
+        return new PeerAttributes();
+    }
+}
+/**
+ * Get the reward fee of address
+ * @param address User's address
+ * @param url Node's restfull url
+ */
+async function getSplitFeeAddress(address, url) {
+    const restClient = new _network_rest_restClient__WEBPACK_IMPORTED_MODULE_3__["default"](url);
+    const codeHash = contractAddress.toHexString();
+    const key = Object(_utils__WEBPACK_IMPORTED_MODULE_5__["str2hexstr"])(SPLIT_FEE_ADDRESS) + address.serialize();
+    const res = await restClient.getStorage(codeHash, key);
+    const result = res.Result;
+    if (result) {
+        return SplitFeeAddress.deserialize(new _utils__WEBPACK_IMPORTED_MODULE_5__["StringReader"](result));
+    } else {
+        return new SplitFeeAddress();
+    }
+}
+/**
+ * Get authorization of user's address
+ * @param peerPubKey Peer's public key
+ * @param address User's address
+ * @param url Node's restful url
+ */
+async function getAuthorizeInfo(peerPubKey, address, url) {
+    const restClient = new _network_rest_restClient__WEBPACK_IMPORTED_MODULE_3__["default"](url);
+    const codeHash = contractAddress.toHexString();
+    const key = Object(_utils__WEBPACK_IMPORTED_MODULE_5__["str2hexstr"])(AUTHORIZE_INFO_POOL) + peerPubKey + address.serialize();
+    const res = await restClient.getStorage(codeHash, key);
+    const result = res.Result;
+    if (result) {
+        return AuthorizeInfo.deserialize(new _utils__WEBPACK_IMPORTED_MODULE_5__["StringReader"](result));
+    } else {
+        return new AuthorizeInfo();
+    }
+}
+/**
+ * Query the governance view
+ * @param url Url of restful api
+ */
+async function getGovernanceView(url) {
+    const restClient = new _network_rest_restClient__WEBPACK_IMPORTED_MODULE_3__["default"](url);
+    const codeHash = contractAddress.toHexString();
+    const key = Object(_utils__WEBPACK_IMPORTED_MODULE_5__["str2hexstr"])('governanceView');
+    const viewRes = await restClient.getStorage(codeHash, key);
+    const view = viewRes.Result;
+    console.log(view);
+    const governanceView = GovernanceView.deserialize(new _utils__WEBPACK_IMPORTED_MODULE_5__["StringReader"](view));
+    return governanceView;
 }
 /**
  * Query all the peer's state. The result is a map.
  * @param url Url of blockchain node
  */
 async function getPeerPoolMap(url) {
-    const restClient = new _network_rest_restClient__WEBPACK_IMPORTED_MODULE_2__["default"](url);
+    const restClient = new _network_rest_restClient__WEBPACK_IMPORTED_MODULE_3__["default"](url);
     const codeHash = contractAddress.toHexString();
-    const key = Object(_utils__WEBPACK_IMPORTED_MODULE_4__["str2hexstr"])('governanceView');
-    const viewRes = await restClient.getStorage(codeHash, key);
-    const view = viewRes.Result;
-    const governanceView = GovernanceView.deserialize(new _utils__WEBPACK_IMPORTED_MODULE_4__["StringReader"](view));
-    const key1 = Object(_utils__WEBPACK_IMPORTED_MODULE_4__["str2hexstr"])('peerPool');
-    const key2 = Object(_utils__WEBPACK_IMPORTED_MODULE_4__["num2hexstring"])(governanceView.view, 4, true);
+    // const key = str2hexstr('governanceView');
+    // const viewRes = await restClient.getStorage(codeHash, key);
+    // const view = viewRes.Result;
+    // const governanceView = GovernanceView.deserialize(new StringReader(view));
+    const governanceView = await getGovernanceView(url);
+    const key1 = Object(_utils__WEBPACK_IMPORTED_MODULE_5__["str2hexstr"])('peerPool');
+    const key2 = Object(_utils__WEBPACK_IMPORTED_MODULE_5__["num2hexstring"])(governanceView.view, 4, true);
     const keyP = key1 + key2;
     const res = await restClient.getStorage(codeHash, keyP);
-    const sr = new _utils__WEBPACK_IMPORTED_MODULE_4__["StringReader"](res.Result);
+    const sr = new _utils__WEBPACK_IMPORTED_MODULE_5__["StringReader"](res.Result);
     const length = sr.readInt();
     const result = {};
     for (let i = 0; i < length; i++) {
@@ -60946,22 +61203,38 @@ async function getPeerPoolMap(url) {
     }
     return result;
 }
+async function getGlobalParam(url) {
+    const restClient = new _network_rest_restClient__WEBPACK_IMPORTED_MODULE_3__["default"](url);
+    const codeHash = contractAddress.toHexString();
+    const key = Object(_utils__WEBPACK_IMPORTED_MODULE_5__["str2hexstr"])(GLOBAL_PARAM);
+    const res = await restClient.getStorage(codeHash, key);
+    if (res.Result) {
+        return GlobalParam.deserialize(new _utils__WEBPACK_IMPORTED_MODULE_5__["StringReader"](res.Result));
+    } else {
+        return new GlobalParam();
+    }
+}
 /**
  * Use to store governance state.
  */
 class GovernanceView {
+    constructor() {
+        this.view = 0;
+        this.height = 0;
+        this.txhash = '';
+    }
     static deserialize(sr) {
         const g = new GovernanceView();
-        g.view = sr.readInt();
-        g.height = sr.readInt();
-        g.txhash = sr.readNextBytes();
+        g.view = sr.readUint32();
+        g.height = sr.readUint32();
+        g.txhash = sr.read(64); // uint256
         return g;
     }
     serialize() {
         let result = '';
-        result += Object(_utils__WEBPACK_IMPORTED_MODULE_4__["num2hexstring"])(this.view, 4, true);
-        result += Object(_utils__WEBPACK_IMPORTED_MODULE_4__["num2hexstring"])(this.height, 4, true);
-        result += Object(_utils__WEBPACK_IMPORTED_MODULE_4__["hex2VarBytes"])(this.txhash);
+        result += Object(_utils__WEBPACK_IMPORTED_MODULE_5__["num2hexstring"])(this.view, 4, true);
+        result += Object(_utils__WEBPACK_IMPORTED_MODULE_5__["num2hexstring"])(this.height, 4, true);
+        result += Object(_utils__WEBPACK_IMPORTED_MODULE_5__["hex2VarBytes"])(this.txhash);
         return result;
     }
 }
@@ -60969,11 +61242,18 @@ class GovernanceView {
  * Describs the peer's state in the pool.
  */
 class PeerPoolItem {
+    constructor() {
+        this.index = 0;
+        this.peerPubkey = '';
+        this.status = 0;
+        this.initPos = 0;
+        this.totalPos = 0;
+    }
     static deserialize(sr) {
         const p = new PeerPoolItem();
         p.index = sr.readInt();
-        p.peerPubkey = Object(_utils__WEBPACK_IMPORTED_MODULE_4__["hexstr2str"])(sr.readNextBytes());
-        p.address = _crypto__WEBPACK_IMPORTED_MODULE_0__["Address"].deserialize(sr);
+        p.peerPubkey = Object(_utils__WEBPACK_IMPORTED_MODULE_5__["hexstr2str"])(sr.readNextBytes());
+        p.address = _crypto__WEBPACK_IMPORTED_MODULE_1__["Address"].deserialize(sr);
         p.status = parseInt(sr.read(1), 16);
         p.initPos = sr.readLong();
         p.totalPos = sr.readLong();
@@ -60981,13 +61261,100 @@ class PeerPoolItem {
     }
     serialize() {
         let result = '';
-        result += Object(_utils__WEBPACK_IMPORTED_MODULE_4__["num2hexstring"])(this.index, 4, true);
-        result += Object(_utils__WEBPACK_IMPORTED_MODULE_4__["str2VarBytes"])(this.peerPubkey);
+        result += Object(_utils__WEBPACK_IMPORTED_MODULE_5__["num2hexstring"])(this.index, 4, true);
+        result += Object(_utils__WEBPACK_IMPORTED_MODULE_5__["str2VarBytes"])(this.peerPubkey);
         result += this.address.serialize();
-        result += Object(_utils__WEBPACK_IMPORTED_MODULE_4__["num2hexstring"])(this.status);
-        result += Object(_utils__WEBPACK_IMPORTED_MODULE_4__["num2hexstring"])(this.initPos, 8, true);
-        result += Object(_utils__WEBPACK_IMPORTED_MODULE_4__["num2hexstring"])(this.totalPos, 8, true);
+        result += Object(_utils__WEBPACK_IMPORTED_MODULE_5__["num2hexstring"])(this.status);
+        result += Object(_utils__WEBPACK_IMPORTED_MODULE_5__["num2hexstring"])(this.initPos, 8, true);
+        result += Object(_utils__WEBPACK_IMPORTED_MODULE_5__["num2hexstring"])(this.totalPos, 8, true);
         return result;
+    }
+}
+class PeerAttributes {
+    constructor() {
+        this.peerPubkey = '';
+        this.maxAuthorize = 0;
+        this.oldPeerCost = 100;
+        this.newPeerCost = 100;
+        this.setCostView = 0;
+    }
+    static deserialize(sr) {
+        const pr = new PeerAttributes();
+        pr.peerPubkey = Object(_utils__WEBPACK_IMPORTED_MODULE_5__["hexstr2str"])(sr.readNextBytes());
+        pr.maxAuthorize = sr.readUint32();
+        pr.oldPeerCost = sr.readLong();
+        pr.newPeerCost = sr.readLong();
+        pr.setCostView = sr.readUint32();
+        pr.field1 = sr.readNextBytes();
+        pr.field2 = sr.readNextBytes();
+        pr.field3 = sr.readNextBytes();
+        pr.field4 = sr.readNextBytes();
+        return pr;
+    }
+    serialize() {
+        return '';
+    }
+}
+class SplitFeeAddress {
+    constructor() {
+        this.amount = 0;
+    }
+    static deserialize(sr) {
+        const sfa = new SplitFeeAddress();
+        sfa.address = _crypto__WEBPACK_IMPORTED_MODULE_1__["Address"].deserialize(sr);
+        sfa.amount = sr.readLong();
+        return sfa;
+    }
+}
+class AuthorizeInfo {
+    constructor() {
+        this.peerPubkey = '';
+        this.consensusPos = 0;
+        this.freezePos = 0;
+        this.newPos = 0;
+        this.withdrawPos = 0;
+        this.withdrawFreezePos = 0;
+        this.withdrawUnfreezePos = 0;
+    }
+    static deserialize(sr) {
+        const ai = new AuthorizeInfo();
+        ai.peerPubkey = Object(_utils__WEBPACK_IMPORTED_MODULE_5__["hexstr2str"])(sr.readNextBytes());
+        ai.address = _crypto__WEBPACK_IMPORTED_MODULE_1__["Address"].deserialize(sr);
+        ai.consensusPos = sr.readLong();
+        ai.freezePos = sr.readLong();
+        ai.newPos = sr.readLong();
+        ai.withdrawPos = sr.readLong();
+        ai.withdrawFreezePos = sr.readLong();
+        ai.withdrawUnfreezePos = sr.readLong();
+        return ai;
+    }
+}
+class GlobalParam {
+    static deserialize(sr) {
+        const gp = new GlobalParam();
+        const feeHexStr = sr.readNextBytes();
+        const candidateFeeStr = _common_bigInt__WEBPACK_IMPORTED_MODULE_0__["default"].fromHexstr(feeHexStr).value;
+        gp.candidateFee = Number(candidateFeeStr);
+        const minStr = _common_bigInt__WEBPACK_IMPORTED_MODULE_0__["default"].fromHexstr(sr.readNextBytes()).value;
+        gp.minInitState = Number(minStr);
+        const candidateNumStr = _common_bigInt__WEBPACK_IMPORTED_MODULE_0__["default"].fromHexstr(sr.readNextBytes()).value;
+        const candidateNum = Number(candidateNumStr);
+        gp.candidateNum = candidateNum;
+        const posLimitStr = _common_bigInt__WEBPACK_IMPORTED_MODULE_0__["default"].fromHexstr(sr.readNextBytes()).value;
+        gp.posLimit = Number(posLimitStr);
+        const aStr = _common_bigInt__WEBPACK_IMPORTED_MODULE_0__["default"].fromHexstr(sr.readNextBytes()).value;
+        const a = Number(aStr);
+        const bStr = _common_bigInt__WEBPACK_IMPORTED_MODULE_0__["default"].fromHexstr(sr.readNextBytes()).value;
+        const b = Number(bStr);
+        const yStr = _common_bigInt__WEBPACK_IMPORTED_MODULE_0__["default"].fromHexstr(sr.readNextBytes()).value;
+        const yita = Number(yStr);
+        const pStr = _common_bigInt__WEBPACK_IMPORTED_MODULE_0__["default"].fromHexstr(sr.readNextBytes()).value;
+        const penalty = Number(pStr);
+        gp.A = a;
+        gp.B = b;
+        gp.yita = yita;
+        gp.penalty = penalty;
+        return gp;
     }
 }
 
@@ -61065,7 +61432,7 @@ function getTokenContract(tokenType) {
  */
 function verifyAmount(amount) {
     const value = new bignumber_js__WEBPACK_IMPORTED_MODULE_0__["BigNumber"](amount);
-    if (!value.isInteger() || value <= new bignumber_js__WEBPACK_IMPORTED_MODULE_0__["BigNumber"](0)) {
+    if (!value.isInteger() || value.lte(new bignumber_js__WEBPACK_IMPORTED_MODULE_0__["BigNumber"](0))) {
         throw new Error('Amount is invalid.');
     }
 }

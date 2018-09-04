@@ -67,7 +67,7 @@
     padding-left: 5.13rem !important;
   }
 
-  .font-medium {
+  .font-regular {
     font-family: 'AvenirNext-Regular';
     color: #000000;
     font-size: 0.88rem;
@@ -100,7 +100,7 @@
 
   .btn-next,
   .btn-cancel {
-    width: 6.25rem !important;
+    min-width: 6.25rem !important;
     height: 2.13rem !important;
     font-family: AvenirNext-Medium !important;
     font-size: 14px !important;
@@ -144,6 +144,10 @@
     background: #FFFFFF !important;
     border: 1px solid #DFE2E9 !important;
     height: 34px !important;
+  }
+
+  .error-input {
+    border-color:red !important;
   }
 
   .footer-btns {

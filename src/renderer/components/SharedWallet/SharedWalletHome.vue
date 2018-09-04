@@ -365,6 +365,8 @@ import dbService from '../../../core/dbService'
 import axios from 'axios'
 import Breadcrumb from '../Breadcrumb'
 import { BigNumber } from 'bignumber.js';
+const {BrowserWindow} = require('electron').remote;
+
 export default {
     name:'SharedWalletHome',
     data() {
@@ -553,15 +555,23 @@ export default {
             if(this.network === 'TestNet') {
                 url += '/testnet'
             }
-            window.location.href = url;
+            let win = new BrowserWindow({width: 1280, height: 800, center: true});
+            win.on('closed', () => {
+            win = null
+            })
+            win.loadURL(url)
         },
         showTxDetail(txHash) {
-        let url = `https://explorer.ont.io/transaction/${txHash}`
-        if(this.network === 'TestNet') {
-            url += '/testnet'
-        }
-        window.location.href = url;
-      },
+            let url = `https://explorer.ont.io/transaction/${txHash}`
+            if(this.network === 'TestNet') {
+                url += '/testnet'
+            }
+            let win = new BrowserWindow({width: 1280, height: 800, center: true});
+            win.on('closed', () => {
+                win = null
+                })
+            win.loadURL(url)
+        },
       copy() {
             this.$copyText(this.sharedWallet.sharedWalletAddress);
             this.$message.success(this.$t('common.copied'))

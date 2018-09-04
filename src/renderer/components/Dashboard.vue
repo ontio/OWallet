@@ -443,6 +443,8 @@
   import Breadcrumb from './Breadcrumb'
 import { BigNumber } from 'bignumber.js';
 import RedeemInfoIcon from './RedeemInfoIcon'
+const {BrowserWindow} = require('electron').remote;
+
   export default {
     name: 'Dashboard',
     components: {
@@ -630,14 +632,22 @@ import RedeemInfoIcon from './RedeemInfoIcon'
         if (this.network === 'TestNet') {
           url += '/testnet'
         }
-        window.location.href = url;
+        let win = new BrowserWindow({width: 1280, height: 800, center: true});
+        win.on('closed', () => {
+          win = null
+        })
+        win.loadURL(url)
       },
       showTxDetail(txHash) {
         let url = `https://explorer.ont.io/transaction/${txHash}`
         if (this.network === 'TestNet') {
           url += '/testnet'
         }
-        window.location.href = url;
+        let win = new BrowserWindow({width: 1280, height: 800, center: true});
+        win.on('closed', () => {
+          win = null
+        })
+        win.loadURL(url)
       },
       copy(value) {
             this.$copyText(value);

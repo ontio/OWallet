@@ -4,7 +4,7 @@
     <p><b>{{$t('createJsonWallet.addressN')}}: </b> {{ address }}</p>
     <p><b>{{$t('createJsonWallet.pubKeyN')}}: </b> {{publicKey}}</p>
     <p><b>{{$t('createJsonWallet.signatureSchemeN')}}: </b> SHA256withECDSA </p>
-    <p><b>{{$t('createJsonWallet.wif')}}: </b> {{wif}}</p>
+    <p><b>{{$t('createJsonWallet.priavteKeywif')}}: </b> {{wif}}</p>
 
     <div class="backup-text">
       <p class="font-medium-black">
@@ -84,16 +84,18 @@
           address: this.address,
           wallet: this.account
         }
+        const that = this;
         dbService.insert(wallet, function (err, newDoc) {
           if (err) {
             console.log(err)
+            alert('Save to keystore failed.Please try later.')
+            return;
           }
           // console.log(newDoc)
+          that.$store.commit('INIT_JSON_WALLET')
+          that.$message.success(that.$t('createJsonWallet.createSuccess'))
+          that.$router.push({name: 'Wallets'})
         })
-
-        this.$store.commit('INIT_JSON_WALLET')
-        this.$message.success(this.$t('createJsonWallet.createSuccess'))
-        this.$router.push({name: 'Wallets'})
       }
     }
   }

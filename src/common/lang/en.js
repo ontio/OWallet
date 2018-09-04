@@ -125,18 +125,18 @@ export default {
     pubKeyN: 'Public Key',
     signatureSchemeN: 'Signature Scheme',
     wif: 'WIF',
-    mnemonic: 'Mnemonic',
+    mnemonic: 'Mnemonic phrase',
     privateKey: 'Private Key',
     backupWallet: 'Please make a backup of these data and save the .dat file.',
     createSuccess:'Create individual wallet successfully.',
     download: "Download .dat",
-    privateKey64Hex: 'Private Key(64 Hex)',
-    priavteKeywif: 'Private Key(WIF)',
-    keystoreDat: 'Keystore(.dat)'
+    privateKey64Hex: 'Private key (64 Hex)',
+    priavteKeywif: 'Private key (WIF)',
+    keystoreDat: 'Keystore (.dat)'
   },
 
   importJsonWallet: {
-    datFile: 'Select the file',
+    datFile: 'Select file',
     selectedDatFile: 'Selected file: ',
     dat: '.dat File',
     datImportPassword: 'Password to decrypt keystore(.dat)',
@@ -144,8 +144,8 @@ export default {
     basicInfo: 'Basic info',
     label: 'Name of Individual Wallet',
     wif: 'WIF',
-    wifTip: 'Please enter 52-bit WIF text',
-    privateKeyTip: 'Please enter the private key with 64 bytes HEX format',
+    wifTip: 'Please enter 52-bit WIF',
+    privateKeyTip: 'Please enter private key with 64 byte hex format',
     datPassword: 'New Password',
     datRePassword: 'Repeat New password',
     password: 'Password',
@@ -155,7 +155,7 @@ export default {
     back: 'Back',
     details: '',
     confirmInfo: 'Confirm info',
-    mnemonic: 'Please use space to separate the mnemonic words.',
+    mnemonic: 'Please use a space to separate each of the words.',
     privateKey: 'Private Key',
     createSuccess: 'Create Individual wallet successfully!'
   },
@@ -283,7 +283,8 @@ export default {
   transfer: {
     inputValidAmount: 'Please input valid transfer amount.',
     inputValidAddress: 'Please input valid receiver address.',
-    exceedBalance: 'Amount of transfer can not exceed your balance.'
+    exceedBalance: 'Amount of transfer can not exceed your balance.',
+    ongBalanceNotEnough: 'Your ONG balance is not enough for transfer and fee.'
   },
 
   setting: {
@@ -297,7 +298,12 @@ export default {
     pathTit: 'Path: ',
     path: 'Save keystore file path',
     change: 'Change',
-    setNetworkSuccess: 'The network has been set to '
+    setNetworkSuccess: 'The network has been set to ',
+    wallets: 'Wallets',
+    ontid: 'ONT ID',
+    nodeStake: 'Node Stake',
+    help: 'Help',
+    settings: 'Settings'
   },
 
   ledgerWallet: {
@@ -381,5 +387,82 @@ export default {
     claimableOngName: 'Claimable ONG: ',
     unboundOngName: 'Unbound ONG: ',
     noClaimableOng: 'Your claimable ONG is 0. When a transaction of ONT is made in your address, the claimable ONG balance will update'
+  },
+
+  nodeMgmt: {
+    nodeUser: 'Your are a node, here you can stake and manage stake.',
+    nodeStakeMgmt: 'Node Stake Management',
+    normalUser: 'You are a user, want to participate stake authorization.',
+    stakeAuthorizaton: 'Stake Authorization',
+    nodeStake: 'Node Stake',
+    userStakeAuthorization: 'User Stake Authorization',
+    newStake: 'Submit A New Stake',
+    allowStakes: 'Allow stakes from other users',
+    deny: 'Deny',
+    permit: 'Permit',
+    yourStakeAmount: 'Your node stake amount',
+    stakeLimit: 'Total max stake limit',
+    userNumber: 'Current number of users staking',
+    userStake: 'Current total stake of users',
+    rewardsPerMonth: 'Estimate total rewards per month',
+    rewardsTip: 'Estimate total rewards per month includes your rewards and the rewards of other uesrs staking.',
+    rewardProportion: 'Reward proportion for yourself',
+    current: 'current',
+    rewardsProportionTip: '0% indicates the node will share all rewards to stake authorized users.',
+    confirm: 'Confirm',
+    changesTakeEffect: ' Changes will take effect in two consensus rounds (each round is approximately every 30 days). ',
+    stakeAuthorization: 'Stake Authorization',
+    toNextRound: 'To next round',
+    rank: 'Rank',
+    name: 'Name',
+    currentStake: 'Current Total Stake',
+    process: 'Process',
+    changes: 'Changes',
+    userParticipate: 'Make sure you are a user who wants to participate stake authorization',
+    nodeName: 'Node Name',
+    walletAddress: 'Your wallet address',
+    inAuthorization: 'In authorization',
+    cancelStakeAuthorization: 'Cancel Stake Authorization',
+    locked: 'Locked',
+    claimable: 'Redeemable',
+    redeem: 'Redeem',
+    profit: 'Profit',
+    rewards: 'Rewards',
+    newStakeAuthorization: 'Submit A New Stake Authorization',
+    cancelAuthorization: 'Cancel Stake Authorization',
+    units: 'Units of stake authorization',
+    stakeAmountTip: 'Stake amount = input number * 500 ONT/unit.',
+    stakeAmount: 'Stake amount',
+    submit: 'Submit',
+    allowedStakeUnits: 'Allowed Stake Units',
+    allowedStakeAmount: 'Allowed Stake Amount',
+    noChange: 'You did not make a change.',
+    noRewards: 'No rewards to redeem.',
+    switchWallet: 'Switch wallet',
+    noClaimableOnt: 'No claimable ONT',
+    amountToCancel: 'Amount to cancel',
+    invalidInput: 'Please enter valid value.',
+    peerNotAllowAuthorize: 'This peer does not allow authorization now.',
+    addInitPos: 'Add Init Pos',
+    reduceInitPos: 'Reduce Init Pos',
+    amountToAdd: 'Amount To Add',
+    amountToReduce: 'Amount To Reduce',
+    notThanCommitment: 'Initial stake can not be less than the commitment stake.',
+    notLessTotalPos: 'The initial stake amount is too small.',
+    notThanMax: 'Allowed stake can not be more than the max stake limit.',
+    refresh: 'Refresh',
+    totalStakeAmount: 'Total Authorization Amount',
+    blocks: 'Blocks',
+    proportionNextRound: 'Reward proportion in next round',
+    nodeAndUser: 'Node / User',
+    authorizeTip: `A user’s authorized stake amount for a node is made up of any authorized ONT from this consensus round and any authorized ONT from a previous consensus round.
+If authorized ONT from this consensus round is cancelled it will be cancelled immediately and be shown as redeemable ONT.
+If authorized ONT from previous consensus rounds is cancelled it will be cancelled only at the beginning of the next consensus round.
+If a user has both authorized ONT from this consensus round and a previous consensus round and cancels an ONT amount exceeding the amount from this consensus round, they will receive authorized ONT from this consensus round first and the remaining authorized ONT in the next consensus round.
+`,
+    rewardTip: `All transactions fees received by Ontology are distributed to all candidate nodes and consensus nodes - 50% to each group.
+Within their 50% share each candidate node will receive their share linearly according to their stake amount.
+Within their 50% share each consensus node will receive their share according to their stake amount, which is subject to the incentive curve that discourages too high stakes.
+`
   }
 }
