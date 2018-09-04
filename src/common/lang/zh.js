@@ -27,7 +27,12 @@ export default {
     authentication: '验证',
     enterWalletPassword: '请输入钱包密码',
     password: '密码',
-    invalidLedger: '当前Ledger设备与要打开的钱包不匹配，请尝试正确的ledger设备。'
+    invalidLedger: '当前Ledger设备与要打开的钱包不匹配，请尝试正确的ledger设备。',
+    exportDat: '导出.dat',
+    exportWIF: '导出WIF',
+    changePassword: '修改密码',
+    deleteWallet: '删除钱包',
+    more: '更多'
   },
 
   TopNav: {
@@ -102,7 +107,12 @@ export default {
     deleteSucceess: '删除钱包成功.',
     deleteFailed: '删除钱包失败.',
     deleteingWallet: '您正在删除钱包，钱包地址是：',
-    exportingWallet: '您正在导出钱包，钱包地址是：'
+    exportingWallet: '您正在导出钱包.dat文件，钱包地址是：',
+    exportingWIF: '您正在导出钱包的私钥(WIF), 钱包地址是：',
+    oldPassword: '旧密码',
+    newPassword: '新密码',
+    reNewPassword: '重复新密码',
+    changePassSuccess: '修改密码成功！'
   },
 
   dashboard: {
@@ -156,7 +166,11 @@ export default {
     details: '详情',
     confirmInfo: '确认信息',
     mnemonic: '请用空格分隔助记词',
-    privateKey: '私钥'
+    privateKey: '私钥',
+    confirmImport: '确认导入',
+    confirmImportExist: '要导入的钱包本地已存在。仍然要导入？',
+    success: '导入钱包成功',
+    saveDbFailed: '保存到Keystore失败。请稍后重试。'
   },
 
   createSharedWallet: {

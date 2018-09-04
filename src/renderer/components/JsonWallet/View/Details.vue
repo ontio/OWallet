@@ -16,8 +16,27 @@
     <!-- <a-button type="primary" class="common-export-btn" @click="exportWallet(wallet)" v-if="isCommonWallet"
     >{{$t('common.export')}}</a-button> -->
     <div class="common-topRight-btns">
-      <span class="common-delete-icon" @click="deleteWallet()" ></span>
-      <span class="common-download-icon" @click="handleExportWallet()" v-if="isCommonWallet"></span>      
+      <span class="common-delete-icon" @click="deleteWallet()" v-if="!isCommonWallet"></span>
+      <!-- <span class="common-download-icon" @click="handleExportWallet()" v-if="isCommonWallet"></span> -->
+      <a-dropdown v-if="isCommonWallet">
+        <a-menu slot="overlay" >
+          <a-menu-item key="1" >
+            <span @click="handleExportWallet()">{{$t('common.exportDat')}}</span>
+          </a-menu-item>
+          <a-menu-item key="2">
+            <span  @click="handleExportWIF()">{{$t('common.exportWIF')}}</span>
+          </a-menu-item>
+          <a-menu-item key="3">
+            <span  @click="handleChangePassword()">{{$t('common.changePassword')}}</span>
+          </a-menu-item>
+          <a-menu-item key="4">
+            <span  @click="deleteWallet()">{{$t('common.deleteWallet')}}</span>
+          </a-menu-item>          
+        </a-menu>
+        <a-button style="margin-left: 8px">
+          {{$t('common.more')}}<a-icon type="down" />
+        </a-button>
+      </a-dropdown>      
     </div>
 
     <a-modal 
@@ -27,15 +46,47 @@
         @cancel="handleCancel">
           <div>
               <p class="font-medium">
-                {{option==='TO_DELETE' ? $t('wallets.deleteingWallet') : $t('wallets.exportingWallet') }}
+                {{option==='TO_DELETE' ? $t('wallets.deleteingWallet') : '' }}
+                {{option === 'TO_EXPORT' ? $t('wallets.exportingWallet') : ''}}
+                {{option === 'EXPORT_WIF' ? $t('wallets.exportingWIF') : ''}}
                  {{wallet.address}}</p>
               <div v-if="isCommonWallet">
                 <p>{{$t('common.enterWalletPassword')}}</p>
                 <a-input class="input" v-model="password" :plaecholder="$t('common.password')" type="password"></a-input>
               </div>   
-              
           </div>
     </a-modal>
+
+    <a-modal 
+        :title="$t('common.changePassword')"
+        :visible="changePassModal"
+        @ok="handleChangePassOk"
+        @cancel="handleChangePassCancel">
+          <div class="change-password-input">
+            <div>
+              <a-input type="password" class="input change-password"
+               v-validate="{required: true ,min:6}" name="oldPassword" data-vv-as="old password"
+               v-model="oldPassword" :placeholder="$t('wallets.oldPassword')"></a-input>
+              <span class="v-validate-span-errors" v-show="errors.has('oldPassword')">{{ errors.first('oldPassword') }}</span>
+            </div>
+
+            <div>
+              <a-input type="password" class="input change-password"
+               v-validate="{required: true ,min:6}" name="newPassword" data-vv-as="new password"
+               v-model="newPassword" :placeholder="$t('wallets.newPassword')"></a-input>
+              <span class="v-validate-span-errors" v-show="errors.has('newPassword')">{{ errors.first('newPassword') }}</span>
+            </div>
+
+            <div>
+              <a-input type="password" class="input change-password"
+                      v-validate="{required: true , min:6, is:newPassword}" data-vv-as="new password confirmation" name="reNewPassword"
+                      v-model="reNewPassword" :placeholder="$t('wallets.reNewPassword')"></a-input>
+              <span class="v-validate-span-errors" v-show="errors.has('reNewPassword')">{{ errors.first('reNewPassword') }}</span> 
+            </div>
+
+          </div>
+    </a-modal>
+
   </div>
 </template>
 
@@ -54,7 +105,11 @@
         isCommonWallet: this.wallet.key ? true: false,
         passModal: false,
         password: '',
-        option: ''
+        option: '',
+        oldPassword: '',
+        newPassword: '',
+        reNewPassword: '',
+        changePassModal: false
       }
     },
     methods: {
@@ -122,7 +177,17 @@
         } else if (this.option === 'TO_EXPORT') {
           this.passModal = false;         
           this.exportWallet(this.wallet)
+        } else if (this.option === 'EXPORT_WIF') {
+          this.passModal = false;
+          this.$store.dispatch('hideLoadingModals')
+          const wif = pri.serializeWIF();
+          this.$success({
+            title: 'The private key(WIF) is:',
+            content: wif
+          });
         }
+        this.password = '';
+        pri.key = '';
       },
       handleDelete() {      
         // remove from db
@@ -145,6 +210,58 @@
       handleCancel() {
         this.passModal = false;
         this.password = '';
+      },
+      handleExportWIF() {
+        this.passModal = true;
+        this.option = 'EXPORT_WIF'
+      },
+      handleChangePassword() {
+        this.changePassModal = true;
+      },
+      handleChangePassOk() {
+        this.$validator.validateAll().then(result => {
+          if(result) {
+            this.$store.dispatch('showLoadingModals').then( () => {
+            const enc = new Crypto.PrivateKey(this.wallet.key)
+            let pri;
+            try {
+              pri = enc.decrypt(this.oldPassword, new Crypto.Address(this.wallet.address), this.wallet.salt, DEFAULT_SCRYPT)
+            } catch (err) {
+              console.log(err);
+              this.$store.dispatch('hideLoadingModals')
+              this.$message.error(this.$t('common.pwdErr'))
+              return;
+            }
+            //save with new password
+            const saltHex = Buffer.from(this.wallet.salt, 'base64').toString('hex');
+            const address = new Crypto.Address(this.wallet.address)
+            const newEnc = pri.encrypt(this.newPassword, address, saltHex, DEFAULT_SCRYPT);
+            this.wallet.key = newEnc.key;
+            dbService.update(
+              {address: this.wallet.address}, 
+              {$set: {wallet: this.wallet}}, {}, 
+              (err, numReplaced) => {
+                if(err) {
+                  this.$message.error(this.$t('importJsonWallet.saveDbFailed'))
+                  return;
+                }
+                this.$store.dispatch('hideLoadingModals')
+                this.changePassModal = false;
+                this.$message.success(this.$t('wallets.changePassSuccess'))
+                this.oldPassword = '';
+                this.newPassword = '';
+                this.reNewPassword = ''
+            })
+            })
+
+          }
+        })
+      },
+      handleChangePassCancel() {
+        this.changePassModal = false;
+        this.oldPassword = '';
+        this.newPassword = '';
+        this.reNewPassword = ''
       }
     }
   }
@@ -233,6 +350,11 @@
     display: inline-block;
     cursor: pointer;
     background:url('../../../assets/download.png') center center no-repeat;
-    margin-left: 24px;
+  }
+  .change-password-input div{
+    margin-bottom: 15px;
+  }
+  .change-password-input :last-child {
+    margin:0;
   }
 </style>

@@ -27,7 +27,12 @@ export default {
     authentication: 'Authentication',
     enterWalletPassword: 'Please enter your wallet password',
     password: 'Password',
-    invalidLedger: 'The current ledger dose not match with the wallet.Please try with another ledger device.'
+    invalidLedger: 'The current ledger dose not match with the wallet.Please try with another ledger device.',
+    exportDat: 'Export .dat',
+    exportWIF: 'Export WIF',
+    changePassword: 'Change Password',
+    deleteWallet: 'Delete Wallet',
+    more: 'More'
   },
 
   TopNav: {
@@ -102,7 +107,12 @@ export default {
     deleteSucceess: 'Delete wallet successfully.',
     deleteFailed: 'Delete wallet failed.',
     deleteingWallet: 'You are about to delete wallet with address: ',
-    exportingWallet: 'You are about to export wallet with address; ',
+    exportingWallet: 'You are about to export the .dat file of wallet with address: ',
+    exportingWIF: 'You are about to export the private key(WIF) of wallet with address: ',
+    oldPassword: 'Old password',
+    newPassword: 'New password',
+    reNewPassword: 'Repeat new password',
+    changePassSuccess: 'Change password successfully!'
   },
 
   dashboard: {
@@ -157,7 +167,11 @@ export default {
     confirmInfo: 'Confirm info',
     mnemonic: 'Please use a space to separate each of the words.',
     privateKey: 'Private Key',
-    createSuccess: 'Create Individual wallet successfully!'
+    createSuccess: 'Create Individual wallet successfully!',
+    confirmImport: 'Confirm Import',
+    confirmImportExist: 'The wallet to import is already in your local. Still want to import it?',
+    success: 'Import wallet successfully!',
+    saveDbFailed: 'Save to keystore failed. Please try later.'
   },
 
   createSharedWallet: {
