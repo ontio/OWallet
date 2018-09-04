@@ -84,16 +84,18 @@
           address: this.address,
           wallet: this.account
         }
+        const that = this;
         dbService.insert(wallet, function (err, newDoc) {
           if (err) {
             console.log(err)
+            alert('Save to keystore failed.Please try later.')
+            return;
           }
           // console.log(newDoc)
+          that.$store.commit('INIT_JSON_WALLET')
+          that.$message.success(that.$t('createJsonWallet.createSuccess'))
+          that.$router.push({name: 'Wallets'})
         })
-
-        this.$store.commit('INIT_JSON_WALLET')
-        this.$message.success(this.$t('createJsonWallet.createSuccess'))
-        this.$router.push({name: 'Wallets'})
       }
     }
   }

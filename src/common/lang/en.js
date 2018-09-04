@@ -415,7 +415,7 @@ export default {
     toNextRound: 'To next round',
     rank: 'Rank',
     name: 'Name',
-    currentStake: 'Current Stake',
+    currentStake: 'Current Total Stake',
     process: 'Process',
     changes: 'Changes',
     userParticipate: 'Make sure you are a user who wants to participate stake authorization',
@@ -424,7 +424,7 @@ export default {
     inAuthorization: 'In authorization',
     cancelStakeAuthorization: 'Cancel Stake Authorization',
     locked: 'Locked',
-    claimable: 'Claimable',
+    claimable: 'Redeemable',
     redeem: 'Redeem',
     profit: 'Profit',
     rewards: 'Rewards',
@@ -448,10 +448,21 @@ export default {
     amountToAdd: 'Amount To Add',
     amountToReduce: 'Amount To Reduce',
     notThanCommitment: 'Initial stake can not be less than the commitment stake.',
-    notLessTotalPos: '20 times of initial stake can not be less than the total authorization.',
+    notLessTotalPos: 'The initial stake amount is too small.',
     notThanMax: 'Allowed stake can not be more than the max stake limit.',
     refresh: 'Refresh',
     totalStakeAmount: 'Total Authorization Amount',
-    blocks: 'Blocks'
+    blocks: 'Blocks',
+    proportionNextRound: 'Reward proportion in next round',
+    nodeAndUser: 'Node / User',
+    authorizeTip: `A user’s authorized stake amount for a node is made up of any authorized ONT from this consensus round and any authorized ONT from a previous consensus round.
+If authorized ONT from this consensus round is cancelled it will be cancelled immediately and be shown as redeemable ONT.
+If authorized ONT from previous consensus rounds is cancelled it will be cancelled only at the beginning of the next consensus round.
+If a user has both authorized ONT from this consensus round and a previous consensus round and cancels an ONT amount exceeding the amount from this consensus round, they will receive authorized ONT from this consensus round first and the remaining authorized ONT in the next consensus round.
+`,
+    rewardTip: `All transactions fees received by Ontology are distributed to all candidate nodes and consensus nodes - 50% to each group.
+Within their 50% share each candidate node will receive their share linearly according to their stake amount.
+Within their 50% share each consensus node will receive their share according to their stake amount, which is subject to the incentive curve that discourages too high stakes.
+`
   }
 }

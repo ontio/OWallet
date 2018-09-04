@@ -230,9 +230,11 @@ export default {
     }
     this.$store.dispatch("fetchStakeDetail", this.stakeIdentity.ontid);
     this.$store.dispatch('fetchPeerItem', this.detail.publickey);
+    this.$store.dispatch('fetchPosLimit')
     const intervalId = setInterval(() => {
       this.$store.dispatch("fetchStakeDetail", this.stakeIdentity.ontid);
       this.$store.dispatch('fetchPeerItem', this.detail.publickey);
+      this.$store.dispatch('fetchPosLimit')
     }, this.interval);
     this.intervalId = intervalId
   },
@@ -249,6 +251,7 @@ export default {
       ledgerWallet: state => state.LedgerConnector.ledgerWallet,
       detail: state => state.NodeStake.detail,
       current_peer: state => state.NodeAuthorization.current_peer,
+      posLimit: state => state.NodeAuthorization.posLimit,
       // detail: state => state.NodeStake.detail
       status1: state => state.NodeStake.status1,
       status2: state => state.NodeStake.status2,
@@ -268,6 +271,7 @@ export default {
     handleWalletSignCancel() {
       this.tx = "";
       this.walletPassModal = false;
+      this.walletPassword = '';
     },
     handleWalletSignOK() {
       const tx = this.tx;
@@ -366,6 +370,7 @@ export default {
         console.log(res)
         this.isDelegateSendTx = true;
         this.walletPassModal = false;
+        this.walletPassword = '';
         this.$store.dispatch("hideLoadingModals");
         if (res.Error === 0) {
             this.$message.success(this.$t('common.transSentSuccess'))
@@ -444,7 +449,7 @@ export default {
         this.$message.error(this.$t('nodeMgmt.notThanCommitment'))
         return;
       }
-      if(this.current_peer.totalPos && (this.current_peer.initPos - this.reducePos)*20 < this.current_peer.totalPos ) {
+      if(this.current_peer.totalPos && (this.current_peer.initPos - this.reducePos)* this.posLimit < this.current_peer.totalPos ) {
         this.validaReducePos = false;
         this.$message.error(this.$t('nodeMgmt.notLessTotalPos'))        
         return;

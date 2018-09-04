@@ -26,7 +26,8 @@ const state = {
         amount: 0
     },
     countdown: 0,
-    node_list: []
+    node_list: [],
+    posLimit: 10
 }
 
 const mutations = {
@@ -78,6 +79,9 @@ const mutations = {
     },
     UPDATE_NODE_LIST(state, payload) {
         state.node_list = payload.list
+    },
+    UPDATE_POS_LIMIT(state, payload) {
+        state.posLimit = payload.posLimit
     }
 }
 
@@ -146,6 +150,9 @@ const actions = {
                 item.maxAuthorize = attr.maxAuthorize;
                 item.maxAuthorizeStr = numeral(item.maxAuthorize).format('0,0')
                 item.totalPosStr = numeral(item.totalPos).format('0,0')
+                const nodeProportion = attr.newPeerCost + '%'
+                const userProportion = (100 - attr.newPeerCost) + '%'
+                item.nodeProportion = nodeProportion + ' / ' + userProportion
                 list.push(item);
             }
             list.sort((v1, v2) => {
@@ -164,16 +171,15 @@ const actions = {
                 item.pk = item.peerPubkey
                 item.name = 'Node No.' + (index + 1)
                 if (item.peerPubkey === '02f4c0a18ae38a65b070820e3e51583fd3aea06fee2dc4c03328e4b4115c622567') {//for test
-                    item.name = 'Node1 To vote'
+                    item.name = 'Node1 To Authorize'
                 }
                 if (item.pk === '03f6149b3a982c046912731d6374305e2bc8e278fa90892f6f20a8ee85c1d5443f') {//for test
-                    item.name = 'Node2 To vote'
+                    item.name = 'Node2 To Authorize'
                 }
             })
             commit('UPDATE_NODE_LIST', {list});
             return list;
         } catch(err) {
-            alert('Network error.')
             console.log(err)            
             return [];
         }
@@ -191,6 +197,18 @@ const actions = {
         }catch(err) {
             // alert('Network error.')
             console.log(err)
+        }
+    },
+    async fetchPosLimit({commit}) {
+        const url = getNodeUrl();
+        try {
+            const globalParams = await Ont.GovernanceTxBuilder.getGlobalParam(url);
+            if(globalParams.posLimit) {
+                commit('UPDATE_POS_LIMIT', {posLimit: globalParams.posLimit});
+                return globalParams.posLimit;
+            }
+        }catch(err) {
+            console.log(err);
         }
     } 
 }

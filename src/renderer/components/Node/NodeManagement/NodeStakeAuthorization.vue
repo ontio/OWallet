@@ -234,17 +234,18 @@ export default {
             ledgerWallet: state => state.LedgerConnector.ledgerWallet,
             stakeDetail: state => state.NodeStake.detail,
             splitFee: state => state.NodeAuthorization.splitFee,
+            posLimit: state => state.NodeAuthorization.posLimit
         }),
         maxStakeLimit: {
             get(){
                 const initPos = this.$store.state.NodeAuthorization.current_peer.initPos;
-                return numeral(20 * initPos).format('0,0');
+                return numeral(this.posLimit * initPos).format('0,0');
             }
         }
     },
     methods:{
         confirmChangeAuthorization() {
-            if(!this.unit || !this.validUnit) {
+            if(!this.validUnit) {
                 this.$message.error(this.$t('nodeMgmt.invalidInput'))
                 return;
             }
@@ -284,7 +285,7 @@ export default {
                 this.validUnit = false;
                 return;
             }
-            if(this.unit && parseInt(this.unit)*500 > this.current_peer.initPos*20) {
+            if(this.unit && parseInt(this.unit)*500 > this.current_peer.initPos * this.posLimit) {
                 this.validUnit = false;
                 this.$message.error(this.$t('nodeMgmt.notThanMax'))
                 return;
@@ -307,6 +308,7 @@ export default {
             this.$store.dispatch('fetchPeerItem', pk)
             this.$store.dispatch('fetchPeerAttributes', pk)
             this.$store.dispatch('fetchSplitFee', address)
+            this.$store.dispatch('fetchPosLimit')
         },
         redeemRewards() {
             if(!this.splitFee.amount) {

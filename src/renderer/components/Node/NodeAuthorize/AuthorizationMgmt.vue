@@ -107,7 +107,7 @@
                 </div>
                 <div class="authorize-tip">
                     <a-icon type="info-circle" />
-                    <span class="font-regular tip-font">用户对该节点的授权抵押金额，包括本轮新授权的ONT和已生效的授权ONT，取消授权会优先取消本轮新授权的ONT，取消后进入用户的可提取ONT中。本轮新授权的ONT不足则会取消已生效的授权ONT，按照节点是候选/共识状态分别锁定1轮或2轮，之后进入用户的可提取ONT中。</span>
+                    <span class="font-regular tip-font">{{$t('nodeMgmt.authorizeTip')}}</span>
                 </div>
                 <a-button type="default" class="cancel-btn" @click="cancelAuthorization">{{$t('nodeMgmt.cancelAuthorization')}}</a-button>
                 <div class="redeem-ont">
@@ -132,7 +132,7 @@
 
                 <p class="authorize-tip">
                    <a-icon type="info-circle" />
-<span class="font-regular tip-font">本体网络收到的所有手续费按照50%/50%的比例分给所有候选节点和共识节点，其中候选节点部分按照节点总抵押大小线性分配到每个候选节点，每个候选节点先拿走自己的部分（百分比），剩下的按照每个地址授权ONT的多少线性分配到每个地址。其中共识节点部分按照分润曲线分配到每个共识节点，每个共识节点先拿走自己的部分（百分比），剩下的按照每个地址授权ONT的多少线性分配到每个地址。</span>
+                   <span class="font-regular tip-font">{{$t('nodeMgmt.rewardTip')}}</span>
                 </p>
             </div>
         </div>

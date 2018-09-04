@@ -35,6 +35,12 @@
 .detail-link i {
     font-size:20px;
 }
+.proportion-title {
+    width:230px;
+}
+.proportion-title p {
+    margin:0
+}
 </style>
 <template>
     <div>
@@ -54,6 +60,10 @@
         <a-table :columns="columns"
         :dataSource="node_list"
         >
+        <div slot="nodeProportionTitle" class="proportion-title">
+            <p>{{$t('nodeMgmt.proportionNextRound')}}</p>
+            <p>{{$t('nodeMgmt.nodeAndUser')}}</p>
+            </div>
         <a slot="name" slot-scope="text" @click="handleNodeDetail(record)">{{text}}</a>
         <div slot="action" slot-scope="text, record" class="detail-link">
             <a-icon type="arrow-right" @click="handleAuthorizeLogin(record)"/>
@@ -76,20 +86,30 @@ export default {
         const columns = [
             {
                 title: this.$t('nodeMgmt.rank'),
-                dataIndex: 'rank'
+                dataIndex: 'rank',
+                key:'rank'
             },
             {
                 title: this.$t('nodeMgmt.name'),
                 dataIndex: 'name',
+                key: 'name',
                 scopedSlots: {customRender: 'name'}
             },
             {
+                // title: this.$t('nodeMgmt.nodeProportion'),
+                dataIndex: 'nodeProportion',
+                key: 'nodeProportion',
+                slots: {title: 'nodeProportionTitle'}
+            },
+            {
                 title: this.$t('nodeMgmt.currentStake'),
-                dataIndex: 'currentStake'
+                dataIndex: 'currentStake',
+                key: 'currentStake'
             },
             {
                 title: this.$t('nodeMgmt.process'),
-                dataIndex: 'process'
+                dataIndex: 'process',
+                key: 'process'
             },
             {
                 title: '',
