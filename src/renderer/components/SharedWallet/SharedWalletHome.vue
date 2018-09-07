@@ -257,6 +257,65 @@
     position: relative;
     top: 5px;
 }
+.claim-ong-container {
+    margin: 30px 0;
+  }
+
+  .claim-ong {
+    float: left;
+  }
+
+  .claim-ong-item {
+    margin-bottom: 10px;
+    position: relative;
+  }
+
+  .claim-ong-item :first-child {
+    font-family: AvenirNext-Medium;
+    font-size: 12px;
+    color: #515457;
+    margin-right: 8px;
+    width: 100px;
+    display: block;
+    float: left;
+  }
+
+  .claim-ong-item :nth-child(2) {
+    font-family: AvenirNext-Medium;
+    font-size: 12px;
+    color: #000000;
+    float: left;
+  }
+
+  .commonWallet-btn {
+    width: 70px;
+    height: 28px;
+    border-radius: 0;
+    background: #FBE45A;
+    padding: 0;
+    font-family: AvenirNext-Medium;
+    font-size: 14px;
+    color: #5E6369;
+    border: none;
+  }
+  .commonWallet-btn {
+    width: 70px;
+    height: 28px;
+    border-radius: 0;
+    background: #FBE45A;
+    padding: 0;
+    font-family: AvenirNext-Medium;
+    font-size: 14px;
+    color: #5E6369;
+    border: none;
+  }
+  .btn-swap {
+    margin-left: 30px;
+  }
+  .btn-redeem {
+    float: left;
+    margin-left: 30px;
+  }
 </style>
 <template>
     <div class="home-container">
@@ -288,6 +347,23 @@
                         <span class="asset-amount">{{balance.ong}}</span>
                     </div>
                     <!-- <div class="asset-value">{{'$900'}}</div> -->
+                </div>
+
+                <div class="claim-ong-container clearfix">
+                    <div class="claim-ong">
+                        <div class="claim-ong-item clearfix">
+                        <span>{{$t('commonWalletHome.claimableOng')}}: </span>
+                        <span>{{unboundOng}}</span>
+
+                        </div>
+                        <div class="claim-ong-item clearfix">
+                        <span>{{$t('commonWalletHome.unboundOng')}}: </span>
+                        <span>{{waitBoundOng}}</span>
+                        </div>
+                    </div>
+                    <a-button type="default" class="commonWallet-btn btn-redeem"
+                    @click="redeemOng">{{$t('commonWalletHome.redeem')}}</a-button>
+                    <redeem-info-icon></redeem-info-icon>
                 </div>
 
 
@@ -332,7 +408,8 @@
                 <div class="pending-tx-container">
                     <div v-for="tx in pendingTx" :key="tx.transactionidhash" class="tx-item pendingTx-item" @click="pendingTxDetail(tx)">
                     <span>{{tx.transactionidhash}}</span>
-                    <span>-{{tx.amount}} {{tx.assetName}}</span>
+                    <span> {{tx.receiveaddress === sharedWallet.sharedWalletAddress ? '+' : '-'}}
+                        {{tx.amount}} {{tx.assetName}}</span>
                 </div>
                 </div>
 
@@ -354,7 +431,13 @@
 
         </div>
         </div>
-
+        <a-modal
+            :title="$t('redeemInfo.info')"
+            v-model="redeemInfoVisible"
+            @ok="handleModalOk"
+            >
+            <p class="font-regular"><span class="font-medium"></span> {{$t('redeemInfo.noClaimableOng')}}</p>
+      </a-modal>
     </div>
 </template>
 
@@ -365,6 +448,8 @@ import dbService from '../../../core/dbService'
 import axios from 'axios'
 import Breadcrumb from '../Breadcrumb'
 import { BigNumber } from 'bignumber.js';
+import RedeemInfoIcon from '../RedeemInfoIcon'
+
 const {BrowserWindow} = require('electron').remote;
 
 export default {
@@ -383,6 +468,8 @@ export default {
             amount: 0,
             toAddress: '',
             balance: {ont: 0, ong: 0.0000, ontValue:0},
+            unboundOng: 0,
+            waitBoundOng: 0,
             transactions: '',
             nodeUrl:url,
             sharedWallet,
@@ -394,11 +481,13 @@ export default {
             nodeUrl: url,
             hasLocalCopayer:true,
             interval: 2000,
-            intervalId: ''
+            intervalId: '',
+            redeemInfoVisible: false
         }
     },
     components: {
-        Breadcrumb
+        Breadcrumb,
+        RedeemInfoIcon
     },
     mounted(){
         this.refresh()
@@ -449,13 +538,34 @@ export default {
             })
         },
         getBalance() {
-            const restClient = new Ont.RestClient(this.nodeUrl);
-            const from = new Ont.Crypto.Address(this.sharedWallet.sharedWalletAddress);
-            restClient.getBalance(from).then(res => {
-            this.balance.ont = res.Result.ont
-            this.balance.ong = new BigNumber(res.Result.ong).div(1e9).toFixed(9)
-            // this.getExchangeCurrency()
+            const urlNode = this.network === 'TestNet' ? 'https://polarisexplorer.ont.io' : 'https://explorer.ont.io';
+            const url = `${urlNode}/api/v1/explorer/address/balance/${this.sharedWallet.sharedWalletAddress}`
+            axios.get(url).then(res => {
+            if (res.data.Result) {
+                for (let r of res.data.Result) {
+                    if (r.AssetName === 'ong') {
+                        this.balance.ong = r.Balance;
+                    }
+                    if (r.AssetName === 'waitboundong') {
+                        this.waitBoundOng = r.Balance;
+                    }
+                    if (r.AssetName === 'unboundong') {
+                        this.unboundOng = r.Balance;
+                    }
+                    if (r.AssetName === 'ont') {
+                        this.balance.ont = r.Balance;
+                    }
+                }
+                //pending tx has redeem tx,set unbound ong to 0;
+                for(const tx of this.pendingTx) {
+                    if(tx.receiveaddress === tx.sendaddress && tx.assetName === 'ONG' &&
+                    (tx.amount - this.unboundOng) == 0)  {
+                        this.unboundOng = 0;
+                    }
+                }
+            }
             })
+
         },
         getExchangeCurrency() {
         const currency = 'ont'
@@ -516,6 +626,7 @@ export default {
                 return;
             }
             this.$store.commit('CLEAR_CURRENT_TRANSFER');
+            this.$store.commit('UPDATE_TRANSFER_REDEEM_TYPE', {type: false});
             this.$store.commit('UPDATE_TRANSFER_BALANCE', {balance: this.balance})
             this.$router.push({path:'/sharedWallet/sendTransfer'})
         },
@@ -524,6 +635,9 @@ export default {
         },
         pendingTxDetail(tx) {
             this.$store.commit('UPDATE_PENDINGTX', {pendingTx: tx})
+            if(tx.receiveaddress === tx.sendaddress && tx.assetName === 'ONG') {
+                this.$store.commit('UPDATE_TRANSFER_REDEEM_TYPE', {type: true});
+            }
             this.$router.push('/sharedWallet/pendingTxHome')
         },
         ifHasLocalCopayer() {
@@ -575,6 +689,28 @@ export default {
       copy() {
             this.$copyText(this.sharedWallet.sharedWalletAddress);
             this.$message.success(this.$t('common.copied'))
+      },
+      redeemOng() {
+          if(this.unboundOng == 0) {
+            this.redeemInfoVisible = true;
+            return;
+          }
+          if(Number(this.balance.ong) < 0.01) {
+                this.$message.warning(this.$t('common.ongNoEnough'))
+                return;
+            }
+            this.$store.commit('CLEAR_CURRENT_TRANSFER');
+            this.$store.commit('UPDATE_TRANSFER_REDEEM_TYPE', {type: true});
+            
+            const redeem = {
+                claimableOng : this.unboundOng,
+                balance: this.balance.ong
+            }
+            this.$store.commit('UPDATE_CURRENT_REDEEM', {redeem: redeem})
+            this.$router.push({path:'/sharedWallet/sendTransfer'})
+      },
+      handleModalOk() {
+        this.redeemInfoVisible = false;
       }
     }
 }

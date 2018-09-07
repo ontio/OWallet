@@ -134,6 +134,8 @@ export default {
                 }catch(err) {
                     console.log(err)
                     alert('Password error')
+                    this.sending = false;
+                    this.$store.dispatch('hideLoadingModals')
                 }
                 const M = tx.sigs[0].M;
                 const pks = tx.sigs[0].pubKeys;

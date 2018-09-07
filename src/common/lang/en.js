@@ -266,7 +266,8 @@ export default {
     signSequence: 'Sign sequence',
     sign: 'Sign',
     checkMore: 'Check More',
-    publicKey: 'Public Key'
+    publicKey: 'Public Key',
+    redeemOng: 'Redeem ONG'
   },
 
   commonWalletHome: {
@@ -477,6 +478,7 @@ If a user has both authorized ONT from this consensus round and a previous conse
     rewardTip: `All transactions fees received by Ontology are distributed to all candidate nodes and consensus nodes - 50% to each group.
 Within their 50% share each candidate node will receive their share linearly according to their stake amount.
 Within their 50% share each consensus node will receive their share according to their stake amount, which is subject to the incentive curve that discourages too high stakes.
-`
+`,
+    unboundOng: 'Unbound ONG'
   }
 }

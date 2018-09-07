@@ -62,6 +62,7 @@
     padding-left: 20px;
     padding-top:10px;
     margin-bottom:50px;
+    text-align: left !important;
 }
 .sponsor-select {
     padding-left: 4rem;
@@ -103,9 +104,18 @@
 
 <template>
     <div class="confirm-container clearfix">
-            <p class="label">{{$t('sharedWalletHome.send')}}</p>
+        <p class="label" v-if="transfer.isRedeem">{{$t('sharedWalletHome.redeemOng')}}</p>
+        <div class="asset-table" v-if="transfer.isRedeem">
+            <div class="asset-item">
+                <span class="font-medium">{{$t('sharedWalletHome.amount')}}</span>
+                <span class="font-medium-black">{{redeem.claimableOng}} ONG</span>
+           
+            </div>
+            <div class="fee font-medium-black">{{$t('sharedWalletHome.fee')}}: 0.01 ONG</div>
+        </div>
         
-        <div class="asset-table">
+        <p class="label" v-if="!transfer.isRedeem">{{$t('sharedWalletHome.send')}}</p>
+        <div class="asset-table" v-if="!transfer.isRedeem">
             <div class="asset-item">
                 <span class="font-medium">{{$t('sharedWalletHome.amount')}}</span>
                 <span class="font-medium-black">{{transfer.amount}} {{transfer.asset}}</span>
@@ -175,7 +185,8 @@ export default {
     },
     computed:{
         ...mapState({
-            transfer: state => state.CurrentWallet.transfer
+            transfer: state => state.CurrentWallet.transfer,
+            redeem: state => state.CurrentWallet.redeem
         }),
         localCopayers : {
             get() {

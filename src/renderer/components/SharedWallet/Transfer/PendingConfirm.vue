@@ -109,8 +109,9 @@
 
 <template>
     <div class="confirm-container clearfix">
-            <p class="label">{{$t('sharedWalletHome.send')}}</p>
-        
+            <p class="label" v-if="!isRedeem">{{$t('sharedWalletHome.send')}}</p>
+            <p class="label" v-if="isRedeem">{{$t('sharedWalletHome.redeemOng')}}</p>
+
         <div class="asset-table">
             <div class="asset-item">
                 <span class="font-medium">{{$t('sharedWalletHome.amount')}}</span>
@@ -175,13 +176,14 @@ export default {
     
     computed:{
         ...mapState({
-            pendingTx: state => state.CurrentWallet.pendingTx
+            pendingTx: state => state.CurrentWallet.pendingTx,
+            isRedeem: state => state.CurrentWallet.transfer.isRedeem
         }),
         gas: {
             get() {
                 const gasPrice = new BigNumber(this.$store.state.CurrentWallet.pendingTx.gasprice)
                 const gasLimit = new BigNumber(this.$store.state.CurrentWallet.pendingTx.gaslimit)
-                const gas = gasPrice.multipliedBy(gasLimit).div(1e9)
+                const gas = gasPrice.multipliedBy(gasLimit).div(1e9).toString();
                 return gas;
             }
         }
