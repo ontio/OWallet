@@ -40,7 +40,7 @@
     </div>
 
     <a-modal 
-        :title="$t('common.authentication')"
+        :title="modalTitle"
         :visible="passModal"
         @ok="handleValidatePassword"
         @cancel="handleCancel">
@@ -109,7 +109,8 @@
         oldPassword: '',
         newPassword: '',
         reNewPassword: '',
-        changePassModal: false
+        changePassModal: false,
+        modalTitle: this.wallet.key ? this.$t('common.authentication') : this.$t('common.confirmation')
       }
     },
     methods: {

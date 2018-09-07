@@ -25,6 +25,7 @@ export default {
     readyToLogin: 'Ready to login',
     walletAddress: 'Wallet Address',
     authentication: 'Authentication',
+    confirmation: 'Confirmation',
     enterWalletPassword: 'Please enter your wallet password',
     password: 'Password',
     invalidLedger: 'The current ledger dose not match with the wallet.Please try with another ledger device.',

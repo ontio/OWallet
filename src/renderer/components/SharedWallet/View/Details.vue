@@ -16,7 +16,7 @@
     </div>
 
     <a-modal 
-        :title="$t('common.authentication')"
+        :title="$t('common.confirmation')"
         :visible="showModal"
         @ok="handleDelete"
         @cancel="handleCancel">
