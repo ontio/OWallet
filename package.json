@@ -3,8 +3,8 @@
   "productName": "OWallet",
   "homepage": "http://ont.io",
   "version": "v0.8.7",
-  "author": "MickeyWang <wangdashuang@onchain.com>",
-  "description": "ledger",
+  "author": "Ontology Foundation Ltd.",
+  "description": "OWallet is a comprehensive Ontology desktop wallet",
   "license": "Apache-2.0",
   "main": "./dist/electron/main.js",
   "scripts": {
@@ -87,6 +87,7 @@
     "bignumber.js": "^7.2.1",
     "bootstrap": "^4.1.1",
     "clipboard": "^2.0.1",
+    "electron-winstaller": "^2.6.4",
     "font-awesome": "^4.7.0",
     "jquery": "^3.3.1",
     "nedb": "^1.8.0",
