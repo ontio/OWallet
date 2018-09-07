@@ -27,14 +27,15 @@ const state = {
     },
     countdown: 0,
     node_list: [],
-    posLimit: 10
+    posLimit: 10,
+    peerUnboundOng: 0
 }
 
 const mutations = {
     UPDATE_CURRENT_PEER(state, payload) {
         state.current_peer = {
             peerPubkey: payload.peerItem.peerPubkey,
-            address: payload.peerItem.address.toBase58(),
+            address: payload.peerItem.address?payload.peerItem.address.toBase58() : '',
             status: payload.peerItem.status,
             initPos: payload.peerItem.initPos,
             initPosStr: numeral(payload.peerItem.initPos).format('0,0'),
@@ -82,6 +83,9 @@ const mutations = {
     },
     UPDATE_POS_LIMIT(state, payload) {
         state.posLimit = payload.posLimit
+    },
+    UPDATE_PEER_UNBOUND_ONG(state, payload) {
+        state.peerUnboundOng = payload.peerUnboundOng
     }
 }
 
@@ -210,7 +214,19 @@ const actions = {
         }catch(err) {
             console.log(err);
         }
-    } 
+    },
+    async fetchPeerUnboundOng({commit}, address) {
+        const url = getNodeUrl();
+        const addr = new Crypto.Address(address);
+        try {   
+            let peerUnboundOng = await Ont.GovernanceTxBuilder.getPeerUnboundOng(addr, url);
+            peerUnboundOng = new BigNumber(peerUnboundOng).div(1e9).toNumber();
+            commit('UPDATE_PEER_UNBOUND_ONG', {peerUnboundOng})
+            return peerUnboundOng;
+        } catch(err) {
+            console.log(err);
+        }
+    }
 }
 
 export default {

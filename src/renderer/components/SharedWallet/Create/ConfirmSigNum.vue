@@ -20,7 +20,7 @@
     <div class="confirm-btns">
       <div class="confirm-btn-container">
         <a-button type="default" class="btn-cancel" @click="back">{{$t('createSharedWallet.back')}}</a-button>
-        <a-button type="primary" class="btn-next" @click="next">{{$t('createSharedWallet.next')}}</a-button>
+        <a-button type="primary" class="btn-next" @click="next" :disabled="processing">{{$t('createSharedWallet.next')}}</a-button>
       </div>
     </div>
   </div>

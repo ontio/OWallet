@@ -65,7 +65,7 @@
             </div>
         <div class="input-btns">
             <a-button type="default" class="btn-cancel" @click="back">{{$t('sharedWalletHome.back')}}</a-button>
-            <a-button type="primary" class="btn-next" @click="submit" >
+            <a-button type="primary" class="btn-next" @click="submit"  :disabled="sending">
                 {{$t('sharedWalletHome.submit')}}
                 </a-button>
         </div>
@@ -98,7 +98,8 @@ export default {
     },
     computed:{
         ...mapState({
-            transfer: state => state.CurrentWallet.transfer
+            transfer: state => state.CurrentWallet.transfer,
+            redeem: state => state.CurrentWallet.redeem
         })
     },
 
@@ -131,15 +132,26 @@ export default {
             }
             if(this.password && this.checked && !this.sending) {
             this.sending = true;
-            //create transaction
+            let tx, amount, gasPrice;
             const tokenType = this.transfer.asset;
-            const from = new Crypto.Address(this.sharedWallet.sharedWalletAddress)
-            const to = new Crypto.Address(this.transfer.to);
-            const amount = tokenType === 'ONT' ? this.transfer.amount : new BigNumber(this.transfer.amount).multipliedBy(1e9);
             const gasLimit = '20000';
-            const gas = new BigNumber(this.transfer.gas).multipliedBy(1e9);
-            const gasPrice = gas.div(gasLimit).toString();
-            const tx = OntAssetTxBuilder.makeTransferTx(tokenType, from, to, amount, gasPrice, gasLimit, from);
+            if(this.transfer.isRedeem) {
+                const from = new Crypto.Address(this.sharedWallet.sharedWalletAddress)
+                const to = from
+                const value = new BigNumber(this.redeem.claimableOng);
+                gasPrice = '500'
+                amount = value.multipliedBy(1e9).toString();
+                tx = OntAssetTxBuilder.makeWithdrawOngTx(from, to, amount, from, gasPrice, gasLimit);
+            } else {
+            //create transaction
+                const from = new Crypto.Address(this.sharedWallet.sharedWalletAddress)
+                const to = new Crypto.Address(this.transfer.to);
+                amount = tokenType === 'ONT' ? this.transfer.amount : new BigNumber(this.transfer.amount).multipliedBy(1e9);
+                
+                const gas = new BigNumber(this.transfer.gas).multipliedBy(1e9);
+                gasPrice = gas.div(gasLimit).toString();
+                tx = OntAssetTxBuilder.makeTransferTx(tokenType, from, to, amount, gasPrice, gasLimit, from);
+            }    
             this.$store.dispatch('showLoadingModals')
             //sign tx
             const M = this.sharedWallet.requiredNumber;
@@ -165,7 +177,7 @@ export default {
             const url = ontPassNode + ONT_PASS_URL.CreateSharedTransfer
             const body = {
                 sendAddress: this.sharedWallet.sharedWalletAddress,
-                receiveAddress: this.transfer.to,
+                receiveAddress: this.transfer.isRedeem ? this.sharedWallet.sharedWalletAddress : this.transfer.to,
                 assetName: tokenType,
                 amount: amount,
                 gasLimit,

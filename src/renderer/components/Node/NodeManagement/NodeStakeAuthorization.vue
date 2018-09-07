@@ -109,6 +109,14 @@
       font-size: 16px;
   }
 
+.redeem-item span:first-child {
+    display: inline-block;
+    width:130px;
+}
+.redeem-item button {
+    margin-left: 20px;
+}
+
 </style>
 <template>
     <div class="content-container">
@@ -177,11 +185,16 @@
         </div>
 
         <div class="redeem-profit">
-            <p>
+            <div class="redeem-item">
                 <span class="font-medium-black label">{{$t('nodeMgmt.profit')}}: </span>
                 <span class="font-medium">{{splitFee.amount}} ONG</span>
-            </p>
                 <a-button type="primary" class="redeem-btn" @click="redeemRewards">{{$t('nodeMgmt.redeem')}}</a-button>
+            </div>
+            <div class="redeem-item">
+                <span class="font-medium-black label">{{$t('nodeMgmt.unboundOng')}}: </span>
+                <span class="font-medium">{{peerUnboundOng}} ONG</span>
+                <a-button type="primary" class="redeem-btn" @click="redeemPeerUnboundOng">{{$t('nodeMgmt.redeem')}}</a-button>
+            </div>
         </div>
        
         <sign-send-tx :visible="signVisible" :tx="tx"  :wallet="stakeWallet"
@@ -234,7 +247,8 @@ export default {
             ledgerWallet: state => state.LedgerConnector.ledgerWallet,
             stakeDetail: state => state.NodeStake.detail,
             splitFee: state => state.NodeAuthorization.splitFee,
-            posLimit: state => state.NodeAuthorization.posLimit
+            posLimit: state => state.NodeAuthorization.posLimit,
+            peerUnboundOng: state => state.NodeAuthorization.peerUnboundOng
         }),
         maxStakeLimit: {
             get(){
@@ -309,6 +323,7 @@ export default {
             this.$store.dispatch('fetchPeerAttributes', pk)
             this.$store.dispatch('fetchSplitFee', address)
             this.$store.dispatch('fetchPosLimit')
+            this.$store.dispatch('fetchPeerUnboundOng', address)
         },
         redeemRewards() {
             if(!this.splitFee.amount) {
@@ -324,6 +339,20 @@ export default {
             this.signVisible = true;
             this.tx = tx;
         },
+        redeemPeerUnboundOng() {
+            if(!this.peerUnboundOng) {
+                this.$message.warning(this.$t('nodeMgmt.noUnboundOng'))
+                return;
+            }
+            const tx = Ont.GovernanceTxBuilder.makeWithdrawPeerUnboundOngTx(
+                new Crypto.Address(this.stakeWallet.address),
+                new Crypto.Address(this.stakeWallet.address),
+                GAS_PRICE,
+                GAS_LIMIT
+            )
+            this.signVisible = true;
+            this.tx = tx;
+        }
     }
 }
 </script>

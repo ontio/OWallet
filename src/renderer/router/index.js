@@ -139,11 +139,11 @@ export default new Router({
       name: 'NodeManagement',
       component: require('@/components/Node/Node').default
     },
-    {
-      path: '/node/nodeLogin',
-      name: 'NodeLogin',
-      component: require('@/components/Node/NodeManagement/NodeLogin').default
-    },
+    // {
+    //   path: '/node/nodeLogin',
+    //   name: 'NodeLogin',
+    //   component: require('@/components/Node/NodeManagement/NodeLogin').default
+    // },
     {
       path: '/node/nodeStakeMgmt',
       name: 'NodeStakeManagement',
