@@ -478,5 +478,10 @@ If a user has both authorized ONT from this consensus round and a previous conse
 Within their 50% share each candidate node will receive their share linearly according to their stake amount.
 Within their 50% share each consensus node will receive their share according to their stake amount, which is subject to the incentive curve that discourages too high stakes.
 `
-  }
+},
+exchange: {
+ exchange: 'Exchange',
+ changelly: 'Changelly' 
+}
+ 
 }

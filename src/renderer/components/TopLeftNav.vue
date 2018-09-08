@@ -5,8 +5,6 @@
         <img class="logo-img" src="./../assets/logo.png" alt="">
       </router-link>
 
-      
-
         <router-link :to="{name:'Wallets'}" active-class="nav-wallets-active">
           <a-tooltip placement="right" :title="$t('setting.wallets')">
               <div class="nav-wallets"></div>
@@ -30,6 +28,12 @@
                <div class="node-stake-icon"></div>
           </a-tooltip>
       </router-link>
+      
+      <router-link :to="{name:'Exchange'}" active-class="nav-exchange-active">
+          <a-tooltip placement="right" :title="$t('exchange.exchange')">
+              <div class="nav-exchange"></div>
+          </a-tooltip>
+        </router-link>
 
         <!-- <div class="setting-img" alt="" @click="toSetting"></div> -->
       
@@ -203,6 +207,23 @@
   }
 
   .nav-wallets:hover {
+    background: url('../assets/selectwallet.png') center center;
+  }
+
+  .nav-exchange {
+    width: 24px;
+    height: 24px;
+    margin: 67px auto;
+    background: url('../assets/unselectwallet.png') center center;
+    background-size: cover;
+    cursor: pointer;
+  }
+
+  .nav-exchange-active div {
+    background: url('../assets/selectwallet.png') center center;
+  }
+
+  .nav-exchange:hover {
     background: url('../assets/selectwallet.png') center center;
   }
 </style>
