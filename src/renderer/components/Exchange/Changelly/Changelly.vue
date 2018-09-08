@@ -45,15 +45,19 @@
 </template>
 
 <script>
+import Breadcrumb from '../../Breadcrumb'
 export default {
   name: "Changelly",
   data() {
     return {
     };
   },
+  components: {
+        Breadcrumb
+  },
   methods: {
     handleRouteBack() {
-      this.$router.go(-1);
+      this.$router.push({name: 'Exchange'})      
     },
   }
 };
