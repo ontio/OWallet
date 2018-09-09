@@ -35,6 +35,9 @@
             <div class="btn-item">
                 <a-button class="btn-next" @click="handleExchangeChangelly">{{$t('exchange.changelly')}}</a-button>
             </div>
+            <div class="btn-item">
+                <a-button class="btn-next" @click="handleExchangeCryptonex">{{$t('exchange.cryptonex')}}</a-button>
+            </div>
         </div>
     </div>
     
@@ -46,6 +49,9 @@ export default {
     methods: {
         handleExchangeChangelly() {
             this.$router.push({name: 'Changelly'})
+        },
+        handleExchangeCryptonex() {
+            //this.$router.push({name: 'Cryptonex'})
         }
     }
 }

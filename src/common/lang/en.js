@@ -481,7 +481,8 @@ Within their 50% share each consensus node will receive their share according to
 },
 exchange: {
  exchange: 'Exchange',
- changelly: 'Changelly' 
+ changelly: 'Changelly', 
+ cryptonex: 'Cryptonex (Soon!)'
 }
  
 }
