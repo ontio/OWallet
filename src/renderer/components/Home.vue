@@ -67,12 +67,37 @@
     font-family: AvenirNext-Regular;
     margin: 0;
   }
+  .bg-container {
+    position: relative;
+  }
+  .home-upgrade {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px;
+    text-align: center;
+    border:1px solid #FBE45A;
+    background:#FBE45A;
+    font-family: AvenirNext-Regular;
+  }
+  .home-upgrade a {
+    color: #196BD8;
+  }
+  .home-upgrade a:hover {
+    color: rgb(50, 120, 211);
+  }
 </style>
 <template>
   <div class="row row-home home-container">
-    <div class="col-10">
+    <div class="col-10 bg-container">
       <!-- <img class="img-home-page" src="./../assets/home/background@1.5x.png" alt=""> -->
       <div class="home-img"></div>
+      <div class="home-upgrade">
+        <!-- <a-alert message="Warning" type="warning" showIcon /> -->
+        {{$t('common.versionUpdate')}}
+        <a @click="handleUpdate">{{$t('common.getLatestVersion')}}</a>
+      </div>
     </div>
     <div class="col-2 text-center">
       <div class="div-slogan home-slogan">
@@ -86,21 +111,49 @@
       </div>
 
       <div class="div-footer-version">
-        <p>Version: 0.8.8</p>
+        <p>Version: {{version}}</p>
         <p>Powered by Ontology</p>
       </div>
     </div>
+
+    
   </div>
 </template>
 
 <script>
   import {mapState} from 'vuex'
   import {TEST_NET, MAIN_NET} from '../../core/consts'
+  import axios from 'axios';
+  const {BrowserWindow} = require('electron').remote;
 
   export default {
     name: 'Home',
+    data() {
+      return {
+        version: '0.8.8',
+        latest_url: ''
+      }
+    },
     mounted() {
-      this.$store.dispatch('fetchWalletsFromDb')
+      const url = 'https://api.github.com/repos/ontio/OWallet/releases/latest';
+      axios.get(url).then(res => {
+        if (res.data && res.data.tag_name !== 'v' + this.version) {
+          console.log('not latest')
+          this.latest_url = res.data.html_url
+        }
+      }) 
+    },
+    methods: {
+      handleUpdate() {
+        const url = this.latest_url;
+        let win = new BrowserWindow({width: 800, height: 600, center: true});
+        win.on('closed', () => {
+          win = null
+        })
+
+        // Load a remote URL
+        win.loadURL(url)
+      }
     }
   }
 </script>

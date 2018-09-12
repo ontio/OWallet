@@ -34,7 +34,9 @@ export default {
     changePassword: '修改密码',
     deleteWallet: '删除钱包',
     more: '更多',
-    neoCompatible: '兼容NEO地址'
+    neoCompatible: '兼容NEO地址',
+    versionUpdate: '您可以升级OWallet。',
+    getLatestVersion: '下载最新版本。'
   },
 
   TopNav: {
