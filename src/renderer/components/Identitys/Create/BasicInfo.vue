@@ -164,7 +164,7 @@ import {legacySignWithLedger} from '../../../../core/ontLedger'
                   txSig.M = 1;
                   txSig.pubKeys = [pk];
                   const txData = tx.serializeUnsignedData();
-                  legacySignWithLedger(txData, this.publicKey).then(res => {
+                  legacySignWithLedger(txData).then(res => {
                   // console.log('txSigned: ' + res);
                   const sign = '01' + res; //ECDSAwithSHA256
                   txSig.sigData = [sign]

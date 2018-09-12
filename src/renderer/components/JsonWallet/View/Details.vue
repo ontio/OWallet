@@ -3,6 +3,7 @@
     <div @click="toWalletHome(wallet)">
       <div class="div-shared-wallet-sign">
         <span>{{ isCommonWallet ? $t('common.normalWallet') : $t('common.hardwareWallet') }}</span>
+        <p class="neo-compatile" v-if="!isCommonWallet && wallet.neo">{{$t('common.neoCompatible')}}</p>
       </div>
       <div class="div-wallet-name">{{wallet.label}}</div>
       <!--<img class="img-wallet-edit" src="./../assets/edit.png" alt="">-->
@@ -357,5 +358,12 @@
   }
   .change-password-input :last-child {
     margin:0;
+  }
+  .neo-compatile {
+    font-size:12px;
+    margin-top: 5px;
+    margin-bottom:0;
+    position:absolute;
+    color: #515457;
   }
 </style>

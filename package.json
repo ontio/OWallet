@@ -2,7 +2,7 @@
   "name": "ont-wallet-test",
   "productName": "OWallet",
   "homepage": "http://ont.io",
-  "version": "v0.8.7",
+  "version": "v0.8.8",
   "author": "Ontology Foundation Ltd. <devops@ont.io>",
   "description": "OWallet is a comprehensive Ontology desktop wallet",
   "license": "Apache-2.0",
@@ -21,10 +21,12 @@
     "pack": "npm run pack:main && npm run pack:renderer",
     "pack:main": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.main.config.js",
     "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
-    "postinstall": "npm run lint:fix",
     "package": "npm run pack && electron-builder -mwl",
     "packageLocal": "electron-builder",
-    "packageWin": "yarn run pack && electron-builder --win --x64"
+    "packageWin": "yarn run pack && electron-builder --win --x64",
+    "packageLin": "yarn run pack && electron-builder --linux --x64",
+    "postinstall": "electron-builder install-app-deps && electron-rebuild --force --module_dir . -w node-hid -v 1.8.4",
+    "electron-rebuild": "electron-rebuild --force --module_dir . -w node-hid"
   },
   "build": {
     "productName": "OWallet",

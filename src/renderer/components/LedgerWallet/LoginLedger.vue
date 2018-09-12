@@ -20,7 +20,6 @@
 
 <script>
   import {getDeviceInfo, getPublicKey} from '../../../core/ontLedger'
-
   const interval = 1000;
   export default {
     name: 'LoginLedger',
@@ -35,11 +34,13 @@
       clearInterval(this.intervalId);
     },
     data() {
+      const currentWallet = JSON.parse(sessionStorage.getItem('currentWallet'));
       return {
         intervalId: 0,
         ledgerStatus: '',
         device: null,
-        publicKey: ''
+        publicKey: '',
+        currentWallet
       }
     },
     methods: {
@@ -66,7 +67,9 @@
         })
       },
       getPublicKey() {
-        getPublicKey().then(res => {
+        const acctNum = 0;
+        const neo = this.currentWallet.neo;
+        getPublicKey(acctNum, neo).then(res => {
           console.log('pk info: ' + res);
           this.publicKey = res;
           this.ledgerStatus = this.$t('common.readyToLogin')
