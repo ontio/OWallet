@@ -143,6 +143,7 @@ export default {
     privateKey: '私钥',
     backupWallet: '请备份好以上数据并保存好.dat文件。',
     createSuccess: '创建普通钱包成功！',
+    createFail: '创建普通钱包失败。请重试。',
     download: '下载.dat文件',
     privateKey64Hex: '私钥(64 Hex格式)',
     priavteKeywif: '私钥(WIF格式)',
