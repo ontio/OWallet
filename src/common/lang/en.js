@@ -33,7 +33,8 @@ export default {
     exportWIF: 'Export WIF',
     changePassword: 'Change Password',
     deleteWallet: 'Delete Wallet',
-    more: 'More'
+    more: 'More',
+    neoCompatible: 'NEO Address Compatible'
   },
 
   TopNav: {
@@ -232,7 +233,8 @@ export default {
   importLedgerWallet: {
     import: 'Connect Ledger Wallet',
     label: 'Name of Ledger Wallet',
-    next: 'Connect'
+    next: 'Connect',
+    neoCompatible: 'NEO Address Compatible'
   },
 
   sharedWalletHome: {
@@ -406,9 +408,9 @@ export default {
   },
 
   nodeMgmt: {
-    nodeUser: 'Your are a node, here you can stake and manage stake.',
+    nodeUser: 'If you are a candidate node, you can stake and manage your stake here.',
     nodeStakeMgmt: 'Node Stake Management',
-    normalUser: 'You are a user, want to participate stake authorization.',
+    normalUser: 'If you are a normal user, you can participate stake authorization here.',
     stakeAuthorizaton: 'Stake Authorization',
     nodeStake: 'Node Stake',
     userStakeAuthorization: 'User Stake Authorization',

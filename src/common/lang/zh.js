@@ -33,7 +33,8 @@ export default {
     exportWIF: '导出WIF',
     changePassword: '修改密码',
     deleteWallet: '删除钱包',
-    more: '更多'
+    more: '更多',
+    neoCompatible: '兼容NEO地址'
   },
 
   TopNav: {
@@ -231,7 +232,8 @@ export default {
   importLedgerWallet: {
     import: '连接Ledger钱包',
     label: '钱包名称',
-    next: '连接'
+    next: '连接',
+    neoCompatible: '兼容NEO地址'
   },
 
   sharedWalletHome: {

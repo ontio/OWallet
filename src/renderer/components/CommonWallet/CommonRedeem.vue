@@ -44,7 +44,7 @@
         <div class="footer-btns">
             <div class="footer-btn-container">
                 <a-button type="default" class="btn-cancel" @click="cancel">{{$t('commonWalletHome.cancel')}}</a-button>
-                <a-button type="primary" class="btn-next" @click="submit" >
+                <a-button type="primary" class="btn-next" @click="submit" :disabled="sending">
                     {{$t('commonWalletHome.submit')}}
                     </a-button>
             </div>
@@ -175,7 +175,7 @@ export default {
                 this.$message.error(this.$t('commonWalletHome.emptyPass'))
                 return;
             }
-            
+            this.sending = true;
             const from = new Crypto.Address(this.currentWallet.address);
             const to = from;
             const value = new BigNumber(this.redeem.claimableOng);
@@ -190,6 +190,7 @@ export default {
                 } catch (err) {
                     console.log(err);
                     this.$message.error(this.$t('common.pwdErr'))
+                    this.sending = false;
                     return;
                 }
                 TransactionBuilder.signTransaction(tx, pri);
@@ -205,7 +206,8 @@ export default {
                     txSig.pubKeys = [pk];
                     tx.payer = from;
                     const txData = tx.serializeUnsignedData();
-                    legacySignWithLedger(txData, this.publicKey).then(res => {
+                    const neo = this.currentWallet.neo;
+                    legacySignWithLedger(txData, neo).then(res => {
                     // console.log('txSigned: ' + res);
                         const sign = '01' + res; //ECDSAwithSHA256
                         txSig.sigData = [sign]

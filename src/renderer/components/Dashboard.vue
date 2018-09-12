@@ -436,7 +436,6 @@
 
 <script>
   import {mapState} from 'vuex'
-  import {legacySignWithLedger} from '../../core/ontLedger'
   import {TEST_NET, MAIN_NET, ONT_CONTRACT, ONT_PASS_NODE} from '../../core/consts'
   import {Crypto, OntAssetTxBuilder} from 'ontology-ts-sdk'
   import axios from 'axios';

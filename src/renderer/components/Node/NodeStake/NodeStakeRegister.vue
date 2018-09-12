@@ -252,7 +252,7 @@ export default {
             txSig.pubKeys = [pk];
             tx.payer = new Crypto.Address(this.ledgerWallet.address);
             const txData = tx.serializeUnsignedData();
-            legacySignWithLedger(txData, this.publicKey).then(res => {
+            legacySignWithLedger(txData).then(res => {
             // console.log('txSigned: ' + res);
             const sign = '01' + res; //ECDSAwithSHA256
             txSig.sigData = [sign]
