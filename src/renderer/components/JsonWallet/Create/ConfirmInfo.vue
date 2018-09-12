@@ -85,6 +85,15 @@
           wallet: this.account
         }
         const that = this;
+        // Add verification to make sure wallet data is right before saving
+        const pri = Crypto.PrivateKey.deserializeWIF(this.wif);
+        const pk = pri.getPublicKey();
+        const addTmp = Crypto.Address.fromPubKey(pk);
+        if (addTmp.toBase58() !== this.account.address) {
+          this.$message.error(this.$t('createJsonWallet.createFail'));
+          this.back();
+          return;
+        }
         dbService.insert(wallet, function (err, newDoc) {
           if (err) {
             console.log(err)

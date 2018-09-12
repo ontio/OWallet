@@ -143,6 +143,7 @@ export default {
     privateKey: 'Private Key',
     backupWallet: 'Please make a backup of these data and save the .dat file.',
     createSuccess:'Create individual wallet successfully.',
+    createFail: 'Create individual wallet failed. Please try again.',
     download: "Download .dat",
     privateKey64Hex: 'Private key (64 Hex)',
     priavteKeywif: 'Private key (WIF)',
