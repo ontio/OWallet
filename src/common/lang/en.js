@@ -34,7 +34,9 @@ export default {
     changePassword: 'Change Password',
     deleteWallet: 'Delete Wallet',
     more: 'More',
-    neoCompatible: 'NEO Address Compatible'
+    neoCompatible: 'NEO Address Compatible',
+    versionUpdate: 'You can upgrade your OWallet.',
+    getLatestVersion: 'Get the latest version here.'
   },
 
   TopNav: {
