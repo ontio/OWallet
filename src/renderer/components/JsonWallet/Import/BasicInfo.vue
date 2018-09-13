@@ -284,7 +284,6 @@
     },
     beforeDestroy() {
       console.log('clear')
-      this.$store.commit('INIT_JSON_WALLET')
     },
     methods: {
       activeTab(tabName) {
@@ -429,7 +428,6 @@
             return;
           }
           // console.log(newDoc)
-          that.$store.commit('INIT_JSON_WALLET')
           that.$message.success(that.$t('importJsonWallet.success'))
           that.$router.push({name: 'Wallets'})
         })
@@ -445,7 +443,6 @@
               this.$message.error(this.$t('importJsonWallet.saveDbFailed'))
               return;
             }
-            this.$store.commit('INIT_JSON_WALLET')
             this.$message.success(this.$t('importJsonWallet.success'))
             this.$router.push({name: 'Wallets'})
           })
