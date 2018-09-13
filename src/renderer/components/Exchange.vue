@@ -1,31 +1,31 @@
 <style scoped>
 .exchange-container {
-    position: relative;
-    width:100%;
-    height:100vh;
+  position: relative;
+  width: 100%;
+  height: 100vh;
 }
 .center-content {
-    width: 540px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-left:auto;
-    margin-right: auto;
-    transform: translate(-50%, -50%);
+  width: 540px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  transform: translate(-50%, -50%);
 }
 .btn-item {
-    text-align: center;
-    margin-bottom:80px;
+  text-align: center;
+  margin-bottom: 80px;
 }
 .btn-item p {
-    text-align: center;
-    font-size: 16px;
-    margin-bottom: 5px;
+  text-align: center;
+  font-size: 16px;
+  margin-bottom: 5px;
 }
 .btn-item button {
-    font-size:18px !important;
-    height: 80px !important;
-    width:300px !important;
+  font-size: 18px !important;
+  height: 80px !important;
+  width: 300px !important;
 }
 </style>
 
@@ -45,14 +45,14 @@
 
 <script>
 export default {
-    name: 'Exchange',
-    methods: {
-        handleExchangeChangelly() {
-            this.$router.push({name: 'Changelly'})
-        },
-        handleExchangeCryptonex() {
-            //this.$router.push({name: 'Cryptonex'})
-        }
+  name: "Exchange",
+  methods: {
+    handleExchangeChangelly() {
+      this.$router.push({ name: "Changelly" });
+    },
+    handleExchangeCryptonex() {
+      //this.$router.push({name: 'Cryptonex'})
     }
-}
+  }
+};
 </script>
