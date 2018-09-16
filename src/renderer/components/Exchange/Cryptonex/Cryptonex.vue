@@ -16,18 +16,6 @@
 <template>
     <div>
       <breadcrumb  :current="$t('exchange.exchange')" v-on:backEvent="handleRouteBack"></breadcrumb>
-      <!-- Remove this div and enable this.loadPage in mounted() to open in a new window
-      <div class="cryptonex"
-        <iframe
-          src="https://wallet.cryptonex.org/users/login"
-          width="1000"
-          height="500"
-          class="cryptonex"
-          scrolling="no"
-          style="overflow-y: hidden; border: none"
-        >         
-        </iframe>
-        </div> -->
    </div>
 </template>
 
@@ -39,9 +27,6 @@ const { BrowserWindow } = require("electron").remote;
 export default {
   name: "Cryptonex",
   mounted() {
-    //Cryptonex page set to load as iframe in current window, if new browser
-    //window is preferred, enable method this.loadPage() below and remove reference
-    //to iFrame in <div> above
     this.loadPage()
   },
   data() {
