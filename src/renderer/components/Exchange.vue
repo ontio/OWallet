@@ -51,7 +51,7 @@ export default {
       this.$router.push({ name: "Changelly" });
     },
     handleExchangeCryptonex() {
-      //this.$router.push({name: 'Cryptonex'})
+      this.$router.push({ name: "Cryptonex" });
     }
   }
 };
