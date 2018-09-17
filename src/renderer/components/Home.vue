@@ -93,7 +93,7 @@
     <div class="col-10 bg-container">
       <!-- <img class="img-home-page" src="./../assets/home/background@1.5x.png" alt=""> -->
       <div class="home-img"></div>
-      <div class="home-upgrade">
+      <div class="home-upgrade" v-if="latest_url">
         <!-- <a-alert message="Warning" type="warning" showIcon /> -->
         {{$t('common.versionUpdate')}}
         <a @click="handleUpdate">{{$t('common.getLatestVersion')}}</a>
@@ -124,20 +124,22 @@
   import {mapState} from 'vuex'
   import {TEST_NET, MAIN_NET} from '../../core/consts'
   import axios from 'axios';
+  import pkg from '../../../package.json'
   const {BrowserWindow} = require('electron').remote;
 
   export default {
     name: 'Home',
     data() {
       return {
-        version: '0.8.8',
+        version: pkg.version,
         latest_url: ''
       }
     },
     mounted() {
       const url = 'https://api.github.com/repos/ontio/OWallet/releases/latest';
+      const version = this.version;
       axios.get(url).then(res => {
-        if (res.data && res.data.tag_name !== 'v' + this.version) {
+        if (res.data && res.data.tag_name !== version){
           console.log('not latest')
           this.latest_url = res.data.html_url
         }
