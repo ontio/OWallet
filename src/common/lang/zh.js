@@ -36,7 +36,10 @@ export default {
     more: '更多',
     neoCompatible: '兼容NEO地址',
     versionUpdate: '您可以升级OWallet。',
-    getLatestVersion: '下载最新版本。'
+    getLatestVersion: '下载最新版本。',
+    changePassSuccess: '修改密码成功',
+    changePassSuccessTip: '您已经修改了钱包密码。我们建议您下载并备份钱包的.dat文件。(旧的.dat文件可以被替换或者删除)',
+    download: 'Download'
   },
 
   TopNav: {
@@ -423,7 +426,7 @@ export default {
     userStake: '当前用户授权质押数额',
     rewardsPerMonth: '预计每月收益总额',
     rewardsTip: '预计每月收益总额包括节点的和参与授权质押用户的收益总额',
-    rewardProportion: '节点收益分配比例',
+    rewardProportion: '节点收益分配比例: ',
     current: '当前',
     rewardsProportionTip: '0%表示节点不会分享收益给参与授权质押的用户。',
     confirm: '确认',
@@ -458,6 +461,7 @@ export default {
     switchWallet: '切换钱包',
     noClaimableOnt: '没有可提取的ONT',
     amountToCancel: '要取消的质押数额',
+    unitToCancel: '要取消的质押份数',
     invalidInput: '请输入合理的值',
     peerNotAllowAuthorize: '此节点当前不允许授权质押',
     addInitPos: '增加初始质押',
@@ -474,7 +478,12 @@ export default {
     nodeUser: '节点 / 用户',
     authorizeTip: '用户对该节点的授权抵押金额，包括本轮新授权的ONT和已生效的授权ONT，取消授权会优先取消本轮新授权的ONT，取消后进入用户的可提取ONT中。本轮新授权的ONT不足则会取消已生效的授权ONT，按照节点是候选/共识状态分别锁定1轮或2轮，之后进入用户的可提取ONT中。',
     rewardTip: '本体网络收到的所有手续费按照50%/50%的比例分给所有候选节点和共识节点，其中候选节点部分按照节点总抵押大小线性分配到每个候选节点，每个候选节点先拿走自己的部分（百分比），剩下的按照每个地址授权ONT的多少线性分配到每个地址。其中共识节点部分按照分润曲线分配到每个共识节点，每个共识节点先拿走自己的部分（百分比），剩下的按照每个地址授权ONT的多少线性分配到每个地址。',
-    unboundOng: '解绑的 ONG'
+    unboundOng: '解绑的 ONG',
+    activeT: '本轮生效',
+    activeT1: '下一轮生效',
+    activeT2: '下下轮生效',
+    changeRewardProportion: '修改节点分配比例',
+    edit:'修改'
   }
 
 }

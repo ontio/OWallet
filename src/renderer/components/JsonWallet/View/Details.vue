@@ -88,6 +88,17 @@
           </div>
     </a-modal>
 
+    <a-modal
+        :title="$t('common.changePassSuccess')"
+        v-model="showChangePassTip"
+        @ok="handleShowChangePassTipOk"
+        >
+        <div class="change-pass-success">
+          <p class="font-medium"><a-icon type="warning" /> {{$t('common.changePassSuccessTip')}}</p>
+          <a-button type="primary" @click="exportWallet(wallet)">{{$t('common.download')}}</a-button>
+        </div>
+    </a-modal>
+
   </div>
 </template>
 
@@ -111,6 +122,7 @@
         newPassword: '',
         reNewPassword: '',
         changePassModal: false,
+        showChangePassTip: false,
         modalTitle: this.wallet.key ? this.$t('common.authentication') : this.$t('common.confirmation')
       }
     },
@@ -145,6 +157,7 @@
         const account = Account.parseJsonObj(commonWallet)
         wallet.addAccount(account)
         FileHelper.downloadFile(wallet.toJsonObj(), commonWallet.label);
+        this.showChangePassTip = false;
       },
       handleExportWallet() {
         this.passModal = true;
@@ -253,6 +266,7 @@
                 this.oldPassword = '';
                 this.newPassword = '';
                 this.reNewPassword = ''
+                this.showChangePassTip = true;
             })
             })
 
@@ -264,6 +278,9 @@
         this.oldPassword = '';
         this.newPassword = '';
         this.reNewPassword = ''
+      },
+      handleShowChangePassTipOk() {
+        this.showChangePassTip = false;
       }
     }
   }
@@ -365,5 +382,9 @@
     margin-bottom:0;
     position:absolute;
     color: #515457;
+  }
+  .change-pass-success button {
+    display: block;
+    margin:0 auto;
   }
 </style>
