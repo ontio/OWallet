@@ -590,7 +590,7 @@ const {BrowserWindow} = require('electron').remote;
         this.$store.dispatch('showLoadingModals')
         setTimeout(() => {
             this.$store.dispatch('hideLoadingModals')
-        }, 100)
+        }, 500)
         this.getBalance();
         this.getTransactions();
         this.getNep5Balance();

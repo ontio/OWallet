@@ -36,10 +36,10 @@
                 <p class="font-medium">{{$t('nodeMgmt.nodeUser')}}</p>
                 <a-button class="btn-next" @click="handleNodeStake">{{$t('nodeMgmt.nodeStakeMgmt')}}</a-button>
             </div>
-            <!-- <div class="btn-item">
+            <div class="btn-item">
                 <p class="font-medium">{{$t('nodeMgmt.normalUser')}}</p>
                 <a-button class="btn-next" @click="handleAuthorization">{{$t('nodeMgmt.stakeAuthorizaton')}}</a-button>
-            </div> -->
+            </div>
         </div>
     </div>
     

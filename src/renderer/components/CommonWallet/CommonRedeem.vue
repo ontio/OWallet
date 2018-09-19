@@ -151,6 +151,7 @@ export default {
           const restClient = new RestClient(this.nodeUrl);
           restClient.sendRawTransaction(tx.serialize()).then(res => {
             console.log(res)
+            this.$store.dispatch('hideLoadingModals')
             if (res.Error === 0) {
                 this.$message.success(this.$t('common.transSentSuccess'))
             } else if (res.Error === -1) {

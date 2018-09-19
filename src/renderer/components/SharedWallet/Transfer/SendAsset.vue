@@ -154,7 +154,7 @@ export default {
             this.$emit('cancelEvent');
         },
         next() {
-            if(!this.amount ||!this.validAmount) {
+            if(!this.amount || Number(this.amount) === 0 ||!this.validAmount) {
                 this.$message.error(this.$t('transfer.inputValidAmount'))
                 return;
             }

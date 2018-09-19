@@ -36,7 +36,10 @@ export default {
     more: 'More',
     neoCompatible: 'NEO Address Compatible',
     versionUpdate: 'You can upgrade your OWallet.',
-    getLatestVersion: 'Get the latest version here.'
+    getLatestVersion: 'Get the latest version here.',
+    changePassSuccess: 'Change password successfully',
+    changePassSuccessTip: 'You have already changed the password of the wallet. We recommand you to download and backup the .dat file.(Please replace or delete the old .dat file of this wallet.)',
+    download: 'Download .dat'
   },
 
   TopNav: {
@@ -427,7 +430,7 @@ export default {
     userStake: 'Current total stake of users',
     rewardsPerMonth: 'Estimate total rewards per month',
     rewardsTip: 'Estimate total rewards per month includes your rewards and the rewards of other uesrs staking.',
-    rewardProportion: 'Reward proportion for yourself',
+    rewardProportion: 'Reward proportion for yourself: ',
     current: 'current',
     rewardsProportionTip: '0% indicates the node will share all rewards to stake authorized users.',
     confirm: 'Confirm',
@@ -462,6 +465,7 @@ export default {
     switchWallet: 'Switch wallet',
     noClaimableOnt: 'No claimable ONT',
     amountToCancel: 'Amount to cancel',
+    unitToCancel: 'Units to cancel',
     invalidInput: 'Please enter valid value.',
     peerNotAllowAuthorize: 'This peer does not allow authorization now.',
     addInitPos: 'Add Init Pos',
@@ -485,6 +489,11 @@ If a user has both authorized ONT from this consensus round and a previous conse
 Within their 50% share each candidate node will receive their share linearly according to their stake amount.
 Within their 50% share each consensus node will receive their share according to their stake amount, which is subject to the incentive curve that discourages too high stakes.
 `,
-    unboundOng: 'Unbound ONG'
+    unboundOng: 'Unbound ONG',
+    activeT: 'Active in current round',
+    activeT1: 'Active in next round',
+    activeT2: 'Active in next 2 round',
+    changeRewardProportion: 'Change Reward Proportion',
+    edit: 'Edit'
   }
 }

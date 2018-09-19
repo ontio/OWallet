@@ -114,12 +114,12 @@
                 <p class="font-medium-black" for="">{{$t('nodeStake.stakeQuantity')}}</p>
                 <p>{{current_peer.initPos}}</p>
             </div>
-            <!-- <div class="initPos-btns" v-if="showPosBtn">
+            <div class="initPos-btns" v-if="showPosBtn">
                     <a-button class="add-initPos-btn" @click="handleAddInitPos">{{$t('nodeMgmt.addInitPos')}}</a-button>
                     <a-button class="add-initPos-btn" @click="handleReduceInitPos"
                     v-if="current_peer.initPos> detail.commitmentquantity"
                     >{{$t('nodeMgmt.reduceInitPos')}}</a-button>                    
-            </div> -->
+            </div>
         </div>
         <div class="footer-btns">
             <p class="font-medium stake-status-tip" >

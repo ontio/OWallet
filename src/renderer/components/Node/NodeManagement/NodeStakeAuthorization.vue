@@ -68,6 +68,7 @@
     height: 40px;
     line-height: 40px;
     margin-right: 10px;
+    font-size: 16px;
 }
 .btn-confirm {
     margin:5px auto;
@@ -116,7 +117,17 @@
 .redeem-item button {
     margin-left: 20px;
 }
-
+.node-reward-proportion {
+    margin-top:10px;
+    float:left;
+}
+.node-reward-proportion p {
+    margin:0;
+}
+.edit-proportion-btn {
+    margin-top: 10px;
+    margin-left: 20px;
+}
 </style>
 <template>
     <div class="content-container">
@@ -162,27 +173,17 @@
                 <span class="font-regular">{{$t('nodeMgmt.rewardsTip')}}</span>
             </div>
         </div>
-
-        <div class="clearfix" style="margin-top:20px;">
-            <span class="rewardProportionTip font-medium">{{$t('nodeMgmt.rewardProportion')}}</span>
-            <a-slider :min="0" :max="100" v-model="peerCost" :step="1" class="reward-slider"/>
-            <a-input-number
-                :min="0"
-                :max="100"
-                class="reward-input"
-                v-model="peerCost"
-            /> %
-             <span class="font-medium current-proportion"> ({{$t('nodeMgmt.current')}}: {{peer_attrs.oldPeerCost}}%) </span>
+        <div class="clearfix">
+            <div class="font-medium-black rewardProportionTip">{{$t('nodeMgmt.rewardProportion')}}</div>
+            <div class="node-reward-proportion">
+                <p class="font-medium">{{peer_attrs.tPeerCost}}%  ({{$t('nodeMgmt.activeT')}})</p>
+                <p class="font-medium">{{peer_attrs.t1PeerCost}}%  ({{$t('nodeMgmt.activeT1')}})</p>                
+                <p class="font-medium">{{peer_attrs.t2PeerCost}}%  ({{$t('nodeMgmt.activeT2')}})</p>
+            </div>
+            <a-button type="primary" class="btn-next edit-proportion-btn" @click="editProportion">{{$t('nodeMgmt.edit')}}</a-button>
         </div>
-        <div style="margin-bottom:10px;">
-            <a-icon type="exclamation-circle-o" />
-            <span>{{$t('nodeMgmt.rewardsProportionTip')}}</span>
-        </div>
-        <a-button type="primary" class="btn-next" @click="confirmChangeCost">{{$t('nodeMgmt.confirm')}}</a-button>
-        <div style="margin-top:10px;">
-            <a-icon type="exclamation-circle-o" />
-            <span>{{$t('nodeMgmt.changesTakeEffect')}}</span>
-        </div>
+        
+        
 
         <div class="redeem-profit">
             <div class="redeem-item">
@@ -201,6 +202,34 @@
         v-on:signClose="handleCancel"
         v-on:txSent="handleTxSent"
         ></sign-send-tx>
+
+        <a-modal
+            :title="$t('nodeMgmt.changeRewardProportion')"
+            :visible="showEditProportion"
+            @ok="confirmChangeCost"
+            @cancel="handleCancelChangeCost"
+            >
+            <div class="clearfix" style="margin-top:10px;">
+                <span class="rewardProportionTip font-medium">{{$t('nodeMgmt.changeRewardProportion')}}</span>
+                <!-- <a-slider :min="0" :max="100" v-model="peerCost" :step="1" class="reward-slider"/> -->
+                <a-input-number
+                    :min="0"
+                    :max="100"
+                    class="reward-input"
+                    v-model="peerCost"
+                    style="width:60px;"
+                /> %
+            </div>
+            <div>
+                <a-icon type="exclamation-circle-o" />
+                <span>{{$t('nodeMgmt.rewardsProportionTip')}}</span>
+            </div>
+            <div style="margin-bottom:5px;">
+                <a-icon type="exclamation-circle-o" />
+                <span>{{$t('nodeMgmt.changesTakeEffect')}}</span>
+            </div>
+    
+        </a-modal>
     </div>
 </template>
 <script>
@@ -222,11 +251,11 @@ export default {
             unit:0,
             intervalId:0,
             signVisible: false,
-            tx: ''
+            tx: '',
+            showEditProportion: false 
         }
     },
     mounted() {
-        this.peerCost = this.peer_attrs.newPeerCost;
         //fetch stake info
         this.refresh()
         this.intervalId = setInterval(()=>{
@@ -258,6 +287,12 @@ export default {
         }
     },
     methods:{
+        editProportion() {
+            this.showEditProportion = true;
+        },
+        handleCancelChangeCost() {
+            this.showEditProportion = false;
+        },
         confirmChangeAuthorization() {
             if(!this.validUnit) {
                 this.$message.error(this.$t('nodeMgmt.invalidInput'))
@@ -279,8 +314,7 @@ export default {
             }
         },
         confirmChangeCost() {
-            if(this.peerCost != this.peer_attrs.newPeerCost) {
-                const tx = Ont.GovernanceTxBuilder.makeSetPeerCostTx(
+            const tx = Ont.GovernanceTxBuilder.makeSetPeerCostTx(
                     this.stakeDetail.publickey,
                     new Crypto.Address(this.stakeWallet.address),
                     parseInt(this.peerCost),
@@ -290,9 +324,8 @@ export default {
                 )
                 this.tx = tx;
                 this.signVisible = true;
-            } else {
-                this.$message.warning(this.$t('nodeMgmt.noChange'))
-            }
+                this.showEditProportion = false;
+                this.peerCost = 0;
         },
         validateUnit(){
             if(this.unit && !varifyPositiveInt(this.unit)) {
@@ -309,6 +342,7 @@ export default {
         handleCancel() {
             this.signVisible = false;
             this.tx = ''
+            this.unit = 0;
         },
         handleTxSent() {
             this.signVisible = false;

@@ -52,6 +52,7 @@ export default {
     },
     methods: {
         handleWalletSignCancel() {
+            this.walletPassword = '';
             this.$emit('signClose')
         },
         handleWalletSignOK() {

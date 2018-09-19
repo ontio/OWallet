@@ -16,8 +16,9 @@ const state = {
         peerPubkey: '',
         maxAuthorize: 0,
         maxAuthorizeStr: '0',
-        oldPeerCost: 0,
-        newPeerCost: 0,
+        t2PeerCost: 0,
+        t1PeerCost: 0,
+        tPeerCost: 0
     },
     current_node: '',
     authorizationInfo:'',
@@ -48,8 +49,9 @@ const mutations = {
             peerPubkey: payload.peerAttrs.peerPubkey,
             maxAuthorize: payload.peerAttrs.maxAuthorize,
             maxAuthorizeStr: numeral(payload.peerAttrs.maxAuthorize).format('0,0'),
-            oldPeerCost: payload.peerAttrs.oldPeerCost,
-            newPeerCost: payload.peerAttrs.newPeerCost,
+            t2PeerCost: payload.peerAttrs.t2PeerCost,
+            t1PeerCost: payload.peerAttrs.t1PeerCost,
+            tPeerCost: payload.peerAttrs.tPeerCost
         }
     },
     UPDATE_CURRENT_NODE(state, payload) {
@@ -150,12 +152,15 @@ const actions = {
             const list = []
             for (let k in peerMap) {
                 let item = peerMap[k];
+                if(item.status !== 1 && item.status !== 2) {
+                    continue;
+                }
                 const attr = await Ont.GovernanceTxBuilder.getAttributes(item.peerPubkey, url);
                 item.maxAuthorize = attr.maxAuthorize;
                 item.maxAuthorizeStr = numeral(item.maxAuthorize).format('0,0')
                 item.totalPosStr = numeral(item.totalPos).format('0,0')
-                const nodeProportion = attr.newPeerCost + '%'
-                const userProportion = (100 - attr.newPeerCost) + '%'
+                const nodeProportion = attr.t1PeerCost + '%'
+                const userProportion = (100 - attr.t1PeerCost) + '%'
                 item.nodeProportion = nodeProportion + ' / ' + userProportion
                 list.push(item);
             }
@@ -171,7 +176,11 @@ const actions = {
             list.forEach((item, index) => {
                 item.rank = index + 1;
                 item.currentStake = item.initPos + item.totalPos;
-                item.process = Number((item.totalPos + item.initPos) * 100 / (item.initPos + item.maxAuthorize)).toFixed(2) + '%'
+                let process = Number((item.totalPos + item.initPos) * 100 / (item.initPos + item.maxAuthorize)).toFixed(2)
+                if(process > 100) {
+                    process = 100;
+                }
+                item.process = process + '%'
                 item.pk = item.peerPubkey
                 item.name = 'Node No.' + (index + 1)
                 if (item.peerPubkey === '02f4c0a18ae38a65b070820e3e51583fd3aea06fee2dc4c03328e4b4115c622567') {//for test
