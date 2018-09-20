@@ -36,10 +36,13 @@
     font-size:20px;
 }
 .proportion-title {
-    width:230px;
+    /* width:230px; */
 }
 .proportion-title p {
     margin:0
+}
+.proportion-info-icon {
+    cursor: pointer;
 }
 </style>
 <template>
@@ -61,8 +64,9 @@
         :dataSource="node_list"
         >
         <div slot="nodeProportionTitle" class="proportion-title">
-            <p>{{$t('nodeMgmt.proportionNextRound')}}</p>
-            <p>{{$t('nodeMgmt.nodeAndUser')}}</p>
+            <p>{{$t('nodeMgmt.proportionNextRound')}}
+                <a-icon type="info-circle-o" class="proportion-info-icon" @click="showProportionTip"/>
+            </p>
             </div>
         <a slot="name" slot-scope="text" @click="handleNodeDetail(record)">{{text}}</a>
         <div slot="action" slot-scope="text, record" class="detail-link">
@@ -162,17 +166,17 @@ export default {
             // Load a remote URL
             win.loadURL(url)
         },
-        // customRow(record) {
-        //     return {
-        //         on: {
-        //             click: () => {
-        //                 console.log(record)
-        //                 this.$store.commit('UPDATE_CURRENT_NODE', {current_node: record})
-        //                 this.$router.push({name: 'AuthorizeLogin'})
-        //             }
-        //         }
-        //     }
-        // }
+        showProportionTip() {
+            const h = this.$createElement
+            this.$info({
+                title: 'This is a notification message',
+                content: h('div',{}, [
+                h('p', 'some messages...some messages...'),
+                h('p', 'some messages...some messages...'),
+                ]),
+                onOk() {},
+            });
+        }
     }
 }
 </script>

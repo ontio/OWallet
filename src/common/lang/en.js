@@ -478,7 +478,7 @@ export default {
     refresh: 'Refresh',
     totalStakeAmount: 'Total Authorization Amount',
     blocks: 'Blocks',
-    proportionNextRound: 'Reward proportion in next round',
+    proportionNextRound: "Node Stake Reward proportion",
     nodeAndUser: 'Node / User',
     authorizeTip: `A user’s authorized stake amount for a node is made up of any authorized ONT from this consensus round and any authorized ONT from a previous consensus round.
 If authorized ONT from this consensus round is cancelled it will be cancelled immediately and be shown as redeemable ONT.

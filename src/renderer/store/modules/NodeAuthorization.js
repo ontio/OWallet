@@ -161,7 +161,8 @@ const actions = {
                 item.totalPosStr = numeral(item.totalPos).format('0,0')
                 const nodeProportion = attr.t1PeerCost + '%'
                 const userProportion = (100 - attr.t1PeerCost) + '%'
-                item.nodeProportion = nodeProportion + ' / ' + userProportion
+                // item.nodeProportion = nodeProportion + ' / ' + userProportion
+                item.nodeProportion =  userProportion
                 list.push(item);
             }
             list.sort((v1, v2) => {
