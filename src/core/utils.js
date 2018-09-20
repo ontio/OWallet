@@ -16,6 +16,6 @@ export function varifyOngValue(value) {
 
 export function getNodeUrl() {
     const net = localStorage.getItem('net');
-    // return net === 'TEST_NET' ? 'http://139.219.128.220:20334' : MAIN_NET + ':20334'
-    return 'http://139.219.128.220:20334' //for test
+    return net === 'TEST_NET' ? 'http://139.219.128.220:20334' : MAIN_NET + ':20334'
+    // return 'http://139.219.128.220:20334' //for test `
 }
