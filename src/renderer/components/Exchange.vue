@@ -38,6 +38,9 @@
             <div class="btn-item">
                 <a-button class="btn-next" @click="handleExchangeCryptonex">{{$t('exchange.cryptonex')}}</a-button>
             </div>
+             <div class="btn-item">
+                <a-button class="btn-next" @click="handleExchangeCoincap">{{$t('exchange.coincap')}}</a-button>
+            </div>
         </div>
     </div>
     
@@ -52,7 +55,10 @@ export default {
     },
     handleExchangeCryptonex() {
       this.$router.push({ name: "Cryptonex" });
-    }
+    },
+    handleExchangeCoincap() {
+      this.$router.push({ name: "Coincap" });
+    }  
   }
 };
 </script>

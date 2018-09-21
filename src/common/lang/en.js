@@ -482,7 +482,8 @@ Within their 50% share each consensus node will receive their share according to
 exchange: {
  exchange: 'Exchange',
  changelly: 'Changelly', 
- cryptonex: 'Cryptonex'
+ cryptonex: 'Cryptonex',
+ coincap: 'Prices (Coincap)'
 }
  
 }
