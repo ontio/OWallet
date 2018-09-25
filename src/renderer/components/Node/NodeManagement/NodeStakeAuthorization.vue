@@ -162,10 +162,6 @@
                     <span>{{$t('nodeMgmt.userStake')}}</span>
                     <span>{{current_peer.totalPosStr}} ONT</span>
                 </div>
-                <!-- <div class="content-column">
-                    <span>{{$t('nodeMgmt.rewardsPerMonth')}}</span>
-                    <span>{{'1,00,000 ONT'}}</span>
-                </div> -->
             </div>
             
             <div class="rewardsTip">

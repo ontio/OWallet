@@ -44,10 +44,15 @@
 .proportion-info-icon {
     cursor: pointer;
 }
+
+.btn-history {
+    float: right;
+}
 </style>
 <template>
     <div>
         <breadcrumb :current="$t('nodeMgmt.stakeAuthorization')" v-on:backEvent="handleRouteBack"></breadcrumb>
+            <a-button type="primary" class="btn-next btn-history" @click="toStakeHistory">{{$t('nodeMgmt.stakeHistory')}}</a-button>
         <div class="block-clock">
             <div>
                 <div class="countdown-img">
@@ -168,14 +173,18 @@ export default {
         },
         showProportionTip() {
             const h = this.$createElement
+            const title = this.$t('nodeMgmt.proportionNextRound')
+            const content = this.$t('nodeMgmt.proportionNextRoundTip')
             this.$info({
-                title: 'This is a notification message',
+                title: title,
                 content: h('div',{}, [
-                h('p', 'some messages...some messages...'),
-                h('p', 'some messages...some messages...'),
+                h('p', content),
                 ]),
                 onOk() {},
             });
+        },
+        toStakeHistory() {
+            this.$router.push({name: 'StakeHistory'})
         }
     }
 }

@@ -158,7 +158,7 @@
                 <div>
                     <span class="label font-medium-black">{{$t('nodeMgmt.unitToCancel')}}: </span>
                     <a-input class="input cancel-stake-input" :class="validCancelAmount? '': 'error-input'"
-                    v-model="cancelAmount" @change="validateCancelAmount"></a-input> Units
+                    v-model="cancelAmount" @change="validateCancelAmount"></a-input> {{$t('nodeMgmt.cancelUnits')}}
                 </div>
                 <div>
                     <span class="label font-medium-black">{{$t('nodeMgmt.amountToCancel')}}: </span>
@@ -269,9 +269,29 @@ export default {
         },
         handleTxSent() {
             this.signVisible = false;
-            this.tx = ''
+            // this.tx = ''
             this.cancelAmount = 0;
             this.refresh();
+            setTimeout(() => {
+                const address = this.stakeWallet.address;
+                const pk = this.current_node.pk;
+                this.$store.dispatch('fetchAuthorizationInfo', {pk, address}).then(authorizationInfo => {
+                    if(authorizationInfo) {
+                        const inAuthorization = authorizationInfo.consensusPos + authorizationInfo.freezePos
+                + authorizationInfo.newPos;
+                        const record = {
+                            indexKey : address + '-' + pk,
+                            stakeWalletAddress: address,
+                            nodePk: pk,
+                            nodeName: this.current_node.name,
+                            amount: inAuthorization
+                        }
+                        this.$store.dispatch('recordStakeHistory', {tx: this.tx, record}).then(res => {
+                            this.tx = '';
+                        })
+                    }
+                })
+            }, 2000)
         },
         validateCancelAmount() {
             if(!this.cancelAmount || !varifyPositiveInt(this.cancelAmount)) {

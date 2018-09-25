@@ -14,11 +14,8 @@
     </div>
     <div v-show="addressCopied" class="copied-label">Copied</div>
     <img class="img-wallet-copy" src="../../../assets/copy.png" @click="copyAddress(wallet)" alt="">
-    <!-- <a-button type="primary" class="common-export-btn" @click="exportWallet(wallet)" v-if="isCommonWallet"
-    >{{$t('common.export')}}</a-button> -->
     <div class="common-topRight-btns">
       <span class="common-delete-icon" @click="deleteWallet()" v-if="!isCommonWallet"></span>
-      <!-- <span class="common-download-icon" @click="handleExportWallet()" v-if="isCommonWallet"></span> -->
       <a-dropdown v-if="isCommonWallet">
         <a-menu slot="overlay" >
           <a-menu-item key="1" >

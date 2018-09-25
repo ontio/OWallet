@@ -155,6 +155,11 @@ export default new Router({
       component: require('@/components/Node/NodeAuthorize/NodeList').default
     },
     {
+      path: '/node/stakeHistory',
+      name: 'StakeHistory',
+      component: require('@/components/Node/NodeAuthorize/StakeHistory').default
+    },
+    {
       path: '/node/authorizeLogin',
       name: 'AuthorizeLogin',
       component: require('@/components/Node/NodeAuthorize/AuthorizeLogin').default
