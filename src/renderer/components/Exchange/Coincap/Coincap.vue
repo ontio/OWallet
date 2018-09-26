@@ -1,24 +1,36 @@
 <style scoped>
+td img {
+  width: 20px;
+}
 </style>
 
 <template>
   <div>
     <breadcrumb  :current="$t('exchange.exchange')" v-on:backEvent="handleRouteBack"></breadcrumb>
   <table class="table">
-    <th>Coin</th>
-    <th>Price (USD)</th>
-    <th>Market Cap</th>
-    <th>24hr Volume</th>
-    <th>24hr Change</th>
-    <tr v-for="(result,index) in results" class="tx-item" v-if="index<20">
-      <td  v-for="(value, key) in result">
-        {{ formatPrice(value) }} 
-      </td>
+    <thead>
+      <tr>
+        <td><b>Coin</b></td>
+        <td><b>Price (USD)</b></td>
+        <td><b>Market Cap (USD)</b></td>
+        <td><b>24hr Volume (USD)</b></td>
+        <td><b>24hr Change (%)</b></td>
+      </tr>
+    </thead>
+   
+    <tbody>
+    <tr v-for="(result, index) in results" v-if="index<20">
+      <td><img v-bind:src="getCoinImage(result.coin_short)"> {{ result.coin_long }} ({{ result.coin_short}})</td>
+      <td>{{ formatPrice(result.price) }}</td>
+      <td>{{ formatPrice(result.mcap) }}</td>
+      <td>{{ formatPrice(result.vol) }}</td>
+      <td v-bind:style="setColor(result.dailychange)">{{ result.dailychange }}%</td>
     </tr>
-  </table>  
-</div>
-</template>
+  </tbody>
 
+  </table>  
+ </div>
+</template>
 
 <script>
 import axios from "axios";
@@ -32,10 +44,10 @@ export default {
   },
   data() {
     return {
-      transactions: "",
       result: "",
       results: "",
-      coin: "",
+      coin_short: "",
+      coin_long: "",
       price: "",
       mcap: "",
       vol: "",
@@ -46,22 +58,27 @@ export default {
     };
   },
   mounted: function() {
-    this.refresh();
     let that = this;
-    this.intervalId = setInterval(() => {
-      that.getPrices();
+    setInterval(() => {
+      that.getImageData();
     }, this.interval);
   },
   computed: {},
   beforeDestroy() {
     clearInterval(this.intervalId);
   },
+  created: function() {
+    this.getImageData();
+  },
   methods: {
     formatPrice(value) {
       if (isNumber(value)) {
         let val = (value / 1).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        return "$"+ val;
+        return "$" + val;
       } else return value;
+    },
+    setColor: num => {
+      return num > 0 ? "color:green;" : "color:red;";
     },
     handleBack() {
       this.$router.push({ name: "Exchange" });
@@ -75,14 +92,16 @@ export default {
             const pricelist = response.data;
 
             const filteredlist = pricelist.map(t => {
-              const coin = t.long + " (" + t.short + ")";
+              const coin_short = t.short;
+              const coin_long = t.long;
               const price = t.price;
               const mcap = t.mktcap;
               const vol = t.volume;
-              const dailychange = t.cap24hrChange + "%";
+              const dailychange = t.cap24hrChange;
 
               return {
-                coin,
+                coin_short,
+                coin_long,
                 price,
                 mcap,
                 vol,
@@ -97,6 +116,25 @@ export default {
         .catch(err => {
           console.log(err);
         });
+    },
+    getImageData: function() {
+      let self = this;
+
+      this.axios
+        .get("https://min-api.cryptocompare.com/data/all/coinlist")
+        .then(response => {
+          if (response.status === 200 && response.data) {
+            this.imageData = response.data.Data;
+            this.getPrices();
+          }
+        })
+        .catch(err => {
+          this.getPrices();
+          console.error(err);
+        });
+    },
+    getCoinImage: function(short) {
+      return "https://www.cryptocompare.com" + this.imageData[short].ImageUrl;
     },
     refresh() {
       this.$store.dispatch("showLoadingModals");
