@@ -179,7 +179,8 @@ export default {
     confirmImport: 'Confirm Import',
     confirmImportExist: 'The wallet to import is already in your local. Still want to import it?',
     success: 'Import wallet successfully!',
-    saveDbFailed: 'Save to keystore failed. Please try later.'
+    saveDbFailed: 'Save to keystore failed. Please try later.',
+    invalidPrivateKey: 'Please enter valid private key.'
   },
 
   createSharedWallet: {

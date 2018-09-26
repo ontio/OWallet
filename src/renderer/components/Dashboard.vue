@@ -196,6 +196,8 @@
     color: #227EEC;
     text-align: center;
     cursor: pointer;
+    width:100%;
+    float:left;
   }
 
   .txList-header {
