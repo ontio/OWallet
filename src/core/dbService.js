@@ -12,25 +12,23 @@ var Datastore = require('nedb');
 const savePath = localStorage.getItem('savePath')
 
 const db = new Datastore({filename: savePath + '/keystore.db', autoload:true});
-// db.sharedWallet = new Datastore(savePath + '/sharedWallet.db');
-// db.hardwareWallet = new Datastore(savePath + '/userData/hardwareWallet.db');
+
+const db2 = new Datastore({filename: savePath + '/stakeHistory.db', autoload:true, timestampData: true});
 
 //indexing
 db.ensureIndex({fieldName: 'address', unique: true}, function(err) {
     console.log(err)
 });
-// db.sharedWallet.ensureIndex({fieldName: 'sharedWalletAddress', unique:true }, function(err){
-//     console.log(err)
-// })
-// db.hardwareWallet.ensureIndex({ fieldName: 'address', unique: true }, function (err) {
-//     console.log(err)
-// });
+
+// indexKey = stake wallet address + '-' + node's pk
+db2.ensureIndex({fieldName: 'indexKey', unique: true}, function(err) {
+    console.log(err)
+})
 
 db.loadDatabase();
-// db.sharedWallet.loadDatabase();
-// db.hardwareWallet.loadDatabase();
+db2.loadDatabase();
 
-const findWallet = (db, opt) => {
+const dbFind = (db, opt) => {
     return new Promise((resolve, reject) => {
         db.find(opt, function(err, docs) {
             if (err) {
@@ -42,5 +40,29 @@ const findWallet = (db, opt) => {
     })
 }
 
+const dbInsert = (db, doc) => {
+    return new Promise((resolve, reject) => {
+        db.insert(doc, function(err, newDoc) {
+            if(err) {
+                reject(err)
+            } else {
+                resolve(newDoc)
+            }
+        })
+    })
+}
+
+const dbUpsert = (db, index ,doc) => {
+    return new Promise((resolve, reject) => {
+        db.update({[index] : doc.indexKey}, doc, {upsert: true}, function(err, numReplaced, upsert) {
+            if(err) {
+                reject(err)
+            } else {
+                resolve(upsert)
+            }
+        })
+    })
+}
+
 export default db;
-export {findWallet};
+export {dbFind, dbUpsert, db2};

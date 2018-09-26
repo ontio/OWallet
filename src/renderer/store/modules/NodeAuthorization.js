@@ -1,7 +1,9 @@
 import {getNodeUrl} from '../../../core/utils'
 import numeral from 'numeral'
-import {Crypto, RestClient} from 'ontology-ts-sdk'
+import {Crypto, RestClient, utils} from 'ontology-ts-sdk'
 import {BigNumber} from 'bignumber.js'
+import {db2, dbUpsert, dbFind} from '../../../core/dbService'
+
 const state = {
     current_peer:{ // for node user
         peerPubkey: '',
@@ -29,7 +31,8 @@ const state = {
     countdown: 0,
     node_list: [],
     posLimit: 10,
-    peerUnboundOng: 0
+    peerUnboundOng: 0,
+    stakeHistory: []
 }
 
 const mutations = {
@@ -88,6 +91,9 @@ const mutations = {
     },
     UPDATE_PEER_UNBOUND_ONG(state, payload) {
         state.peerUnboundOng = payload.peerUnboundOng
+    },
+    UPDATE_STAKE_HISTORY(state, payload) {
+        state.stakeHistory = payload.history
     }
 }
 
@@ -236,6 +242,29 @@ const actions = {
         } catch(err) {
             console.log(err);
         }
+    },
+
+    async recordStakeHistory({commit}, {tx, record}) {
+        const url = getNodeUrl();
+        const rest = new RestClient(url)
+        const txHash = utils.reverseHex(tx.getHash());
+        const event = await rest.getSmartCodeEvent(txHash)
+        if(event.Result && parseInt(event.Result.State) === 1) {
+            try {
+                const upsert = await dbUpsert(db2, 'indexKey', record);
+                return upsert;
+            }catch(err) {
+                console.log(err)
+                return;
+            }
+        }
+    },
+    async fetchStakeHistory({commit}) {
+        let history = await dbFind(db2, {});
+        history.forEach(item => {item.updatedAt = item.updatedAt.toLocaleString()})
+        commit('UPDATE_STAKE_HISTORY', {history})
+        console.log(history)
+        return history;
     }
 }
 

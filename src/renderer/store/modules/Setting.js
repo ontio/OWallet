@@ -1,4 +1,4 @@
-import dbService, { findWallet } from '../../../core/dbService';
+import dbService, { dbFind } from '../../../core/dbService';
 
 const net = localStorage.getItem('net');
 const state = {

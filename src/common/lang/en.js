@@ -318,7 +318,7 @@ export default {
     testNet: 'TestNet',
     mainNet: 'MainNet',
     en: 'English',
-    zh: 'Chinese',
+    zh: '中文',
     pathTit: 'Path: ',
     path: 'Save keystore file path',
     change: 'Change',
@@ -436,11 +436,11 @@ export default {
     confirm: 'Confirm',
     changesTakeEffect: ' Changes will take effect in two consensus rounds (each round is approximately every 30 days). ',
     stakeAuthorization: 'Stake Authorization',
-    toNextRound: 'To next round',
+    toNextRound: 'Next round in',
     rank: 'Rank',
     name: 'Name',
-    currentStake: 'Current Total Stake',
-    process: 'Process',
+    currentStake: 'Current total stake',
+    process: 'Remaining stake',
     changes: 'Changes',
     userParticipate: 'Make sure you are a user who wants to participate stake authorization',
     nodeName: 'Node Name',
@@ -478,7 +478,8 @@ export default {
     refresh: 'Refresh',
     totalStakeAmount: 'Total Authorization Amount',
     blocks: 'Blocks',
-    proportionNextRound: "Node Stake Reward proportion",
+    proportionNextRound: "Reward proportion for others",
+    proportionNextRoundTip: 'This is the portion of rewards received the node has chosen to share with users who have authorized stakes with them.',
     nodeAndUser: 'Node / User',
     authorizeTip: `A user’s authorized stake amount for a node is made up of any authorized ONT from this consensus round and any authorized ONT from a previous consensus round.
 If authorized ONT from this consensus round is cancelled it will be cancelled immediately and be shown as redeemable ONT.
@@ -494,6 +495,10 @@ Within their 50% share each consensus node will receive their share according to
     activeT1: 'Active in next round',
     activeT2: 'Active in next 2 round',
     changeRewardProportion: 'Change Reward Proportion',
-    edit: 'Edit'
+    edit: 'Edit',
+    stakeHistory: 'Stake History',
+    cancelUnits: 'Units',
+    stakeWalletAddress: 'Stake wallet address',
+    lastUpdate: 'Last update time'
   }
 }

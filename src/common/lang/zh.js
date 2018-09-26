@@ -316,7 +316,7 @@ export default {
     testNet: 'ONT测试网络',
     mainNet: 'ONT主网',
     en: 'English',
-    zh: 'Chinese',
+    zh: '中文',
     pathTit: '当前路径： ',
     path: '钱包保存路径',
     change: '修改',
@@ -451,7 +451,7 @@ export default {
     newStakeAuthorization: '提交新的授权质押',
     cancelAuthorization: '取消授权质押',
     units: '授权质押份数',
-    stakeAmountTip: '质押数额 = 分数 * 500 ONT/每份.',
+    stakeAmountTip: '质押数额 = 份数 * 500 ONT/每份.',
     stakeAmount: '质押数额',
     submit: '提交',
     allowedStakeUnits: '允许授权质押份数',
@@ -475,7 +475,8 @@ export default {
     totalStakeAmount: '授权质押总额',
     blocks: '区块',
     proportionNextRound: '节点质押收益分配比例',
-    nodeUser: '节点 / 用户',
+    proportionNextRoundTip: '由节点设定的，节点的所有质押用户能获得的收益分配比例',
+    nodeAndUser: '节点 / 用户',
     authorizeTip: '用户对该节点的授权抵押金额，包括本轮新授权的ONT和已生效的授权ONT，取消授权会优先取消本轮新授权的ONT，取消后进入用户的可提取ONT中。本轮新授权的ONT不足则会取消已生效的授权ONT，按照节点是候选/共识状态分别锁定1轮或2轮，之后进入用户的可提取ONT中。',
     rewardTip: '本体网络收到的所有手续费按照50%/50%的比例分给所有候选节点和共识节点，其中候选节点部分按照节点总抵押大小线性分配到每个候选节点，每个候选节点先拿走自己的部分（百分比），剩下的按照每个地址授权ONT的多少线性分配到每个地址。其中共识节点部分按照分润曲线分配到每个共识节点，每个共识节点先拿走自己的部分（百分比），剩下的按照每个地址授权ONT的多少线性分配到每个地址。',
     unboundOng: '解绑的 ONG',
@@ -483,7 +484,11 @@ export default {
     activeT1: '下一轮生效',
     activeT2: '下下轮生效',
     changeRewardProportion: '修改节点分配比例',
-    edit:'修改'
+    edit:'修改',
+    stakeHistory: '质押历史',
+    cancelUnits: '份',
+    stakeWalletAddress: '质押钱包地址',
+    lastUpdate: '上次更新时间'
   }
 
 }
