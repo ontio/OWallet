@@ -178,7 +178,8 @@ export default {
     confirmImport: '确认导入',
     confirmImportExist: '要导入的钱包本地已存在。仍然要导入？',
     success: '导入钱包成功',
-    saveDbFailed: '保存到Keystore失败。请稍后重试。'
+    saveDbFailed: '保存到Keystore失败。请稍后重试。',
+    invalidPrivateKey: '请输入正确的私钥'
   },
 
   createSharedWallet: {

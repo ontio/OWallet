@@ -251,6 +251,7 @@
   import dbService from '../../../../core/dbService'
   import {DEFAULT_SCRYPT} from '../../../../core/consts'
   import $ from 'jquery'
+  import {isHexString} from '../../../../core/utils'
 
   export default {
     name: 'BasicInfo',
@@ -341,6 +342,11 @@
           label: this.pkLabel,
           privateKey: new Crypto.PrivateKey(this.pk),
           password: this.pkPassword
+        }
+        if(!isHexString(this.pk)) {
+          this.$message.error(this.$t('importJsonWallet.invalidPrivateKey'))
+          this.$store.dispatch('hideLoadingModals')
+          return;
         }
         this.$store.dispatch('createJsonWalletWithPrivateKey', body).then(res => {
           this.saveToDb(res)
