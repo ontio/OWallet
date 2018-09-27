@@ -11,6 +11,21 @@ OWallet is a comprehensive Ontology desktop wallet. OWallet supports standard wa
 
 Welcome to join [our community on Discord](https://discord.gg/4TQujHj).
 
+Core features of OWallet are as follows:
+
+* Create wallet/import wallet using keystore,mnemonic phrase,WIF private key,HEX private key 
+* Support shared wallet based on multi-signature technology
+* Ledger support
+* View balance and record
+* Send ONG and ONT
+* Withdraw (redeem) ONG
+* Node stake and stake authrization management
+* ONT ID support
+* Integrate exchangely 
+
+![](images/OWallet.jpg)
+
+
 ## Get started
 
 1. Clone the repo
