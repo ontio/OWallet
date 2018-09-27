@@ -19,7 +19,7 @@ Core features of OWallet are as follows:
 * View balance and record
 * Send ONG and ONT
 * Withdraw (redeem) ONG
-* Node stake and stake authrization management
+* Node stake and stake authorization management
 * ONT ID support
 * Integrate exchangely 
 
