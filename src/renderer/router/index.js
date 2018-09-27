@@ -184,10 +184,5 @@ export default new Router({
       name: 'Cryptonex',
       component: require('@/components/Exchange/Cryptonex/Cryptonex').default
     },
-    {
-      path: '/Exchange/Coincap',
-      name: 'Coincap',
-      component: require('@/components/Exchange/Coincap/Coincap').default
-    }    
   ]
 })
