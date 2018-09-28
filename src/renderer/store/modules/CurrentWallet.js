@@ -22,7 +22,8 @@ const state = {
         asset:'ONT',
         gas:0.01,
         coPayers : [],
-        sponsorPayer:''
+        sponsorPayer:'',
+        isRedeem: false
     },
     pendingTx: {
         
@@ -75,6 +76,10 @@ const mutations = {
     },
     UPDATE_NEP5_ONT(state, payload) {
         state.nep5Ont = payload.nep5Ont
+    },
+    UPDATE_TRANSFER_REDEEM_TYPE(state, payload) {
+        state.transfer.isRedeem = payload.type;
+        state.transfer.asset = payload.type ? 'ONG' : 'ONT'
     }
 
 }

@@ -18,7 +18,7 @@
         <div class="send-container">
             <div class="steps">
                 <a-steps :current="current">
-                    <a-step />
+                    <a-step  v-if="!isRedeem"/>
                     <a-step  />
                     <a-step  />
                 </a-steps>
@@ -27,7 +27,7 @@
             <send-asset
             v-on:cancelEvent="handleCancel"
             v-on:sendAssetNext="handleSendAssetNext" 
-            v-if="current ===0">
+            v-if="current ===0 && !isRedeem">
             </send-asset>
             <send-confirm
             v-if="current === 1"
@@ -49,6 +49,7 @@ import Breadcrumb from '../Breadcrumb'
 import SendAsset from './Transfer/SendAsset'
 import SendConfirm from './Transfer/SendConfirm'
 import InputPassword from './Transfer/InputPassword'
+import {mapState} from 'vuex'
 export default {
     name: 'SharedWalletSend',
     components: {
@@ -57,14 +58,22 @@ export default {
         SendConfirm,
         InputPassword
     },
+    computed: {
+        ...mapState({
+            isRedeem: state => state.CurrentWallet.transfer.isRedeem,
+        })
+    },
     data() {
         const sharedWallet = JSON.parse(sessionStorage.getItem('sharedWallet'));
         const routes = [{name: sharedWallet.sharedWalletName, path:'/sharedWallet/home'}]
         return {
             sharedWallet,
             routes,
-            current:0
+            current: 0
         }
+    },
+    mounted(){
+        this.current = this.isRedeem ? 1 : 0;
     },
     methods: {
         handleRouteBack() {

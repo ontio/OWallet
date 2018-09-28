@@ -282,6 +282,7 @@ export default {
           const restClient = new Ont.RestClient(this.nodeUrl);
           restClient.sendRawTransaction(tx.serialize()).then(res => {
           console.log(res)
+          this.$store.dispatch('hideLoadingModals')
           if (res.Error === 0) {
             this.$message.success(this.$t('common.transSentSuccess'))
           } else if (res.Error === -1) {
@@ -329,6 +330,7 @@ export default {
         } catch (err) {
           this.sending = false;
           console.log(err);
+          this.$store.dispatch('hideLoadingModals')
           this.$message.error(this.$t('common.pwdErr'))
           return;
         }
@@ -345,7 +347,8 @@ export default {
             txSig.pubKeys = [pk];
             tx.payer = from;
             const txData = tx.serializeUnsignedData();
-            legacySignWithLedger(txData, this.publicKey).then(res => {
+            const neo = this.currentWallet.neo;
+            legacySignWithLedger(txData, neo).then(res => {
             // console.log('txSigned: ' + res);
             const sign = '01' + res; //ECDSAwithSHA256
             txSig.sigData = [sign]

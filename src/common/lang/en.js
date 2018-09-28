@@ -25,6 +25,7 @@ export default {
     readyToLogin: 'Ready to login',
     walletAddress: 'Wallet Address',
     authentication: 'Authentication',
+    confirmation: 'Confirmation',
     enterWalletPassword: 'Please enter your wallet password',
     password: 'Password',
     invalidLedger: 'The current ledger dose not match with the wallet.Please try with another ledger device.',
@@ -32,7 +33,13 @@ export default {
     exportWIF: 'Export WIF',
     changePassword: 'Change Password',
     deleteWallet: 'Delete Wallet',
-    more: 'More'
+    more: 'More',
+    neoCompatible: 'NEO Address Compatible',
+    versionUpdate: 'You can upgrade your OWallet.',
+    getLatestVersion: 'Get the latest version here.',
+    changePassSuccess: 'Change password successfully',
+    changePassSuccessTip: 'You have already changed the password of the wallet. We recommand you to download and backup the .dat file.(Please replace or delete the old .dat file of this wallet.)',
+    download: 'Download .dat'
   },
 
   TopNav: {
@@ -139,6 +146,7 @@ export default {
     privateKey: 'Private Key',
     backupWallet: 'Please make a backup of these data and save the .dat file.',
     createSuccess:'Create individual wallet successfully.',
+    createFail: 'Create individual wallet failed. Please try again.',
     download: "Download .dat",
     privateKey64Hex: 'Private key (64 Hex)',
     priavteKeywif: 'Private key (WIF)',
@@ -171,7 +179,8 @@ export default {
     confirmImport: 'Confirm Import',
     confirmImportExist: 'The wallet to import is already in your local. Still want to import it?',
     success: 'Import wallet successfully!',
-    saveDbFailed: 'Save to keystore failed. Please try later.'
+    saveDbFailed: 'Save to keystore failed. Please try later.',
+    invalidPrivateKey: 'Please enter valid private key.'
   },
 
   createSharedWallet: {
@@ -231,7 +240,8 @@ export default {
   importLedgerWallet: {
     import: 'Connect Ledger Wallet',
     label: 'Name of Ledger Wallet',
-    next: 'Connect'
+    next: 'Connect',
+    neoCompatible: 'NEO Address Compatible'
   },
 
   sharedWalletHome: {
@@ -266,7 +276,8 @@ export default {
     signSequence: 'Sign sequence',
     sign: 'Sign',
     checkMore: 'Check More',
-    publicKey: 'Public Key'
+    publicKey: 'Public Key',
+    redeemOng: 'Redeem ONG'
   },
 
   commonWalletHome: {
@@ -308,7 +319,7 @@ export default {
     testNet: 'TestNet',
     mainNet: 'MainNet',
     en: 'English',
-    zh: 'Chinese',
+    zh: '中文',
     pathTit: 'Path: ',
     path: 'Save keystore file path',
     change: 'Change',
@@ -404,9 +415,9 @@ export default {
   },
 
   nodeMgmt: {
-    nodeUser: 'Your are a node, here you can stake and manage stake.',
+    nodeUser: 'If you are a candidate node, you can stake and manage your stake here.',
     nodeStakeMgmt: 'Node Stake Management',
-    normalUser: 'You are a user, want to participate stake authorization.',
+    normalUser: 'If you are a normal user, you can participate stake authorization here.',
     stakeAuthorizaton: 'Stake Authorization',
     nodeStake: 'Node Stake',
     userStakeAuthorization: 'User Stake Authorization',
@@ -420,17 +431,17 @@ export default {
     userStake: 'Current total stake of users',
     rewardsPerMonth: 'Estimate total rewards per month',
     rewardsTip: 'Estimate total rewards per month includes your rewards and the rewards of other uesrs staking.',
-    rewardProportion: 'Reward proportion for yourself',
+    rewardProportion: 'Reward proportion for yourself: ',
     current: 'current',
     rewardsProportionTip: '0% indicates the node will share all rewards to stake authorized users.',
     confirm: 'Confirm',
     changesTakeEffect: ' Changes will take effect in two consensus rounds (each round is approximately every 30 days). ',
     stakeAuthorization: 'Stake Authorization',
-    toNextRound: 'To next round',
+    toNextRound: 'Next round in',
     rank: 'Rank',
     name: 'Name',
-    currentStake: 'Current Total Stake',
-    process: 'Process',
+    currentStake: 'Current total stake',
+    process: 'Remaining stake',
     changes: 'Changes',
     userParticipate: 'Make sure you are a user who wants to participate stake authorization',
     nodeName: 'Node Name',
@@ -455,6 +466,7 @@ export default {
     switchWallet: 'Switch wallet',
     noClaimableOnt: 'No claimable ONT',
     amountToCancel: 'Amount to cancel',
+    unitToCancel: 'Units to cancel',
     invalidInput: 'Please enter valid value.',
     peerNotAllowAuthorize: 'This peer does not allow authorization now.',
     addInitPos: 'Add Init Pos',
@@ -467,7 +479,8 @@ export default {
     refresh: 'Refresh',
     totalStakeAmount: 'Total Authorization Amount',
     blocks: 'Blocks',
-    proportionNextRound: 'Reward proportion in next round',
+    proportionNextRound: "Reward proportion for others",
+    proportionNextRoundTip: 'This is the portion of rewards received the node has chosen to share with users who have authorized stakes with them.',
     nodeAndUser: 'Node / User',
     authorizeTip: `A user’s authorized stake amount for a node is made up of any authorized ONT from this consensus round and any authorized ONT from a previous consensus round.
 If authorized ONT from this consensus round is cancelled it will be cancelled immediately and be shown as redeemable ONT.
@@ -477,7 +490,17 @@ If a user has both authorized ONT from this consensus round and a previous conse
     rewardTip: `All transactions fees received by Ontology are distributed to all candidate nodes and consensus nodes - 50% to each group.
 Within their 50% share each candidate node will receive their share linearly according to their stake amount.
 Within their 50% share each consensus node will receive their share according to their stake amount, which is subject to the incentive curve that discourages too high stakes.
-`
+`,
+    unboundOng: 'Unbound ONG',
+    activeT: 'Active in current round',
+    activeT1: 'Active in next round',
+    activeT2: 'Active in next 2 round',
+    changeRewardProportion: 'Change Reward Proportion',
+    edit: 'Edit',
+    stakeHistory: 'Stake History',
+    cancelUnits: 'Units',
+    stakeWalletAddress: 'Stake wallet address',
+    lastUpdate: 'Last update time'
 },
 exchange: {
  exchange: 'Exchange',
@@ -485,5 +508,4 @@ exchange: {
  cryptonex: 'Cryptonex',
  coincap: 'Prices (Coincap)'
 }
- 
 }

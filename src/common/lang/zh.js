@@ -25,6 +25,7 @@ export default {
     readyToLogin: '可以登录',
     walletAddress: '钱包地址',
     authentication: '验证',
+    confirmation: '确认',
     enterWalletPassword: '请输入钱包密码',
     password: '密码',
     invalidLedger: '当前Ledger设备与要打开的钱包不匹配，请尝试正确的ledger设备。',
@@ -32,7 +33,13 @@ export default {
     exportWIF: '导出WIF',
     changePassword: '修改密码',
     deleteWallet: '删除钱包',
-    more: '更多'
+    more: '更多',
+    neoCompatible: '兼容NEO地址',
+    versionUpdate: '您可以升级OWallet。',
+    getLatestVersion: '下载最新版本。',
+    changePassSuccess: '修改密码成功',
+    changePassSuccessTip: '您已经修改了钱包密码。我们建议您下载并备份钱包的.dat文件。(旧的.dat文件可以被替换或者删除)',
+    download: 'Download'
   },
 
   TopNav: {
@@ -139,6 +146,7 @@ export default {
     privateKey: '私钥',
     backupWallet: '请备份好以上数据并保存好.dat文件。',
     createSuccess: '创建普通钱包成功！',
+    createFail: '创建普通钱包失败。请重试。',
     download: '下载.dat文件',
     privateKey64Hex: '私钥(64 Hex格式)',
     priavteKeywif: '私钥(WIF格式)',
@@ -170,7 +178,8 @@ export default {
     confirmImport: '确认导入',
     confirmImportExist: '要导入的钱包本地已存在。仍然要导入？',
     success: '导入钱包成功',
-    saveDbFailed: '保存到Keystore失败。请稍后重试。'
+    saveDbFailed: '保存到Keystore失败。请稍后重试。',
+    invalidPrivateKey: '请输入正确的私钥'
   },
 
   createSharedWallet: {
@@ -230,7 +239,8 @@ export default {
   importLedgerWallet: {
     import: '连接Ledger钱包',
     label: '钱包名称',
-    next: '连接'
+    next: '连接',
+    neoCompatible: '兼容NEO地址'
   },
 
   sharedWalletHome: {
@@ -265,7 +275,8 @@ export default {
     signSequence: '选择签名人数',
     sign: '签名',
     checkMore: '查看更多',
-    publicKey: '公钥'
+    publicKey: '公钥',
+    redeemOng: '提取ONG'
   },
 
   commonWalletHome: {
@@ -306,7 +317,7 @@ export default {
     testNet: 'ONT测试网络',
     mainNet: 'ONT主网',
     en: 'English',
-    zh: 'Chinese',
+    zh: '中文',
     pathTit: '当前路径： ',
     path: '钱包保存路径',
     change: '修改',
@@ -416,7 +427,7 @@ export default {
     userStake: '当前用户授权质押数额',
     rewardsPerMonth: '预计每月收益总额',
     rewardsTip: '预计每月收益总额包括节点的和参与授权质押用户的收益总额',
-    rewardProportion: '节点收益分配比例',
+    rewardProportion: '节点收益分配比例: ',
     current: '当前',
     rewardsProportionTip: '0%表示节点不会分享收益给参与授权质押的用户。',
     confirm: '确认',
@@ -441,7 +452,7 @@ export default {
     newStakeAuthorization: '提交新的授权质押',
     cancelAuthorization: '取消授权质押',
     units: '授权质押份数',
-    stakeAmountTip: '质押数额 = 分数 * 500 ONT/每份.',
+    stakeAmountTip: '质押数额 = 份数 * 500 ONT/每份.',
     stakeAmount: '质押数额',
     submit: '提交',
     allowedStakeUnits: '允许授权质押份数',
@@ -451,6 +462,7 @@ export default {
     switchWallet: '切换钱包',
     noClaimableOnt: '没有可提取的ONT',
     amountToCancel: '要取消的质押数额',
+    unitToCancel: '要取消的质押份数',
     invalidInput: '请输入合理的值',
     peerNotAllowAuthorize: '此节点当前不允许授权质押',
     addInitPos: '增加初始质押',
@@ -463,14 +475,26 @@ export default {
     refresh: '刷新',
     totalStakeAmount: '授权质押总额',
     blocks: '区块',
-    proportionNextRound: '下轮收益分配比例',
-    nodeUser: '节点 / 用户',
+    proportionNextRound: '节点质押收益分配比例',
+    proportionNextRoundTip: '由节点设定的，节点的所有质押用户能获得的收益分配比例',
+    nodeAndUser: '节点 / 用户',
     authorizeTip: '用户对该节点的授权抵押金额，包括本轮新授权的ONT和已生效的授权ONT，取消授权会优先取消本轮新授权的ONT，取消后进入用户的可提取ONT中。本轮新授权的ONT不足则会取消已生效的授权ONT，按照节点是候选/共识状态分别锁定1轮或2轮，之后进入用户的可提取ONT中。',
-    rewardTip: '本体网络收到的所有手续费按照50%/50%的比例分给所有候选节点和共识节点，其中候选节点部分按照节点总抵押大小线性分配到每个候选节点，每个候选节点先拿走自己的部分（百分比），剩下的按照每个地址授权ONT的多少线性分配到每个地址。其中共识节点部分按照分润曲线分配到每个共识节点，每个共识节点先拿走自己的部分（百分比），剩下的按照每个地址授权ONT的多少线性分配到每个地址。'
+    rewardTip: '本体网络收到的所有手续费按照50%/50%的比例分给所有候选节点和共识节点，其中候选节点部分按照节点总抵押大小线性分配到每个候选节点，每个候选节点先拿走自己的部分（百分比），剩下的按照每个地址授权ONT的多少线性分配到每个地址。其中共识节点部分按照分润曲线分配到每个共识节点，每个共识节点先拿走自己的部分（百分比），剩下的按照每个地址授权ONT的多少线性分配到每个地址。',
+    unboundOng: '解绑的 ONG',
+    activeT: '本轮生效',
+    activeT1: '下一轮生效',
+    activeT2: '下下轮生效',
+    changeRewardProportion: '修改节点分配比例',
+    edit:'修改',
+    stakeHistory: '质押历史',
+    cancelUnits: '份',
+    stakeWalletAddress: '质押钱包地址',
+    lastUpdate: '上次更新时间'
   },
   exchange: {
-   exchange: 'Exchange', //Replace with ZH
-   changelly: 'Changelly', //Replace with ZH
-   cryptonex: 'Cryptonex (Soon!)' //Replace with ZH
-  }
+  exchange: 'Exchange',
+  changelly: 'Changelly', 
+  cryptonex: 'Cryptonex',
+  coincap: 'Prices (Coincap)'
+}
 }

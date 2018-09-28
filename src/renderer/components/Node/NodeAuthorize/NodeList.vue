@@ -36,15 +36,23 @@
     font-size:20px;
 }
 .proportion-title {
-    width:230px;
+    /* width:230px; */
 }
 .proportion-title p {
     margin:0
+}
+.proportion-info-icon {
+    cursor: pointer;
+}
+
+.btn-history {
+    float: right;
 }
 </style>
 <template>
     <div>
         <breadcrumb :current="$t('nodeMgmt.stakeAuthorization')" v-on:backEvent="handleRouteBack"></breadcrumb>
+            <a-button type="primary" class="btn-next btn-history" @click="toStakeHistory">{{$t('nodeMgmt.stakeHistory')}}</a-button>
         <div class="block-clock">
             <div>
                 <div class="countdown-img">
@@ -61,8 +69,9 @@
         :dataSource="node_list"
         >
         <div slot="nodeProportionTitle" class="proportion-title">
-            <p>{{$t('nodeMgmt.proportionNextRound')}}</p>
-            <p>{{$t('nodeMgmt.nodeAndUser')}}</p>
+            <p>{{$t('nodeMgmt.proportionNextRound')}}
+                <a-icon type="info-circle-o" class="proportion-info-icon" @click="showProportionTip"/>
+            </p>
             </div>
         <a slot="name" slot-scope="text" @click="handleNodeDetail(record)">{{text}}</a>
         <div slot="action" slot-scope="text, record" class="detail-link">
@@ -162,17 +171,21 @@ export default {
             // Load a remote URL
             win.loadURL(url)
         },
-        // customRow(record) {
-        //     return {
-        //         on: {
-        //             click: () => {
-        //                 console.log(record)
-        //                 this.$store.commit('UPDATE_CURRENT_NODE', {current_node: record})
-        //                 this.$router.push({name: 'AuthorizeLogin'})
-        //             }
-        //         }
-        //     }
-        // }
+        showProportionTip() {
+            const h = this.$createElement
+            const title = this.$t('nodeMgmt.proportionNextRound')
+            const content = this.$t('nodeMgmt.proportionNextRoundTip')
+            this.$info({
+                title: title,
+                content: h('div',{}, [
+                h('p', content),
+                ]),
+                onOk() {},
+            });
+        },
+        toStakeHistory() {
+            this.$router.push({name: 'StakeHistory'})
+        }
     }
 }
 </script>

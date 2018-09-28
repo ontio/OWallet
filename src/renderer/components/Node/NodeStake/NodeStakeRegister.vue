@@ -130,21 +130,10 @@ export default {
       stakeQuantity: 0,
       ontidPassModal: false,
       walletPassModal: false,
+      walletModalHandled: false,
       ontidPassword: "",
       walletPassword: "",
       tx: "",
-      // detail: {
-      //   ontid: "did:ont:AKbC3ZaSBQ1GuNKsbcqWxi3uL2oyf9F8vK",
-      //   stakewalletaddress: "AazEvfQPcQ2GEFFPLF1ZLwQ7K5jDn81hve",
-      //   publickey:
-      //     "035384561673e76c7e3003e705e4aa7aee67714c8b68d62dd1fb3221f48c5d3da0",
-      //   contract: "testcontractname",
-      //   commitmentquantity: 100000,
-      //   stakequantity: 10,
-      //   transactionhash:
-      //     "364a945fc0e0fbbb05b09ededbbf4b22e1357653c924341cc210906cbd5305e0",
-      //   status: 3
-      // },
       nodeUrl : url
     };
   },
@@ -221,6 +210,10 @@ export default {
       this.ontidPassModal = false;
     },
     handleWalletSignOK(){
+      if(this.walletModalHandled) {
+        return;
+      }
+      this.walletModalHandled = true;
       if(this.stakeWallet.key && !this.walletPassword) { //common wallet
         this.$message.error(this.$t('nodeStake.passwordEmpty'))
         return;
@@ -238,6 +231,7 @@ export default {
         } catch (err) {
           console.log(err);
           this.$message.error(this.$t("common.pwdErr"));
+          this.walletModalHandled = false;
           return;
         }
         TransactionBuilder.addSign(this.tx, pri);
@@ -252,14 +246,14 @@ export default {
             txSig.pubKeys = [pk];
             tx.payer = new Crypto.Address(this.ledgerWallet.address);
             const txData = tx.serializeUnsignedData();
-            legacySignWithLedger(txData, this.publicKey).then(res => {
+            legacySignWithLedger(txData).then(res => {
             // console.log('txSigned: ' + res);
             const sign = '01' + res; //ECDSAwithSHA256
             txSig.sigData = [sign]
             tx.sigs.push(txSig);
             this.delegateSendTx(tx);
             }, err => {
-                this.sending = false;
+                this.walletModalHandled = false;
                 alert(err.message)
             }) 
         } else {
@@ -282,6 +276,8 @@ export default {
       const ontPassNode = net === 'TEST_NET' ? ONT_PASS_NODE : ONT_PASS_NODE_PRD
       this.$store.dispatch('showLoadingModals')
       axios.post(ontPassNode + ONT_PASS_URL.DelegateSendTx, body).then(res => {
+        this.$store.dispatch('hideLoadingModals')
+        this.walletModalHandled = false;
         const params = {
           ontid: this.stakeIdentity.ontid,
           stakewalletaddress: this.stakeWallet.address,
@@ -292,6 +288,7 @@ export default {
         })
       }).catch(err => {
         this.$store.dispatch('hideLoadingModals')
+        this.walletModalHandled = false;
         console.log(err)
         this.$message.error(this.$t('nodeStake.txFailed'))
         this.walletPassModal = false;

@@ -79,6 +79,7 @@ Vue.component(Dropdown.name, Dropdown)
 Vue.prototype.$message = message
 Vue.prototype.$confirm = Modal.confirm
 Vue.prototype.$success = Modal.success
+Vue.prototype.$info = Modal.info
 
 /* eslint-disable no-new */
 new Vue({

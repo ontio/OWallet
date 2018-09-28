@@ -251,6 +251,7 @@
   import dbService from '../../../../core/dbService'
   import {DEFAULT_SCRYPT} from '../../../../core/consts'
   import $ from 'jquery'
+  import {isHexString} from '../../../../core/utils'
 
   export default {
     name: 'BasicInfo',
@@ -284,7 +285,6 @@
     },
     beforeDestroy() {
       console.log('clear')
-      this.$store.commit('INIT_JSON_WALLET')
     },
     methods: {
       activeTab(tabName) {
@@ -342,6 +342,11 @@
           label: this.pkLabel,
           privateKey: new Crypto.PrivateKey(this.pk),
           password: this.pkPassword
+        }
+        if(!isHexString(this.pk)) {
+          this.$message.error(this.$t('importJsonWallet.invalidPrivateKey'))
+          this.$store.dispatch('hideLoadingModals')
+          return;
         }
         this.$store.dispatch('createJsonWalletWithPrivateKey', body).then(res => {
           this.saveToDb(res)
@@ -429,7 +434,6 @@
             return;
           }
           // console.log(newDoc)
-          that.$store.commit('INIT_JSON_WALLET')
           that.$message.success(that.$t('importJsonWallet.success'))
           that.$router.push({name: 'Wallets'})
         })
@@ -445,7 +449,6 @@
               this.$message.error(this.$t('importJsonWallet.saveDbFailed'))
               return;
             }
-            this.$store.commit('INIT_JSON_WALLET')
             this.$message.success(this.$t('importJsonWallet.success'))
             this.$router.push({name: 'Wallets'})
           })

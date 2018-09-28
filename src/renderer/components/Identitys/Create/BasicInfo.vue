@@ -140,8 +140,9 @@ import {legacySignWithLedger} from '../../../../core/ontLedger'
               payer: payer
             }
             this.$store.dispatch('createIdentityWithPrivateKey', body).then(res => {
-              // console.log(res)
-              const tx = res
+              console.log(res)
+              const tx = res;
+              // const tx = Object.assign({}, res);
               this.$store.dispatch('showLoadingModals')
               if(this.payerWalletType === 'commonWallet') {
                 const enc = new Crypto.PrivateKey(this.payerWallet.key)
@@ -163,7 +164,7 @@ import {legacySignWithLedger} from '../../../../core/ontLedger'
                   txSig.M = 1;
                   txSig.pubKeys = [pk];
                   const txData = tx.serializeUnsignedData();
-                  legacySignWithLedger(txData, this.publicKey).then(res => {
+                  legacySignWithLedger(txData).then(res => {
                   // console.log('txSigned: ' + res);
                   const sign = '01' + res; //ECDSAwithSHA256
                   txSig.sigData = [sign]
@@ -188,6 +189,8 @@ import {legacySignWithLedger} from '../../../../core/ontLedger'
           restClient.sendRawTransaction(tx.serialize()).then(res => {
           console.log(res)
           this.$store.dispatch('hideLoadingModals')
+          console.log('hide')
+
           if (res.Error === 0) {
             this.$message.success(this.$t('common.transSentSuccess'))
           } else if (res.Error === -1) {

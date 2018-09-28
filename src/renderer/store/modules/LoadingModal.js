@@ -8,6 +8,14 @@ const actions = {
     // Wait for the animation to end
     $('#loadingModal').on('shown.bs.modal', function () {
       $("#loadingModal").modal('hide')
+      // $('.modal-backdrop').hide();
+      // setTimeout(()=>{
+      //   $('body').removeClass('modal-open');
+      //   if ($('.modal-backdrop')) {
+      //     $('.modal-backdrop').remove();
+      //   }
+      // }, 500)
+      
     })
   }
 }

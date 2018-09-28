@@ -3,6 +3,7 @@
     <div @click="toWalletHome(wallet)">
       <div class="div-shared-wallet-sign">
         <span>{{ isCommonWallet ? $t('common.normalWallet') : $t('common.hardwareWallet') }}</span>
+        <p class="neo-compatile" v-if="!isCommonWallet && wallet.neo">{{$t('common.neoCompatible')}}</p>
       </div>
       <div class="div-wallet-name">{{wallet.label}}</div>
       <!--<img class="img-wallet-edit" src="./../assets/edit.png" alt="">-->
@@ -13,11 +14,8 @@
     </div>
     <div v-show="addressCopied" class="copied-label">Copied</div>
     <img class="img-wallet-copy" src="../../../assets/copy.png" @click="copyAddress(wallet)" alt="">
-    <!-- <a-button type="primary" class="common-export-btn" @click="exportWallet(wallet)" v-if="isCommonWallet"
-    >{{$t('common.export')}}</a-button> -->
     <div class="common-topRight-btns">
       <span class="common-delete-icon" @click="deleteWallet()" v-if="!isCommonWallet"></span>
-      <!-- <span class="common-download-icon" @click="handleExportWallet()" v-if="isCommonWallet"></span> -->
       <a-dropdown v-if="isCommonWallet">
         <a-menu slot="overlay" >
           <a-menu-item key="1" >
@@ -40,7 +38,7 @@
     </div>
 
     <a-modal 
-        :title="$t('common.authentication')"
+        :title="modalTitle"
         :visible="passModal"
         @ok="handleValidatePassword"
         @cancel="handleCancel">
@@ -87,6 +85,17 @@
           </div>
     </a-modal>
 
+    <a-modal
+        :title="$t('common.changePassSuccess')"
+        v-model="showChangePassTip"
+        @ok="handleShowChangePassTipOk"
+        >
+        <div class="change-pass-success">
+          <p class="font-medium"><a-icon type="warning" /> {{$t('common.changePassSuccessTip')}}</p>
+          <a-button type="primary" @click="exportWallet(wallet)">{{$t('common.download')}}</a-button>
+        </div>
+    </a-modal>
+
   </div>
 </template>
 
@@ -109,7 +118,9 @@
         oldPassword: '',
         newPassword: '',
         reNewPassword: '',
-        changePassModal: false
+        changePassModal: false,
+        showChangePassTip: false,
+        modalTitle: this.wallet.key ? this.$t('common.authentication') : this.$t('common.confirmation')
       }
     },
     methods: {
@@ -143,6 +154,7 @@
         const account = Account.parseJsonObj(commonWallet)
         wallet.addAccount(account)
         FileHelper.downloadFile(wallet.toJsonObj(), commonWallet.label);
+        this.showChangePassTip = false;
       },
       handleExportWallet() {
         this.passModal = true;
@@ -251,6 +263,7 @@
                 this.oldPassword = '';
                 this.newPassword = '';
                 this.reNewPassword = ''
+                this.showChangePassTip = true;
             })
             })
 
@@ -262,6 +275,9 @@
         this.oldPassword = '';
         this.newPassword = '';
         this.reNewPassword = ''
+      },
+      handleShowChangePassTipOk() {
+        this.showChangePassTip = false;
       }
     }
   }
@@ -356,5 +372,16 @@
   }
   .change-password-input :last-child {
     margin:0;
+  }
+  .neo-compatile {
+    font-size:12px;
+    margin-top: 5px;
+    margin-bottom:0;
+    position:absolute;
+    color: #515457;
+  }
+  .change-pass-success button {
+    display: block;
+    margin:0 auto;
   }
 </style>

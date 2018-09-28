@@ -33,11 +33,13 @@ const evalTransportError = err => {
     return err
 }
 
-const BIP44 = (acct = 0) => {
+const BIP44 = (acct = 0, neo = false) => {
     const acctNumber = acct.toString(16)
+    const coinType = neo ? '80000378' : '80000400';
+
     return (
         '8000002C' +
-        '80000400' +
+         coinType +
         '80000000' +
         '00000000' +
         '0'.repeat(8 - acctNumber.length) +
@@ -99,8 +101,8 @@ export default class NeonLedger {
      * @param {number} [acct] - Account that you want to retrieve the public key from.
      * @return {string} Public Key (Unencoded)
      */
-    async getPublicKey(acct: number = 0): Promise<string> {
-        const res = await this.send('80040000', BIP44(acct), [VALID_STATUS])
+    async getPublicKey(acct: number = 0, neo: boolean): Promise<string> {
+        const res = await this.send('80040000', BIP44(acct, neo), [VALID_STATUS])
         return res.toString('hex').substring(0, 130)
     }
 
@@ -149,8 +151,8 @@ export default class NeonLedger {
      * @param {number} [acct]
      * @return {Promise<string>}
      */
-    async getSignature(data: string, acct: number = 0): Promise<string> {
-        data += BIP44(acct)
+    async getSignature(data: string, acct: number = 0, neo: boolean = false): Promise<string> {
+        data += BIP44(acct, neo)
         let response = null
         const chunks = data.match(/.{1,510}/g) || [];
         if (!chunks.length) throw new Error(`Invalid data provided: ${data}`)
@@ -203,10 +205,10 @@ const assembleSignature = (response: string): string => {
     return integers.join('')
 }
 
-export const getPublicKey = async (acct: number = 0): Promise<string> => {
+export const getPublicKey = async (acct: number = 0, neo: boolean = false): Promise<string> => {
     const ledger = await NeonLedger.init()
     try {
-        return await ledger.getPublicKey(acct)
+        return await ledger.getPublicKey(acct, neo)
     } finally {
         await ledger.close()
     }
@@ -221,38 +223,10 @@ export const getDeviceInfo = async () => {
     }
 }
 
-/**
- * Signs a transaction with Ledger. Returns the whole transaction string
- * @param {Transaction|string} unsignedTx - hexstring or Transaction object
- * @param {number} acct - The account to sign with.
- * @return {string} Transaction as a hexstring.
- */
-export const signWithLedger = async (
-    unsignedTx: Transaction | string,
-    acct: number = 0
-): Promise<string> => {
-    const ledger = await NeonLedger.init()
-    try {
-        const data =
-            typeof unsignedTx !== 'string'
-                ? tx.serializeTransaction(unsignedTx, false)
-                : unsignedTx
-        const publicKey = await ledger.getPublicKey(acct)
-        const invocationScript = '40' + (await ledger.getSignature(data, acct))
-        const verificationScript = wallet.getVerificationScriptFromPublicKey(
-            publicKey
-        )
-        const txObj = tx.deserializeTransaction(data)
-        txObj.scripts.push({ invocationScript, verificationScript })
-        return tx.serializeTransaction(txObj)
-    } finally {
-        await ledger.close()
-    }
-}
 
 export const legacySignWithLedger = async (
     unsignedTx: Transaction | string,
-    publicKeyEncoded: string,
+    neo: boolean = false,
     acct: number = 0
 ): Promise<string> => {
     const ledger = await NeonLedger.init()
@@ -261,9 +235,8 @@ export const legacySignWithLedger = async (
             typeof unsignedTx !== 'string'
                 ? tx.serializeTransaction(unsignedTx, false)
                 : unsignedTx
-        const signData = await ledger.getSignature(data, acct)
+        const signData = await ledger.getSignature(data, acct, neo)
         return signData;
-        // return '01' + invocationScript + verificationScript;
     } catch(err) {
         return Promise.reject(err)
     }

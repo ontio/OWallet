@@ -1,10 +1,10 @@
 {
-  "name": "ont-wallet-test",
+  "name": "owallet",
   "productName": "OWallet",
   "homepage": "http://ont.io",
-  "version": "v0.8.6",
-  "author": "MickeyWang <wangdashuang@onchain.com>",
-  "description": "ledger",
+  "version": "v0.8.8",
+  "author": "Ontology Foundation Ltd. <devops@ont.io>",
+  "description": "OWallet is a comprehensive Ontology desktop wallet",
   "license": "Apache-2.0",
   "main": "./dist/electron/main.js",
   "scripts": {
@@ -21,10 +21,12 @@
     "pack": "npm run pack:main && npm run pack:renderer",
     "pack:main": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.main.config.js",
     "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
-    "postinstall": "npm run lint:fix",
     "package": "npm run pack && electron-builder -mwl",
     "packageLocal": "electron-builder",
-    "packageWin": "yarn run pack && electron-builder --win --x64"
+    "packageWin": "yarn run pack && electron-builder --win --x64",
+    "packageLin": "yarn run pack && electron-builder --linux --x64",
+    "postinstall": "electron-builder install-app-deps && electron-rebuild --force --module_dir . -w node-hid -v 1.8.4",
+    "electron-rebuild": "electron-rebuild --force --module_dir . -w node-hid"
   },
   "build": {
     "productName": "OWallet",
@@ -87,6 +89,7 @@
     "bignumber.js": "^7.2.1",
     "bootstrap": "^4.1.1",
     "clipboard": "^2.0.1",
+    "electron-winstaller": "^2.6.4",
     "font-awesome": "^4.7.0",
     "jquery": "^3.3.1",
     "nedb": "^1.8.0",

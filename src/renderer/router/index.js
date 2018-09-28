@@ -144,11 +144,11 @@ export default new Router({
       name: 'NodeManagement',
       component: require('@/components/Node/Node').default
     },
-    {
-      path: '/node/nodeLogin',
-      name: 'NodeLogin',
-      component: require('@/components/Node/NodeManagement/NodeLogin').default
-    },
+    // {
+    //   path: '/node/nodeLogin',
+    //   name: 'NodeLogin',
+    //   component: require('@/components/Node/NodeManagement/NodeLogin').default
+    // },
     {
       path: '/node/nodeStakeMgmt',
       name: 'NodeStakeManagement',
@@ -158,6 +158,11 @@ export default new Router({
       path: '/node/nodeList',
       name: 'NodeList',
       component: require('@/components/Node/NodeAuthorize/NodeList').default
+    },
+    {
+      path: '/node/stakeHistory',
+      name: 'StakeHistory',
+      component: require('@/components/Node/NodeAuthorize/StakeHistory').default
     },
     {
       path: '/node/authorizeLogin',

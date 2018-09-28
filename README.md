@@ -3,13 +3,28 @@
 
 
 <h1 align="center">OWallet - a comprehensive Ontology desktop wallet</h1>
-<h4 align="center">Version 0.8.0</h4>
+<h4 align="center">Version 0.8.8</h4>
 
 ## Introduction
 
 OWallet is a comprehensive Ontology desktop wallet. OWallet supports standard wallet management, shared wallet management based on multi-signature technology, and will also connect with various hard wallets such as Ledger, Trezor, and so on. In the next phase, OWallet will integrate more applications, providing developers with smart contract compilation, invocation, and other comprehensive services.
 
-Welcome to join [our community on Discord](https://discord.gg/4TQujHj).
+Support Windows/MacOS/Linux,get it [Here](https://github.com/ontio/OWallet/releases)，also welcome to join [our community on Discord](https://discord.gg/4TQujHj).
+
+Core features of OWallet are as follows:
+
+* Create wallet/import wallet using keystore,mnemonic phrase,WIF private key,HEX private key 
+* Support shared wallet based on multi-signature technology
+* Ledger support
+* View balance and record
+* Send ONG and ONT
+* Withdraw (redeem) ONG
+* Node stake and stake authorization management
+* ONT ID support
+* Integrate exchangely 
+
+![](images/OWallet.jpg)
+
 
 ## Get started
 

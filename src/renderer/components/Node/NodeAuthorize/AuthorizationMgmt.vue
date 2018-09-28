@@ -54,12 +54,12 @@
   .redeem-item {
       width:100%;
   }
-  .redeem-item :first-child {
-      width:100px;
+  .redeem-item span:first-child {
+      width:130px;
       display: inline-block;
   }
-  .redeem-item :last-child {
-
+  .redeem-item button {
+      margin-left: 20px;
   }
   .redeem-ont {
       margin: 15px 0;
@@ -118,8 +118,13 @@
                     <p class="redeem-item">
                         <span class="font-medium-black label">{{$t('nodeMgmt.claimable')}}: </span>
                         <span class="font-medium">{{authorizationInfo.claimable}} ONT</span>
+                        <a-button type="primary" class="redeem-btn" @click="redeemOnt">{{$t('nodeMgmt.redeem')}}</a-button>
                     </p>
-                    <a-button type="primary" class="redeem-btn" @click="redeemOnt">{{$t('nodeMgmt.redeem')}}</a-button>
+                    <p class="redeem-item">
+                        <span class="font-medium-black label">{{$t('nodeMgmt.unboundOng')}}: </span>
+                        <span class="font-medium">{{unboundOng}} ONG</span>
+                        <a-button type="primary" class="redeem-btn" @click="redeemOng">{{$t('nodeMgmt.redeem')}}</a-button>
+                    </p>
                 </div>
             </div>
             <div class="right-half">
@@ -151,9 +156,13 @@
                     <span class="font-medium">{{authorizationInfo.inAuthorization}} ONT</span>
                 </div>
                 <div>
-                    <span class="label font-medium-black">{{$t('nodeMgmt.amountToCancel')}}: </span>
+                    <span class="label font-medium-black">{{$t('nodeMgmt.unitToCancel')}}: </span>
                     <a-input class="input cancel-stake-input" :class="validCancelAmount? '': 'error-input'"
-                    v-model="cancelAmount" @change="validateCancelAmount"></a-input> ONT
+                    v-model="cancelAmount" @change="validateCancelAmount"></a-input> {{$t('nodeMgmt.cancelUnits')}}
+                </div>
+                <div>
+                    <span class="label font-medium-black">{{$t('nodeMgmt.amountToCancel')}}: </span>
+                    <span class="font-medium">{{cancelAmount*500}} ONT</span>
                 </div>
             </div>
         </a-modal>
@@ -195,15 +204,9 @@ export default {
         //fetch stake info
         // const pk = this.stakeDetail.publicKey
 
-        const address = this.stakeWallet.address;
-        const pk = this.current_node.pk;
-        this.$store.dispatch('fetchAuthorizationInfo', {pk, address})
-        this.$store.dispatch('fetchSplitFee', address)
-        this.$store.dispatch('fetchPeerAttributes', pk)
+        this.refresh();
         this.intervalId = setInterval(()=>{
-            this.$store.dispatch('fetchAuthorizationInfo', {pk, address})
-            this.$store.dispatch('fetchSplitFee', address)
-            this.$store.dispatch('fetchPeerAttributes', pk)            
+            this.refresh();            
         }, 5000)
     },
     beforeDestroy(){
@@ -217,6 +220,7 @@ export default {
             splitFee: state => state.NodeAuthorization.splitFee,
             authorizationInfo: state => state.NodeAuthorization.authorizationInfo,
             peer_attrs: state => state.NodeAuthorization.peer_attrs,
+            unboundOng: state => state.NodeAuthorization.peerUnboundOng
         }),
         inAuthorization: {
             get() {
@@ -226,6 +230,14 @@ export default {
 
     },
     methods: {
+        refresh(){
+            const address = this.stakeWallet.address;
+            const pk = this.current_node.pk;
+            this.$store.dispatch('fetchAuthorizationInfo', {pk, address})
+            this.$store.dispatch('fetchSplitFee', address)
+            this.$store.dispatch('fetchPeerAttributes', pk)
+            this.$store.dispatch('fetchPeerUnboundOng', address)
+        },
         handleRouteBack() {
             this.$router.go(-1);
         },
@@ -253,10 +265,33 @@ export default {
         handleCancel() {
             this.signVisible = false;
             this.tx = ''
+            this.cancelAmount = 0;
         },
         handleTxSent() {
             this.signVisible = false;
-            this.tx = ''
+            // this.tx = ''
+            this.cancelAmount = 0;
+            this.refresh();
+            setTimeout(() => {
+                const address = this.stakeWallet.address;
+                const pk = this.current_node.pk;
+                this.$store.dispatch('fetchAuthorizationInfo', {pk, address}).then(authorizationInfo => {
+                    if(authorizationInfo) {
+                        const inAuthorization = authorizationInfo.consensusPos + authorizationInfo.freezePos
+                + authorizationInfo.newPos;
+                        const record = {
+                            indexKey : address + '-' + pk,
+                            stakeWalletAddress: address,
+                            nodePk: pk,
+                            nodeName: this.current_node.name,
+                            amount: inAuthorization
+                        }
+                        this.$store.dispatch('recordStakeHistory', {tx: this.tx, record}).then(res => {
+                            this.tx = '';
+                        })
+                    }
+                })
+            }, 2000)
         },
         validateCancelAmount() {
             if(!this.cancelAmount || !varifyPositiveInt(this.cancelAmount)) {
@@ -265,7 +300,7 @@ export default {
             }
             const inAuthorization = this.authorizationInfo.consensusPos + this.authorizationInfo.freezePos
                                     + this.authorizationInfo.newPos;
-            if(this.cancelAmount && this.cancelAmount > inAuthorization) {
+            if(Number(this.cancelAmount)*500 > inAuthorization) {
                 this.validCancelAmount = false;
                 return;
             }
@@ -279,10 +314,11 @@ export default {
             this.cancelVisible = false;
             this.signVisible = true;
             const userAddr = new Crypto.Address(this.stakeWallet.address);
+            const amount = Number(this.cancelAmount) * 500;
             const tx = Ont.GovernanceTxBuilder.makeUnauthorizeForPeerTx(
                 userAddr,
                 [this.current_node.pk],
-                [parseInt(this.cancelAmount)],
+                [parseInt(amount)],
                 userAddr,
                 GAS_PRICE,
                 GAS_LIMIT
@@ -321,6 +357,20 @@ export default {
                 new Crypto.Address(this.stakeWallet.address),
                 [this.current_node.pk],
                 [claimable],
+                new Crypto.Address(this.stakeWallet.address),
+                GAS_PRICE,
+                GAS_LIMIT
+            )
+            this.signVisible = true;
+            this.tx = tx;
+        },
+        redeemOng() {
+            if(!this.unboundOng) {
+                this.$message.warning(this.$t('nodeMgmt.noUnboundOng'));
+                return;
+            }
+            const tx = Ont.GovernanceTxBuilder.makeWithdrawPeerUnboundOngTx(
+                new Crypto.Address(this.stakeWallet.address),
                 new Crypto.Address(this.stakeWallet.address),
                 GAS_PRICE,
                 GAS_LIMIT

@@ -2,6 +2,9 @@
   <div class="container ledger-import-container">
     <div>
       <a-input class="input" :placeholder="$t('importLedgerWallet.label')" v-model="label"></a-input>
+
+      <a-checkbox @change="onChangeNeo" :checked="neo" class="check-neo">{{$t('importLedgerWallet.neoCompatible')}}</a-checkbox>
+
     </div>
     <div class="div-ledger-info">
       <div class="div-ledger-info-tit"><strong>{{$t('ledgerWallet.info')}}</strong></div>
@@ -18,7 +21,7 @@
     <div class="basic-pk-btns">
       <div class="btn-container">
         <a-button type="default" @click="cancel" class="btn-cancel">{{$t('importJsonWallet.cancel')}}</a-button>
-        <!-- <a-button type="primary" @click="next" class="btn-next">{{$t('importLedgerWallet.next')}}</a-button> -->
+        <a-button type="primary" @click="next" class="btn-next">{{$t('importLedgerWallet.next')}}</a-button>
       </div>
     </div>
   </div>
@@ -48,7 +51,8 @@
         intervalId: '',
         interval: 1000,
         label: '',
-        ledgerStatus: ''
+        ledgerStatus: '',
+        neo: false
       }
     },
     methods: {
@@ -62,7 +66,11 @@
           return;
         }
         if(this.publicKey) {
-          this.$store.dispatch('createLedgerWalletWithPk', this.publicKey).then(res => {
+          const body = {
+            pk: this.publicKey,
+            neo: this.neo
+          }
+          this.$store.dispatch('createLedgerWalletWithPk', body).then(res => {
             if(res) {
               this.saveToDb(res)
             }
@@ -87,11 +95,12 @@
         })
       },
       getPublicKey() {
-        getPublicKey().then(res => {
+        const acctNum = 0;
+        getPublicKey(acctNum, this.neo).then(res => {
           console.log('pk info: ' + res);
           this.publicKey = res
           this.ledgerStatus = this.$t('common.readyToImport')
-          this.next();
+          // this.next();
         }).catch(err => {
           this.ledgerStatus = err.message
         })
@@ -105,27 +114,47 @@
           address: account.address,
           wallet: account
         }
-        
-        dbService.insert(wallet, function (err, newDoc) {
-          if (err) {
+
+        dbService.find({address: account.address}, (err, accounts) => {
+          if(err) {
             console.log(err)
-            // that.$message.warning(that.$t('common.existLocal'))
-            // return;
+            return;
           }
-          // that.$message.success(that.$t('common.importLedgerSuccess'))
-          // that.$router.push({name: 'Wallets'})
+          if(accounts && accounts.length > 0) {
+            dbService.update(
+              {address: account.address}, 
+              {$set: {wallet: account}}, {},
+              (err, replaceDoc) => {
+                if(err) {
+                  console.log(err);
+                  return;
+                }
+              }
+            )
+          } else {
+            dbService.insert(wallet, function (err, newDoc) {
+              if (err) {
+                console.log(err)
+              }
+            })
+          }
         })
+        
+        
         sessionStorage.setItem('currentWallet', JSON.stringify(account))
         that.$router.push({name: 'Dashboard'})
       },
       cancel() {
         this.$router.push({name: 'Wallets'})
+      },
+      onChangeNeo() {
+        this.neo = !this.neo;
       }
     }
   }
 </script>
 
-<style>
+<style scoped>
   .ledger-import-container {
     width: 36rem;
   }
@@ -168,6 +197,12 @@
 
   .error-input {
     border-color: red;
+  }
+  .check-neo {
+    margin-top: 10px;
+    font-family: 'AvenirNext-Medium';
+    color: #000000;
+    font-size: 13px;
   }
 </style>
 

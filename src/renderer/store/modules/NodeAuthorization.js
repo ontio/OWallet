@@ -1,7 +1,9 @@
 import {getNodeUrl} from '../../../core/utils'
 import numeral from 'numeral'
-import {Crypto, RestClient} from 'ontology-ts-sdk'
+import {Crypto, RestClient, utils} from 'ontology-ts-sdk'
 import {BigNumber} from 'bignumber.js'
+import {db2, dbUpsert, dbFind} from '../../../core/dbService'
+
 const state = {
     current_peer:{ // for node user
         peerPubkey: '',
@@ -16,8 +18,9 @@ const state = {
         peerPubkey: '',
         maxAuthorize: 0,
         maxAuthorizeStr: '0',
-        oldPeerCost: 0,
-        newPeerCost: 0,
+        t2PeerCost: 0,
+        t1PeerCost: 0,
+        tPeerCost: 0
     },
     current_node: '',
     authorizationInfo:'',
@@ -27,14 +30,16 @@ const state = {
     },
     countdown: 0,
     node_list: [],
-    posLimit: 10
+    posLimit: 10,
+    peerUnboundOng: 0,
+    stakeHistory: []
 }
 
 const mutations = {
     UPDATE_CURRENT_PEER(state, payload) {
         state.current_peer = {
             peerPubkey: payload.peerItem.peerPubkey,
-            address: payload.peerItem.address.toBase58(),
+            address: payload.peerItem.address?payload.peerItem.address.toBase58() : '',
             status: payload.peerItem.status,
             initPos: payload.peerItem.initPos,
             initPosStr: numeral(payload.peerItem.initPos).format('0,0'),
@@ -47,8 +52,9 @@ const mutations = {
             peerPubkey: payload.peerAttrs.peerPubkey,
             maxAuthorize: payload.peerAttrs.maxAuthorize,
             maxAuthorizeStr: numeral(payload.peerAttrs.maxAuthorize).format('0,0'),
-            oldPeerCost: payload.peerAttrs.oldPeerCost,
-            newPeerCost: payload.peerAttrs.newPeerCost,
+            t2PeerCost: payload.peerAttrs.t2PeerCost,
+            t1PeerCost: payload.peerAttrs.t1PeerCost,
+            tPeerCost: payload.peerAttrs.tPeerCost
         }
     },
     UPDATE_CURRENT_NODE(state, payload) {
@@ -82,6 +88,12 @@ const mutations = {
     },
     UPDATE_POS_LIMIT(state, payload) {
         state.posLimit = payload.posLimit
+    },
+    UPDATE_PEER_UNBOUND_ONG(state, payload) {
+        state.peerUnboundOng = payload.peerUnboundOng
+    },
+    UPDATE_STAKE_HISTORY(state, payload) {
+        state.stakeHistory = payload.history
     }
 }
 
@@ -146,13 +158,17 @@ const actions = {
             const list = []
             for (let k in peerMap) {
                 let item = peerMap[k];
+                if(item.status !== 1 && item.status !== 2) {
+                    continue;
+                }
                 const attr = await Ont.GovernanceTxBuilder.getAttributes(item.peerPubkey, url);
                 item.maxAuthorize = attr.maxAuthorize;
                 item.maxAuthorizeStr = numeral(item.maxAuthorize).format('0,0')
                 item.totalPosStr = numeral(item.totalPos).format('0,0')
-                const nodeProportion = attr.newPeerCost + '%'
-                const userProportion = (100 - attr.newPeerCost) + '%'
-                item.nodeProportion = nodeProportion + ' / ' + userProportion
+                const nodeProportion = attr.t1PeerCost + '%'
+                const userProportion = (100 - attr.t1PeerCost) + '%'
+                // item.nodeProportion = nodeProportion + ' / ' + userProportion
+                item.nodeProportion =  userProportion
                 list.push(item);
             }
             list.sort((v1, v2) => {
@@ -167,7 +183,11 @@ const actions = {
             list.forEach((item, index) => {
                 item.rank = index + 1;
                 item.currentStake = item.initPos + item.totalPos;
-                item.process = Number((item.totalPos + item.initPos) * 100 / (item.initPos + item.maxAuthorize)).toFixed(2) + '%'
+                let process = Number((item.totalPos + item.initPos) * 100 / (item.initPos + item.maxAuthorize)).toFixed(2)
+                if(process > 100) {
+                    process = 100;
+                }
+                item.process = process + '%'
                 item.pk = item.peerPubkey
                 item.name = 'Node No.' + (index + 1)
                 if (item.peerPubkey === '02f4c0a18ae38a65b070820e3e51583fd3aea06fee2dc4c03328e4b4115c622567') {//for test
@@ -210,7 +230,42 @@ const actions = {
         }catch(err) {
             console.log(err);
         }
-    } 
+    },
+    async fetchPeerUnboundOng({commit}, address) {
+        const url = getNodeUrl();
+        const addr = new Crypto.Address(address);
+        try {   
+            let peerUnboundOng = await Ont.GovernanceTxBuilder.getPeerUnboundOng(addr, url);
+            peerUnboundOng = new BigNumber(peerUnboundOng).div(1e9).toNumber();
+            commit('UPDATE_PEER_UNBOUND_ONG', {peerUnboundOng})
+            return peerUnboundOng;
+        } catch(err) {
+            console.log(err);
+        }
+    },
+
+    async recordStakeHistory({commit}, {tx, record}) {
+        const url = getNodeUrl();
+        const rest = new RestClient(url)
+        const txHash = utils.reverseHex(tx.getHash());
+        const event = await rest.getSmartCodeEvent(txHash)
+        if(event.Result && parseInt(event.Result.State) === 1) {
+            try {
+                const upsert = await dbUpsert(db2, 'indexKey', record);
+                return upsert;
+            }catch(err) {
+                console.log(err)
+                return;
+            }
+        }
+    },
+    async fetchStakeHistory({commit}) {
+        let history = await dbFind(db2, {});
+        history.forEach(item => {item.updatedAt = item.updatedAt.toLocaleString()})
+        commit('UPDATE_STAKE_HISTORY', {history})
+        console.log(history)
+        return history;
+    }
 }
 
 export default {

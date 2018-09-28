@@ -17,11 +17,11 @@
 
   .left-half {
     flex-basis: 50%;
+    padding-right: 40px;
   }
 
   .right-half {
     flex-basis: 50%;
-    padding-left: 40px;
   }
 
   .asset {
@@ -196,6 +196,8 @@
     color: #227EEC;
     text-align: center;
     cursor: pointer;
+    width:100%;
+    float:left;
   }
 
   .txList-header {
@@ -436,7 +438,6 @@
 
 <script>
   import {mapState} from 'vuex'
-  import {legacySignWithLedger} from '../../core/ontLedger'
   import {TEST_NET, MAIN_NET, ONT_CONTRACT, ONT_PASS_NODE} from '../../core/consts'
   import {Crypto, OntAssetTxBuilder} from 'ontology-ts-sdk'
   import axios from 'axios';
@@ -444,7 +445,7 @@
 import { BigNumber } from 'bignumber.js';
 import RedeemInfoIcon from './RedeemInfoIcon'
 const {BrowserWindow} = require('electron').remote;
-
+const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
   export default {
     name: 'Dashboard',
     components: {
@@ -484,12 +485,11 @@ const {BrowserWindow} = require('electron').remote;
     },
     mounted: function () {
       this.refresh()
-        let that = this;
-        this.intervalId = setInterval(() => {
-            that.getBalance();
-            that.getTransactions();
-            that.getNep5Balance();
-        }, this.interval)
+      this.intervalId = setInterval(() => {
+          this.getBalance();
+          this.getTransactions();
+          this.getNep5Balance();
+      }, this.interval)
     },
     computed: {
       ...mapState({
@@ -509,20 +509,28 @@ const {BrowserWindow} = require('electron').remote;
         this.axios.get(url + '/api/v1/explorer/address/' + this.address + '/10/1').then(response => {
           if (response.status === 200 && response.data && response.data.Result) {
             const txlist = response.data.Result.TxnList;
-            const completed = txlist.map(t => {
-              const asset = t.TransferList[0].AssetName === 'ont' ? 'ONT' : 'ONG';
-              let amount = asset === 'ONT' ? parseInt(t.TransferList[0].Amount) : Number(t.TransferList[0].Amount).toFixed(9);
-              if (t.TransferList[0].FromAddress === this.address) {
-                amount = '-' + amount;
-              } else {
-                amount = '+' + amount;
+            const completed = []
+            for(const t of txlist) {
+              if(t.TransferList.length > 2) {
+                continue;
               }
-              return {
-                txHash: t.TxnHash,
-                asset,
-                amount: amount
+              for(const tx of t.TransferList) {
+                if(tx.ToAddress !== ONG_GOVERNANCE_CONTRACT) {
+                  const asset = tx.AssetName === 'ont' ? 'ONT' : 'ONG'
+                  let amount = asset === 'ONT' ? parseInt(tx.Amount) : Number(tx.Amount).toFixed(9);
+                  if (tx.FromAddress === this.address) {
+                      amount = '-' + amount;
+                    } else {
+                      amount = '+' + amount;
+                    }
+                    completed.push({
+                      txHash: t.TxnHash,
+                      asset,
+                      amount: amount
+                    })
+                }
               }
-            });
+            }
             this.completedTx = completed;
           } else {
             console.log(response)
@@ -591,7 +599,7 @@ const {BrowserWindow} = require('electron').remote;
         this.$store.dispatch('showLoadingModals')
         setTimeout(() => {
             this.$store.dispatch('hideLoadingModals')
-        }, 100)
+        }, 500)
         this.getBalance();
         this.getTransactions();
         this.getNep5Balance();

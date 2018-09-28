@@ -21,9 +21,7 @@ const actions = {
     },
     loginWithLedger({ commit }, pk) {
         const publicKeyEncoded = wallet.getPublicKeyEncoded(pk);
-        const account = new wallet.Account(publicKeyEncoded);
-        localStorage.setItem('publicKey', publicKeyEncoded);
-        localStorage.setItem('address', account.address);  
+        const account = new wallet.Account(publicKeyEncoded); 
         const currentWallet = JSON.parse(sessionStorage.getItem('currentWallet'))
         if(currentWallet.address !== account.address) {
             return false;
@@ -33,12 +31,13 @@ const actions = {
         }
         
     },
-    createLedgerWalletWithPk({commit}, pk) {
-        const publicKeyEncoded = wallet.getPublicKeyEncoded(pk);
+    createLedgerWalletWithPk({commit}, body) {
+        const publicKeyEncoded = wallet.getPublicKeyEncoded(body.pk);
         const account = new wallet.Account(publicKeyEncoded);
         const ledgerWallet =  {
                 publicKey: publicKeyEncoded,
-                address: account.address
+                address: account.address,
+                neo: body.neo || false
             }
         return ledgerWallet;
     }

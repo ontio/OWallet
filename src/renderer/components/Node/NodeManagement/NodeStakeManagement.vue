@@ -42,7 +42,7 @@ export default {
     },
     data(){
         return {
-            current: ['Node_Authorization']
+            current: ['Node_Stake']
         }
     },
     methods: {
