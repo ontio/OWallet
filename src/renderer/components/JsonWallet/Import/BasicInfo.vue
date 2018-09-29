@@ -126,10 +126,9 @@
   <div class="container json-import-container">
     <ul class="nav nav-pills import-json-nav-pills" id="pills-tab" role="tablist">
       <li class="nav-item">
-        <a class="nav-link active" id="import-json-private-key-pills-tab" data-toggle="pill"
-           href="#import-json-private-key-pills"
+        <a class="nav-link active" id="import-json-wif-pills-tab" data-toggle="pill" href="#import-json-wif-pills"
            role="tab"
-           aria-controls="import-json-private-key-pills" aria-selected="true" @click="activeTab('pk')">{{ $t('createJsonWallet.privateKey64Hex') }}</a>
+           aria-controls="import-json-wif-pills" aria-selected="true" @click="activeTab('wif')">{{ $t('createJsonWallet.priavteKeywif') }}</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" id="import-json-dat-pills-tab" data-toggle="pill" href="#import-json-dat-pills"
@@ -137,19 +136,40 @@
            aria-controls="import-json-dat-pills" aria-selected="true" @click="activeTab('dat')">{{ $t('createJsonWallet.keystoreDat') }}</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" id="import-json-wif-pills-tab" data-toggle="pill" href="#import-json-wif-pills"
-           role="tab"
-           aria-controls="import-json-wif-pills" aria-selected="true" @click="activeTab('wif')">{{ $t('createJsonWallet.priavteKeywif') }}</a>
-      </li>
-      <li class="nav-item">
         <a class="nav-link" id="import-json-mnemonic-pills-tab" data-toggle="pill" href="#import-json-mnemonic-pills"
            role="tab"
            aria-controls="import-json-mnemonic-pills" aria-selected="false" @click="activeTab('mnemonic')">{{ $t('createJsonWallet.mnemonic') }}</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" id="import-json-private-key-pills-tab" data-toggle="pill"
+           href="#import-json-private-key-pills"
+           role="tab"
+           aria-controls="import-json-private-key-pills" aria-selected="true" @click="activeTab('pk')">{{ $t('createJsonWallet.privateKey64Hex') }}</a>
+      </li>
     </ul>
 
     <div class="tab-content" id="pills-tabContent">
-      <div class="tab-pane fade show active" id="import-json-private-key-pills" role="tabpanel"
+      <div class="tab-pane fade show active" id="import-json-wif-pills" role="tabpanel"
+           aria-labelledby="import-json-wif-pills-tab">
+        <a-input class="input" :placeholder="$t('importJsonWallet.label')" v-model="wifLabel"></a-input>
+
+        <a-input class="input input-wif"
+                 v-validate="{required: true}" name="wif"
+                 v-model="wif" :placeholder="$t('importJsonWallet.wifTip')"></a-input>
+        <span class="v-validate-span-errors" v-show="errors.has('wif')">{{ errors.first('wif') }}</span>
+
+        <a-input type="password" class="input input-password"
+                 v-validate="{required: true ,min:6}" data-vv-as="password" name="wifPassword"
+                 v-model="wifPassword" :placeholder="$t('importJsonWallet.setPassword')"></a-input>
+        <span class="v-validate-span-errors" v-show="errors.has('wifPassword')">{{ errors.first('wifPassword') }}</span>
+        <a-input type="password" class="input input-repassword"
+                 v-validate="{required: true ,min:6, is:wifPassword}" data-vv-as="password confirmation"
+                 name="wifRePassword"
+                 v-model="wifRePassword" :placeholder="$t('importJsonWallet.rePassword')"></a-input>
+        <span class="v-validate-span-errors"
+              v-show="errors.has('wifRePassword')">{{ errors.first('wifRePassword') }}</span>
+      </div>
+      <div class="tab-pane fade" id="import-json-private-key-pills" role="tabpanel"
            aria-labelledby="import-json-private-key-pills-tab">
         <a-input class="input" :placeholder="$t('importJsonWallet.label')" v-model="pkLabel"></a-input>
         <a-input class="input input-wif"
@@ -158,7 +178,7 @@
         <span class="v-validate-span-errors" v-show="errors.has('pk')">{{ errors.first('pk') }}</span>
         <a-input type="password" class="input input-password"
                  v-validate="{required: true, min:6}" data-vv-as="password" name="pkPassword"
-                 v-model="pkPassword" :placeholder="$t('importJsonWallet.password')"></a-input>
+                 v-model="pkPassword" :placeholder="$t('importJsonWallet.setPassword')"></a-input>
         <span class="v-validate-span-errors" v-show="errors.has('pkPassword')">{{ errors.first('pkPassword') }}</span>
         <a-input type="password" class="input input-repassword"
                  v-validate="{required: true, min:6, is:pkPassword}" data-vv-as="password confirmation" name="pkRePassword"
@@ -182,27 +202,6 @@
         <span class="v-validate-span-errors" v-show="errors.has('datPassword')">{{ errors.first('datPassword') }}</span>
       </div>
 
-      <div class="tab-pane fade" id="import-json-wif-pills" role="tabpanel"
-           aria-labelledby="import-json-wif-pills-tab">
-        <a-input class="input" :placeholder="$t('importJsonWallet.label')" v-model="wifLabel"></a-input>
-
-        <a-input class="input input-wif"
-                 v-validate="{required: true}" name="wif"
-                 v-model="wif" :placeholder="$t('importJsonWallet.wifTip')"></a-input>
-        <span class="v-validate-span-errors" v-show="errors.has('wif')">{{ errors.first('wif') }}</span>
-
-        <a-input type="password" class="input input-password"
-                 v-validate="{required: true ,min:6}" data-vv-as="password" name="wifPassword"
-                 v-model="wifPassword" :placeholder="$t('importJsonWallet.password')"></a-input>
-        <span class="v-validate-span-errors" v-show="errors.has('wifPassword')">{{ errors.first('wifPassword') }}</span>
-        <a-input type="password" class="input input-repassword"
-                 v-validate="{required: true ,min:6, is:wifPassword}" data-vv-as="password confirmation"
-                 name="wifRePassword"
-                 v-model="wifRePassword" :placeholder="$t('importJsonWallet.rePassword')"></a-input>
-        <span class="v-validate-span-errors"
-              v-show="errors.has('wifRePassword')">{{ errors.first('wifRePassword') }}</span>
-      </div>
-
       <div class="tab-pane fade" id="import-json-mnemonic-pills" role="tabpanel"
            aria-labelledby="import-json-mnemonic-pills-tab">
         <a-input class="input" :placeholder="$t('importJsonWallet.label')" v-model="mnemonicLabel"></a-input>
@@ -214,7 +213,7 @@
 
         <a-input type="password" class="input input-password"
                  v-validate="{required: true ,min:6}" data-vv-as="password" name="mnemonicPassword"
-                 v-model="mnemonicPassword" :placeholder="$t('importJsonWallet.password')"></a-input>
+                 v-model="mnemonicPassword" :placeholder="$t('importJsonWallet.setPassword')"></a-input>
         <span class="v-validate-span-errors" v-show="errors.has('mnemonicPassword')">{{ errors.first('mnemonicPassword') }}</span>
         <a-input type="password" class="input input-repassword"
                  v-validate="{required: true ,min:6, is:mnemonicPassword}" data-vv-as="password confirmation"
@@ -257,7 +256,7 @@
     name: 'BasicInfo',
     data() {
       return {
-        tabName: 'pk', // dat | pk | wif | mnemonic
+        tabName: 'wif', // dat | pk | wif | mnemonic
 
         pk: '',
         pkLabel: '',

@@ -15,6 +15,7 @@
 .btn-container {
     text-align: center;
     margin:5px auto;
+    padding-top:15px;
 }
 .btn-container p {
     margin-bottom:5px;
@@ -51,7 +52,7 @@
         </div>
         <div class="footer-btns">
             <div class="btn-container">
-                <p class="font-medium"><a-icon type="exclamation-circle" /> {{$t('nodeMgmt.userParticipate')}}</p>
+                <!-- <p class="font-medium"><a-icon type="exclamation-circle" /> {{$t('nodeMgmt.userParticipate')}}</p> -->
                 <a-button type="primary" class="btn-next" @click="next">{{$t('nodeStake.next')}}</a-button>
             </div>
         </div>

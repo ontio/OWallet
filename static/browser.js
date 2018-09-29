@@ -74330,13 +74330,13 @@ function getSmartCodeEvent(value) {
     let param = {};
     if (typeof value === 'number') {
         param = {
-            Action: 'getsmartcodeevent',
+            Action: 'getsmartcodeeventbyheight',
             Version: '1.0.0',
             Height: value
         };
     } else if (typeof value === 'string') {
         param = {
-            Action: 'getsmartcodeeventtxs',
+            Action: 'getsmartcodeeventbyhash',
             Version: '1.0.0',
             Hash: value
         };
@@ -75036,6 +75036,9 @@ function checkEcbDecrypted(encryptedKey, decryptedKey, publicKeyEncoded) {
  * @param scryptParams Optional params to encrypt
  */
 function encryptWithGcm(privateKey, address, salt, keyphrase, scryptParams = _consts__WEBPACK_IMPORTED_MODULE_4__["DEFAULT_SCRYPT"]) {
+    if (!Object(_utils__WEBPACK_IMPORTED_MODULE_8__["isHexString"])(privateKey)) {
+        throw new Error(_error__WEBPACK_IMPORTED_MODULE_7__["ERROR_CODE"].INVALID_PARAMS + ', Invalid private key');
+    }
     const derived = scrypt(keyphrase, salt, scryptParams);
     const derived1 = derived.slice(0, 12);
     const derived2 = derived.slice(32);
@@ -77111,7 +77114,6 @@ async function getAttributes(peerPubKey, url) {
     const res = await restClient.getStorage(codeHash, key);
     const result = res.Result;
     if (result) {
-        console.log(result);
         return PeerAttributes.deserialize(new _utils__WEBPACK_IMPORTED_MODULE_6__["StringReader"](result));
     } else {
         return new PeerAttributes();
@@ -77162,7 +77164,6 @@ async function getGovernanceView(url) {
     const key = Object(_utils__WEBPACK_IMPORTED_MODULE_6__["str2hexstr"])('governanceView');
     const viewRes = await restClient.getStorage(codeHash, key);
     const view = viewRes.Result;
-    console.log(view);
     const governanceView = GovernanceView.deserialize(new _utils__WEBPACK_IMPORTED_MODULE_6__["StringReader"](view));
     return governanceView;
 }
@@ -77211,7 +77212,6 @@ async function getTotalStake(userAddr, url) {
 }
 async function getPeerUnboundOng(userAddr, url) {
     const totalStake = await getTotalStake(userAddr, url);
-    console.log(totalStake);
     if (!totalStake.address) {
         return 0;
     }
@@ -80107,7 +80107,7 @@ class TxSignature {
 /*!**********************!*\
   !*** ./src/utils.ts ***!
   \**********************/
-/*! exports provided: hexstring2ab, ab2hexstring, ab2str, str2ab, str2hexstr, hexstr2str, hex2VarBytes, str2VarBytes, bool2VarByte, hexXor, num2hexstring, num2VarInt, reverseHex, StringReader, EventEmitter, sendBackResult2Native, axiosPost, now, sha256, ripemd160, hash160, generateRandomArray, randomBytes, generateMnemonic, parseMnemonic, varifyPositiveInt, isBase64, unboundDeadline, calcUnboundOng */
+/*! exports provided: hexstring2ab, ab2hexstring, ab2str, str2ab, str2hexstr, hexstr2str, hex2VarBytes, str2VarBytes, bool2VarByte, hexXor, num2hexstring, num2VarInt, reverseHex, StringReader, EventEmitter, sendBackResult2Native, axiosPost, now, sha256, ripemd160, hash160, generateRandomArray, randomBytes, generateMnemonic, parseMnemonic, varifyPositiveInt, isBase64, isHexString, unboundDeadline, calcUnboundOng */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -80139,6 +80139,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "parseMnemonic", function() { return parseMnemonic; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "varifyPositiveInt", function() { return varifyPositiveInt; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isBase64", function() { return isBase64; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isHexString", function() { return isHexString; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "unboundDeadline", function() { return unboundDeadline; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "calcUnboundOng", function() { return calcUnboundOng; });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
@@ -80560,6 +80561,10 @@ function varifyPositiveInt(v) {
 }
 function isBase64(str) {
     return Buffer.from(str, 'base64').toString('base64') === str;
+}
+function isHexString(str) {
+    const regexp = /^[0-9a-fA-F]+$/;
+    return regexp.test(str) && str.length % 2 === 0;
 }
 function unboundDeadline() {
     let count = 0;
