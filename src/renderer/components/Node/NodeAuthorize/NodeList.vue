@@ -73,7 +73,7 @@
                 <a-icon type="info-circle-o" class="proportion-info-icon" @click="showProportionTip"/>
             </p>
             </div>
-        <a slot="name" slot-scope="text" @click="handleNodeDetail(record)">{{text}}</a>
+        <a slot="name" slot-scope="text, record" @click="handleNodeDetail(record)">{{text}}</a>
         <div slot="action" slot-scope="text, record" class="detail-link">
             <a-icon type="arrow-right" @click="handleAuthorizeLogin(record)"/>
         </div>
@@ -136,10 +136,11 @@ export default {
     },
     mounted(){
         //loop to fetch data
+        // this.$store.dispatch('showLoadingModals');
         this.$store.dispatch('fetchNodeList')
         this.$store.dispatch('fetchBlockCountdown')
         this.intervalId = setInterval(()=>{
-            this.$store.dispatch('fetchNodeList')
+            // this.$store.dispatch('fetchNodeList')
             this.$store.dispatch('fetchBlockCountdown')
         }, 5000)  
     },
@@ -161,15 +162,15 @@ export default {
             this.$store.commit('UPDATE_CURRENT_NODE', {current_node: record})
             this.$router.push({name: 'AuthorizeLogin'})
         },
-        handleNodeDetail(record) {
-            console.log('clicked')
+        handleNodeDetail(record, item) {
+            console.log(record);
            let win = new BrowserWindow({width: 800, height: 600, center: true});
             win.on('closed', () => {
             win = null
             })
 
             // Load a remote URL
-            win.loadURL(url)
+            win.loadURL(record.detailUrl);
         },
         showProportionTip() {
             const h = this.$createElement

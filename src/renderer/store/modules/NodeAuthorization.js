@@ -1,8 +1,36 @@
-import {getNodeUrl} from '../../../core/utils'
+import { getNodeUrl} from '../../../core/utils'
+import {CON_NODE, NODE_DETAIL} from '../../../core/consts'
 import numeral from 'numeral'
 import {Crypto, RestClient, utils} from 'ontology-ts-sdk'
 import {BigNumber} from 'bignumber.js'
 import {db2, dbUpsert, dbFind} from '../../../core/dbService'
+var dateFormat = require('dateformat');
+
+
+function matchNodeName(node) {
+    for (const cnode of CON_NODE) {
+        if (node.pk === cnode.pk) {
+            node.name = cnode.name
+        }
+    }
+    if(!node.name) {
+        node.name = 'Node_' + node.address.toBase58().substr(0,6);
+    }
+}
+
+function isMainnetConNode(pk) {
+    const net = localStorage.getItem('net');
+    if (net === 'MAIN_NET') {
+        let isConNode = false;
+        for (const cnode of CON_NODE) {
+            if (cnode.pk === pk) {
+                isConNode = true;
+            }
+        }
+        return isConNode;
+    } 
+    return true;
+}
 
 const state = {
     current_peer:{ // for node user
@@ -151,14 +179,18 @@ const actions = {
             return splitFee
         }
     },
-    async fetchNodeList({commit}) {
+    async fetchNodeList({commit, dispatch}) {
         const url = getNodeUrl();
         try{
+            dispatch('showLoadingModals');
             const peerMap = await Ont.GovernanceTxBuilder.getPeerPoolMap(url);
             const list = []
             for (let k in peerMap) {
                 let item = peerMap[k];
                 if(item.status !== 1 && item.status !== 2) {
+                    continue;
+                }
+                if (!isMainnetConNode(item.peerPubkey)) {
                     continue;
                 }
                 const attr = await Ont.GovernanceTxBuilder.getAttributes(item.peerPubkey, url);
@@ -189,18 +221,15 @@ const actions = {
                 }
                 item.process = process + '%'
                 item.pk = item.peerPubkey
-                item.name = 'Node No.' + (index + 1)
-                if (item.peerPubkey === '02f4c0a18ae38a65b070820e3e51583fd3aea06fee2dc4c03328e4b4115c622567') {//for test
-                    item.name = 'Node1 To Authorize'
-                }
-                if (item.pk === '03f6149b3a982c046912731d6374305e2bc8e278fa90892f6f20a8ee85c1d5443f') {//for test
-                    item.name = 'Node2 To Authorize'
-                }
+                item.detailUrl = NODE_DETAIL + item.pk;
+                matchNodeName(item)
             })
             commit('UPDATE_NODE_LIST', {list});
+            dispatch('hideLoadingModals');
             return list;
         } catch(err) {
-            console.log(err)            
+            console.log(err)  
+            dispatch('hideLoadingModals');          
             return [];
         }
     },
@@ -261,7 +290,7 @@ const actions = {
     },
     async fetchStakeHistory({commit}) {
         let history = await dbFind(db2, {});
-        history.forEach(item => {item.updatedAt = item.updatedAt.toLocaleString()})
+        history.forEach(item => {item.updatedAt = dateFormat(new Date(item.updatedAt), 'yyyy/mm/dd hh:MM:ss')})
         commit('UPDATE_STAKE_HISTORY', {history})
         console.log(history)
         return history;

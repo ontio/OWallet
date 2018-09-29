@@ -10,9 +10,9 @@ export default {
     ongNoEnough: 'Not enough ONG for the transaction fee.',
     transferFailed: 'Transfer failed. ',
     networkErr: 'Network error!',
-    normalWallet: 'Individual Wallet',
-    sharedWallet: 'Shared Wallet',
-    hardwareWallet: 'Ledger Wallet',
+    normalWallet: 'Individual wallet',
+    sharedWallet: 'Shared wallet',
+    hardwareWallet: 'Ledger wallet',
     export: 'Export',
     ledgerNotOpen: 'Ledger not open',
     ledgerNotSupported: 'Ledger not supported',
@@ -49,7 +49,7 @@ export default {
 
   basicInfo: {
     InvalidMnemonic: 'Invalid mnemonic.',
-    errWif: 'Please input the valid WIF.'
+    errWif: 'Please enter a valid WIF.'
   },
 
   SetPaths: {
@@ -180,7 +180,8 @@ export default {
     confirmImportExist: 'The wallet to import is already in your local. Still want to import it?',
     success: 'Import wallet successfully!',
     saveDbFailed: 'Save to keystore failed. Please try later.',
-    invalidPrivateKey: 'Please enter valid private key.'
+    invalidPrivateKey: 'Please enter valid private key.',
+    setPassword: 'Set password'
   },
 
   createSharedWallet: {
@@ -417,7 +418,7 @@ export default {
   nodeMgmt: {
     nodeUser: 'If you are a candidate node, you can stake and manage your stake here.',
     nodeStakeMgmt: 'Node Stake Management',
-    normalUser: 'If you are a normal user, you can participate stake authorization here.',
+    normalUser: 'If you are a normal user, you can participate in stake authorization here.',
     stakeAuthorizaton: 'Stake Authorization',
     nodeStake: 'Node Stake',
     userStakeAuthorization: 'User Stake Authorization',
@@ -443,34 +444,34 @@ export default {
     currentStake: 'Current total stake',
     process: 'Remaining stake',
     changes: 'Changes',
-    userParticipate: 'Make sure you are a user who wants to participate stake authorization',
-    nodeName: 'Node Name',
+    userParticipate: 'Only proceed if you want to participate in stake authorization!',
+    nodeName: 'Node name',
     walletAddress: 'Your wallet address',
     inAuthorization: 'In authorization',
-    cancelStakeAuthorization: 'Cancel Stake Authorization',
+    cancelStakeAuthorization: 'Cancel stake authorization',
     locked: 'Locked',
     claimable: 'Redeemable',
     redeem: 'Redeem',
     profit: 'Profit',
     rewards: 'Rewards',
-    newStakeAuthorization: 'Submit A New Stake Authorization',
-    cancelAuthorization: 'Cancel Stake Authorization',
+    newStakeAuthorization: 'Submit new stake authorization',
+    cancelAuthorization: 'Cancel stake authorization',
     units: 'Units of stake authorization',
     stakeAmountTip: 'Stake amount = input number * 500 ONT/unit.',
     stakeAmount: 'Stake amount',
     submit: 'Submit',
-    allowedStakeUnits: 'Allowed Stake Units',
-    allowedStakeAmount: 'Allowed Stake Amount',
+    allowedStakeUnits: 'Allowed stake unit',
+    allowedStakeAmount: 'Allowed stake amount',
     noChange: 'You did not make a change.',
     noRewards: 'No rewards to redeem.',
     switchWallet: 'Switch wallet',
-    noClaimableOnt: 'No claimable ONT',
+    noClaimableOnt: 'No redeemable ONT',
     amountToCancel: 'Amount to cancel',
     unitToCancel: 'Units to cancel',
     invalidInput: 'Please enter valid value.',
     peerNotAllowAuthorize: 'This peer does not allow authorization now.',
-    addInitPos: 'Add Init Pos',
-    reduceInitPos: 'Reduce Init Pos',
+    addInitPos: 'Add to stake',
+    reduceInitPos: 'Reduce stake',
     amountToAdd: 'Amount To Add',
     amountToReduce: 'Amount To Reduce',
     notThanCommitment: 'Initial stake can not be less than the commitment stake.',
@@ -498,14 +499,17 @@ Within their 50% share each consensus node will receive their share according to
     changeRewardProportion: 'Change Reward Proportion',
     edit: 'Edit',
     stakeHistory: 'Stake History',
-    cancelUnits: 'Units',
+    cancelUnits: 'units',
     stakeWalletAddress: 'Stake wallet address',
-    lastUpdate: 'Last update time'
+    lastUpdate: 'Last update time',
+    walletRewardTip: 'This is all the reward of your wallet in current round.',
+    switchMainnet: 'Please switch to MainNet.'
 },
-exchange: {
- exchange: 'Exchange',
- changelly: 'Changelly', 
- cryptonex: 'Cryptonex',
- coincap: 'Prices (Coincap)'
-}
+  exchange: {
+    exchange: 'Exchange',
+    changelly: 'Changelly', 
+    cryptonex: 'Cryptonex',
+    coincap: 'Prices (Coincap)'
+  }
+    
 }

@@ -2,10 +2,10 @@
 import electron from 'electron'
 const app = electron.remote.app;
 const userData = app.getAppPath('userData')
+console.log('path' + userData)
 if(!localStorage.getItem('savePath')) {
     localStorage.setItem('savePath', userData)
 }
-console.log('path' + userData)
 //create db
 var Datastore = require('nedb');
 

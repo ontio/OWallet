@@ -114,6 +114,7 @@
                 <p class="font-medium-black" for="">{{$t('nodeStake.stakeQuantity')}}</p>
                 <p>{{current_peer.initPos}}</p>
             </div>
+            <!-- NODE_HIDE -->
             <div class="initPos-btns" v-if="showPosBtn">
                     <a-button class="add-initPos-btn" @click="handleAddInitPos">{{$t('nodeMgmt.addInitPos')}}</a-button>
                     <a-button class="add-initPos-btn" @click="handleReduceInitPos"

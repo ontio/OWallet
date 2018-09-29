@@ -14,6 +14,7 @@
 <template>
     <div>
         <breadcrumb :current="$t('nodeMgmt.nodeStakeMgmt')" v-on:backEvent="handleRouteBack"></breadcrumb>
+        <!-- NODE_HIDE -->
         <a-menu v-model="current" mode="horizontal" @click="handleSelect">
             <a-menu-item key="Node_Stake">{{$t('nodeMgmt.nodeStake')}}</a-menu-item>
             <a-menu-item key="Node_Authorization">{{$t('nodeMgmt.userStakeAuthorization')}}</a-menu-item>
@@ -23,7 +24,7 @@
                 <node-stake-info :showPosBtn="true" :breadcrumb="true"></node-stake-info>
                 
             </div>
-
+            <!-- NODE_HIDE -->
             <node-stake-authorization v-if="current[0] === 'Node_Authorization'"></node-stake-authorization>
         </div>
     </div>

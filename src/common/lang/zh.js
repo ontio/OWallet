@@ -179,7 +179,8 @@ export default {
     confirmImportExist: '要导入的钱包本地已存在。仍然要导入？',
     success: '导入钱包成功',
     saveDbFailed: '保存到Keystore失败。请稍后重试。',
-    invalidPrivateKey: '请输入正确的私钥'
+    invalidPrivateKey: '请输入正确的私钥',
+    setPassword: '设置密码'
   },
 
   createSharedWallet: {
@@ -371,7 +372,7 @@ export default {
     back: '返回',
     recall: '撤销',
     refund: '退款',
-    quitNode: '推出节点',
+    quitNode: '退出节点',
     newStake: '新质押',
     passwordEmpty: '密码不能为空'
 
@@ -489,12 +490,15 @@ export default {
     stakeHistory: '质押历史',
     cancelUnits: '份',
     stakeWalletAddress: '质押钱包地址',
-    lastUpdate: '上次更新时间'
+    lastUpdate: '上次更新时间',
+    walletRewardTip: '这是当前周期内您的钱包所有的授权质押收益',
+    switchMainnet: '请切换到主网。'
   },
-  exchange: {
-  exchange: 'Exchange',
-  changelly: 'Changelly', 
-  cryptonex: 'Cryptonex',
-  coincap: 'Prices (Coincap)'
-}
+    exchange: {
+    exchange: '兑换',
+    changelly: 'Changelly', 
+    cryptonex: 'Cryptonex',
+    coincap: '价格 (Coincap)'
+  }
+
 }

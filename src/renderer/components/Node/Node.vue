@@ -36,6 +36,7 @@
                 <p class="font-medium">{{$t('nodeMgmt.nodeUser')}}</p>
                 <a-button class="btn-next" @click="handleNodeStake">{{$t('nodeMgmt.nodeStakeMgmt')}}</a-button>
             </div>
+            <!-- NODE_HIDE -->
             <div class="btn-item">
                 <p class="font-medium">{{$t('nodeMgmt.normalUser')}}</p>
                 <a-button class="btn-next" @click="handleAuthorization">{{$t('nodeMgmt.stakeAuthorizaton')}}</a-button>
@@ -50,9 +51,19 @@ export default {
     name: 'NodeManagement',
     methods: {
         handleNodeStake() {
+            const net = localStorage.getItem('net');
+            if(net === 'TEST_NET') {
+                this.$message.warning(this.$t('nodeMgmt.switchMainnet'));
+                return;
+            }
             this.$router.push({name: 'NodeStakeIntro'})
         },
         handleAuthorization() {
+            const net = localStorage.getItem('net');
+            if(net === 'TEST_NET') {
+                this.$message.warning(this.$t('nodeMgmt.switchMainnet'));
+                return;
+            }
             this.$router.push({name: 'NodeList'})
         }
     }
