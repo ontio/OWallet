@@ -490,6 +490,11 @@ export default {
     cancelUnits: '份',
     stakeWalletAddress: '质押钱包地址',
     lastUpdate: '上次更新时间'
-  }
-
+  },
+  exchange: {
+  exchange: 'Exchange',
+  changelly: 'Changelly', 
+  cryptonex: 'Cryptonex',
+  coincap: 'Prices (Coincap)'
+}
 }

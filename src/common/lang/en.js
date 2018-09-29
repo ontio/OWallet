@@ -501,5 +501,11 @@ Within their 50% share each consensus node will receive their share according to
     cancelUnits: 'Units',
     stakeWalletAddress: 'Stake wallet address',
     lastUpdate: 'Last update time'
-  }
+},
+exchange: {
+ exchange: 'Exchange',
+ changelly: 'Changelly', 
+ cryptonex: 'Cryptonex',
+ coincap: 'Prices (Coincap)'
+}
 }

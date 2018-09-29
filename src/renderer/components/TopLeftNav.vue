@@ -5,8 +5,6 @@
         <img class="logo-img" src="./../assets/logo.png" alt="">
       </router-link>
 
-      
-
         <router-link :to="{name:'Wallets'}" active-class="nav-wallets-active">
           <a-tooltip placement="right" :title="$t('setting.wallets')">
               <div class="nav-wallets"></div>
@@ -30,6 +28,12 @@
                <div class="node-stake-icon"></div>
           </a-tooltip>
       </router-link>
+      
+      <router-link :to="{name:'Exchange'}" active-class="nav-exchange-active">
+          <a-tooltip placement="right" :title="$t('exchange.exchange')">
+              <div class="nav-exchange"></div>
+          </a-tooltip>
+        </router-link>
 
         <!-- <div class="setting-img" alt="" @click="toSetting"></div> -->
       
@@ -43,166 +47,183 @@
 </template>
 
 <script>
-  const {BrowserWindow} = require('electron').remote;
+const { BrowserWindow } = require("electron").remote;
 
-  export default {
-    name: "TopLeftNav",
-    computed: {
-      network: {
-        get() {
-          const net = this.$store.state.Setting.network;
-          return net === 'TEST_NET' ? 'TestNet' : 'MainNet'
-        }
-      }
-    },
-    methods: {
-      toHelp() {
-        const lang = localStorage.getItem('user_lang');
-        let url = '';
-        if (lang === 'zh') {
-          url = 'http://ontfans.io/article/41.html'
-          // url = 'https://medium.com/ontologynetwork/owallet-faq-7f4f96784253'
-        } else {
-          // url = 'https://ontfans.io/?/article/39'
-          url = 'https://medium.com/ontologynetwork/owallet-faq-7f4f96784253'          
-        }
-
-        let win = new BrowserWindow({width: 800, height: 600, center: true});
-        win.on('closed', () => {
-          win = null
-        })
-
-        // Load a remote URL
-        win.loadURL(url)
+export default {
+  name: "TopLeftNav",
+  computed: {
+    network: {
+      get() {
+        const net = this.$store.state.Setting.network;
+        return net === "TEST_NET" ? "TestNet" : "MainNet";
       }
     }
+  },
+  methods: {
+    toHelp() {
+      const lang = localStorage.getItem("user_lang");
+      let url = "";
+      if (lang === "zh") {
+        url = "http://ontfans.io/article/41.html";
+        // url = 'https://medium.com/ontologynetwork/owallet-faq-7f4f96784253'
+      } else {
+        // url = 'https://ontfans.io/?/article/39'
+        url = "https://medium.com/ontologynetwork/owallet-faq-7f4f96784253";
+      }
+
+      let win = new BrowserWindow({ width: 800, height: 600, center: true });
+      win.on("closed", () => {
+        win = null;
+      });
+
+      // Load a remote URL
+      win.loadURL(url);
+    }
   }
+};
 </script>
 
 <style scoped>
-  .left-nav {
-    width: 4rem;
-    height: 100%;
-    position: fixed;
-    left: 0;
-    background-color: #373A42;
-  }
+.left-nav {
+  width: 4rem;
+  height: 100%;
+  position: fixed;
+  left: 0;
+  background-color: #373a42;
+}
 
-  .logo-img {
-    height: 4rem;
-    width: 4rem;
-  }
+.logo-img {
+  height: 4rem;
+  width: 4rem;
+}
 
-  .logo-div {
-    height: 4rem;
-    width: 4rem;
-    background-color: #373A42;
-  }
+.logo-div {
+  height: 4rem;
+  width: 4rem;
+  background-color: #373a42;
+}
 
-  .setting-img,
-  .setting-btn {
-    height: 1.5rem;
-    width: 1.5rem;
-  }
+.setting-img,
+.setting-btn {
+  height: 1.5rem;
+  width: 1.5rem;
+}
 
-  .nav-setting-active div {
-    background: url('../assets/selectsetting.png') center center;
-  }
+.nav-setting-active div {
+  background: url("../assets/selectsetting.png") center center;
+}
 
-  .setting-img {
-    background: url('../assets/settingunselect.png') center center;
-    background-size: contain;
-  }
+.setting-img {
+  background: url("../assets/settingunselect.png") center center;
+  background-size: contain;
+}
 
-  .setting-img:hover {
-    background: url('../assets/selectsetting.png') center center;
-  }
+.setting-img:hover {
+  background: url("../assets/selectsetting.png") center center;
+}
 
-  .setting-img {
-    cursor: pointer;
-    position: fixed;
-    bottom: 4rem;
-    left: 1.25rem;
-  }
+.setting-img {
+  cursor: pointer;
+  position: fixed;
+  bottom: 4rem;
+  left: 1.25rem;
+}
 
-  .temp-top {
-    margin-top: 30px;
-  }
+.temp-top {
+  margin-top: 30px;
+}
 
-  .nav-help {
-    width: 1.5rem;
-    height: 1.5rem;
-    position: absolute;
-    bottom: 8rem;
-    left: 1.25rem;
-    background: url('../assets/helpunselected.png') center center;
-    cursor: pointer;
-  }
+.nav-help {
+  width: 1.5rem;
+  height: 1.5rem;
+  position: absolute;
+  bottom: 8rem;
+  left: 1.25rem;
+  background: url("../assets/helpunselected.png") center center;
+  cursor: pointer;
+}
 
-  .node-stake-icon {
-    width: 24px;
-    height: 24px;
-    margin: 67px auto;
-    background: url('../assets/node.png');
-    background-size: cover;
-    cursor: pointer;
-  }
+.node-stake-icon {
+  width: 24px;
+  height: 24px;
+  margin: 67px auto;
+  background: url("../assets/node.png");
+  background-size: cover;
+  cursor: pointer;
+}
 
-  .node-stake-active div {
-    background: url('../assets/nodeSelect.png') center center;
-  }
-  .node-stake-icon:hover {
-    background: url('../assets/nodeSelect.png') center center;    
-  }
+.node-stake-active div {
+  background: url("../assets/nodeSelect.png") center center;
+}
+.node-stake-icon:hover {
+  background: url("../assets/nodeSelect.png") center center;
+}
 
-  .nav-help:hover {
-    background: url('../assets/helpselect.png')
-  }
+.nav-help:hover {
+  background: url("../assets/helpselect.png");
+}
 
-  .nav-network {
-    position: absolute;
-    bottom: 10px;
-    left: 0;
-    text-align: center;
-    font-family: PingFangSC-Regular;
-    font-size: 12px;
-    color: #FFFFFF;
-    width: 100%;
-  }
+.nav-network {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  text-align: center;
+  font-family: PingFangSC-Regular;
+  font-size: 12px;
+  color: #ffffff;
+  width: 100%;
+}
 
-  .nav-accounts {
-    width: 24px;
-    height: 24px;
-    margin: 67px auto;
-    background: url('../assets/accounts.png');
-    background-size: cover;
-    cursor: pointer;
-  }
+.nav-accounts {
+  width: 24px;
+  height: 24px;
+  margin: 67px auto;
+  background: url("../assets/accounts.png");
+  background-size: cover;
+  cursor: pointer;
+}
 
-  .nav-accounts-active div {
-    background: url('../assets/account-hover.png');
-    background-size: cover;
-  }
+.nav-accounts-active div {
+  background: url("../assets/account-hover.png");
+  background-size: cover;
+}
 
-  .nav-accounts:hover {
-    background: url('../assets/account-hover.png');
-    background-size: cover;
-  }
+.nav-accounts:hover {
+  background: url("../assets/account-hover.png");
+  background-size: cover;
+}
 
-  .nav-wallets {
-    width: 24px;
-    height: 24px;
-    margin: 67px auto;
-    background: url('../assets/unselectwallet.png') center center;
-    background-size: cover;
-    cursor: pointer;
-  }
+.nav-wallets {
+  width: 24px;
+  height: 24px;
+  margin: 67px auto;
+  background: url("../assets/unselectwallet.png") center center;
+  background-size: cover;
+  cursor: pointer;
+}
 
-  .nav-wallets-active div {
-    background: url('../assets/selectwallet.png') center center;
-  }
+.nav-wallets-active div {
+  background: url("../assets/selectwallet.png") center center;
+}
 
-  .nav-wallets:hover {
-    background: url('../assets/selectwallet.png') center center;
-  }
+.nav-wallets:hover {
+  background: url("../assets/selectwallet.png") center center;
+}
+
+.nav-exchange {
+  width: 24px;
+  height: 24px;
+  margin: 67px auto;
+  background: url("../assets/jiaoyi-unselect.png") center center;
+  background-size: cover;
+  cursor: pointer;
+}
+
+.nav-exchange-active div {
+  background: url("../assets/jiaoyi-select.png") center center;
+}
+
+.nav-exchange:hover {
+  background: url("../assets/jiaoyi-select.png") center center;
+}
 </style>

@@ -31,6 +31,11 @@ export default new Router({
       component: require('@/components/Setting').default
     },
     {
+    path: '/Exchange',
+      name: 'Exchange',
+      component: require('@/components/Exchange').default
+    },
+    {
       path: '*',
       redirect: '/'
     },
@@ -173,6 +178,16 @@ export default new Router({
       path: '/node/newAuthorization',
       name: 'NewAuthorization',
       component: require('@/components/Node/NodeAuthorize/NewAuthorization').default
-    }
+    },
+    {
+      path: '/Exchange/Changelly',
+      name: 'Changelly',
+      component: require('@/components/Exchange/Changelly/Changelly').default
+    },
+    {
+      path: '/Exchange/Cryptonex',
+      name: 'Cryptonex',
+      component: require('@/components/Exchange/Cryptonex/Cryptonex').default
+    },
   ]
 })
