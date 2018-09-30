@@ -2,18 +2,14 @@
 td img {
   width: 20px;
 }
-.pageNumber {
-  padding: 2px;
+
+loading {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
-.btn-item button {
-  font-size: 16px !important;
-  height: 40px !important;
-  width: 150px !important;
-  margin-right: 20px;
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
 </style>
 
 <template>
@@ -21,9 +17,12 @@ td img {
     <div class="btn-item">
                 <a-button class="btn-next" @click="handleExchangeChangelly">{{$t('exchange.changelly')}}</a-button>
                 <a-button class="btn-next" @click="handleExchangeCryptonex">{{$t('exchange.cryptonex')}}</a-button>
+            </div>
+    <div class="loading" v-if="loading">
+                <h5>{{$t('exchange.loading')}}</h5>
     </div>
-
-      <div class ="grid">
+ 
+      <div class ="grid" v-if="!loading">
         <table class="table">
           <thead>
             <tr>
@@ -67,11 +66,15 @@ export default {
       vol: "",
       dailychange: "",
       filteredlist: "",
-      intervalId: "",
-      interval: 60000
+      interval: 60000,
+      loading: true
     };
   },
   mounted: function() {
+   /* this.$store.dispatch("showLoadingModals");
+    setTimeout(() => {
+      this.$store.dispatch("hideLoadingModals");
+    }, 8000); */
     let that = this;
     setInterval(() => {
       that.getImageData();
@@ -79,12 +82,15 @@ export default {
   },
   computed: {},
   beforeDestroy() {
-    clearInterval(this.intervalId);
+    clearInterval(this.interval);
   },
   created: function() {
     this.getImageData();
   },
   methods: {
+    findIndex(array) {
+      return array.long == value;
+    },
     handleExchangeChangelly() {
       this.$router.push({ name: "Changelly" });
     },
@@ -100,7 +106,15 @@ export default {
     setColor: num => {
       return num > 0 ? "color:green;" : "color:red;";
     },
+    reorderArray(array, initialIndex, destinationIndex) {
+      const itemOfInterest = array[initialIndex];
+      array.splice(initialIndex, 1);
+      array.splice(destinationIndex, 0, itemOfInterest);
+
+      return array;
+    },
     getPrices() {
+      this.loading = true;
       const url = "http://coincap.io/front";
       this.axios
         .get(url)
@@ -125,14 +139,35 @@ export default {
                 dailychange
               };
             });
-            this.results = filteredlist;
+
+            try {
+              // Find ONT in list and re-order it to top of the list
+              let ONTindex = filteredlist.findIndex(
+                filteredlist => filteredlist.coin_long == "Ontology"
+              );
+              const reorderedArray = this.reorderArray(
+                filteredlist,
+                ONTindex,
+                0
+              );
+              this.results = reorderedArray;
+
+              this.loading = false
+            } catch (err) {
+              this.results = filteredlist;
+              console.log(err);
+            }
           } else {
             console.log(response);
           }
         })
         .catch(err => {
+          this.loading = false
           console.log(err);
         });
+    },
+    test: function(from, to) {
+      this.splice(to, 0, this.splice(from, 1)[0]);
     },
     getImageData: function() {
       let self = this;
@@ -165,7 +200,7 @@ export default {
       this.$store.dispatch("showLoadingModals");
       setTimeout(() => {
         this.$store.dispatch("hideLoadingModals");
-      }, 1000);
+      }, 8000);
       this.getPrices();
     }
   }

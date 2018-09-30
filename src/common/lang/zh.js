@@ -494,11 +494,10 @@ export default {
     walletRewardTip: '这是当前周期内您的钱包所有的授权质押收益',
     switchMainnet: '请切换到主网。'
   },
-    exchange: {
-    exchange: '兑换',
+  exchange: {
+    exchange: 'Exchange',
     changelly: 'Changelly', 
     cryptonex: 'Cryptonex',
-    coincap: '价格 (Coincap)'
-  }
-
+    loading: 'Loading latest pricing information, please wait..'
+   }
 }

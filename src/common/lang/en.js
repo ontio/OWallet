@@ -505,11 +505,10 @@ Within their 50% share each consensus node will receive their share according to
     walletRewardTip: 'This is all the reward of your wallet in current round.',
     switchMainnet: 'Please switch to MainNet.'
 },
-  exchange: {
-    exchange: 'Exchange',
-    changelly: 'Changelly', 
-    cryptonex: 'Cryptonex',
-    coincap: 'Prices (Coincap)'
-  }
-    
+exchange: {
+  exchange: 'Exchange',
+  changelly: 'Changelly', 
+  cryptonex: 'Cryptonex',
+  loading: 'Loading latest pricing information, please wait..'
+ }
 }
