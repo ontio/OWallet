@@ -135,6 +135,13 @@ export default {
                  this.$message.error(this.$t('transfer.exceedBalance'))
                  return;
              }
+
+            if (this.asset === "ONG" && Number(this.amount) == Number(this.balance.ong - 0.01)) {
+                    if (!confirm(this.$t('transfer.warningTransferAllONG'))) {
+                    this.validAmount = false;
+                    return;
+                    }
+            }         
             this.validAmount = true;
         },
         changeAsset(value) {

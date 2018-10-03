@@ -310,7 +310,8 @@ export default {
     inputValidAmount: 'Please input valid transfer amount.',
     inputValidAddress: 'Please input valid receiver address.',
     exceedBalance: 'Amount of transfer can not exceed your balance.',
-    ongBalanceNotEnough: 'Your ONG balance is not enough for transfer and fee.'
+    ongBalanceNotEnough: 'Your ONG balance is not enough for transfer and fee.',
+    warningTransferAllONG: 'Transferring this amount of ONG means you will not have enough ONG to pay\r\nfor further transaction fees (including claiming unbound ONG). \r\n\r\nContinue?'
   },
 
   setting: {
