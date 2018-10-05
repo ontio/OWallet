@@ -21,7 +21,7 @@ Core features of OWallet are as follows:
 * Withdraw (redeem) ONG
 * Node stake and stake authorization management
 * ONT ID support
-* Integrate exchangely 
+* Integrate gateway provided by changelly and cryptonex 
 
 ![](images/OWallet.jpg)
 
