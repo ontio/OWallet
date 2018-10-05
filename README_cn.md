@@ -21,7 +21,7 @@ OWallet核心功能如下:
 * 提取ONG
 * 节点质押和质押授权管理
 * 支持ONT ID功能
-* 集成exchangely 
+* 集成changelly和cryptonex网关 
 
 ![](images/OWallet.jpg)
 
