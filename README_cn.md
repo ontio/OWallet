@@ -3,7 +3,7 @@
 
 
 <h1 align="center">OWallet - 本体综合性桌面版钱包 </h1>
-<h4 align="center">Version 0.8.8</h4>
+<h4 align="center">Version 0.8.9</h4>
 
 ## 总体介绍
 
