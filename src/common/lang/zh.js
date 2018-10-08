@@ -309,7 +309,9 @@ export default {
     inputValidAmount: '请输入有效的转账金额。',
     inputValidAddress: '请输入有效的转账地址。',
     exceedBalance : '转账金额不能超余额',
-    ongBalanceNotEnough: '您的ONG余额不足以支付转账和手续费。'
+    ongBalanceNotEnough: '您的ONG余额不足以支付转账和手续费。',
+    //Needs translation
+    warningTransferAllONG: 'Transferring this amount of ONG means you will not have enough ONG to pay\r\nfor further transaction fees (including claiming unbound ONG). \r\n\r\nContinue?'
   },
   setting: {
     name: '设置',
@@ -494,11 +496,10 @@ export default {
     walletRewardTip: '这是当前周期内您的钱包所有的授权质押收益',
     switchMainnet: '请切换到主网。'
   },
-    exchange: {
-    exchange: '兑换',
+  exchange: {
+    exchange: 'Exchange',
     changelly: 'Changelly', 
     cryptonex: 'Cryptonex',
-    coincap: '价格 (Coincap)'
-  }
-
+    loading: 'Loading latest pricing information, please wait..'
+   }
 }
