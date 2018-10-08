@@ -1,7 +1,7 @@
 import { getNodeUrl} from '../../../core/utils'
 import {CON_NODE, NODE_DETAIL} from '../../../core/consts'
 import numeral from 'numeral'
-import {Crypto, RestClient, utils} from 'ontology-ts-sdk'
+import { Crypto, RestClient, utils, GovernanceTxBuilder} from 'ontology-ts-sdk'
 import {BigNumber} from 'bignumber.js'
 import {db2, dbUpsert, dbFind} from '../../../core/dbService'
 var dateFormat = require('dateformat');
@@ -128,7 +128,7 @@ const mutations = {
 const actions = {
     async fetchPeerItem({commit}, pk){
         const url = getNodeUrl();
-        const peerMap = await Ont.GovernanceTxBuilder.getPeerPoolMap(url);
+        const peerMap = await GovernanceTxBuilder.getPeerPoolMap(url);
         if(!pk) {
             return peerMap;
         }
@@ -152,7 +152,7 @@ const actions = {
 
     async fetchPeerAttributes({commit}, pk) {
         const url = getNodeUrl();
-        const peerAttrs = await Ont.GovernanceTxBuilder.getAttributes(pk, url);
+        const peerAttrs = await GovernanceTxBuilder.getAttributes(pk, url);
         if (peerAttrs) {
             commit('UPDATE_PEER_ATTRS', {peerAttrs})
             return peerAttrs;
@@ -161,7 +161,7 @@ const actions = {
     async fetchAuthorizationInfo({commit}, {pk, address}) {
         const url = getNodeUrl();
         const userAddr = new Crypto.Address(address);
-        const authorizeInfo = await Ont.GovernanceTxBuilder.getAuthorizeInfo(pk, userAddr, url)
+        const authorizeInfo = await GovernanceTxBuilder.getAuthorizeInfo(pk, userAddr, url)
         if(authorizeInfo) {
             commit('UPDATE_AUTHORIZATION_INFO', {info: authorizeInfo})
             return authorizeInfo
@@ -170,7 +170,7 @@ const actions = {
     async fetchSplitFee({commit}, address) {
         const url = getNodeUrl();
         const userAddr = new Crypto.Address(address);        
-        const splitFee = await Ont.GovernanceTxBuilder.getSplitFeeAddress(userAddr, url)
+        const splitFee = await GovernanceTxBuilder.getSplitFeeAddress(userAddr, url)
         if(splitFee) {
             if(splitFee.amount) {
                 splitFee.amount = new BigNumber(splitFee.amount).div(1e9).toFixed(9)
@@ -183,7 +183,7 @@ const actions = {
         const url = getNodeUrl();
         try{
             dispatch('showLoadingModals');
-            const peerMap = await Ont.GovernanceTxBuilder.getPeerPoolMap(url);
+            const peerMap = await GovernanceTxBuilder.getPeerPoolMap(url);
             const list = []
             for (let k in peerMap) {
                 let item = peerMap[k];
@@ -193,7 +193,7 @@ const actions = {
                 if (!isMainnetConNode(item.peerPubkey)) {
                     continue;
                 }
-                const attr = await Ont.GovernanceTxBuilder.getAttributes(item.peerPubkey, url);
+                const attr = await GovernanceTxBuilder.getAttributes(item.peerPubkey, url);
                 item.maxAuthorize = attr.maxAuthorize;
                 item.maxAuthorizeStr = numeral(item.maxAuthorize).format('0,0')
                 item.totalPosStr = numeral(item.totalPos).format('0,0')
@@ -237,7 +237,7 @@ const actions = {
         const url = getNodeUrl();
         const rest = new RestClient(url);
         try {
-            const view = await Ont.GovernanceTxBuilder.getGovernanceView(url);
+            const view = await GovernanceTxBuilder.getGovernanceView(url);
             const blockRes = await rest.getBlockHeight();
             const blockHeight = blockRes.Result;
             const countdown = 120000 - (blockHeight - view.height);
@@ -251,7 +251,7 @@ const actions = {
     async fetchPosLimit({commit}) {
         const url = getNodeUrl();
         try {
-            const globalParams = await Ont.GovernanceTxBuilder.getGlobalParam(url);
+            const globalParams = await GovernanceTxBuilder.getGlobalParam(url);
             if(globalParams.posLimit) {
                 commit('UPDATE_POS_LIMIT', {posLimit: globalParams.posLimit});
                 return globalParams.posLimit;
@@ -264,7 +264,7 @@ const actions = {
         const url = getNodeUrl();
         const addr = new Crypto.Address(address);
         try {   
-            let peerUnboundOng = await Ont.GovernanceTxBuilder.getPeerUnboundOng(addr, url);
+            let peerUnboundOng = await GovernanceTxBuilder.getPeerUnboundOng(addr, url);
             peerUnboundOng = new BigNumber(peerUnboundOng).div(1e9).toNumber();
             commit('UPDATE_PEER_UNBOUND_ONG', {peerUnboundOng})
             return peerUnboundOng;

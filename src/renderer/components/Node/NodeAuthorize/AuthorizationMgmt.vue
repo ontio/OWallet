@@ -181,7 +181,7 @@ import Breadcrumb from '../../Breadcrumb'
 import {mapState} from 'vuex'
 import SignSendTx from '../../Common/SignSendTx'
 import {GAS_PRICE, GAS_LIMIT} from '../../../../core/consts'
-import {Crypto} from 'ontology-ts-sdk'
+import {Crypto, GovernanceTxBuilder} from 'ontology-ts-sdk'
 import numeral from 'numeral'
 import {varifyPositiveInt} from '../../../../core/utils.js'
 
@@ -319,7 +319,7 @@ export default {
             this.signVisible = true;
             const userAddr = new Crypto.Address(this.stakeWallet.address);
             const amount = Number(this.cancelAmount) * 500;
-            const tx = Ont.GovernanceTxBuilder.makeUnauthorizeForPeerTx(
+            const tx = GovernanceTxBuilder.makeUnauthorizeForPeerTx(
                 userAddr,
                 [this.current_node.pk],
                 [parseInt(amount)],
@@ -338,7 +338,7 @@ export default {
                 this.$message.warning(this.$t('nodeMgmt.noRewards'))
                 return;
             }
-            const tx = Ont.GovernanceTxBuilder.makeWithdrawFeeTx(
+            const tx = GovernanceTxBuilder.makeWithdrawFeeTx(
                 new Crypto.Address(this.stakeWallet.address),
                 new Crypto.Address(this.stakeWallet.address),
                 GAS_PRICE,
@@ -357,7 +357,7 @@ export default {
                 return;
             }
             const claimable = this.authorizationInfo.claimableVal
-            const tx = Ont.GovernanceTxBuilder.makeWithdrawTx(
+            const tx = GovernanceTxBuilder.makeWithdrawTx(
                 new Crypto.Address(this.stakeWallet.address),
                 [this.current_node.pk],
                 [claimable],
@@ -373,7 +373,7 @@ export default {
                 this.$message.warning(this.$t('nodeMgmt.noUnboundOng'));
                 return;
             }
-            const tx = Ont.GovernanceTxBuilder.makeWithdrawPeerUnboundOngTx(
+            const tx = GovernanceTxBuilder.makeWithdrawPeerUnboundOngTx(
                 new Crypto.Address(this.stakeWallet.address),
                 new Crypto.Address(this.stakeWallet.address),
                 GAS_PRICE,

@@ -35,7 +35,7 @@
 
 <script>
   import {mapState} from 'vuex'
-  import {Wallet, Account, Crypto, Identity, OntidContract, RestClient} from "ontology-ts-sdk"
+  import {Wallet, Account, Crypto, Identity, OntidContract, RestClient, SDK} from "ontology-ts-sdk"
   import FileHelper from "../../../../core/fileHelper"
   import dbService from '../../../../core/dbService'
   import {DEFAULT_SCRYPT, TEST_NET, MAIN_NET} from '../../../../core/consts'
@@ -89,7 +89,7 @@
             const label = keystore.label
             const salt = keystore.salt
             //must call if use 
-            let password = Ont.SDK.transformPassword(this.keystorePassword)
+            let password = SDK.transformPassword(this.keystorePassword)
             identity = Identity.importIdentity(label, encryptedPrivateKeyObj, password, addr, salt);
             identity = identity.toJsonObj();
         } catch (err) {

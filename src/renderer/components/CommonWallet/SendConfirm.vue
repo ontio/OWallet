@@ -191,7 +191,7 @@
 import {mapState} from 'vuex'
 import {legacySignWithLedger} from '../../../core/ontLedger'
 import { TEST_NET, MAIN_NET, ONT_CONTRACT, ONT_PASS_NODE, DEFAULT_SCRYPT } from '../../../core/consts'
-import {Crypto, OntAssetTxBuilder, TransactionBuilder, utils} from 'ontology-ts-sdk'
+import {Crypto, OntAssetTxBuilder, TransactionBuilder, utils, RestClient, TxSignature} from 'ontology-ts-sdk'
 import axios from 'axios';
 import {getDeviceInfo, getPublicKey} from '../../../core/ontLedger'
 import $ from 'jquery'
@@ -279,14 +279,15 @@ export default {
         })
       },
       sendTx(tx){
-          const restClient = new Ont.RestClient(this.nodeUrl);
+          const restClient = new RestClient(this.nodeUrl);
           restClient.sendRawTransaction(tx.serialize()).then(res => {
           console.log(res)
           this.$store.dispatch('hideLoadingModals')
           if (res.Error === 0) {
             this.$message.success(this.$t('common.transSentSuccess'))
           } else if (res.Error === -1) {
-            this.$message.error(this.$t('common.ongNoEnough'))
+            const err = res.Result || this.$t('common.ongNoEnough')
+            this.$message.error(err)
             return;
           } else {
             this.$message.error(res.Result)
@@ -312,14 +313,14 @@ export default {
           return;
       }
       
-      const from = new Ont.Crypto.Address(this.currentWallet.address);
-      const to = new Ont.Crypto.Address(this.transfer.to);
+      const from = new Crypto.Address(this.currentWallet.address);
+      const to = new Crypto.Address(this.transfer.to);
       const asset = this.transfer.asset;
       const amount = asset === 'ONT' ? this.transfer.amount : new BigNumber(this.transfer.amount).multipliedBy(1e9);
       const gasLimit = '20000';
       const gas = (new BigNumber(this.transfer.gas)).multipliedBy(1e9);
       const gasPrice = gas.div(parseInt(gasLimit)).toString();
-      const tx = Ont.OntAssetTxBuilder.makeTransferTx(asset, from, to, amount, gasPrice, gasLimit);
+      const tx = OntAssetTxBuilder.makeTransferTx(asset, from, to, amount, gasPrice, gasLimit);
       
       if (this.isCommonWallet) {
         this.$store.dispatch('showLoadingModals')
@@ -341,8 +342,8 @@ export default {
             this.sending = true;
             this.ledgerStatus = this.$t('common.waitForSign')
             this.$store.dispatch('showLoadingModals')
-            const pk = new Ont.Crypto.PublicKey(this.currentWallet.publicKey);
-            const txSig = new Ont.TxSignature();
+            const pk = new Crypto.PublicKey(this.currentWallet.publicKey);
+            const txSig = new TxSignature();
             txSig.M = 1;
             txSig.pubKeys = [pk];
             tx.payer = from;

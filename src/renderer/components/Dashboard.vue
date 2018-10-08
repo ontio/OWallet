@@ -439,7 +439,7 @@
 <script>
   import {mapState} from 'vuex'
   import {TEST_NET, MAIN_NET, ONT_CONTRACT, ONT_PASS_NODE} from '../../core/consts'
-  import {Crypto, OntAssetTxBuilder} from 'ontology-ts-sdk'
+  import {Crypto, OntAssetTxBuilder, RestClient, SDK} from 'ontology-ts-sdk'
   import axios from 'axios';
   import Breadcrumb from './Breadcrumb'
 import { BigNumber } from 'bignumber.js';
@@ -541,7 +541,7 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
         })
       },
       getUnclaimOng() {
-        const restClient = new Ont.RestClient(this.nodeUrl);
+        const restClient = new RestClient(this.nodeUrl);
         restClient.getAllowance('ong', new Crypto.Address(ONT_CONTRACT), new Crypto.Address(this.address)).then(res => {
           console.log(res.Result)
           this.unclaimOng = new BigNumber(res.Result).div(1e9);
@@ -575,7 +575,7 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
       },
       getNep5Balance() {
         const NEO_TRAN = 100000000;
-        Ont.SDK.getNeoBalance(this.currentWallet.address).then(res => {
+        SDK.getNeoBalance(this.currentWallet.address).then(res => {
           let nep5Ont = 0;
           if(res.result) {
             nep5Ont = res.result / NEO_TRAN

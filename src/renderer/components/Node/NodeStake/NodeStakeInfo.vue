@@ -186,7 +186,7 @@
 <script>
 import Breadcrumb from "../../Breadcrumb";
 import { mapState } from "vuex";
-import { Crypto, TransactionBuilder, utils } from "ontology-ts-sdk";
+import { Crypto, TransactionBuilder, utils, TxSignature, GovernanceTxBuilder, RestClient } from "ontology-ts-sdk";
 import {legacySignWithLedger} from '../../../../core/ontLedger'
 import {varifyPositiveInt, getNodeUrl} from '../../../../core/utils.js'
 import axios from "axios";
@@ -310,8 +310,8 @@ export default {
         //ledger sign
         if (this.ledgerWallet.address) {
           this.$store.dispatch("showLoadingModals");
-          const pk = new Ont.Crypto.PublicKey(this.ledgerWallet.publicKey);
-          const txSig = new Ont.TxSignature();
+          const pk = new Crypto.PublicKey(this.ledgerWallet.publicKey);
+          const txSig = new TxSignature();
           txSig.M = 1;
           txSig.pubKeys = [pk];
           tx.payer = new Crypto.Address(this.ledgerWallet.address);;
@@ -366,7 +366,7 @@ export default {
     },
     sendTx(tx){
         const url = getNodeUrl();
-        const restClient = new Ont.RestClient(url);
+        const restClient = new RestClient(url);
         restClient.sendRawTransaction(tx.serialize()).then(res => {
         console.log(res)
         this.isDelegateSendTx = true;
@@ -396,7 +396,7 @@ export default {
       const userAddr = new Crypto.Address(this.stakeWallet.address);
       const peerPubkey = this.detail.publickey;
       const payer = userAddr;
-      const tx = Ont.GovernanceTxBuilder.makeUnregisterCandidateTx(
+      const tx = GovernanceTxBuilder.makeUnregisterCandidateTx(
         userAddr,
         peerPubkey,
         payer,
@@ -412,7 +412,7 @@ export default {
         const peerPubkeys = [this.detail.publickey]
         const withdrawList = [this.detail.stakequantity]
         const payer = userAddr
-        const tx = Ont.GovernanceTxBuilder.makeWithdrawTx(userAddr, peerPubkeys, withdrawList, payer, GAS_PRICE, GAS_LIMIT)
+        const tx = GovernanceTxBuilder.makeWithdrawTx(userAddr, peerPubkeys, withdrawList, payer, GAS_PRICE, GAS_LIMIT)
         this.tx = tx;
         this.walletPassModal = true;
     },
@@ -420,7 +420,7 @@ export default {
         const userAddr = new Crypto.Address(this.stakeWallet.address);
         const peerPubkey = this.detail.publickey;
         const payer = userAddr;   
-        const tx = Ont.GovernanceTxBuilder.makeQuitNodeTx(userAddr, peerPubkey, payer, GAS_PRICE, GAS_LIMIT)
+        const tx = GovernanceTxBuilder.makeQuitNodeTx(userAddr, peerPubkey, payer, GAS_PRICE, GAS_LIMIT)
         this.tx = tx;
         this.walletPassModal = true;
     },
@@ -464,7 +464,7 @@ export default {
       }
       this.addPosVisible = false;
       const userAddr = new Crypto.Address(this.stakeWallet.address);      
-      const tx = Ont.GovernanceTxBuilder.makeAddInitPosTx(
+      const tx = GovernanceTxBuilder.makeAddInitPosTx(
         this.detail.publickey,
         userAddr,
         parseInt(this.addPos),
@@ -486,7 +486,7 @@ export default {
       }
       this.reducePosVisible = false;
       const userAddr = new Crypto.Address(this.stakeWallet.address);      
-      const tx = Ont.GovernanceTxBuilder.makeReduceInitPosTx(
+      const tx = GovernanceTxBuilder.makeReduceInitPosTx(
         this.detail.publickey,
         userAddr,
         parseInt(this.reducePos),

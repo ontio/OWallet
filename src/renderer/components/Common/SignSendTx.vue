@@ -25,7 +25,7 @@ import {mapState} from 'vuex'
 import {DEFAULT_SCRYPT} from '../../../core/consts'
 import {getNodeUrl} from '../../../core/utils'
 import {legacySignWithLedger} from '../../../core/ontLedger'
-import {Crypto, TransactionBuilder, TxSignature, utils} from 'ontology-ts-sdk'
+import {Crypto, TransactionBuilder, TxSignature, utils, RestClient} from 'ontology-ts-sdk'
 export default {
     name: 'SignSendTx',
     props:['tx', 'wallet', 'visible'],
@@ -113,7 +113,7 @@ export default {
             sendTx(tx){
                 this.walletPassword = '';
                 const url = getNodeUrl();
-                const restClient = new Ont.RestClient(url);
+                const restClient = new RestClient(url);
                 restClient.sendRawTransaction(tx.serialize()).then(res => {
                 console.log(res)
                 if (res.Error === 0) {

@@ -56,7 +56,7 @@
 <script>
 import Breadcrumb from '../Breadcrumb'
 import {legacySignWithLedger} from '../../../core/ontLedger'
-import {RestClient, Crypto,OntAssetTxBuilder, TransactionBuilder, utils} from 'ontology-ts-sdk'
+import {RestClient, Crypto,OntAssetTxBuilder, TransactionBuilder, utils, TxSignature} from 'ontology-ts-sdk'
 import { TEST_NET, MAIN_NET, ONT_CONTRACT, ONT_PASS_NODE, DEFAULT_SCRYPT } from '../../../core/consts'
 import {mapState} from 'vuex'
 import {getDeviceInfo, getPublicKey} from '../../../core/ontLedger'
@@ -155,7 +155,8 @@ export default {
             if (res.Error === 0) {
                 this.$message.success(this.$t('common.transSentSuccess'))
             } else if (res.Error === -1) {
-                this.$message.error(this.$t('common.ongNoEnough'))
+                const err = res.Result || this.$t('common.ongNoEnough')
+                this.$message.error(err)
                 return;
             } else {
                 this.$message.error(res.Result)
@@ -201,8 +202,8 @@ export default {
                     this.$store.dispatch('showLoadingModals')
                     this.sending = true;
                     this.ledgerStatus = this.$t('common.waitForSign')
-                    const pk = new Ont.Crypto.PublicKey(this.currentWallet.publicKey);
-                    const txSig = new Ont.TxSignature();
+                    const pk = new Crypto.PublicKey(this.currentWallet.publicKey);
+                    const txSig = new TxSignature();
                     txSig.M = 1;
                     txSig.pubKeys = [pk];
                     tx.payer = from;

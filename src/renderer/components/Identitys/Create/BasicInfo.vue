@@ -56,7 +56,7 @@
 
 <script>
   import {mapState} from 'vuex'
-  import {Wallet, Account, Crypto, TransactionBuilder} from "ontology-ts-sdk"
+  import {Wallet, Account, Crypto, TransactionBuilder, TxSignature, RestClient} from "ontology-ts-sdk"
   import FileHelper from "../../../../core/fileHelper"
   import dbService from '../../../../core/dbService'
   import {DEFAULT_SCRYPT, TEST_NET, MAIN_NET} from '../../../../core/consts'
@@ -160,7 +160,7 @@ import {legacySignWithLedger} from '../../../../core/ontLedger'
                 if(this.ledgerPk) {
                   this.$store.dispatch('showLoadingModals')
                   const pk = new Crypto.PublicKey(this.ledgerWallet.publicKey);
-                  const txSig = new Ont.TxSignature();
+                  const txSig = new TxSignature();
                   txSig.M = 1;
                   txSig.pubKeys = [pk];
                   const txData = tx.serializeUnsignedData();
@@ -185,7 +185,7 @@ import {legacySignWithLedger} from '../../../../core/ontLedger'
         })
       },
       sendTx(tx){
-        const restClient = new Ont.RestClient(this.nodeUrl);
+        const restClient = new RestClient(this.nodeUrl);
           restClient.sendRawTransaction(tx.serialize()).then(res => {
           console.log(res)
           this.$store.dispatch('hideLoadingModals')

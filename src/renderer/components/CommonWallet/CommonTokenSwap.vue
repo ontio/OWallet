@@ -61,7 +61,7 @@ import Breadcrumb from '../Breadcrumb'
 import {mapState} from 'vuex'
 import {varifyPositiveInt} from '../../../core/utils.js'
 import {SWAP_ADDRESS, DEFAULT_SCRYPT} from '../../../core/consts'
-import {Crypto} from 'ontology-ts-sdk'
+import {Crypto, SDK} from 'ontology-ts-sdk'
 
 export default {
     name: 'CommonTokenSwap',
@@ -90,7 +90,7 @@ export default {
     methods: {
         getNep5Balance() {
             const NEO_TRAN = 100000000;
-            Ont.SDK.getNeoBalance(this.currentWallet.address).then(res => {
+            SDK.getNeoBalance(this.currentWallet.address).then(res => {
                 if(res.result) {
                     const nep5Ont = res.result / NEO_TRAN
                     this.nep5Ont = nep5Ont;
@@ -140,7 +140,7 @@ export default {
             // must transform password to base when call Ont.SDK's api
             const password = Buffer.from(this.password).toString('base64');
             const params = DEFAULT_SCRYPT;
-            const resp =  Ont.SDK.neoTransfer(from, to, value, encKey,password,salt,'', params)
+            const resp =  SDK.neoTransfer(from, to, value, encKey,password,salt,'', params)
             if(resp.then) {
                 resp.then(res => {
                     if(res.result) {
