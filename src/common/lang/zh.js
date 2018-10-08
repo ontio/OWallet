@@ -487,7 +487,7 @@ export default {
     activeT2: '下下轮生效',
     changeRewardProportion: '修改节点分配比例',
     edit:'修改',
-    stakeHistory: '质押历史',
+    stakeHistory: '我的质押',
     cancelUnits: '份',
     stakeWalletAddress: '质押钱包地址',
     lastUpdate: '上次更新时间',

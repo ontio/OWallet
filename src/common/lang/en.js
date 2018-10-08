@@ -498,7 +498,7 @@ Within their 50% share each consensus node will receive their share according to
     activeT2: 'Active in next 2 round',
     changeRewardProportion: 'Change Reward Proportion',
     edit: 'Edit',
-    stakeHistory: 'Stake History',
+    stakeHistory: 'My Stake',
     cancelUnits: 'units',
     stakeWalletAddress: 'Stake wallet address',
     lastUpdate: 'Last update time',
