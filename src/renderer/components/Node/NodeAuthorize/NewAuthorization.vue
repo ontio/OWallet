@@ -76,7 +76,7 @@ import {varifyPositiveInt} from '../../../../core/utils.js'
 import SignSendTx from '../../Common/SignSendTx'
 import {mapState} from 'vuex'
 import {GAS_LIMIT, GAS_PRICE} from '../../../../core/consts'
-import {Crypto} from 'ontology-ts-sdk'
+import {Crypto, GovernanceTxBuilder} from 'ontology-ts-sdk'
 
 export default {
     name: 'NewAuthorization',
@@ -153,7 +153,7 @@ export default {
                 return;
             }
             const userAddr = new Crypto.Address(this.stakeWallet.address)
-            const tx = Ont.GovernanceTxBuilder.makeAuthorizeForPeerTx(
+            const tx = GovernanceTxBuilder.makeAuthorizeForPeerTx(
                 userAddr,
                 [this.current_node.pk],
                 [this.amount],

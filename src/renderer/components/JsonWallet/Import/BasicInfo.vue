@@ -408,7 +408,7 @@
         // 助记词导入
         let account
         try {
-          account = Ont.Account.importWithMnemonic(this.mnemonicLabel, this.mnemonic, this.mnemonicPassword, DEFAULT_SCRYPT)
+          account = Account.importWithMnemonic(this.mnemonicLabel, this.mnemonic, this.mnemonicPassword, DEFAULT_SCRYPT)
         } catch (err) {
           this.message.error(this.t('basicInfo.InvalidMnemonic'))
         }

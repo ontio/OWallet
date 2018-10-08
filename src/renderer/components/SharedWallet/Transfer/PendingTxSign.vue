@@ -125,7 +125,7 @@ export default {
                 this.sending = true;
                 this.$store.dispatch('showLoadingModals')
                 //sign and decide to send
-                const tx = Ont.Transaction.deserialize(this.pendingTx.transactionbodyhash);
+                const tx = Transaction.deserialize(this.pendingTx.transactionbodyhash);
                 const txHash = this.pendingTx.transactionidhash;
                 const enc = new Crypto.PrivateKey(this.currentSigner.key);
                 let pri;

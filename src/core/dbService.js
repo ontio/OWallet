@@ -2,7 +2,7 @@
 import electron from 'electron'
 const app = electron.remote.app;
 const userData = app.getAppPath('userData')
-console.log('path' + userData)
+console.log('appPath: ' + userData)
 if(!localStorage.getItem('savePath')) {
     localStorage.setItem('savePath', userData)
 }
@@ -18,6 +18,10 @@ const db2 = new Datastore({filename: savePath + '/stakeHistory.db', autoload:tru
 //indexing
 db.ensureIndex({fieldName: 'address', unique: true}, function(err) {
     console.log(err)
+    if (err && err.code === 'ENOENT') {
+        localStorage.setItem('savePath', userData);
+        alert('Can not find the keystore.db file.Please set the path of the keystore.db file.');
+    }
 });
 
 // indexKey = stake wallet address + '-' + node's pk

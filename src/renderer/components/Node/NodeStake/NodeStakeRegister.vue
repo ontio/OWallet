@@ -105,7 +105,7 @@
 import Breadcrumb from "../../Breadcrumb";
 import { mapState } from "vuex";
 import { GAS_PRICE, GAS_LIMIT, TEST_NET, MAIN_NET, ONT_PASS_NODE, ONT_PASS_NODE_PRD, ONT_PASS_URL, DEFAULT_SCRYPT } from "../../../../core/consts";
-import { Crypto, TransactionBuilder, RestClient, utils } from "ontology-ts-sdk";
+import { Crypto, TransactionBuilder, RestClient, utils, GovernanceTxBuilder, TxSignature } from "ontology-ts-sdk";
 import axios from 'axios'
 import {legacySignWithLedger} from '../../../../core/ontLedger'
 
@@ -169,7 +169,7 @@ export default {
       const userAddr = new Crypto.Address(this.detail.stakewalletaddress);
       const initPos = parseInt(this.stakeQuantity);
       const payer = userAddr;
-      const tx = Ont.GovernanceTxBuilder.makeRegisterCandidateTx(
+      const tx = GovernanceTxBuilder.makeRegisterCandidateTx(
         ontid,
         peerPubkey,
         keyNo,
@@ -240,8 +240,8 @@ export default {
         if(this.ledgerWallet.address) {
             this.$store.dispatch('showLoadingModals')
             const tx = this.tx;
-            const pk = new Ont.Crypto.PublicKey(this.ledgerWallet.publicKey);
-            const txSig = new Ont.TxSignature();
+            const pk = new Crypto.PublicKey(this.ledgerWallet.publicKey);
+            const txSig = new TxSignature();
             txSig.M = 1;
             txSig.pubKeys = [pk];
             tx.payer = new Crypto.Address(this.ledgerWallet.address);
