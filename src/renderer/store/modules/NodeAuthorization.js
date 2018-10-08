@@ -278,6 +278,7 @@ const actions = {
         const rest = new RestClient(url)
         const txHash = utils.reverseHex(tx.getHash());
         const event = await rest.getSmartCodeEvent(txHash)
+        console.log(event);
         if(event.Result && parseInt(event.Result.State) === 1) {
             try {
                 const upsert = await dbUpsert(db2, 'indexKey', record);

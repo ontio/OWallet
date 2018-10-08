@@ -349,7 +349,7 @@ export default {
         },
         cancelAuthorization() {
             this.cancelVisible = true
-            this.tx = tx;
+            this.tx = '';
         },
         redeemOnt() {
             if(!this.authorizationInfo.withdrawUnfreezePos) {

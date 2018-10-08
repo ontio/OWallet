@@ -41,11 +41,12 @@ export default {
                 dataIndex: 'stakeWalletAddress',
                 key: 'stakeWalletAddress'
             },
-            {
-                title: this.$t('nodeMgmt.stakeAmount'),
-                dataIndex: 'amount',
-                key: 'amount'
-            },
+            // hide for now
+            // {
+            //     title: this.$t('nodeMgmt.stakeAmount'),
+            //     dataIndex: 'amount',
+            //     key: 'amount'
+            // },
             {
                 title: this.$t('nodeMgmt.lastUpdate'),
                 dataIndex: 'updatedAt',
