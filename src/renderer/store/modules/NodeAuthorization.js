@@ -18,6 +18,12 @@ function matchNodeName(node) {
     }
 }
 
+function delay(s) {
+    return new Promise((resolve, reject) => {
+        setTimeout(resolve, s);
+    })
+}
+
 function isMainnetConNode(pk) {
     const net = localStorage.getItem('net');
     if (net === 'MAIN_NET') {
@@ -273,21 +279,38 @@ const actions = {
         }
     },
 
-    async recordStakeHistory({commit}, {tx, record}) {
+    async recordStakeHistory({commit, dispatch}, {tx, record}) {
         const url = getNodeUrl();
         const rest = new RestClient(url)
         const txHash = utils.reverseHex(tx.getHash());
-        const event = await rest.getSmartCodeEvent(txHash)
-        console.log(event);
-        if(event.Result && parseInt(event.Result.State) === 1) {
-            try {
-                const upsert = await dbUpsert(db2, 'indexKey', record);
-                return upsert;
-            }catch(err) {
-                console.log(err)
-                return;
-            }
+        await delay(6000);
+        let event = await rest.getSmartCodeEvent(txHash)
+        if (event.Result && parseInt(event.Result.State) === 1) {
+            //do nothing
+        } else {
+            await delay(3000);
+            event = await rest.getSmartCodeEvent(txHash)
         }
+        if (!event.Result || parseInt(event.Result.State) !== 1) {
+            return;
+        }
+        // update stake history Db
+        const pk = record.nodePk;
+        const address = record.stakeWalletAddress
+        const authorizationInfo = await dispatch('fetchAuthorizationInfo', { pk, address })
+        if (authorizationInfo) {
+            const inAuthorization = authorizationInfo.consensusPos + authorizationInfo.freezePos
+                + authorizationInfo.newPos;
+            record.amount = inAuthorization;
+        }
+        try {
+            const upsert = await dbUpsert(db2, 'indexKey', record);
+            return upsert;
+        } catch (err) {
+            console.log(err)
+            return;
+        }
+        
     },
     async fetchStakeHistory({commit}) {
         let history = await dbFind(db2, {});
