@@ -32,7 +32,7 @@
                 <a-radio value="ledgerWallet" class="payer-radio-item">{{$t('createIdentity.ledgerWallet')}}</a-radio>
 
                 <div v-if="payerWalletType === 'commonWallet'">
-                    <a-select :options="normalWallet" class="select-wallet" 
+                    <a-select :options="normalWallet" class="select-wallet" v-model="payerWalletValue"
                     :placeholder="$t('createIdentity.selectCommonWallet')"
                         @change="handleChangePayer">
                     </a-select>
@@ -68,12 +68,26 @@ export default {
     },
     data(){
         return {
-            payerWalletType: 'commonWallet'
+            payerWalletType: 'commonWallet',
+            payerWalletValue:''
         }
     },
     mounted() {
-        this.$store.dispatch("fetchWalletsFromDb");
-        this.$store.dispatch("fetchIdentitiesFromDb");
+        this.$store.dispatch("fetchWalletsFromDb").then(() => {
+            //set payer wallet
+              
+        });
+        const stakeAuthorizationWalletAddress = this.$store.state.NodeAuthorization.stake_authorization_wallet;
+            const index = this.$store.state.Wallets.NormalWallet.findIndex((w)=> w.address === stakeAuthorizationWalletAddress)
+            if(index > -1) {
+                this.payerWalletType = 'commonWallet'
+                this.payerWalletValue = stakeAuthorizationWalletAddress
+            } else {    
+                this.payerWalletType = 'ledgerWallet'
+                this.$store.dispatch('getLedgerStatus')
+            } 
+       
+
     },
     beforeDestroy(){
         this.$store.dispatch('stopGetLedgerStatus')
@@ -88,10 +102,10 @@ export default {
             get() {
                 const list = this.$store.state.Wallets.NormalWallet.slice();
                 return list.map(i => {
-                return Object.assign({}, i, {
-                    label: i.label + " " + i.address,
-                    value: i.address
-                });
+                    return Object.assign({}, i, {
+                        label: i.label + " " + i.address,
+                        value: i.address
+                    });
                 });
             }
         },
@@ -108,6 +122,7 @@ export default {
         },
         handleChangePayer(value) {
             this.payerWallet = this.normalWallet.find((v)=>{return v.address === value})
+            this.payerWalletValue = this.payerWallet.address
         },
         next() {
             if(this.payerWalletType === 'commonWallet' && !this.payerWallet) {

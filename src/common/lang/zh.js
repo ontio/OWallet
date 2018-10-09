@@ -39,7 +39,8 @@ export default {
     getLatestVersion: '下载最新版本。',
     changePassSuccess: '修改密码成功',
     changePassSuccessTip: '您已经修改了钱包密码。我们建议您下载并备份钱包的.dat文件。(旧的.dat文件可以被替换或者删除)',
-    download: 'Download'
+    download: 'Download',
+    balanceInsufficient : '抱歉，您的余额不足'
   },
 
   TopNav: {

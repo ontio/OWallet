@@ -511,25 +511,23 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
             const txlist = response.data.Result.TxnList;
             const completed = []
             for(const t of txlist) {
-              if(t.TransferList.length > 2) {
+              if(t.TransferList.length === 1) {
                 continue;
               }
-              for(const tx of t.TransferList) {
-                if(tx.ToAddress !== ONG_GOVERNANCE_CONTRACT) {
-                  const asset = tx.AssetName === 'ont' ? 'ONT' : 'ONG'
-                  let amount = asset === 'ONT' ? parseInt(tx.Amount) : Number(tx.Amount).toFixed(9);
-                  if (tx.FromAddress === this.address) {
-                      amount = '-' + amount;
-                    } else {
-                      amount = '+' + amount;
-                    }
-                    completed.push({
-                      txHash: t.TxnHash,
-                      asset,
-                      amount: amount
-                    })
+              const tx = t.TransferList[0]
+              const asset = tx.AssetName === 'ont' ? 'ONT' : 'ONG'
+              let amount = asset === 'ONT' ? parseInt(tx.Amount) : Number(tx.Amount).toFixed(9);
+              if (tx.FromAddress === this.address) {
+                  amount = '-' + amount;
+                } else {
+                  amount = '+' + amount;
                 }
-              }
+                completed.push({
+                  txHash: t.TxnHash,
+                  asset,
+                  amount: amount
+                })
+              
             }
             this.completedTx = completed;
           } else {

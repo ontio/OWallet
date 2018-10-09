@@ -86,7 +86,9 @@ export default {
                     current_node = node;
                     break;
                 }
-            }            
+            }  
+            const stakeWallet = record.stakeWalletAddress
+            this.$store.commit('UPDATE_STAKE_AUTHORIZATION_WALLET', {stakeWallet})
             this.$store.commit('UPDATE_CURRENT_NODE', {current_node})
             this.$router.push({name: 'AuthorizeLogin'})
         },

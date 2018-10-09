@@ -126,26 +126,17 @@ export default {
             // this.tx = ''
             this.$router.go(-1);
             //record stake history
-            setTimeout(() => {
-                const address = this.stakeWallet.address;
-                const pk = this.current_node.pk;
-                this.$store.dispatch('fetchAuthorizationInfo', {pk, address}).then(authorizationInfo => {
-                    if(authorizationInfo) {
-                        const inAuthorization = authorizationInfo.consensusPos + authorizationInfo.freezePos
-                + authorizationInfo.newPos;
-                        const record = {
-                            indexKey : address + '-' + pk,
-                            stakeWalletAddress: address,
-                            nodePk: pk,
-                            nodeName: this.current_node.name,
-                            amount: inAuthorization
-                        }
-                        this.$store.dispatch('recordStakeHistory', {tx: this.tx, record}).then(res => {
-                            this.tx = '';
-                        })
-                    }
-                })
-            }, 2000)
+            const address = this.stakeWallet.address;
+            const pk = this.current_node.pk;
+            const record = {
+                indexKey : address + '-' + pk,
+                stakeWalletAddress: address,
+                nodePk: pk,
+                nodeName: this.current_node.name,
+            }
+            this.$store.dispatch('recordStakeHistory', {tx: this.tx, record}).then(res => {
+                this.tx = '';
+            })
         },
         submit() {
             if(!this.validInput) {

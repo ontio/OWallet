@@ -39,7 +39,8 @@ export default {
     getLatestVersion: 'Get the latest version here.',
     changePassSuccess: 'Change password successfully',
     changePassSuccessTip: 'You have already changed the password of the wallet. We recommand you to download and backup the .dat file.(Please replace or delete the old .dat file of this wallet.)',
-    download: 'Download .dat'
+    download: 'Download .dat',
+    balanceInsufficient: 'Sorry, your balance is insufficient.'
   },
 
   TopNav: {
