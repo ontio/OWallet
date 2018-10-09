@@ -119,7 +119,11 @@ export default {
                 if (res.Error === 0) {
                     this.$message.success(this.$t('common.transSentSuccess'))
                 } else if (res.Error === -1) {
-                    this.$message.error(this.$t('common.ongNoEnough'))
+                    if(res.Result.indexOf('balance insufficient') > -1 ) {
+                        this.$message.error(this.$t('common.balanceInsufficient'))
+                    } else {
+                        this.$message.error(res.Result)
+                    }
                     return;
                 } else {
                     this.$message.error(res.Result)
