@@ -42,11 +42,11 @@ export default {
                 key: 'stakeWalletAddress'
             },
             // hide for now
-            {
-                title: this.$t('nodeMgmt.stakeAmount'),
-                dataIndex: 'amount',
-                key: 'amount'
-            },
+            // {
+            //     title: this.$t('nodeMgmt.stakeAmount'),
+            //     dataIndex: 'amount',
+            //     key: 'amount'
+            // },
             {
                 title: this.$t('nodeMgmt.lastUpdate'),
                 dataIndex: 'updatedAt',
@@ -86,7 +86,9 @@ export default {
                     current_node = node;
                     break;
                 }
-            }            
+            }  
+            const stakeWallet = record.stakeWalletAddress
+            this.$store.commit('UPDATE_STAKE_AUTHORIZATION_WALLET', {stakeWallet})
             this.$store.commit('UPDATE_CURRENT_NODE', {current_node})
             this.$router.push({name: 'AuthorizeLogin'})
         },

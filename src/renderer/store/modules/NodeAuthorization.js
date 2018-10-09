@@ -66,7 +66,8 @@ const state = {
     node_list: [],
     posLimit: 10,
     peerUnboundOng: 0,
-    stakeHistory: []
+    stakeHistory: [],
+    stake_authorization_wallet: ''
 }
 
 const mutations = {
@@ -128,6 +129,9 @@ const mutations = {
     },
     UPDATE_STAKE_HISTORY(state, payload) {
         state.stakeHistory = payload.history
+    },
+    UPDATE_STAKE_AUTHORIZATION_WALLET(state, payload) {
+        state.stake_authorization_wallet = payload.stakeWallet
     }
 }
 
