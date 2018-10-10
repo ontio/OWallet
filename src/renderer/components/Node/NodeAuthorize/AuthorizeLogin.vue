@@ -69,24 +69,25 @@ export default {
     data(){
         return {
             payerWalletType: 'commonWallet',
-            payerWalletValue:''
+            payerWalletValue: undefined
         }
     },
     mounted() {
         this.$store.dispatch("fetchWalletsFromDb").then(() => {
-            //set payer wallet
-              
+            //set payer wallet 
         });
         const stakeAuthorizationWalletAddress = this.$store.state.NodeAuthorization.stake_authorization_wallet;
+        if(stakeAuthorizationWalletAddress) {
             const index = this.$store.state.Wallets.NormalWallet.findIndex((w)=> w.address === stakeAuthorizationWalletAddress)
             if(index > -1) {
                 this.payerWalletType = 'commonWallet'
                 this.payerWalletValue = stakeAuthorizationWalletAddress
+                this.payerWallet = this.$store.state.Wallets.NormalWallet[index]
             } else {    
                 this.payerWalletType = 'ledgerWallet'
                 this.$store.dispatch('getLedgerStatus')
             } 
-       
+        }
 
     },
     beforeDestroy(){

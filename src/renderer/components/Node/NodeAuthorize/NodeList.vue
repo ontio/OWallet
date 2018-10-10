@@ -158,7 +158,8 @@ export default {
             this.$router.go(-1);
         },
         handleAuthorizeLogin(record, item){
-            console.log(record)            
+            console.log(record)
+            this.$store.commit('UPDATE_STAKE_AUTHORIZATION_WALLET', {stakeWallet:''})            
             this.$store.commit('UPDATE_CURRENT_NODE', {current_node: record})
             this.$router.push({name: 'AuthorizeLogin'})
         },
