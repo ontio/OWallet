@@ -5,12 +5,13 @@ import { Crypto, RestClient, utils, GovernanceTxBuilder} from 'ontology-ts-sdk'
 import {BigNumber} from 'bignumber.js'
 import {db2, dbUpsert, dbFind} from '../../../core/dbService'
 var dateFormat = require('dateformat');
-
+import nodes from '../../../core/nodes.json'
 
 function matchNodeName(node) {
-    for (const cnode of CON_NODE) {
+    for (const cnode of nodes) {
         if (node.pk === cnode.pk) {
             node.name = cnode.name
+            break;
         }
     }
     if(!node.name) {
@@ -67,7 +68,8 @@ const state = {
     posLimit: 10,
     peerUnboundOng: 0,
     stakeHistory: [],
-    stake_authorization_wallet: ''
+    stake_authorization_wallet: '',
+    peerPoolMap:[]
 }
 
 const mutations = {
@@ -132,6 +134,9 @@ const mutations = {
     },
     UPDATE_STAKE_AUTHORIZATION_WALLET(state, payload) {
         state.stake_authorization_wallet = payload.stakeWallet
+    },
+    UPDATE_PEER_POOL_MAP(state, payload) {
+        state.peerPoolMap = payload.peerMap
     }
 }
 
@@ -189,20 +194,19 @@ const actions = {
             return splitFee
         }
     },
-    async fetchNodeList({commit, dispatch}) {
+    async fetchNodeList({commit, dispatch, state}) {
         const url = getNodeUrl();
         try{
-            dispatch('showLoadingModals');
             const peerMap = await GovernanceTxBuilder.getPeerPoolMap(url);
             const list = []
             for (let k in peerMap) {
                 let item = peerMap[k];
-                if(item.status !== 1 && item.status !== 2) {
+                if(item.status !== 1 && item.status !== 2) {// consensus nodes and candidate nodes
                     continue;
                 }
-                if (!isMainnetConNode(item.peerPubkey)) {
-                    continue;
-                }
+                // if (!isMainnetConNode(item.peerPubkey)) {
+                //     continue;
+                // }
                 const attr = await GovernanceTxBuilder.getAttributes(item.peerPubkey, url);
                 item.maxAuthorize = attr.maxAuthorize;
                 item.maxAuthorizeStr = numeral(item.maxAuthorize).format('0,0')
@@ -224,7 +228,7 @@ const actions = {
             })
             list.forEach((item, index) => {
                 item.rank = index + 1;
-                item.currentStake = item.initPos + item.totalPos;
+                item.currentStake = numeral(item.initPos + item.totalPos).format('0,0');
                 let process = Number((item.totalPos + item.initPos) * 100 / (item.initPos + item.maxAuthorize)).toFixed(2)
                 if(process > 100) {
                     process = 100;
@@ -235,11 +239,9 @@ const actions = {
                 matchNodeName(item)
             })
             commit('UPDATE_NODE_LIST', {list});
-            dispatch('hideLoadingModals');
             return list;
         } catch(err) {
-            console.log(err)  
-            dispatch('hideLoadingModals');          
+            console.log(err)           
             return [];
         }
     },
@@ -283,10 +285,10 @@ const actions = {
         }
     },
 
-    async recordStakeHistory({commit, dispatch}, {tx, record}) {
+    async recordStakeHistory({commit, dispatch}, {txHash, record}) {
         const url = getNodeUrl();
         const rest = new RestClient(url)
-        const txHash = utils.reverseHex(tx.getHash());
+        
         await delay(6000);
         let event = await rest.getSmartCodeEvent(txHash)
         if (event.Result && parseInt(event.Result.State) === 1) {
@@ -317,8 +319,11 @@ const actions = {
         
     },
     async fetchStakeHistory({commit}) {
-        let history = await dbFind(db2, {});
-        history.forEach(item => {item.updatedAt = dateFormat(new Date(item.updatedAt), 'yyyy/mm/dd hh:MM:ss')})
+        let history = (await dbFind(db2, {})).filter((item)=> item.amount > 0);
+        history.forEach(item => {
+            item.updatedAt = dateFormat(new Date(item.updatedAt), 'yyyy/mm/dd hh:MM:ss')
+            item.amount = numeral(item.amount).format('0,0')
+        })
         commit('UPDATE_STAKE_HISTORY', {history})
         console.log(history)
         return history;

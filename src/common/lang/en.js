@@ -444,7 +444,7 @@ export default {
     rank: 'Rank',
     name: 'Name',
     currentStake: 'Current total stake',
-    process: 'Remaining stake',
+    process: 'Stake progress',
     changes: 'Changes',
     userParticipate: 'Only proceed if you want to participate in stake authorization!',
     nodeName: 'Node name',
@@ -483,7 +483,7 @@ export default {
     totalStakeAmount: 'Total Authorization Amount',
     blocks: 'Blocks',
     proportionNextRound: "Reward proportion for others",
-    proportionNextRoundTip: 'This is the portion of rewards received the node has chosen to share with users who have authorized stakes with them.',
+    proportionNextRoundTip: 'This is the portion of rewards received the node has chosen to share with users who have authorized stakes with them in the next consensus round.',
     nodeAndUser: 'Node / User',
     authorizeTip: `A user’s authorized stake amount for a node is made up of any authorized ONT from this consensus round and any authorized ONT from a previous consensus round.
 If authorized ONT from this consensus round is cancelled it will be cancelled immediately and be shown as redeemable ONT.
@@ -505,7 +505,11 @@ Within their 50% share each consensus node will receive their share according to
     stakeWalletAddress: 'Stake wallet address',
     lastUpdate: 'Last update time',
     walletRewardTip: 'This is all the reward of your wallet in current round.',
-    switchMainnet: 'Please switch to MainNet.'
+    switchMainnet: 'Please switch to MainNet.',
+    consensusNode: 'Consensus node',
+    candidateNode: 'Candidate consensus node',
+    lockedONT: 'Your locked ONT is your authorized stake amount currently held in a smart contract. Once it is available to be withdrawn, it will appear as redeemable ONT.',
+    unboundONG: 'This is the unbound ONG amount of your authorized ONT stake.'
 },
 exchange: {
   exchange: 'Exchange',

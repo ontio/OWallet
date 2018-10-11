@@ -495,7 +495,11 @@ export default {
     stakeWalletAddress: '质押钱包地址',
     lastUpdate: '上次更新时间',
     walletRewardTip: '这是当前周期内您的钱包所有的授权质押收益',
-    switchMainnet: '请切换到主网。'
+    switchMainnet: '请切换到主网。',
+    consensusNode: '共识节点',
+    candidateNode: '候选节点',
+    lockedONT: '当前锁定的ONT是由智能合约暂时持有的用户授权质押数额。锁定期满后，会在可提取的ONT中显示并可提取',
+    unboundONG: '这是用户授权质押的ONT所解绑的ONG。'
   },
   exchange: {
     exchange: 'Exchange',

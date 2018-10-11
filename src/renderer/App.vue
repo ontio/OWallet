@@ -175,9 +175,9 @@
     text-shadow: none !important;
   }
 
-  .ant-spin-dot i {
+  /* .ant-spin-dot i {
     background-color: white !important;
-  }
+  } */
 
   .v-validate-span-errors {
     color: red;

@@ -66,17 +66,28 @@
             </div>
         </div>
         <a-table :columns="columns"
-        :dataSource="node_list"
+            :dataSource="node_list"
+            :loading="node_list.length===0"
         >
-        <div slot="nodeProportionTitle" class="proportion-title">
-            <p>{{$t('nodeMgmt.proportionNextRound')}}
-                <a-icon type="info-circle-o" class="proportion-info-icon" @click="showProportionTip"/>
-            </p>
+            <div slot="nodeProportionTitle"  class="proportion-title">
+                <p>{{$t('nodeMgmt.proportionNextRound')}}
+                    <a-icon type="info-circle-o" class="proportion-info-icon" @click="showProportionTip"/>
+                </p>
+                </div>
+            <a slot="name" slot-scope="text, record" :class="record.status ===2 ? 'node-consensus' : 'node-candidate' "
+                @click="handleNodeDetail(record)">
+                
+                <a-tooltip placement="top" :title="$t('nodeMgmt.consensusNode')">
+                    <a-icon type="star" v-if="record.status === 2" />
+                </a-tooltip>
+                <a-tooltip placement="top" :title="$t('nodeMgmt.candidateNode')">
+                    <a-icon type="star-o" v-if="record.status === 1" />
+                </a-tooltip>
+                {{text}}
+            </a>
+            <div slot="action" slot-scope="text, record" class="detail-link" v-if="record.maxAuthorize>0">
+                <a-icon type="arrow-right" @click="handleAuthorizeLogin(record)" v-if="record.maxAuthorize>0"/>
             </div>
-        <a slot="name" slot-scope="text, record" @click="handleNodeDetail(record)">{{text}}</a>
-        <div slot="action" slot-scope="text, record" class="detail-link">
-            <a-icon type="arrow-right" @click="handleAuthorizeLogin(record)"/>
-        </div>
 
         </a-table>
     </div>
@@ -125,9 +136,6 @@ export default {
                 key: 'action',
                 scopedSlots: {customRender:'action'}
             }
-        ]
-        const data = [
-            
         ]
         return {
             columns,
