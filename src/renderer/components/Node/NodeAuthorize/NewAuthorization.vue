@@ -76,7 +76,7 @@ import {varifyPositiveInt} from '../../../../core/utils.js'
 import SignSendTx from '../../Common/SignSendTx'
 import {mapState} from 'vuex'
 import {GAS_LIMIT, GAS_PRICE} from '../../../../core/consts'
-import {Crypto, GovernanceTxBuilder} from 'ontology-ts-sdk'
+import {Crypto, GovernanceTxBuilder, utils} from 'ontology-ts-sdk'
 
 export default {
     name: 'NewAuthorization',
@@ -134,9 +134,9 @@ export default {
                 nodePk: pk,
                 nodeName: this.current_node.name,
             }
-            this.$store.dispatch('recordStakeHistory', {tx: this.tx, record}).then(res => {
-                this.tx = '';
-            })
+            const txHash = utils.reverseHex(this.tx.getHash());
+            this.tx = '';
+            this.$store.dispatch('recordStakeHistory', {txHash, record})
         },
         submit() {
             if(!this.validInput) {

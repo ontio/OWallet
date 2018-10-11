@@ -286,7 +286,7 @@ export default {
           if (res.Error === 0) {
             this.$message.success(this.$t('common.transSentSuccess'))
           } else if (res.Error === -1) {
-            const err = res.Result || this.$t('common.ongNoEnough')
+            const err = res.Result.indexOf('cover gas cost') > -1 ? this.$t('common.ongNoEnough') : res.Result
             this.$message.error(err)
             return;
           } else {

@@ -50,32 +50,32 @@ export const SWAP_ADDRESS = 'AFmseVrdL9f9oyCzZefL9tG6UbvhPbdYzM'
 
 export const CON_NODE = [
   {
-    name: 'Dubhe',
-    pk: '02bcdd278a27e4969d48de95d6b7b086b65b8d1d4ff6509e7a9eab364a76115af7'
+    "name": "Dubhe",
+    "pk": "02bcdd278a27e4969d48de95d6b7b086b65b8d1d4ff6509e7a9eab364a76115af7"
   },
   {
-    name: 'Merak',
-    pk: '0251f06bc247b1da94ec7d9fe25f5f913cedaecba8524140353b826cf9b1cbd9f4'
+    "name": "Merak",
+    "pk": "0251f06bc247b1da94ec7d9fe25f5f913cedaecba8524140353b826cf9b1cbd9f4"
   },
   {
-    name: 'Phecda',
-    pk: '022e911fb5a20b4b2e4f917f10eb92f27d17cad16b916bce8fd2dd8c11ac2878c0'
+    "name": "Phecda",
+    "pk": "022e911fb5a20b4b2e4f917f10eb92f27d17cad16b916bce8fd2dd8c11ac2878c0"
   },
   {
-    name: 'Megrez',
-    pk: '0253719ac66d7cafa1fe49a64f73bd864a346da92d908c19577a003a8a4160b7fa'
+    "name": "Megrez",
+    "pk": "0253719ac66d7cafa1fe49a64f73bd864a346da92d908c19577a003a8a4160b7fa"
   },
   {
-    name: 'Alioth',
-    pk: '022bf80145bd448d993abffa237f4cd06d9df13eaad37afce5cb71d80c47b03feb'
+    "name": "Alioth",
+    "pk": "022bf80145bd448d993abffa237f4cd06d9df13eaad37afce5cb71d80c47b03feb"
   },
   {
-    name: 'Mixar',
-    pk: '02765d98bb092962734e365bd436bdc80c5b5991dcf22b28dbb02d3b3cf74d6444'
+    "name": "Mixar",
+    "pk": "02765d98bb092962734e365bd436bdc80c5b5991dcf22b28dbb02d3b3cf74d6444"
   },
   {
-    name: 'Alkaid',
-    pk: '03c8f63775536eb420c96228cdccc9de7d80e87f1b562a6eb93c0838064350aa53'
+    "name": "Alkaid",
+    "pk": "03c8f63775536eb420c96228cdccc9de7d80e87f1b562a6eb93c0838064350aa53"
   }
 ]
 

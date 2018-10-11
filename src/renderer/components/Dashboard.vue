@@ -511,9 +511,9 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
             const txlist = response.data.Result.TxnList;
             const completed = []
             for(const t of txlist) {
-              if(t.TransferList.length === 1) {
-                continue;
-              }
+              // if(t.TransferList.length === 1 && t.TransferList[0].ToAddress === ONG_GOVERNANCE_CONTRACT) {
+              //   continue;
+              // }
               const tx = t.TransferList[0]
               const asset = tx.AssetName === 'ont' ? 'ONT' : 'ONG'
               let amount = asset === 'ONT' ? parseInt(tx.Amount) : Number(tx.Amount).toFixed(9);
@@ -595,8 +595,9 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
       },
       refresh() {
         this.$store.dispatch('showLoadingModals')
+        const that = this
         setTimeout(() => {
-            this.$store.dispatch('hideLoadingModals')
+            that.$store.dispatch('hideLoadingModals')
         }, 500)
         this.getBalance();
         this.getTransactions();

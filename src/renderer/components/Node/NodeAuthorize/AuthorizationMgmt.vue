@@ -55,7 +55,7 @@
       width:100%;
   }
   .redeem-item span:first-child {
-      width:130px;
+      width:150px;
       display: inline-block;
   }
   .redeem-item button {
@@ -112,16 +112,28 @@
                 <a-button type="default" class="cancel-btn" @click="cancelAuthorization">{{$t('nodeMgmt.cancelAuthorization')}}</a-button>
                 <div class="redeem-ont">
                     <p class="redeem-item">
-                        <span class="font-medium-black label">{{$t('nodeMgmt.locked')}}: </span>
+                        <span class="font-medium-black label">
+                            <a-tooltip placement="right" :title="$t('nodeMgmt.lockedONT')">
+                                <a-icon type="info-circle-o" />
+                            </a-tooltip>
+                            {{$t('nodeMgmt.locked')}}: 
+                        </span>
                         <span class="font-medium">{{authorizationInfo.locked}} ONT</span>
                     </p>
                     <p class="redeem-item">
-                        <span class="font-medium-black label">{{$t('nodeMgmt.claimable')}}: </span>
+                        <span class="font-medium-black label">
+                            {{$t('nodeMgmt.claimable')}}: 
+                        </span>
                         <span class="font-medium">{{authorizationInfo.claimable}} ONT</span>
                         <a-button type="primary" class="redeem-btn" @click="redeemOnt">{{$t('nodeMgmt.redeem')}}</a-button>
                     </p>
                     <p class="redeem-item">
-                        <span class="font-medium-black label">{{$t('nodeMgmt.unboundOng')}}: </span>
+                        <span class="font-medium-black label">
+                            <a-tooltip placement="right" :title="$t('nodeMgmt.unboundONG')">
+                                <a-icon type="info-circle-o" />
+                            </a-tooltip>
+                            {{$t('nodeMgmt.unboundOng')}}: 
+                        </span>
                         <span class="font-medium">{{unboundOng}} ONG</span>
                         <a-button type="primary" class="redeem-btn" @click="redeemOng">{{$t('nodeMgmt.redeem')}}</a-button>
                     </p>
@@ -181,7 +193,7 @@ import Breadcrumb from '../../Breadcrumb'
 import {mapState} from 'vuex'
 import SignSendTx from '../../Common/SignSendTx'
 import {GAS_PRICE, GAS_LIMIT} from '../../../../core/consts'
-import {Crypto, GovernanceTxBuilder} from 'ontology-ts-sdk'
+import {Crypto, GovernanceTxBuilder, utils} from 'ontology-ts-sdk'
 import numeral from 'numeral'
 import {varifyPositiveInt} from '../../../../core/utils.js'
 
@@ -284,9 +296,9 @@ export default {
                 nodePk: pk,
                 nodeName: this.current_node.name,
             }
-            this.$store.dispatch('recordStakeHistory', {tx: this.tx, record}).then(res => {
-                this.tx = '';
-            })
+            const txHash = utils.reverseHex(this.tx.getHash());
+            this.tx = '';
+            this.$store.dispatch('recordStakeHistory', {txHash, record})
         },
         validateCancelAmount() {
             if(!this.cancelAmount || !varifyPositiveInt(this.cancelAmount)) {

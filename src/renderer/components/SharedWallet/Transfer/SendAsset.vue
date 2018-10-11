@@ -87,6 +87,8 @@
 <script>
 import {varifyPositiveInt, varifyOngValue} from '../../../../core/utils.js'
 import {mapState} from 'vuex'
+import { BigNumber } from 'bignumber.js';
+
 export default {
     name: 'SendAsset',
     data(){
@@ -136,11 +138,10 @@ export default {
                  return;
              }
 
-            if (this.asset === "ONG" && Number(this.amount) == Number(this.balance.ong - 0.01)) {
-                    if (!confirm(this.$t('transfer.warningTransferAllONG'))) {
-                    this.validAmount = false;
-                    return;
-                    }
+            if (this.asset === "ONG" && new BigNumber(this.amount).plus(this.gas).isGreaterThan(this.balance.ong)) {
+                this.$message.error(this.$t('transfer.exceedBalance'))
+                this.validAmount = false;
+                return;
             }         
             this.validAmount = true;
         },
@@ -152,7 +153,7 @@ export default {
             if(this.asset === 'ONT') {
                 this.amount = this.balance.ont;
             } else {
-                this.amount = this.balance.ong - this.gas;
+                this.amount = (new BigNumber(this.balance.ong).minus(this.gas)).toString();
                 this.validateAmount()
             }
         },
@@ -169,7 +170,7 @@ export default {
                 this.$message.error(this.$t('transfer.inputValidAddress'))
                 return;
             }
-            if(this.asset === 'ONG' && (this.gas + this.amount) > this.balance.ong) {
+            if(this.asset === 'ONG' && new BigNumber(this.amount).plus(this.gas).isGreaterThan(this.balance.ong) ) {
                 this.$message.error(this.$t('transfer.ongBalanceNotEnough'))
                 return;
             }
