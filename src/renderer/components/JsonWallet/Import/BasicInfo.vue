@@ -410,7 +410,7 @@
         try {
           account = Account.importWithMnemonic(this.mnemonicLabel, this.mnemonic, this.mnemonicPassword, DEFAULT_SCRYPT)
         } catch (err) {
-          this.message.error(this.t('basicInfo.InvalidMnemonic'))
+          this.$message.error(this.t('basicInfo.InvalidMnemonic'))
         }
         this.mnemonicAccount = account.toJsonObj()
         this.saveToDb(this.mnemonicAccount)

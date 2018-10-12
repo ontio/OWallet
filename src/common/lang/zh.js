@@ -295,7 +295,7 @@ export default {
     emptyPass: '密码不能为空',
     cancel: '取消',
     submit: '提交',
-    swapText: '欢迎使用“一站式”主网ONT切换。用户可以在这里将NEP-5 ONT映射成主网ONT。映射将在24小时内完成，您可以登录swap.ont.io查询映射状态。',
+    swapText: '欢迎使用“一站式”主网ONT切换。用户可以在这里将NEP-5 ONT映射成主网ONT。映射将在一个月内完成，您可以登录swap.ont.io查询映射状态。',
     stepFollow: '您只需要使用以下步骤执行操作：',
     step1: '导入NEO钱包的私钥创建钱包',
     step2: '点击映射按钮发起映射',

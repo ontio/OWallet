@@ -296,7 +296,7 @@ export default {
     emptyPass: 'Password can not be empty',
     cancel: 'Cancel',
     submit: 'Submit',
-    swapText: 'Here you can perform the MainNet ONT token swap.Users can exchange Nep-5 ONT for ONT for ONT on the Ontology MainNet.Swap takes up to 24 hours, you can check the status on https://swap.ont.io',
+    swapText: 'Here you can perform the MainNet ONT token swap.Users can exchange Nep-5 ONT for ONT for ONT on the Ontology MainNet.Swap takes up to 1 month, you can check the status on https://swap.ont.io',
     stepFollow: 'Just do as follows:',
     step1: '1. Import your private key(from your NEO wallet) to create a wallet',
     step2: '2. Press [Swap] button to start the swap',

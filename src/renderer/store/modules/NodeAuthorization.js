@@ -321,7 +321,7 @@ const actions = {
     async fetchStakeHistory({commit}) {
         let history = (await dbFind(db2, {})).filter((item)=> item.amount > 0);
         history.forEach(item => {
-            item.updatedAt = dateFormat(new Date(item.updatedAt), 'yyyy/mm/dd hh:MM:ss')
+            item.updatedAt = dateFormat(new Date(item.updatedAt), 'yyyy/mm/dd HH:MM:ss')
             item.amount = numeral(item.amount).format('0,0')
         })
         commit('UPDATE_STAKE_HISTORY', {history})
