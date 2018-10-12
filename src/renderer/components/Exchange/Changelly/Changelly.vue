@@ -18,14 +18,14 @@
       <breadcrumb  :current="$t('exchange.exchange')" v-on:backEvent="handleRouteBack"></breadcrumb>
       <!-- Remove this div and enable this.loadPage in mounted() to open in a new window -->
       <div class="changelly"
-        <iframe
-          src="https://changelly.com/widget/v1?from=BTC&to=ONT&merchant_id=pzjsilenplyn7jgd&address=&amount=1&ref_id=pzjsilenplyn7jgd&color=196BD8"
-          width="1000"
-          height="500"
-          class="changelly"
-          scrolling="no"
-          style="overflow-y: hidden; border: none"
-        >         
+        <iframe 
+          src="https://changelly.com/widget/v1?auth=email&from=BTC&to=ONT&merchant_id=su5srryl1mhz4fno&address=&amount=1&ref_id=su5srryl1mhz4fno&color=00cf70" 
+          width="600" 
+          height="500" 
+          class="changelly" 
+          scrolling="no" 
+          style="overflow-y: hidden; border: none" 
+          > Can't load widget 
         </iframe>
         </div>
    </div>
