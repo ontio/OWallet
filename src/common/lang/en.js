@@ -7,7 +7,7 @@ export default {
     confirmTips: 'Please confirm the transfer.',
     transSentSuccess: 'Transaction has been sent successfully!',
     pwdErr: 'Password error',
-    ongNoEnough: 'Not enough ONG for the transaction fee.',
+    ongNoEnough: 'Transaction does not have enough ONG to process',
     transferFailed: 'Transfer failed. ',
     networkErr: 'Network error!',
     normalWallet: 'Individual wallet',
@@ -158,10 +158,10 @@ export default {
     datFile: 'Select file',
     selectedDatFile: 'Selected file: ',
     dat: '.dat File',
-    datImportPassword: 'Password to decrypt keystore(.dat)',
+    datImportPassword: 'Password to decrypt keystore (.dat)',
     create: 'Import Individual Wallet',
     basicInfo: 'Basic info',
-    label: 'Name of Individual Wallet',
+    label: 'Set a new name for the wallet',
     wif: 'WIF',
     wifTip: 'Please enter 52-bit WIF',
     privateKeyTip: 'Please enter private key with 64 byte hex format',
@@ -449,7 +449,7 @@ export default {
     userParticipate: 'Only proceed if you want to participate in stake authorization!',
     nodeName: 'Node name',
     walletAddress: 'Your wallet address',
-    inAuthorization: 'In authorization',
+    inAuthorization: 'Total authorized stake',
     cancelStakeAuthorization: 'Cancel stake authorization',
     locked: 'Locked',
     claimable: 'Redeemable',
@@ -485,11 +485,7 @@ export default {
     proportionNextRound: "Reward proportion for others",
     proportionNextRoundTip: 'This is the portion of rewards received the node has chosen to share with users who have authorized stakes with them in the next consensus round.',
     nodeAndUser: 'Node / User',
-    authorizeTip: `A user’s authorized stake amount for a node is made up of any authorized ONT from this consensus round and any authorized ONT from a previous consensus round.
-If authorized ONT from this consensus round is cancelled it will be cancelled immediately and be shown as redeemable ONT.
-If authorized ONT from previous consensus rounds is cancelled it will be cancelled only at the beginning of the next consensus round.
-If a user has both authorized ONT from this consensus round and a previous consensus round and cancels an ONT amount exceeding the amount from this consensus round, they will receive authorized ONT from this consensus round first and the remaining authorized ONT in the next consensus round.
-`,
+    authorizeTip: `If new stake is cancelled it will be cancelled immediately and be shown as redeemable ONT. If authorized ONT from previous consensus rounds is cancelled it will be redeemable only at the beginning of the next consensus round for candidate nodes (or one round later for consensus nodes). If a user has both authorized ONT from this consensus round and a previous consensus round and cancels an ONT amount exceeding the amount from this consensus round, they will receive authorized ONT from this consensus round first and the remaining authorized ONT in the next consensus round.`,
     rewardTip: `All transactions fees received by Ontology are distributed to all candidate nodes and consensus nodes - 50% to each group.
 Within their 50% share each candidate node will receive their share linearly according to their stake amount.
 Within their 50% share each consensus node will receive their share according to their stake amount, which is subject to the incentive curve that discourages too high stakes.
@@ -509,7 +505,10 @@ Within their 50% share each consensus node will receive their share according to
     consensusNode: 'Consensus node',
     candidateNode: 'Candidate consensus node',
     lockedONT: 'Your locked ONT is your authorized stake amount currently held in a smart contract. Once it is available to be withdrawn, it will appear as redeemable ONT.',
-    unboundONG: 'This is the unbound ONG amount of your authorized ONT stake.'
+    unboundONG: 'This is the unbound ONG amount of your authorized ONT stake.',
+    profitONG: 'This is the transaction fee profit you have made. This will update at the beginning of each new consensus round.',
+    getProfitPart: 'Already receiving profit portion',
+    newStakePart: 'New stake portion'
 },
 exchange: {
   exchange: 'Exchange',

@@ -38,7 +38,7 @@
   }
 
   .in-authorization {
-      margin:15px 0 10px 0;
+      margin:15px 0 0 0;
   }
   .authorize-tip {
       font-size:16px;
@@ -105,6 +105,14 @@
                         <span class="refresh-icon" @click="handleRefresh"><a-icon type="reload" /></span>
                     </a-tooltip>
                 </div>
+                <div>
+                    <span>{{$t('nodeMgmt.getProfitPart')}}:</span>
+                    <span>{{authorizationInfo.receiveProfitPortion}} ONT</span>
+                </div>
+                <div>
+                    <span>{{$t('nodeMgmt.newStakePart')}}:</span>
+                    <span>{{authorizationInfo.newStakePortion}} ONT</span>
+                </div>
                 <div class="authorize-tip">
                     <a-icon type="info-circle" />
                     <span class="font-regular tip-font">{{$t('nodeMgmt.authorizeTip')}}</span>
@@ -142,12 +150,13 @@
             <div class="right-half">
                 <p class="font-medium-black label">{{$t('nodeMgmt.rewards')}}</p>
                 <p>
-                    <span class="font-medium-black label">{{$t('nodeMgmt.profit')}}: </span>
+                    <span class="font-medium-black label">
+                        <a-tooltip placement="right" :title="$t('nodeMgmt.profitONG')">
+                                <a-icon type="info-circle-o" />
+                            </a-tooltip>
+                        {{$t('nodeMgmt.profit')}}: 
+                    </span>
                     <span class="font-medium">{{splitFee.amount}} ONG</span>
-                </p>
-                <p class="authorize-tip">
-                   <a-icon type="info-circle" />
-                   <span class="font-regular tip-font">{{$t('nodeMgmt.walletRewardTip')}}</span>
                 </p>
                 <a-button type="primary" class="redeem-btn" @click="redeemRewards">{{$t('nodeMgmt.redeem')}}</a-button>
 

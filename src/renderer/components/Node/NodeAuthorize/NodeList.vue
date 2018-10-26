@@ -48,13 +48,20 @@
 .btn-history {
     float: right;
 }
+.question-icon {
+    position:absolute;
+    top:10px;
+    right:10px;
+    font-size:18px;
+    cursor: pointer;
+}
 </style>
 <template>
     <div>
         <breadcrumb :current="$t('nodeMgmt.stakeAuthorization')" v-on:backEvent="handleRouteBack"></breadcrumb>
             <a-button type="primary" class="btn-next btn-history" @click="toStakeHistory">{{$t('nodeMgmt.stakeHistory')}}</a-button>
         <div class="block-clock">
-            <div>
+            <div style="position:relative;">
                 <div class="countdown-img">
                     <img src="../../../assets/countdown.svg" alt="">
                 </div>
@@ -63,11 +70,11 @@
                     <span class="font-medium-black" style="font-size:20px;">{{countdown}}</span>
                     <span class="font-medium label">{{$t('nodeMgmt.blocks')}}</span>
                 </div>
+                <span class="question-icon" @click="toQuestion"><a-icon type="question-circle-o" /></span>
             </div>
         </div>
         <a-table :columns="columns"
             :dataSource="node_list"
-            :loading="node_list.length===0"
         >
             <div slot="nodeProportionTitle"  class="proportion-title">
                 <p>{{$t('nodeMgmt.proportionNextRound')}}
@@ -144,7 +151,7 @@ export default {
     },
     mounted(){
         //loop to fetch data
-        // this.$store.dispatch('showLoadingModals');
+        this.$store.dispatch('showLoadingModals');
         this.$store.dispatch('fetchNodeList')
         this.$store.dispatch('fetchBlockCountdown')
         this.intervalId = setInterval(()=>{
@@ -195,6 +202,23 @@ export default {
         },
         toStakeHistory() {
             this.$router.push({name: 'StakeHistory'})
+        },
+        toQuestion() {
+            const lang = localStorage.getItem("user_lang");
+            let url = "";
+            if (lang === "zh") {
+                url = "https://medium.com/ontology-cn/owallet%E8%8A%82%E7%82%B9%E8%B4%A8%E6%8A%BC%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98-efc3d7d84e3e";
+            } else {
+                url = "https://medium.com/ontologynetwork/owallet-stake-authorization-faq-4a4bce224122";
+            }
+
+            let win = new BrowserWindow({ width: 800, height: 600, center: true });
+            win.on("closed", () => {
+                win = null;
+            });
+
+            // Load a remote URL
+            win.loadURL(url);
         }
     }
 }
