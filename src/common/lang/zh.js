@@ -499,7 +499,10 @@ export default {
     consensusNode: '共识节点',
     candidateNode: '候选节点',
     lockedONT: '当前锁定的ONT是由智能合约暂时持有的用户授权质押数额。锁定期满后，会在可提取的ONT中显示并可提取',
-    unboundONG: '这是用户授权质押的ONT所解绑的ONG。'
+    unboundONG: '这是用户授权质押的ONT所解绑的ONG。',
+    profitONG: '这是您已获得的交易费收益。该收益会在每轮共识周期开始时更新。',
+    getProfitPart: '产生收益中',
+    newStakePart: '新的质押'
   },
   exchange: {
     exchange: 'Exchange',

@@ -102,6 +102,8 @@ const mutations = {
         let inAuthorization = authorizationInfo.consensusPos + authorizationInfo.freezePos
             + authorizationInfo.newPos;
         inAuthorization = numeral(inAuthorization).format('0,0');
+        const newStakePortion = numeral(authorizationInfo.newPos).format('0,0')
+        const receiveProfitPortion = numeral(authorizationInfo.consensusPos + authorizationInfo.freezePos).format('0,0')
         let locked = authorizationInfo.withdrawPos + authorizationInfo.withdrawFreezePos;
         locked = numeral(locked).format('0,0')
         let claimableVal = authorizationInfo.withdrawUnfreezePos;
@@ -111,7 +113,9 @@ const mutations = {
             inAuthorization,
             locked,
             claimable,
-            claimableVal
+            claimableVal,
+            newStakePortion,
+            receiveProfitPortion
         }
     },
     UPDATE_SPLIT_FEE(state, payload) {
@@ -239,6 +243,7 @@ const actions = {
                 matchNodeName(item)
             })
             commit('UPDATE_NODE_LIST', {list});
+            dispatch('hideLoadingModals')
             return list;
         } catch(err) {
             console.log(err)           
