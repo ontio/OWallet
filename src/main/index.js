@@ -96,7 +96,7 @@ let template = [
       }
     },
       {
-        label: 'Quit ( 粘贴 )',
+        label: 'Quit ( 退出 )',
         accelerator: 'CmdOrCtrl+Q',
         role: 'quit'
       },
