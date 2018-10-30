@@ -376,8 +376,14 @@ export default {
         if (res.Error === 0) {
             this.$message.success(this.$t('common.transSentSuccess'))
         } else if (res.Error === -1) {
-            this.$message.error(this.$t('common.ongNoEnough'))
-            return;
+          if(res.Result.indexOf('balance insufficient') > -1 ) {
+              this.$message.error(this.$t('common.balanceInsufficient'))
+          } else if(res.Result.indexOf('cover gas cost') > -1) {
+              this.$message.error(this.$t('common.ongNoEnough'))
+          } else {
+              this.$message.error(res.Result)
+          }
+          return;
         } else {
             this.$message.error(res.Result)
             return;
