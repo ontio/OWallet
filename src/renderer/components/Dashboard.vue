@@ -412,7 +412,7 @@
             <span>{{$t('sharedWalletHome.completedTx')}}</span>
             <span class="transfer-icon"></span>
           </div>
-          <div v-for="(tx,index) in completedTx" :key="tx.txHash" class="tx-item" v-if="index<10"
+          <div v-for="(tx,index) in completedTx" :key="tx.txHash+index" class="tx-item" v-if="index<10"
                @click="showTxDetail(tx.txHash)">
             <span>{{tx.txHash}}</span>
             <span>{{tx.amount}} {{tx.asset}}</span>
@@ -514,11 +514,14 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
               // if(t.TransferList.length === 1 && t.TransferList[0].ToAddress === ONG_GOVERNANCE_CONTRACT) {
               //   continue;
               // }
-              const tx = t.TransferList[0]
-              const asset = tx.AssetName === 'ont' ? 'ONT' : 'ONG'
-              let amount = asset === 'ONT' ? parseInt(tx.Amount) : Number(tx.Amount).toFixed(9);
-              if (tx.FromAddress === this.address) {
-                  amount = '-' + amount;
+              for(const tx of t.TransferList) {
+                const asset = tx.AssetName === 'ont' ? 'ONT' : 'ONG'
+                if(tx.ToAddress === ONG_GOVERNANCE_CONTRACT && asset === 'ONG' && Number(tx.Amount) == 0.01) {
+                  continue;
+                }
+                let amount = asset === 'ONT' ? parseInt(tx.Amount) : new BigNumber(tx.Amount).toString();
+                if (tx.FromAddress === this.address) {
+                    amount = '-' + amount;
                 } else {
                   amount = '+' + amount;
                 }
@@ -527,6 +530,7 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
                   asset,
                   amount: amount
                 })
+              }              
               
             }
             this.completedTx = completed;

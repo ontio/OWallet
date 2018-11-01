@@ -392,6 +392,7 @@
           privateKey = Crypto.PrivateKey.deserializeWIF(this.wif);
         } catch (err) {
           this.$message.error(this.$t('basicInfo.errWif'))
+          this.$store.dispatch('hideLoadingModals')
           return;
         }
 
@@ -410,7 +411,8 @@
         try {
           account = Account.importWithMnemonic(this.mnemonicLabel, this.mnemonic, this.mnemonicPassword, DEFAULT_SCRYPT)
         } catch (err) {
-          this.$message.error(this.t('basicInfo.InvalidMnemonic'))
+          this.$store.dispatch('hideLoadingModals')
+          this.$message.error(this.$t('basicInfo.InvalidMnemonic'))
         }
         this.mnemonicAccount = account.toJsonObj()
         this.saveToDb(this.mnemonicAccount)
