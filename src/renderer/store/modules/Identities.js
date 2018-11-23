@@ -7,6 +7,12 @@ const state = {
 const mutations = {
     FETCH_IDENTITIES(state, payload) {
         state.Identities = payload.identities
+    },
+    DELETE_IDENTITY(state, payload) {
+        const identities = state.Identities.slice();
+        const index = identities.findIndex((w) => w.ontid === payload.ontid)
+        identities.splice(index, 1)
+        state.Identities = identities;
     }
 }
 

@@ -77,16 +77,35 @@
           })
         }
       },
+      validateKeystore(keystore) {
+        if(!keystore.key || !keystore.address || !keystore.salt) {
+          return false;
+        } else {
+          return true;
+        }
+      },
       importIdentityForKeystore() {
         // TODO 需要填充的逻辑部分
         console.log('keystore:[' + this.keystore + ']; keystorePassword:[' + this.keystorePassword + ']')
         //import identity
-        const keystore = JSON.parse(this.keystore)
+        let keystore;
+        try {
+          keystore = JSON.parse(this.keystore)
+        } catch(err) {
+          this.$store.dispatch('hideLoadingModals')
+          this.$message.error(this.$t('importIdentity.invalidKeystore'))
+          return;
+        }
+        if(!this.validateKeystore(keystore)) {
+          this.$store.dispatch('hideLoadingModals')
+          this.$message.error(this.$t('importIdentity.invalidKeystore'))
+          return;
+        }
         let identity = new Identity();
         try {
             const encryptedPrivateKeyObj = new Crypto.PrivateKey(keystore.key);
             const addr = new Crypto.Address(keystore.address);
-            const label = keystore.label
+            const label = keystore.label || 'Identity'
             const salt = keystore.salt
             //must call if use 
             let password = SDK.transformPassword(this.keystorePassword)

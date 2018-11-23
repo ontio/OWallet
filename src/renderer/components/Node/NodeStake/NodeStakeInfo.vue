@@ -330,12 +330,13 @@ export default {
             err => {
               this.sending = false;
               this.ledgerStatus = "";
+              this.$store.dispatch('hideLoadingModals')
               alert(err.message);
             }
           );
         } else {
           this.refundClicked = false;
-         this.$store.dispatch("hideLoadingModals");
+          this.$store.dispatch("hideLoadingModals");
           this.$message.warning(this.$t("ledgerWallet.connectApp"));
         }
       }

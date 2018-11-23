@@ -39,6 +39,27 @@ function isMainnetConNode(pk) {
     return true;
 }
 
+function formatAuthorizationInfo(info) {
+    const authorizationInfo = info;
+    let inAuthorization = authorizationInfo.consensusPos + authorizationInfo.freezePos
+        + authorizationInfo.newPos;
+    inAuthorization = numeral(inAuthorization).format('0,0');
+    const newStakePortion = numeral(authorizationInfo.newPos).format('0,0')
+    const receiveProfitPortion = numeral(authorizationInfo.consensusPos + authorizationInfo.freezePos).format('0,0')
+    let locked = authorizationInfo.withdrawPos + authorizationInfo.withdrawFreezePos;
+    locked = numeral(locked).format('0,0')
+    let claimableVal = authorizationInfo.withdrawUnfreezePos;
+    const claimable = numeral(claimableVal).format('0,0')
+    return {
+        inAuthorization,
+        locked,
+        claimable,
+        claimableVal,
+        newStakePortion,
+        receiveProfitPortion
+    }
+}
+
 const state = {
     current_peer:{ // for node user
         peerPubkey: '',
@@ -98,16 +119,14 @@ const mutations = {
         state.current_node = payload.current_node
     },
     UPDATE_AUTHORIZATION_INFO(state, payload) {
-        const authorizationInfo = payload.info;
-        let inAuthorization = authorizationInfo.consensusPos + authorizationInfo.freezePos
-            + authorizationInfo.newPos;
-        inAuthorization = numeral(inAuthorization).format('0,0');
-        const newStakePortion = numeral(authorizationInfo.newPos).format('0,0')
-        const receiveProfitPortion = numeral(authorizationInfo.consensusPos + authorizationInfo.freezePos).format('0,0')
-        let locked = authorizationInfo.withdrawPos + authorizationInfo.withdrawFreezePos;
-        locked = numeral(locked).format('0,0')
-        let claimableVal = authorizationInfo.withdrawUnfreezePos;
-        const claimable = numeral(claimableVal).format('0,0')
+        const {
+            inAuthorization,
+            locked,
+            claimable,
+            claimableVal,
+            newStakePortion,
+            receiveProfitPortion
+        } = formatAuthorizationInfo(payload.info)
         state.authorizationInfo = {
             ...payload.info,
             inAuthorization,
@@ -196,6 +215,44 @@ const actions = {
             }
             commit('UPDATE_SPLIT_FEE', {splitFee})
             return splitFee
+        }
+    },
+    async searchStakeHistory({commit, dispatch}, {address}) {
+        const url = getNodeUrl();
+        const list = []
+        dispatch('showLoadingModals')
+        try {
+            const peerMap = await GovernanceTxBuilder.getPeerPoolMap(url);
+            for (let k in peerMap) {
+                let item = peerMap[k];
+                if (item.status !== 1 && item.status !== 2) {
+                    //consensus nodes and candidate nodes
+                    continue;
+                }
+                const userAddr = new Crypto.Address(address);
+                const authorizationInfo = await GovernanceTxBuilder.getAuthorizeInfo(k, userAddr, url)
+                if (authorizationInfo){
+                    let inAuthorization = authorizationInfo.consensusPos + authorizationInfo.freezePos
+                        + authorizationInfo.newPos;
+                    let locked = authorizationInfo.withdrawPos + authorizationInfo.withdrawFreezePos;
+                    let claimableVal = authorizationInfo.withdrawUnfreezePos;
+                    if(inAuthorization > 0 || locked > 0 || claimableVal > 0) {
+                        const record = formatAuthorizationInfo(authorizationInfo)
+                        const node = {pk:k}
+                        matchNodeName(node)
+                        commit('UPDATE_CURRENT_NODE', {current_node : node})
+                        record.nodeName = node.name;
+                        list.push(record)
+                    }
+                }
+            }
+            commit('UPDATE_STAKE_HISTORY', {history: list})
+            dispatch('hideLoadingModals')                        
+            return list;
+        } catch(err) {
+            dispatch('hideLoadingModals')            
+            console.log(err)
+            return [];
         }
     },
     async fetchNodeList({commit, dispatch, state}) {
@@ -323,6 +380,7 @@ const actions = {
         }
         
     },
+    // @Deprecated
     async fetchStakeHistory({commit}) {
         let history = (await dbFind(db2, {})).filter((item)=> item.amount > 0);
         history.forEach(item => {

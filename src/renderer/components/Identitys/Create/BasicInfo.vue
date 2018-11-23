@@ -172,6 +172,7 @@ import {legacySignWithLedger} from '../../../../core/ontLedger'
                   this.sendTx(tx);
                   }, err => {
                       this.ledgerStatus = '';
+                      this.$store.dispatch('hideLoadingModals')
                       alert(err.message)
                   }) 
               } else {

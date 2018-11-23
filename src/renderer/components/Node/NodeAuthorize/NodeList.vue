@@ -35,9 +35,7 @@
 .detail-link i {
     font-size:20px;
 }
-.proportion-title {
-    /* width:230px; */
-}
+
 .proportion-title p {
     margin:0
 }
@@ -75,6 +73,7 @@
         </div>
         <a-table :columns="columns"
             :dataSource="node_list"
+            :loading="node_list.length < 1"
         >
             <div slot="nodeProportionTitle"  class="proportion-title">
                 <p>{{$t('nodeMgmt.proportionNextRound')}}
@@ -151,7 +150,7 @@ export default {
     },
     mounted(){
         //loop to fetch data
-        this.$store.dispatch('showLoadingModals');
+        // this.$store.dispatch('showLoadingModals');
         this.$store.dispatch('fetchNodeList')
         this.$store.dispatch('fetchBlockCountdown')
         this.intervalId = setInterval(()=>{

@@ -197,6 +197,7 @@ export default {
          })
      }).catch(err => {
          console.log(err)
+         this.$store.dispatch('hideLoadingModals')
          this.$message.error('common.networkErr')
      }) 
 

@@ -205,6 +205,7 @@ export default {
                     // })
 
                 }
+                this.$store.dispatch('hideLoadingModals')
             }).catch(err => {
                 this.$store.dispatch('hideLoadingModals')
                 this.sending = false;

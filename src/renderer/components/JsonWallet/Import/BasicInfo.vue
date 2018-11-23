@@ -362,6 +362,17 @@
         let files = document.getElementById("datFile").files
         this.dat = files[0]
       },
+      validateWalletFile(wallet) {
+        if(!wallet.accounts || wallet.accounts.length < 1) {
+          return false;
+        }
+        //Only import the first account
+        const account = wallet.accounts[0]
+        if(!account.key || !account.address || !account.salt) {
+          return false;
+        }
+        return true;
+      },
       importAccountForDat() {
         /**
          * 打开的文件：this.dat
@@ -369,7 +380,22 @@
          * 钱包名称：this.datLabel
          */
         FileHelper.readWalletFile(this.dat).then(res => {
-          const wallet = JSON.parse(res)
+          console.log(res);
+          let wallet;
+          try {
+            wallet = JSON.parse(res)
+          } catch(err) {
+            console.log(err)
+            this.$store.dispatch('hideLoadingModals')
+            this.$message.error(this.$t('importJsonWallet.invalidDatFile'))
+            return;
+          }
+          //TODO: validate file content
+          if(!this.validateWalletFile(wallet)) {
+            this.$store.dispatch('hideLoadingModals')
+            this.$message.error(this.$t('importJsonWallet.invalidDatFile'))
+            return;
+          }
           const account = wallet.accounts[0]
           const enc = new Crypto.PrivateKey(account.key);
           const address = new Crypto.Address(account.address)
@@ -447,6 +473,7 @@
           dbService.update({address: this.updatingWallet.address}, {$set:{wallet: this.updatingWallet.wallet}}, {}, 
           (err,numReplaced) => {
             if(err) {
+              this.$store.dispatch('hideLoadingModals')
               this.$message.error(this.$t('importJsonWallet.saveDbFailed'))
               return;
             }

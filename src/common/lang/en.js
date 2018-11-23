@@ -27,6 +27,7 @@ export default {
     authentication: 'Authentication',
     confirmation: 'Confirmation',
     enterWalletPassword: 'Please enter your wallet password',
+    enterIdentityPassword: 'Please enter your ONT ID password',
     password: 'Password',
     invalidLedger: 'The current ledger dose not match with the wallet.Please try with another ledger device.',
     exportDat: 'Export .dat',
@@ -40,7 +41,10 @@ export default {
     changePassSuccess: 'Change password successfully',
     changePassSuccessTip: 'You have already changed the password of the wallet. We recommand you to download and backup the .dat file.(Please replace or delete the old .dat file of this wallet.)',
     download: 'Download .dat',
-    balanceInsufficient: 'Sorry, your balance is insufficient.'
+    balanceInsufficient: 'Sorry, your balance is insufficient.',
+    exportIdentity: 'Export keystore',
+    deleteIdentity: 'Delete ONT ID',
+    savedbFailed: 'Save to db file failed.Please make sure you have set the path to save the keystore.db file and try again.'
   },
 
   TopNav: {
@@ -96,7 +100,8 @@ export default {
     label: '',
     passError: 'Password error',
     ontidNotExist: 'The ONT ID to import does not exist on the blockchain',
-    keystoreImport: 'ONT ID Keystore Import'
+    keystoreImport: 'ONT ID Keystore Import',
+    invalidKeystore: 'The keysotre you input is invalid.'
   },
 
   wallets: {
@@ -120,7 +125,10 @@ export default {
     oldPassword: 'Old password',
     newPassword: 'New password',
     reNewPassword: 'Repeat new password',
-    changePassSuccess: 'Change password successfully!'
+    changePassSuccess: 'Change password successfully!',
+    exportOntid: 'You are about to export the keystore of identiy with ONT ID:',
+    deleteIdentityFailed: 'Delete ONT ID failed',
+    deleteIdentitySuccess: 'Delete ONT ID successfully'
   },
 
   dashboard: {
@@ -156,6 +164,7 @@ export default {
 
   importJsonWallet: {
     datFile: 'Select file',
+    invalidDatFile: 'Please select the valid keystore (.dat) file.',
     selectedDatFile: 'Selected file: ',
     dat: '.dat File',
     datImportPassword: 'Password to decrypt keystore (.dat)',
@@ -304,7 +313,18 @@ export default {
     swapAmount: 'Swap Amount',
     nep5Balance: 'Balance of NEP-5 ONT:',
     password: 'Password',
-    validAmount: 'Please input valid amount'
+    validAmount: 'Please input valid amount',
+    checkMore: 'Check more',
+    balance: 'Balance',
+    scriptHash: 'Script hash',
+    add: '+ Add',
+    addOep4: 'Add OEP4 Token',
+    enterScripthash: 'Please enter the script hash of oep4 token',
+    invalidScriptHash: 'The script hash is invalid',
+    addOep4Success: 'Add OEP4 token succeed!',
+    noOep4Contract: 'The OEP4 contract is not found',
+    networkError: 'Network error!Please try later.',
+    oep4Exists: 'You have already added this OEP4 token.'
   },
 
   transfer: {
@@ -340,7 +360,8 @@ export default {
     connectApp: 'Please connect to your ledger device and open the ONT app on it.',
     status: 'Device Status',
     labelEmpty: 'Label can not be empty.',
-    deviceError: 'Can not connect to device.Please try again.'
+    deviceError: 'Can not connect to device.Please try again.',
+    signFailed: 'Sign with ledger failed.'
   },
 
   ledgerStatus : {
@@ -380,8 +401,8 @@ export default {
     refund: 'Refund',
     quitNode: 'Quit Node',
     newStake: 'New Stake',
-    passwordEmpty: 'Password can not be empty'
-    
+    passwordEmpty: 'Password can not be empty',
+    search: 'Search'
   },
   nodeStakeStatus : {
     transfering: 'Transfering',
@@ -508,7 +529,8 @@ Within their 50% share each consensus node will receive their share according to
     unboundONG: 'This is the unbound ONG amount of your authorized ONT stake.',
     profitONG: 'This is the transaction fee profit you have made. This will update at the beginning of each new consensus round.',
     getProfitPart: 'Already receiving profit portion',
-    newStakePart: 'New stake portion'
+    newStakePart: 'New stake portion',
+    claimableONT: 'Claimable ONT'
 },
 exchange: {
   exchange: 'Exchange',

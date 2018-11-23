@@ -85,7 +85,7 @@
     color: #000000;
     font-family: 'AvenirNext-Bold';
     position: relative;
-    margin-top: 48px;
+    margin-top: 20px;
   }
 
   .wallet-balance :first-child {
@@ -327,6 +327,12 @@
 .nep5-label :last-child {
   font-size: 12px;
 }
+
+.oep4-container  {
+  display: flex;
+  margin-bottom:30px;
+  align-items:center;
+}
 </style>
 <template>
   <div class="home-container">
@@ -388,6 +394,12 @@
           <a-button type="default" class="commonWallet-btn btn-redeem"
           @click="redeemOng">{{$t('commonWalletHome.redeem')}}</a-button>
           <redeem-info-icon></redeem-info-icon>
+        </div>
+
+        <div class="oep4-container">
+          <span class="asset-label">OEP4 Tokens</span>
+          <a-button type="default" 
+          @click="checkMoreOep4">{{$t('commonWalletHome.checkMore')}}</a-button>
         </div>
 
 
@@ -570,10 +582,8 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
                 this.balance.ont = r.Balance;
               }
             }
-            // this.getExchangeCurrency()
           }
         })
-
       },
       getNep5Balance() {
         const NEO_TRAN = 100000000;
@@ -613,7 +623,7 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
           return;
         }
         this.$store.commit('CLEAR_CURRENT_TRANSFER');
-        this.$store.commit('UPDATE_TRANSFER_BALANCE', {balance: this.balance})
+        this.$store.dispatch('queryBalanceForOep4', this.currentWallet.address)
         this.$router.push({name: 'CommonSendHome'})
       },
       commnReceive() {
@@ -669,6 +679,9 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
       },
       handleModalOk() {
         this.redeemInfoVisible = false;
+      },
+      checkMoreOep4() {
+        this.$router.push({name: 'Oep4Home'})
       }
     }
   }

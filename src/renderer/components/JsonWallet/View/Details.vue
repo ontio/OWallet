@@ -254,6 +254,7 @@
               {$set: {wallet: this.wallet}}, {}, 
               (err, numReplaced) => {
                 if(err) {
+                  this.$store.dispatch('hideLoadingModals')
                   this.$message.error(this.$t('importJsonWallet.saveDbFailed'))
                   return;
                 }

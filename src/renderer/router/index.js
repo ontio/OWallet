@@ -189,5 +189,10 @@ export default new Router({
       name: 'Cryptonex',
       component: require('@/components/Exchange/Cryptonex/Cryptonex').default
     },
+    {
+      path: '/oep4Home',
+      name: 'Oep4Home',
+      component: require('@/components/Common/Oep4Home').default
+    },
   ]
 })

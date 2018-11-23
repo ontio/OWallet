@@ -27,6 +27,7 @@ export default {
     authentication: '验证',
     confirmation: '确认',
     enterWalletPassword: '请输入钱包密码',
+    enterIdentityPassword: '请输入ONT ID密码',
     password: '密码',
     invalidLedger: '当前Ledger设备与要打开的钱包不匹配，请尝试正确的ledger设备。',
     exportDat: '导出.dat',
@@ -40,7 +41,10 @@ export default {
     changePassSuccess: '修改密码成功',
     changePassSuccessTip: '您已经修改了钱包密码。我们建议您下载并备份钱包的.dat文件。(旧的.dat文件可以被替换或者删除)',
     download: 'Download',
-    balanceInsufficient : '抱歉，您的余额不足'
+    balanceInsufficient : '抱歉，您的余额不足',
+    exportIdentity: '导出keystore',
+    deleteIdentity: '删除ONT ID',
+    savedbFailed: '保存到keystore.db文件失败。请确保已设置keystore.db保存路径后重新尝试。'
   },
 
   TopNav: {
@@ -96,7 +100,8 @@ export default {
     label: '',
     passError: '密码错误',
     ontidNotExist: '要导入的ONT ID不存在于区块链上',
-    keystoreImport: '导入ONT ID Keystore'
+    keystoreImport: '导入ONT ID Keystore',
+    invalidKeystore: '您输入的keystore不正确。'
   },
 
   wallets: {
@@ -120,7 +125,10 @@ export default {
     oldPassword: '旧密码',
     newPassword: '新密码',
     reNewPassword: '重复新密码',
-    changePassSuccess: '修改密码成功！'
+    changePassSuccess: '修改密码成功！',
+    exportOntid: '您正要导出ONT ID的keystore:',
+    deleteIdentityFailed: '删除ONT ID失败',
+    deleteIdentitySuccess: '删除ONT ID成功。'
   },
 
   dashboard: {
@@ -156,6 +164,7 @@ export default {
 
   importJsonWallet: {
     datFile: '选择文件',
+    invalidDatFile: '请选择正确的keystore(.dat)文件',
     selectedDatFile: '已选择文件： ',
     dat: '.dat文件',
     datImportPassword: '解密keystore文件(.dat)的密码',
@@ -303,7 +312,18 @@ export default {
     swapAmount: '映射数额',
     nep5Balance: 'NEP-5 ONT 余额:',
     password: '密码',
-    validAmount: "请输入正确数额"
+    validAmount: "请输入正确数额",
+    checkMore: '查看更多',
+    balance: '余额',
+    scriptHash: '合约哈希',
+    add: '+ 添加',
+    addOep4: '添加OEP4 Token',
+    enterScripthash: '请输入OEP4的合约哈希',
+    invalidScriptHash: '请输入正确的合约哈希',
+    addOep4Success: '添加OEP4 token成功！',
+    noOep4Contract: '在链上找不到该OEP4合约',
+    networkError: '网络错误！请稍后重试。',
+    oep4Exists: '您已经添加过改OEP4 token。'
   },
 
   transfer: {
@@ -338,7 +358,8 @@ export default {
     connectApp: '请连接您的ledger设备并打开ONT app.',
     status: '设备状态',
     labelEmpty: '钱包名称不能为空.',
-    deviceError: '不能连接到设备，请重试.'
+    deviceError: '不能连接到设备，请重试.',
+    signFailed: '使用ledger签名交易失败。'
   },
   ledgerStatus: {
     NOT_FOUND: 'Ledger没有打开',
@@ -377,7 +398,8 @@ export default {
     refund: '退款',
     quitNode: '退出节点',
     newStake: '新质押',
-    passwordEmpty: '密码不能为空'
+    passwordEmpty: '密码不能为空',
+    search: 'Search'
 
   },
   nodeStakeStatus: {
@@ -502,7 +524,8 @@ export default {
     unboundONG: '这是用户授权质押的ONT所解绑的ONG。',
     profitONG: '这是您已获得的交易费收益。该收益会在每轮共识周期开始时更新。',
     getProfitPart: '产生收益中',
-    newStakePart: '新的质押'
+    newStakePart: '新的质押',
+    claimableONT: '可提取ONT'
   },
   exchange: {
     exchange: 'Exchange',
