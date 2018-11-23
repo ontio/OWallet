@@ -1,7 +1,7 @@
 // import path, { resolve } from 'path'
 import electron from 'electron'
 const app = electron.remote.app;
-const userData = app.getAppPath('userData')
+const userData = app.getPath('userData')
 console.log('appPath: ' + userData)
 if(!localStorage.getItem('savePath')) {
     localStorage.setItem('savePath', userData)

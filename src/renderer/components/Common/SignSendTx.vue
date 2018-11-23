@@ -101,7 +101,8 @@ export default {
                         err => {
                             this.sending = false;
                             this.ledgerStatus = "";
-                            alert(err.message || 'Sign with ledger failed.');
+                            this.$store.dispatch("hideLoadingModals");
+                            this.$message.error(this.$t('ledgerWallet.signFailed'))
                         }
                     );
                 } else {

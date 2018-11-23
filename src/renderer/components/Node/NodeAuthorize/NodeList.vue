@@ -35,9 +35,7 @@
 .detail-link i {
     font-size:20px;
 }
-.proportion-title {
-    /* width:230px; */
-}
+
 .proportion-title p {
     margin:0
 }
@@ -151,7 +149,7 @@ export default {
     },
     mounted(){
         //loop to fetch data
-        this.$store.dispatch('showLoadingModals');
+        // this.$store.dispatch('showLoadingModals');
         this.$store.dispatch('fetchNodeList')
         this.$store.dispatch('fetchBlockCountdown')
         this.intervalId = setInterval(()=>{

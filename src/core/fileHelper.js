@@ -1,7 +1,7 @@
 
 export default {
     downloadFile(json, fileName) {
-        let content = new Blob([JSON.stringify(json)])
+        let content = new Blob([JSON.stringify(json)], { type: "text/plain;charset=utf-8" })
         let urlObject = window.URL || window.webkitURL || window
         let url = urlObject.createObjectURL(content)
         let el = document.createElement('a')

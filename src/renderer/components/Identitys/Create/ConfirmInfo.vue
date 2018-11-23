@@ -68,9 +68,11 @@
           address: this.ontid,
           wallet: this.identity
         }
-        dbService.insert(wallet, function (err, newDoc) {
+        dbService.insert(wallet, (err, newDoc) => {
           if (err) {
             console.log(err)
+            this.$store.dispatch('hideLoadingModals')
+            this.$message.error(this.$t('common.savedbFailed'))
           }
           // console.log(newDoc)
         })

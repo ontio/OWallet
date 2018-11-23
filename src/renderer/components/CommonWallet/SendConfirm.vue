@@ -358,6 +358,7 @@ export default {
             }, err => {
                 this.sending = false;
                 this.ledgerStatus = '';
+                this.$store.dispatch('hideLoadingModals')
                 alert(err.message)
             }) 
         } else {

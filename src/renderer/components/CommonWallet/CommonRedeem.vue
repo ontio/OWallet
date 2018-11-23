@@ -191,6 +191,7 @@ export default {
                     pri = enc.decrypt(this.password, from, this.currentWallet.salt, DEFAULT_SCRYPT)
                 } catch (err) {
                     console.log(err);
+                    this.$store.dispatch('hideLoadingModals')
                     this.$message.error(this.$t('common.pwdErr'))
                     this.sending = false;
                     return;
@@ -218,6 +219,7 @@ export default {
                     }, err => {
                         this.sending = false;
                         this.ledgerStatus = '';
+                        this.$store.dispatch('hideLoadingModals')
                         alert(err.message)
                     }) 
                 } else {

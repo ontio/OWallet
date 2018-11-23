@@ -36,7 +36,6 @@
                 <p class="font-medium">{{$t('nodeMgmt.nodeUser')}}</p>
                 <a-button class="btn-next" @click="handleNodeStake">{{$t('nodeMgmt.nodeStakeMgmt')}}</a-button>
             </div>
-            <!-- NODE_HIDE -->
             <div class="btn-item">
                 <p class="font-medium">{{$t('nodeMgmt.normalUser')}}</p>
                 <a-button class="btn-next" @click="handleAuthorization">{{$t('nodeMgmt.stakeAuthorizaton')}}</a-button>
@@ -49,10 +48,15 @@
 <script>
 export default {
     name: 'NodeManagement',
+    data(){
+        return {
+            onlyTestNet: false
+        }
+    },
     methods: {
         handleNodeStake() {
             const net = localStorage.getItem('net');
-            if(net === 'TEST_NET') {
+            if(net === 'TEST_NET' && this.onlyTestNet) {
                 this.$message.warning(this.$t('nodeMgmt.switchMainnet'));
                 return;
             }
@@ -60,7 +64,7 @@ export default {
         },
         handleAuthorization() {
             const net = localStorage.getItem('net');
-            if(net === 'TEST_NET') {
+            if(net === 'TEST_NET' && this.onlyTestNet) {
                 this.$message.warning(this.$t('nodeMgmt.switchMainnet'));
                 return;
             }

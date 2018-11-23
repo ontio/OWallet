@@ -72,9 +72,6 @@
       },
       next() {
         this.$store.dispatch('showLoadingModals')
-
-        
-
         //Download file
         // FileHelper.downloadFile(this.downloadContent)
 
@@ -97,10 +94,12 @@
         dbService.insert(wallet, function (err, newDoc) {
           if (err) {
             console.log(err)
-            alert('Save to keystore failed.Please try later.')
+            that.$store.dispatch('hideLoadingModals')
+            that.$message.error('common.savedbFailed')
             return;
           }
           // console.log(newDoc)
+          that.$store.dispatch('hideLoadingModals')
           that.$store.commit('INIT_JSON_WALLET')
           that.$message.success(that.$t('createJsonWallet.createSuccess'))
           that.$router.push({name: 'Wallets'})

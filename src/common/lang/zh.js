@@ -27,6 +27,7 @@ export default {
     authentication: '验证',
     confirmation: '确认',
     enterWalletPassword: '请输入钱包密码',
+    enterIdentityPassword: '请输入ONT ID密码',
     password: '密码',
     invalidLedger: '当前Ledger设备与要打开的钱包不匹配，请尝试正确的ledger设备。',
     exportDat: '导出.dat',
@@ -40,7 +41,10 @@ export default {
     changePassSuccess: '修改密码成功',
     changePassSuccessTip: '您已经修改了钱包密码。我们建议您下载并备份钱包的.dat文件。(旧的.dat文件可以被替换或者删除)',
     download: 'Download',
-    balanceInsufficient : '抱歉，您的余额不足'
+    balanceInsufficient : '抱歉，您的余额不足',
+    exportIdentity: '导出keystore',
+    deleteIdentity: '删除ONT ID',
+    savedbFailed: '保存到keystore.db文件失败。请确保已设置keystore.db保存路径后重新尝试。'
   },
 
   TopNav: {
@@ -96,7 +100,8 @@ export default {
     label: '',
     passError: '密码错误',
     ontidNotExist: '要导入的ONT ID不存在于区块链上',
-    keystoreImport: '导入ONT ID Keystore'
+    keystoreImport: '导入ONT ID Keystore',
+    invalidKeystore: '您输入的keystore不正确。'
   },
 
   wallets: {
@@ -120,7 +125,10 @@ export default {
     oldPassword: '旧密码',
     newPassword: '新密码',
     reNewPassword: '重复新密码',
-    changePassSuccess: '修改密码成功！'
+    changePassSuccess: '修改密码成功！',
+    exportOntid: '您正要导出ONT ID的keystore:',
+    deleteIdentityFailed: '删除ONT ID失败',
+    deleteIdentitySuccess: '删除ONT ID成功。'
   },
 
   dashboard: {
@@ -156,6 +164,7 @@ export default {
 
   importJsonWallet: {
     datFile: '选择文件',
+    invalidDatFile: '请选择正确的keystore(.dat)文件',
     selectedDatFile: '已选择文件： ',
     dat: '.dat文件',
     datImportPassword: '解密keystore文件(.dat)的密码',
@@ -338,7 +347,8 @@ export default {
     connectApp: '请连接您的ledger设备并打开ONT app.',
     status: '设备状态',
     labelEmpty: '钱包名称不能为空.',
-    deviceError: '不能连接到设备，请重试.'
+    deviceError: '不能连接到设备，请重试.',
+    signFailed: '使用ledger签名交易失败。'
   },
   ledgerStatus: {
     NOT_FOUND: 'Ledger没有打开',

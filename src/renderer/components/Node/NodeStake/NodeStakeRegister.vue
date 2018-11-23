@@ -254,6 +254,7 @@ export default {
             this.delegateSendTx(tx);
             }, err => {
                 this.walletModalHandled = false;
+                this.$store.dispatch('hideLoadingModals')
                 alert(err.message)
             }) 
         } else {
