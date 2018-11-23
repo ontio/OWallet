@@ -44,6 +44,9 @@
         <a-select v-model="asset" @change="changeAsset" class="select-asset">
                 <a-select-option value="ONT">ONT</a-select-option>
                 <a-select-option value="ONG">ONG</a-select-option>
+                <a-select-option v-for="(oep4,index) of oep4s" :key="index" :value="oep4.symbol">
+                    {{oep4.symbol}}
+                </a-select-option>
         </a-select>
         <a-input-search :placeholder="$t('sharedWalletHome.amount')" class="input-amount"
         @change="validateAmount" :class="validAmount? '': 'error-amount'"
@@ -95,6 +98,8 @@ export default {
         return {
             gas: 0.01,
             asset:'ONT',
+            scriptHash: '',
+            decimal: 1,
             amount: 0,
             to:'',
             validToAddress: true,
@@ -103,7 +108,8 @@ export default {
     },
     computed: {
         ...mapState({
-            balance: state => state.CurrentWallet.transfer.balance
+            balance: state => state.CurrentWallet.transfer.balance,
+            oep4s: state => state.CurrentWallet.transfer.oep4s
         })
     },
     mounted() {
@@ -147,14 +153,31 @@ export default {
         },
         changeAsset(value) {
             this.amount = '0';
+            if(value !== 'ONT' && value !=='ONG'){
+                for(let i=0; i<this.oep4s.length; i++){
+                    if(this.oep4s[i].symbol === value) {
+                        this.scriptHash = this.oep4s[i].scriptHash
+                        this.decimal = this.oep4s[i].decimal
+                        break;
+                    }
+                }
+            }
+            
             console.log(value)
         },
         maxAmount() {
             if(this.asset === 'ONT') {
                 this.amount = this.balance.ont;
-            } else {
+            } else if(this.asset === 'ONG'){
                 this.amount = (new BigNumber(this.balance.ong).minus(this.gas)).toString();
                 this.validateAmount()
+            } else {
+                for(let i=0; i<this.oep4s.length; i++){
+                    if(this.oep4s[i].symbol === this.asset) {
+                        this.amount = this.oep4s[i].balance
+                        break;
+                    }
+                }
             }
         },
         cancel() {
@@ -179,7 +202,9 @@ export default {
                     amount: this.amount,
                     to: this.to,
                     gas: this.gas,
-                    asset: this.asset
+                    asset: this.asset,
+                    scriptHash: this.scriptHash,
+                    decimal: this.decimal
                 }
                 this.$store.commit('UPDATE_TRANSFER', {transfer})
                 this.$emit('sendAssetNext')

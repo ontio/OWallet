@@ -16,6 +16,7 @@ const state = {
             ont: 0,
             ong: 0
         },
+        oep4s:[],
         from:'',
         to: '',
         amount:0,
@@ -55,6 +56,9 @@ const mutations = {
     },
     UPDATE_TRANSFER_BALANCE(state, payload) {
         state.transfer.balance = payload.balance;
+        if(payload.oep4s) {
+            state.transfer.oep4s = payload.oep4s
+        }
     },
     CLEAR_CURRENT_TRANSFER(state, payload) {
         state.transfer = {
@@ -62,6 +66,7 @@ const mutations = {
                 ont: 0,
                 ong: 0
             },
+            oep4s: [],
             from: '',
             to: '',
             amount: 0,
@@ -85,7 +90,9 @@ const mutations = {
 }
 
 const actions = {
-    
+    clearTransferBalance({commit}) {
+        commit('CLEAR_CURRENT_TRANSFER')
+    }
 }
 
 export default {

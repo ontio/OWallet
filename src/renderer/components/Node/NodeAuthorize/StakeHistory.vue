@@ -6,15 +6,63 @@
 .detail-link i {
     font-size:20px;
 }
+
+.auth-login {
+    width:540px;
+    margin:20px auto;
+}
+.select-wallet {
+    width:100%;
+}
+.change-payer-radio {
+    width:100%;
+}
+.payer-radio-item {
+    margin-bottom:20px;
+}
+.stake-btn-container {
+    width: 540px;
+    margin: 25px auto;
+    text-align: center;
+}
 </style>
 
 <template>
     <div>
         <breadcrumb :current="$t('nodeMgmt.stakeHistory')" v-on:backEvent="handleRouteBack"></breadcrumb>
+        <div class="auth-login">
+            <div class="intro-item">
+                <p class="font-medium-black">{{$t('nodeStake.selectStakeWallet')}}</p>
+                <a-radio-group @change="changePayerWallet" v-model="payerWalletType" class="change-payer-radio">
+                <a-radio value="commonWallet" class="payer-radio-item">{{$t('createIdentity.commonWallet')}}</a-radio>
+                <a-radio value="ledgerWallet" class="payer-radio-item">{{$t('createIdentity.ledgerWallet')}}</a-radio>
+
+                <div v-if="payerWalletType === 'commonWallet'">
+                    <a-select :options="normalWallet" class="select-wallet" v-model="payerWalletValue"
+                    :placeholder="$t('createIdentity.selectCommonWallet')"
+                        @change="handleChangePayer">
+                    </a-select>
+                </div>
+
+                <div v-if="payerWalletType === 'ledgerWallet'">
+
+                    <div class="payer-ledger-status">
+                    <div class="font-bold" style="margin-bottom: 10px;">{{$t('ledgerWallet.connectApp')}}</div>
+                    <span class="font-medium-black">{{$t('ledgerWallet.status')}}: </span>
+                    <span class="font-medium">{{ledgerStatus}} </span>
+                    </div>
+                    
+                </div>
+                </a-radio-group>
+            </div>
+            <div class="stake-btn-container">
+                <!-- <p class="font-medium"><a-icon type="exclamation-circle" /> {{$t('nodeMgmt.userParticipate')}}</p> -->
+                <a-button type="primary" class="btn-next" @click="handleSearch">{{$t('nodeStake.search')}}</a-button>
+            </div>
+        </div>
         <a-table :columns="columns"
         :dataSource="stakeHistory"
         >
-        
         <div slot="action" slot-scope="text, record" class="detail-link">
             <a-icon type="arrow-right" @click="handleAuthorizeLogin(record)"/>
         </div>
@@ -36,22 +84,28 @@ export default {
                 dataIndex: 'nodeName',
                 key:'nodeName'
             },
-            {
-                title: this.$t('nodeMgmt.stakeWalletAddress'),
-                dataIndex: 'stakeWalletAddress',
-                key: 'stakeWalletAddress'
-            },
-            // hide for now
             // {
-            //     title: this.$t('nodeMgmt.stakeAmount'),
-            //     dataIndex: 'amount',
-            //     key: 'amount'
+            //     title: this.$t('nodeMgmt.stakeWalletAddress'),
+            //     dataIndex: 'stakeWalletAddress',
+            //     key: 'stakeWalletAddress'
             // },
+
             {
-                title: this.$t('nodeMgmt.lastUpdate'),
-                dataIndex: 'updatedAt',
-                key: 'updatedAt'
+                title: this.$t('nodeMgmt.inAuthorization'),
+                dataIndex: 'inAuthorization',
+                key: 'inAuthorization'
             },
+            {
+                title: this.$t('nodeMgmt.locked'),
+                dataIndex: 'locked',
+                key: 'locked'
+            },
+            {
+                title: this.$t('nodeMgmt.claimableONT'),
+                dataIndex: 'claimable',
+                key: 'claimable'
+            },
+            
             {
                 title: '',
                 key: 'action',
@@ -59,39 +113,93 @@ export default {
             }
         ]
         return {
-            columns
+            columns,
+            payerWalletType: 'commonWallet',
+            payerWalletValue: undefined,
+            stakeWallet:'',
+            payerWallet: ''
         }
     },
     components:{
         Breadcrumb
     },
     mounted() {
-        this.$store.dispatch('fetchStakeHistory')
+        this.$store.dispatch("fetchWalletsFromDb").then(() => {
+            //set payer wallet 
+        });
+        const stakeAuthorizationWalletAddress = this.$store.state.NodeAuthorization.stake_authorization_wallet;
+        if(stakeAuthorizationWalletAddress) {
+            const index = this.$store.state.Wallets.NormalWallet.findIndex((w)=> w.address === stakeAuthorizationWalletAddress)
+            if(index > -1) {
+                this.payerWalletType = 'commonWallet'
+                this.payerWalletValue = stakeAuthorizationWalletAddress
+                this.payerWallet = this.$store.state.Wallets.NormalWallet[index]
+            } else {    
+                this.payerWalletType = 'ledgerWallet'
+                this.$store.dispatch('getLedgerStatus')
+            } 
+        }
+
+    },
+    beforeDestroy(){
+        this.$store.dispatch('stopGetLedgerStatus')
     },
     computed: {
         ...mapState({
+            ledgerStatus: state => state.LedgerConnector.ledgerStatus,
+            ledgerPk : state => state.LedgerConnector.publicKey,
+            ledgerWallet: state => state.LedgerConnector.ledgerWallet,
             stakeHistory: state => state.NodeAuthorization.stakeHistory,
-            node_list: state => state.NodeAuthorization.node_list,
-        })
+        }),
+        normalWallet: {
+            get() {
+                const list = this.$store.state.Wallets.NormalWallet.slice();
+                return list.map(i => {
+                    return Object.assign({}, i, {
+                        label: i.label + " " + i.address,
+                        value: i.address
+                    });
+                });
+            }
+        },
     },
     methods: {
         handleRouteBack() {
             this.$router.go(-1);
         },
         handleAuthorizeLogin(record, item){
-            console.log(record)
-            let current_node;
-            for(let node of this.node_list) {
-                if(node.pk === record.nodePk) {
-                    current_node = node;
-                    break;
-                }
-            }  
-            const stakeWallet = record.stakeWalletAddress
-            this.$store.commit('UPDATE_STAKE_AUTHORIZATION_WALLET', {stakeWallet})
-            this.$store.commit('UPDATE_CURRENT_NODE', {current_node})
-            this.$router.push({name: 'AuthorizeLogin'})
+            // this.$store.commit('UPDATE_STAKE_AUTHORIZATION_WALLET', {stakeWallet: this.stakeWallet.address})
+            // this.$router.push({name: 'AuthorizeLogin'})
+            this.$store.commit('UPDATE_STAKE_AUTHORIZATION_WALLET', {stakeWallet: this.stakeWallet.address})
+            this.$store.commit('UPDATE_STAKE_WALLET', {stakeWallet: this.stakeWallet.address})             
+            this.$router.push({name: 'AuthorizationMgmt'})
         },
+        changePayerWallet(e) {
+            this.payerWalletType = e.target.value
+            if(e.target.value === 'ledgerWallet') {
+                this.$store.dispatch('getLedgerStatus')
+            }
+        },
+        handleChangePayer(value) {
+            this.payerWallet = this.normalWallet.find((v)=>{return v.address === value})
+            this.payerWalletValue = this.payerWallet.address
+        },
+        handleSearch() {
+            if(this.payerWalletType === 'commonWallet' && !this.payerWallet) {
+                this.$message.error(this.$t('nodeStake.selectIndividualWallet'))
+                return;
+            }
+            if(this.payerWalletType === 'ledgerWallet' && !this.ledgerWallet.address) {
+                this.$message.error(this.$t('nodeStake.selectLedgerWallet'))
+                return;
+            }
+            if(this.payerWalletType === 'commonWallet' && this.payerWallet){
+                this.stakeWallet = this.payerWallet
+            } else {
+                this.stakeWallet = this.ledgerWallet
+            }
+            this.$store.dispatch('searchStakeHistory', {address: this.stakeWallet.address})      
+        }
     }
 }
 </script>

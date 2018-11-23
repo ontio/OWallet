@@ -313,7 +313,18 @@ export default {
     swapAmount: 'Swap Amount',
     nep5Balance: 'Balance of NEP-5 ONT:',
     password: 'Password',
-    validAmount: 'Please input valid amount'
+    validAmount: 'Please input valid amount',
+    checkMore: 'Check more',
+    balance: 'Balance',
+    scriptHash: 'Script hash',
+    add: '+ Add',
+    addOep4: 'Add OEP4 Token',
+    enterScripthash: 'Please enter the script hash of oep4 token',
+    invalidScriptHash: 'The script hash is invalid',
+    addOep4Success: 'Add OEP4 token succeed!',
+    noOep4Contract: 'The OEP4 contract is not found',
+    networkError: 'Network error!Please try later.',
+    oep4Exists: 'You have already added this OEP4 token.'
   },
 
   transfer: {
@@ -390,8 +401,8 @@ export default {
     refund: 'Refund',
     quitNode: 'Quit Node',
     newStake: 'New Stake',
-    passwordEmpty: 'Password can not be empty'
-    
+    passwordEmpty: 'Password can not be empty',
+    search: 'Search'
   },
   nodeStakeStatus : {
     transfering: 'Transfering',
@@ -518,7 +529,8 @@ Within their 50% share each consensus node will receive their share according to
     unboundONG: 'This is the unbound ONG amount of your authorized ONT stake.',
     profitONG: 'This is the transaction fee profit you have made. This will update at the beginning of each new consensus round.',
     getProfitPart: 'Already receiving profit portion',
-    newStakePart: 'New stake portion'
+    newStakePart: 'New stake portion',
+    claimableONT: 'Claimable ONT'
 },
 exchange: {
   exchange: 'Exchange',

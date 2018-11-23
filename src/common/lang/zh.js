@@ -312,7 +312,18 @@ export default {
     swapAmount: '映射数额',
     nep5Balance: 'NEP-5 ONT 余额:',
     password: '密码',
-    validAmount: "请输入正确数额"
+    validAmount: "请输入正确数额",
+    checkMore: '查看更多',
+    balance: '余额',
+    scriptHash: '合约哈希',
+    add: '+ 添加',
+    addOep4: '添加OEP4 Token',
+    enterScripthash: '请输入OEP4的合约哈希',
+    invalidScriptHash: '请输入正确的合约哈希',
+    addOep4Success: '添加OEP4 token成功！',
+    noOep4Contract: '在链上找不到该OEP4合约',
+    networkError: '网络错误！请稍后重试。',
+    oep4Exists: '您已经添加过改OEP4 token。'
   },
 
   transfer: {
@@ -387,7 +398,8 @@ export default {
     refund: '退款',
     quitNode: '退出节点',
     newStake: '新质押',
-    passwordEmpty: '密码不能为空'
+    passwordEmpty: '密码不能为空',
+    search: 'Search'
 
   },
   nodeStakeStatus: {
@@ -512,7 +524,8 @@ export default {
     unboundONG: '这是用户授权质押的ONT所解绑的ONG。',
     profitONG: '这是您已获得的交易费收益。该收益会在每轮共识周期开始时更新。',
     getProfitPart: '产生收益中',
-    newStakePart: '新的质押'
+    newStakePart: '新的质押',
+    claimableONT: '可提取ONT'
   },
   exchange: {
     exchange: 'Exchange',

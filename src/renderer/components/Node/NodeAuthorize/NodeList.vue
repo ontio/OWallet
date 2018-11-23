@@ -73,6 +73,7 @@
         </div>
         <a-table :columns="columns"
             :dataSource="node_list"
+            :loading="node_list.length < 1"
         >
             <div slot="nodeProportionTitle"  class="proportion-title">
                 <p>{{$t('nodeMgmt.proportionNextRound')}}

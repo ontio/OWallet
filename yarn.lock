@@ -1290,7 +1290,7 @@ balanced-match@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
 
-base-x@^3.0.2, base-x@^3.0.3:
+base-x@^3.0.2:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/base-x/-/base-x-3.0.4.tgz#94c1788736da065edb1d68808869e357c977fa77"
   dependencies:
@@ -1341,10 +1341,6 @@ bigi@^1.1.0, bigi@^1.2.1, bigi@^1.4.2:
 bignumber.js@5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-5.0.0.tgz#fbce63f09776b3000a83185badcde525daf34833"
-
-bignumber.js@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-6.0.0.tgz#bbfa047644609a5af093e9cbd83b0461fa3f6002"
 
 bignumber.js@^7.2.1:
   version "7.2.1"
@@ -2335,10 +2331,6 @@ crypto-js@^3.1.9-1:
 crypto-random-string@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/crypto-random-string/-/crypto-random-string-1.0.0.tgz#a230f64f568310e1498009940790ec99545bca7e"
-
-crypto@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/crypto/-/crypto-1.0.1.tgz#2af1b7cad8175d24c8a1b0778255794a21803037"
 
 css-color-names@0.0.4:
   version "0.0.4"
@@ -5303,6 +5295,10 @@ loglevel@^1.4.1, loglevel@^1.6.1:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/loglevel/-/loglevel-1.6.1.tgz#e0fc95133b6ef276cdc8887cdaf24aa6f156f8fa"
 
+long@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/long/-/long-4.0.0.tgz#9a7b71cfb7d361a194ea555241c92f7468d5bf28"
+
 longest@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/longest/-/longest-1.0.1.tgz#30a0b2da38f73770e8294a0d22e6625ed77d0097"
@@ -5972,27 +5968,25 @@ onetime@^2.0.0:
   dependencies:
     mimic-fn "^1.0.0"
 
-ontology-ts-sdk@^0.9.8:
-  version "0.9.8"
-  resolved "https://registry.yarnpkg.com/ontology-ts-sdk/-/ontology-ts-sdk-0.9.8.tgz#2c5688a5ac89d955ff0b1035fd0f71b143e39d48"
+ontology-ts-sdk@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/ontology-ts-sdk/-/ontology-ts-sdk-1.0.8.tgz#6d2da77cb785c49cda1863f3bf15ca8c27119e7c"
   dependencies:
     "@ont-community/hdkey-secp256r1" "^1.0.1"
     "@ont-community/html5-websocket" "^2.0.2"
     axios "^0.17.1"
     babel-polyfill "^6.26.0"
-    base-x "^3.0.3"
     base64-url "^2.2.0"
     bigi "^1.4.2"
-    bignumber.js "^6.0.0"
+    bignumber.js "^7.2.1"
     bip39 "^2.5.0"
     bs58 "^4.0.1"
-    bs58check "^2.1.1"
-    crypto "^1.0.1"
     crypto-js "^3.1.9-1"
     ecdsa "^0.7.0"
     ecurve "^1.0.6"
     elliptic "^6.4.0"
     js-sha3 "^0.7.0"
+    long "^4.0.0"
     milagro-crypto-js "^3.3.0"
     promise-timeout "^1.3.0"
     scrypt-async "^2.0.0"

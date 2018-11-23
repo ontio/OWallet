@@ -190,6 +190,7 @@
 <script>
 import {mapState} from 'vuex'
 import {legacySignWithLedger} from '../../../core/ontLedger'
+import {Oep4} from 'ontology-ts-sdk'
 import { TEST_NET, MAIN_NET, ONT_CONTRACT, ONT_PASS_NODE, DEFAULT_SCRYPT } from '../../../core/consts'
 import {Crypto, OntAssetTxBuilder, TransactionBuilder, utils, RestClient, TxSignature} from 'ontology-ts-sdk'
 import axios from 'axios';
@@ -312,15 +313,23 @@ export default {
           this.$message.warning(this.$t('common.confirmTips'))
           return;
       }
-      
+      const asset = this.transfer.asset;
       const from = new Crypto.Address(this.currentWallet.address);
       const to = new Crypto.Address(this.transfer.to);
-      const asset = this.transfer.asset;
-      const amount = asset === 'ONT' ? this.transfer.amount : new BigNumber(this.transfer.amount).multipliedBy(1e9);
       const gasLimit = '20000';
       const gas = (new BigNumber(this.transfer.gas)).multipliedBy(1e9);
       const gasPrice = gas.div(parseInt(gasLimit)).toString();
-      const tx = OntAssetTxBuilder.makeTransferTx(asset, from, to, amount, gasPrice, gasLimit);
+  
+      let tx;
+      if(asset === 'ONT' || asset === 'ONG') {
+        const amount = asset === 'ONT' ? this.transfer.amount : (new BigNumber(this.transfer.amount).multipliedBy(1e9)).toString();
+         tx = OntAssetTxBuilder.makeTransferTx(asset, from, to, amount, gasPrice, gasLimit);
+      } else if (this.transfer.scriptHash) {
+        const contractAddr = new Crypto.Address(utils.reverseHex(this.transfer.scriptHash));
+        const oep4 = new Oep4.Oep4TxBuilder(contractAddr);
+        const amount = new BigNumber(this.transfer.amount).multipliedBy(Math.pow(10, this.transfer.decimal)).toString()
+         tx = oep4.makeTransferTx(from, to, amount, gasPrice, gasLimit, from);
+      }
       
       if (this.isCommonWallet) {
         this.$store.dispatch('showLoadingModals')
