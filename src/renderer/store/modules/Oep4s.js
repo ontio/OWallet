@@ -19,7 +19,8 @@ const oep4s = localStorage.getItem('oep4s')? JSON.parse(localStorage.getItem('oe
 
 const state = {
     oep4s,
-    balance:{ont:0, ong:0}
+    balance:{ont:0, ong:0},
+    completedTx: []
 }
 
 const mutations = {
@@ -33,11 +34,14 @@ const mutations = {
     },
     UPDATE_OEP4S(state, payload) {
         state.oep4s = payload.oep4s
+    },
+    UPDATE_OEP4_TX_LIST(state, payload) {
+        state.completedTx = payload.txList
     }
 }
 
 const actions = {
-    async addOep4Token({commit, dispatch}, {scriptHash, address})  {
+    async addOep4Token({commit, dispatch, state}, {scriptHash, address})  {
         try {
             const restClient = getRestClient()
             const res = await restClient.getContract(scriptHash);
@@ -52,12 +56,32 @@ const actions = {
                 const net = localStorage.getItem('net')
                 const newOep4 = {name, symbol, scriptHash, decimal, balance, net}
                 commit('ADD_OEP4', {newOep4})
+                dispatch('registerOep4Info', scriptHash)
+                dispatch('queryBalanceForOep4', address)
+                dispatch('queryTxForOep4', {address, oep4s: [...state.oep4s, newOep4]})
                 return 'ADD_SUCCESS'
             }
         } catch(err) {
             console.log(err)
             return 'NETWORK_ERROR'
         }
+    },
+
+    async registerOep4Info({commit, dispatch}, scriptHash) {
+        const net = localStorage.getItem('net');
+        let url = ''
+        if(net === 'TEST_NET') {
+            url = 'https://polarisexplorer.ont.io/api/v1/explorer/oep4/info'
+        } else {
+            url = 'https://explorer.ont.io/api/v1/explorer/oep4/info'
+        }
+        axios.post(url, {
+            scriptHash
+        }).then(res => {
+            console.log(res)
+        }).catch(err => {
+            console.log(err)
+        })
     },
 
     async queryOep4Name({commit}, scriptHash) {
@@ -154,6 +178,44 @@ const actions = {
             console.log(err);
             alert('Network error.Please try later.')
         }
+    },
+    async queryTxForOep4({commit}, {address,oep4s}) {
+        const net = localStorage.getItem('net')
+        const url = net === 'TEST_NET' ? 'https://polarisexplorer.ont.io' : 'https://explorer.ont.io';
+        axios.get(url + '/api/v1/explorer/address/' + address + '/10/1').then(response => {
+            if (response.status === 200 && response.data && response.data.Result) {
+                const txlist = response.data.Result.TxnList;
+                const completed = []
+                for (const t of txlist) {
+                    // if(t.TransferList.length === 1 && t.TransferList[0].ToAddress === ONG_GOVERNANCE_CONTRACT) {
+                    //   continue;
+                    // }
+                    for (const tx of t.TransferList) {
+                        if(tx.AssetName === 'ong'){
+                            continue;
+                        } 
+                        for(let o of oep4s) {
+                            let amount = tx.Amount
+                            if(o.symbol === tx.AssetName) {
+                                if (tx.FromAddress === this.address) {
+                                    amount = '-' + amount;
+                                } else {
+                                    amount = '+' + amount;
+                                }
+                                completed.push({
+                                    txHash: t.TxnHash,
+                                    asset: o.symbol,
+                                    amount: amount
+                                })
+                            }
+                        }
+                        
+                    }
+
+                }
+                commit('UPDATE_OEP4_TX_LIST', {txList: completed})
+            }
+        })
     }
 }
 

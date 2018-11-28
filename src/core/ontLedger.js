@@ -1,8 +1,7 @@
-// @flow
-import { tx, wallet, u } from '@cityofzion/neon-js'
-import type { Transaction } from '@cityofzion/neon-js'
 import LedgerNode from '@ledgerhq/hw-transport-node-hid'
 import asyncWrap from './asyncHelper'
+import {utils, Crypto} from 'ontology-ts-sdk'
+import * as elliptic from 'elliptic';
 
 const VALID_STATUS = 0x9000
 const MSG_TOO_BIG = 0x6d08
@@ -47,7 +46,7 @@ const BIP44 = (acct = 0, neo = false) => {
     )
 }
 
-export default class NeonLedger {
+export default class OntLedger {
     path: string;
     device: any;
 
@@ -57,16 +56,16 @@ export default class NeonLedger {
 
     /**
      * Initialises by listing devices and trying to find a ledger device connected. Throws an error if no ledgers detected or unable to connect.
-     * @return {Promise<NeonLedger>}
+     * @return {Promise<OntLedger>}
      */
     static async init() {
         const supported = await LedgerNode.isSupported()
         // if (!supported) { throw new Error(`Your computer does not support the ledger!`) }
         if (!supported) { throw 'NOT_SUPPORT' }
-        const paths = await NeonLedger.list()
+        const paths = await OntLedger.list()
         // if (paths.length === 0) throw new Error('USB Error: No device found.')
         if (paths.length === 0) throw 'NOT_FOUND'
-        const ledger = new NeonLedger(paths[0])
+        const ledger = new OntLedger(paths[0])
         return ledger.open()
     }
 
@@ -76,9 +75,9 @@ export default class NeonLedger {
 
     /**
      * Opens an connection with the selected ledger.
-     * @return {Promise<NeonLedger>}this
+     * @return {Promise<OntLedger>}this
      */
-    async open(): Promise<NeonLedger> {
+    async open(): Promise<OntLedger> {
         try {
             this.device = await LedgerNode.open(this.path)
             return this
@@ -103,7 +102,11 @@ export default class NeonLedger {
      */
     async getPublicKey(acct: number = 0, neo: boolean): Promise<string> {
         const res = await this.send('80040000', BIP44(acct, neo), [VALID_STATUS])
-        return res.toString('hex').substring(0, 130)
+        const uncompressed = res.toString('hex').substring(0, 130)
+        const ec = new elliptic.ec(Crypto.CurveLabel.SECP256R1.preset);
+        const keyPair = ec.keyFromPublic(uncompressed, 'hex');
+        const compressed = keyPair.getPublic(true, 'hex');
+        return compressed;
     }
 
     getDeviceInfo() {
@@ -180,16 +183,16 @@ export default class NeonLedger {
  * @param {string} response - Signature in DER format
  */
 const assembleSignature = (response: string): string => {
-    let ss = new u.StringStream(response)
+    let ss = new utils.StringReader(response)
     // The first byte is format. It is usually 0x30 (SEQ) or 0x31 (SET)
     // The second byte represents the total length of the DER module.
     ss.read(2)
     // Now we read each field off
     // Each field is encoded with a type byte, length byte followed by the data itself
     ss.read(1) // Read and drop the type
-    const r = ss.readVarBytes()
+    const r = ss.readNextBytes()
     ss.read(1)
-    const s = ss.readVarBytes()
+    const s = ss.readNextBytes()
 
     // We will need to ensure both integers are 32 bytes long
     const integers = [r, s].map(i => {
@@ -206,7 +209,7 @@ const assembleSignature = (response: string): string => {
 }
 
 export const getPublicKey = async (acct: number = 0, neo: boolean = false): Promise<string> => {
-    const ledger = await NeonLedger.init()
+    const ledger = await OntLedger.init()
     try {
         return await ledger.getPublicKey(acct, neo)
     } finally {
@@ -215,7 +218,7 @@ export const getPublicKey = async (acct: number = 0, neo: boolean = false): Prom
 }
 
 export const getDeviceInfo = async () => {
-    const ledger = await NeonLedger.init()
+    const ledger = await OntLedger.init()
     try {
         return await ledger.getDeviceInfo()
     } finally {
@@ -225,17 +228,13 @@ export const getDeviceInfo = async () => {
 
 
 export const legacySignWithLedger = async (
-    unsignedTx: Transaction | string,
+    unsignedTx: string,
     neo: boolean = false,
     acct: number = 0
 ): Promise<string> => {
-    const ledger = await NeonLedger.init()
+    const ledger = await OntLedger.init()
     try {
-        const data =
-            typeof unsignedTx !== 'string'
-                ? tx.serializeTransaction(unsignedTx, false)
-                : unsignedTx
-        const signData = await ledger.getSignature(data, acct, neo)
+        const signData = await ledger.getSignature(unsignedTx, acct, neo)
         return signData;
     } catch(err) {
         return Promise.reject(err)

@@ -173,13 +173,14 @@
 
 <style scoped>
   .common-detail-container {
-    position: relative;
+
   }
   .div-shared-wallet-sign {
     margin-top: 0.88rem;
     font-family: AvenirNext-Medium;
     font-size: 14px;
     color: #196BD8;
+    cursor: default;
   }
 
   .div-wallet-name {
@@ -188,6 +189,7 @@
     font-size: 18px;
     color: #515457;
     line-height: 24px;
+    word-wrap: break-word;
   }
 
   .img-wallet-edit {
@@ -197,15 +199,17 @@
   }
 
   .div-wallet-address {
-    margin-top: 4.25rem;
     font-family: AvenirNext-Regular;
     font-size: 13px;
     color: #B2B2B3;
+    position:absolute;
+    bottom:10px;
+    cursor: default;
   }
 
   .img-wallet-copy {
     position: absolute;
-    top: 9rem;
+    bottom:15px;
     right: 1.29rem;
   }
 
@@ -235,7 +239,7 @@
   }
   .common-topRight-btns {
     position:absolute;
-    top:0;
+    top:10px;
     right:10px;
   }
 </style>

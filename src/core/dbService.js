@@ -13,24 +13,17 @@ const savePath = localStorage.getItem('savePath')
 
 const db = new Datastore({filename: savePath + '/keystore.db', autoload:true});
 
-const db2 = new Datastore({filename: savePath + '/stakeHistory.db', autoload:true, timestampData: true});
-
 //indexing
 db.ensureIndex({fieldName: 'address', unique: true}, function(err) {
     console.log(err)
     if (err && err.code === 'ENOENT') {
         localStorage.setItem('savePath', userData);
-        alert('Can not find the keystore.db file.Please set the path of the keystore.db file.');
+        alert('Cannot find the keystore.db file. Please set the keystore.db file path.');
     }
 });
 
-// indexKey = stake wallet address + '-' + node's pk
-db2.ensureIndex({fieldName: 'indexKey', unique: true}, function(err) {
-    console.log(err)
-})
 
 db.loadDatabase();
-db2.loadDatabase();
 
 const dbFind = (db, opt) => {
     return new Promise((resolve, reject) => {
@@ -69,4 +62,4 @@ const dbUpsert = (db, index ,doc) => {
 }
 
 export default db;
-export {dbFind, dbUpsert, db2};
+export {dbFind, dbUpsert};

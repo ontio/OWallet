@@ -307,7 +307,7 @@ export default {
             }
             const txHash = utils.reverseHex(this.tx.getHash());
             this.tx = '';
-            this.$store.dispatch('recordStakeHistory', {txHash, record})
+            // this.$store.dispatch('recordStakeHistory', {txHash, record})
         },
         validateCancelAmount() {
             if(!this.cancelAmount || !varifyPositiveInt(this.cancelAmount)) {

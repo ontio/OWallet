@@ -57,3 +57,13 @@ yarn run package
 ## Install released app
 
 Please download the latest version that is compatiable with your platform.
+
+## Default keystore.db file path
+
+Default points to:
+
+* %APPDATA% on `Windows`
+
+* $XDG_CONFIG_HOME or ~/.config on `Linux`
+
+* ~/Library/Application Support on `macOS`

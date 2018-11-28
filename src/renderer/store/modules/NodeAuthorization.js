@@ -3,7 +3,7 @@ import {CON_NODE, NODE_DETAIL} from '../../../core/consts'
 import numeral from 'numeral'
 import { Crypto, RestClient, utils, GovernanceTxBuilder} from 'ontology-ts-sdk'
 import {BigNumber} from 'bignumber.js'
-import {db2, dbUpsert, dbFind} from '../../../core/dbService'
+import {dbUpsert, dbFind} from '../../../core/dbService'
 var dateFormat = require('dateformat');
 import nodes from '../../../core/nodes.json'
 
@@ -160,6 +160,9 @@ const mutations = {
     },
     UPDATE_PEER_POOL_MAP(state, payload) {
         state.peerPoolMap = payload.peerMap
+    },
+    CLEAR_STAKE_HISTORY(state, payload) {
+        state.stakeHistory = []
     }
 }
 
@@ -242,6 +245,7 @@ const actions = {
                         matchNodeName(node)
                         commit('UPDATE_CURRENT_NODE', {current_node : node})
                         record.nodeName = node.name;
+                        record.stakeWallet = address;
                         list.push(record)
                     }
                 }
@@ -347,7 +351,8 @@ const actions = {
         }
     },
 
-    async recordStakeHistory({commit, dispatch}, {txHash, record}) {
+    //This method is deprecated
+   /*  async recordStakeHistory({commit, dispatch}, {txHash, record}) {
         const url = getNodeUrl();
         const rest = new RestClient(url)
         
@@ -378,19 +383,7 @@ const actions = {
             console.log(err)
             return;
         }
-        
-    },
-    // @Deprecated
-    async fetchStakeHistory({commit}) {
-        let history = (await dbFind(db2, {})).filter((item)=> item.amount > 0);
-        history.forEach(item => {
-            item.updatedAt = dateFormat(new Date(item.updatedAt), 'yyyy/mm/dd HH:MM:ss')
-            item.amount = numeral(item.amount).format('0,0')
-        })
-        commit('UPDATE_STAKE_HISTORY', {history})
-        console.log(history)
-        return history;
-    }
+    } */
 }
 
 export default {

@@ -1,11 +1,11 @@
 <template>
   <div class="common-detail-container">
-    <div @click="toWalletHome(wallet)">
+    <div>
       <div class="div-shared-wallet-sign">
         <span>{{ isCommonWallet ? $t('common.normalWallet') : $t('common.hardwareWallet') }}</span>
         <p class="neo-compatile" v-if="!isCommonWallet && wallet.neo">{{$t('common.neoCompatible')}}</p>
       </div>
-      <div class="div-wallet-name">{{wallet.label}}</div>
+      <div class="div-wallet-name" @click="toWalletHome(wallet)">{{wallet.label}}</div>
       <!--<img class="img-wallet-edit" src="./../assets/edit.png" alt="">-->
       <div class="div-wallet-address">
         <div>{{$t('common.walletAddress')}}:</div>
@@ -286,13 +286,14 @@
 
 <style scoped>
   .common-detail-container {
-    position: relative;
+
   }
   .div-shared-wallet-sign {
     margin-top: 0.88rem;
     font-family: AvenirNext-Medium;
     font-size: 14px;
     color: #196BD8;
+    cursor: default;
   }
 
   .div-wallet-name {
@@ -301,6 +302,9 @@
     font-size: 18px;
     color: #515457;
     line-height: 24px;
+    word-wrap: break-word;
+    height:6rem;
+    cursor: pointer;
   }
 
   .img-wallet-edit {
@@ -310,15 +314,17 @@
   }
 
   .div-wallet-address {
-    margin-top: 4.25rem;
     font-family: AvenirNext-Regular;
     font-size: 14px;
     color: #B2B2B3;
+    position:absolute;
+    bottom:10px;
+    cursor: default;
   }
 
   .img-wallet-copy {
     position: absolute;
-    top: 9rem;
+    bottom:15px;
     right: 1.29rem;
   }
 
@@ -348,7 +354,7 @@
   }
   .common-topRight-btns {
     position: absolute;
-    top: 0px;
+    top: 10px;
     right:20px;
     text-align: right;
   }

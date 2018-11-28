@@ -77,6 +77,64 @@
     background-size:cover;
     cursor: pointer;
   }
+  .txList-header {
+    padding-bottom: 5px;
+    border-bottom: 1px solid #DFE2E9;
+    position: relative;
+  }
+
+  .txList-header :first-child {
+    font-family: AvenirNext-Bold;
+    font-size: 14px;
+    color: #000000;
+    text-align: center;
+  }
+
+  .txList-header :last-child {
+    width: 64px;
+    height: 64px;
+    display: block;
+    float: right;
+    background: url('../../assets/transaction.png');
+    background-size: contain;
+    top: -20px;
+    right: 0;
+    position: absolute;
+  }
+  .tx-item {
+    float: left;
+    margin: 5px 0;
+    cursor: pointer;
+  }
+
+  .tx-item :first-child {
+    width: 65%;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: AvenirNext-Medium;
+    font-size: 12px;
+    color: #6F7781;
+  }
+
+  .tx-item :last-child {
+    width: 30%;
+    text-align: right;
+    float: right;
+    display: block;
+    font-family: AvenirNext-Medium;
+    font-size: 12px;
+    color: #000000;
+  }
+.check-more {
+    font-family: AvenirNext-Medium;
+    font-size: 12px;
+    color: #227EEC;
+    text-align: center;
+    cursor: pointer;
+    width:100%;
+    float:left;
+  }
 </style>
 
 <template>
@@ -117,8 +175,21 @@
                     </a-button>
                 </div>
             </div>
-            <div class="right-hal">
-                
+            <div class="right-half">
+                <div class="completed-tx">
+                    <div class="txList-header">
+                        <span>{{$t('sharedWalletHome.completedTx')}}</span>
+                        <span class="transfer-icon"></span>
+                    </div>
+                    <div v-for="(tx,index) in completedTx" :key="tx.txHash+index" class="tx-item" v-if="index<10"
+                        @click="showTxDetail(tx.txHash)">
+                        <span>{{tx.txHash}}</span>
+                        <span>{{tx.amount}} {{tx.asset}}</span>
+                    </div>
+                    <div class="check-more" v-if="completedTx.length > 6" @click="checkMoreTx">
+                        {{$t('sharedWalletHome.checkMore')}}>>
+                    </div>
+                </div>
             </div>
           </div>
 
@@ -140,6 +211,9 @@
 <script>
 import Breadcrumb from '../Breadcrumb'
 import {mapState} from 'vuex'
+import { TEST_NET } from '../../../core/consts'
+const {BrowserWindow} = require('electron').remote;
+
 export default {
     name: 'Oep4Home',
     data() {
@@ -158,17 +232,19 @@ export default {
         Breadcrumb
     },
     mounted() {
-        this.$store.dispatch('queryBalanceForOep4', this.currentWallet.address)
+        this.refresh()
     },
     computed:{
         ...mapState({
             oep4s: state => state.Oep4s.oep4s,
-            balance: state => state.Oep4s.balance
+            balance: state => state.Oep4s.balance,
+            completedTx: state => state.Oep4s.completedTx
         })
     },
     methods: {
         refresh() {
             this.$store.dispatch('queryBalanceForOep4', this.currentWallet.address)
+            this.$store.dispatch('queryTxForOep4', {address: this.currentWallet.address, oep4s: this.oep4s})
         },
         handleBack() {
             this.$router.push({name: 'Wallets'})
@@ -219,6 +295,28 @@ export default {
         },
         commnReceive() {
             this.$router.push({path: '/commonWalletReceive/commonWallet'})
+        },
+        showTxDetail(txHash) {
+            let url = `https://explorer.ont.io/transaction/${txHash}`
+            if (this.net === 'TEST_NET') {
+                url += '/testnet'
+            }
+            let win = new BrowserWindow({width: 1280, height: 800, center: true});
+            win.on('closed', () => {
+                win = null
+            })
+            win.loadURL(url)
+        },
+        checkMoreTx() {
+        let url = `https://explorer.ont.io/address/${this.address}/10/1`
+            if (this.net === 'TEST_NET') {
+                url += '/testnet'
+            }
+            let win = new BrowserWindow({width: 1280, height: 800, center: true});
+            win.on('closed', () => {
+            win = null
+            })
+            win.loadURL(url)
         },
     }
 }

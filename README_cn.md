@@ -60,3 +60,12 @@ yarn run package
 请下载适合于您的操作系统的最新版本客户端。
 
 
+## keystore.db文件的默认保存路径
+
+在不同系统上指向如下位置：
+
+* %APPDATA% on `Windows`
+
+* $XDG_CONFIG_HOME or ~/.config on `Linux`
+
+* ~/Library/Application Support on `macOS`

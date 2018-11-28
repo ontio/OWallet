@@ -177,9 +177,11 @@ export default {
              this.$store.commit('UPDATE_STAKE_IDENTITY', {stakeIdentity: this.stakeIdentity})
              this.$store.commit('UPDATE_STAKE_WALLET', {stakeWallet: stakeWallet})             
          } else if(res.data.QualifiedState === 1) {
+             this.$store.dispatch('hideLoadingModals')
              this.$message.error(this.$t('nodeStake.invalidOntid'))
              return;
          } else if(res.data.QualifiedState === 2) {
+             this.$store.dispatch('hideLoadingModals')
              this.$message.error(this.$t('nodeStake.invalidAddress'))
              return;
          }
@@ -198,7 +200,7 @@ export default {
      }).catch(err => {
          console.log(err)
          this.$store.dispatch('hideLoadingModals')
-         this.$message.error('common.networkErr')
+         this.$message.error(this.$t('common.networkErr'))
      }) 
 
       

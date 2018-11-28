@@ -124,6 +124,7 @@ export default {
         Breadcrumb
     },
     mounted() {
+        this.$store.commit('CLEAR_STAKE_HISTORY')
         this.$store.dispatch("fetchWalletsFromDb").then(() => {
             //set payer wallet 
         });
@@ -168,10 +169,10 @@ export default {
             this.$router.go(-1);
         },
         handleAuthorizeLogin(record, item){
-            // this.$store.commit('UPDATE_STAKE_AUTHORIZATION_WALLET', {stakeWallet: this.stakeWallet.address})
+            // this.$store.commit('UPDATE_STAKE_AUTHORIZATION_WALLET', {stakeWallet: this.stakeWallet})
             // this.$router.push({name: 'AuthorizeLogin'})
-            this.$store.commit('UPDATE_STAKE_AUTHORIZATION_WALLET', {stakeWallet: this.stakeWallet.address})
-            this.$store.commit('UPDATE_STAKE_WALLET', {stakeWallet: this.stakeWallet.address})             
+            this.$store.commit('UPDATE_STAKE_AUTHORIZATION_WALLET', {stakeWallet: this.stakeWallet})
+            this.$store.commit('UPDATE_STAKE_WALLET', {stakeWallet: this.stakeWallet})             
             this.$router.push({name: 'AuthorizationMgmt'})
         },
         changePayerWallet(e) {

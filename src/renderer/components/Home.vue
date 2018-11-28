@@ -136,14 +136,19 @@
       }
     },
     mounted() {
+      this.$store.dispatch('showLoadingModals');
       const url = 'https://api.github.com/repos/ontio/OWallet/releases/latest';
       const version = this.version;
       axios.get(url).then(res => {
+        this.$store.dispatch('hideLoadingModals');
         if (res.data && res.data.tag_name !== version){
           console.log('not latest')
           this.latest_url = res.data.html_url
         }
-      }) 
+      }).catch(err => {
+        console.lpg(err);
+        this.$store.dispatch('hideLoadingModals');
+      })
     },
     methods: {
       handleUpdate() {
