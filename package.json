@@ -80,7 +80,6 @@
     }
   },
   "dependencies": {
-    "@cityofzion/neon-js": "^3.9.1",
     "@ledgerhq/hw-transport-node-hid": "^4.13.0",
     "@xkeshi/vue-qrcode": "^1.0.0",
     "asar": "^0.14.3",
@@ -92,6 +91,7 @@
     "clipboard": "^2.0.1",
     "dateformat": "^3.0.3",
     "electron-winstaller": "^2.6.4",
+    "elliptic": "^6.4.1",
     "font-awesome": "^4.7.0",
     "global": "^4.3.2",
     "jquery": "^3.3.1",

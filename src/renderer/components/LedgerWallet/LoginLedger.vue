@@ -20,7 +20,7 @@
 
 <script>
   import {getDeviceInfo, getPublicKey} from '../../../core/ontLedger'
-  const interval = 1000;
+  const interval = 3000;
   export default {
     name: 'LoginLedger',
     mounted: function () {

@@ -1,4 +1,4 @@
-import { wallet } from '@cityofzion/neon-js'
+import { Crypto } from 'ontology-ts-sdk'
 import { WALLET_TYPE} from '../../../core/consts'
 import dbService from '../../../core/dbService'
 const state = {
@@ -9,7 +9,7 @@ const state = {
 
 const mutations = {
     LOGIN_WITH_LEDGER(state, payload) {
-        state.publicKey = payload.publicKeyEncoded;
+        state.publicKey = payload.publicKey;
         state.address = payload.address;
     }
 }
@@ -20,23 +20,22 @@ const actions = {
         commit('INCREMENT_MAIN_COUNTER')
     },
     loginWithLedger({ commit }, pk) {
-        const publicKeyEncoded = wallet.getPublicKeyEncoded(pk);
-        const account = new wallet.Account(publicKeyEncoded); 
+        const publicKey = new Crypto.PublicKey(pk);
+        const address = Crypto.Address.fromPubKey(publicKey).toBase58();
         const currentWallet = JSON.parse(sessionStorage.getItem('currentWallet'))
-        if(currentWallet.address !== account.address) {
+        if(currentWallet.address !== address) {
             return false;
         } else {
-            commit('LOGIN_WITH_LEDGER', { publicKeyEncoded, address: account.address })
+            commit('LOGIN_WITH_LEDGER', { publicKey, address })
             return true;
         }
-        
     },
     createLedgerWalletWithPk({commit}, body) {
-        const publicKeyEncoded = wallet.getPublicKeyEncoded(body.pk);
-        const account = new wallet.Account(publicKeyEncoded);
+        const publicKey = new Crypto.PublicKey(body.pk);
+        const address = Crypto.Address.fromPubKey(publicKey).toBase58();
         const ledgerWallet =  {
-                publicKey: publicKeyEncoded,
-                address: account.address,
+                publicKey: body.pk,
+                address,
                 neo: body.neo || false
             }
         return ledgerWallet;

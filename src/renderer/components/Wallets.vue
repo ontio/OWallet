@@ -214,7 +214,7 @@ const {BrowserWindow} = require('electron').remote
 
   .normalWallet {
     background-color: #F5F7FB;
-    padding-left: 1.25rem;
+    padding: 0 1.25rem;
     position: relative;
   }
 

@@ -2,7 +2,7 @@
   <div>
     <div @click="toSharedWalletHome(wallet)">
       <div class="div-shared-wallet-sign">{{ $t('common.sharedWallet') }}</div>
-      <div class="div-wallet-name">{{wallet.sharedWalletName}}</div>
+      <div class="div-wallet-name" @click="toWalletHome(wallet)">{{wallet.sharedWalletName}}</div>
       <!--<img class="img-wallet-edit" src="./../assets/edit.png" alt="">-->
       <div class="div-wallet-address">
         <div>Wallet Address:</div>
@@ -88,6 +88,7 @@ import dbService from '../../../../core/dbService'
     font-family: AvenirNext-Medium;
     font-size: 14px;
     color: #196BD8;
+    cursor: default;
   }
 
   .div-wallet-name {
@@ -96,6 +97,9 @@ import dbService from '../../../../core/dbService'
     font-size: 18px;
     color: #515457;
     line-height: 24px;
+    word-wrap: break-word;
+    height:6rem;
+    cursor: pointer;
   }
 
   .img-wallet-edit {
@@ -105,15 +109,17 @@ import dbService from '../../../../core/dbService'
   }
 
   .div-wallet-address {
-    margin-top: 4.25rem;
     font-family: AvenirNext-Regular;
     font-size: 14px;
     color: #B2B2B3;
+    position:absolute;
+    bottom:10px;
+    cursor: default;
   }
 
   .img-wallet-copy {
     position: absolute;
-    top: 9.56rem;
+    bottom:15px;
     right: 1.29rem;
   }
 
@@ -130,7 +136,7 @@ import dbService from '../../../../core/dbService'
   }
   .common-topRight-btns {
     position: absolute;
-    top: 20px;
+    top: 10px;
     right: 1.29rem;
   }
   .common-delete-icon {

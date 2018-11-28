@@ -1,7 +1,7 @@
 import { getDeviceInfo, getPublicKey } from '../../../core/ontLedger'
 import en from '../../../common/lang/en'
 import zh from '../../../common/lang/zh'
-import { wallet } from '@cityofzion/neon-js'
+import { Crypto } from 'ontology-ts-sdk'
 
 
 function formatLedgerStatus(status) {
@@ -46,11 +46,11 @@ function getLedgerPublicKey(commit, state) {
 }
 
 function getLedgerWallet(commit, pk) {
-    const publicKeyEncoded = wallet.getPublicKeyEncoded(pk);
-    const account = new wallet.Account(publicKeyEncoded);
+    const publicKey = new Crypto.PublicKey(pk);
+    const address = Crypto.Address.fromPubKey(publicKey).toBase58();
     const ledgerWallet = {
-        publicKey: publicKeyEncoded,
-        address: account.address
+        publicKey: pk,
+        address: address
     }
     commit('UPDATE_LEDGER_CONNECTOR_WALLET', {ledgerWallet: ledgerWallet})
 }
