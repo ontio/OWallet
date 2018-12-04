@@ -13,7 +13,6 @@
 <script>
   import 'bootstrap/dist/css/bootstrap.min.css'
   import 'bootstrap/dist/js/bootstrap.min.js'
-  import 'vue-antd-ui/dist/antd.css'
   import TopLeftNav from "./components/TopLeftNav"
   import LoadingModal from './components/Modals/Loading'
 

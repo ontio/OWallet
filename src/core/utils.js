@@ -21,6 +21,6 @@ export function isHexString(str) {
 
 export function getNodeUrl() {
     const net = localStorage.getItem('net');
-    return net === 'TEST_NET' ? 'http://139.219.128.220' + ':20334' : MAIN_NET + ':20334'
+    return net === 'TEST_NET' ? 'http://polaris1.ont.io' + ':20334' : MAIN_NET + ':20334'
     // return 'http://139.219.128.220:20334' //for test 
 }
