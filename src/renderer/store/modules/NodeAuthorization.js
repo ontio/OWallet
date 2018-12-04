@@ -7,6 +7,7 @@ import {dbUpsert, dbFind} from '../../../core/dbService'
 var dateFormat = require('dateformat');
 import nodes from '../../../core/nodes.json'
 
+//TODO: fetch api to match node names
 function matchNodeName(node) {
     for (const cnode of nodes) {
         if (node.pk === cnode.pk) {
@@ -241,7 +242,10 @@ const actions = {
                     let claimableVal = authorizationInfo.withdrawUnfreezePos;
                     if(inAuthorization > 0 || locked > 0 || claimableVal > 0) {
                         const record = formatAuthorizationInfo(authorizationInfo)
-                        const node = {pk:k}
+                        const node = {
+                            pk:k,
+                            address: item.address
+                        }
                         matchNodeName(node)
                         commit('UPDATE_CURRENT_NODE', {current_node : node})
                         record.nodeName = node.name;

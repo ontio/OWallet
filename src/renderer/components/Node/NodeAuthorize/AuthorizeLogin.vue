@@ -78,7 +78,7 @@ export default {
         });
         const stakeAuthorizationWalletAddress = this.$store.state.NodeAuthorization.stake_authorization_wallet;
         if(stakeAuthorizationWalletAddress) {
-            const index = this.$store.state.Wallets.NormalWallet.findIndex((w)=> w.address === stakeAuthorizationWalletAddress)
+            const index = this.$store.state.Wallets.NormalWallet.findIndex((w)=> w.address === stakeAuthorizationWalletAddress.address)
             if(index > -1) {
                 this.payerWalletType = 'commonWallet'
                 this.payerWalletValue = stakeAuthorizationWalletAddress

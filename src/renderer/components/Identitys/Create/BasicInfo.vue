@@ -152,6 +152,7 @@ import {legacySignWithLedger} from '../../../../core/ontLedger'
                 } catch (err) {
                   console.log(err);
                   this.$message.error(this.$t('common.pwdErr'))
+                  this.$store.dispatch('hideLoadingModals')
                   return;
                 }
                 TransactionBuilder.addSign(tx, pri);

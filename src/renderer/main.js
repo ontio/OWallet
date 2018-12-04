@@ -9,7 +9,7 @@ import store from './store'
 import $ from 'jquery'
 import 'font-awesome/css/font-awesome.css'
 import {Button, message, Steps, Input , Form, Icon, Select, Spin, Alert, Modal, Slider,Radio,
-  Row, Col, InputNumber, Layout, Menu, Breadcrumb, Checkbox, Tooltip, Table, Dropdown} from 'vue-antd-ui'
+  Row, Col, InputNumber, Layout, Menu, Breadcrumb, Checkbox, Tooltip, Table, Dropdown} from 'ant-design-vue'
 
 import VueClipboard from 'vue-clipboard2'
 VueClipboard.config.autoSetContainer = true // add this line
@@ -37,7 +37,7 @@ Vue.http = Vue.prototype.$http = axios
 Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
 
-//vue-antd-ui
+
 Vue.component(Button.name, Button)
 Vue.component(Steps.name, Steps)
 Vue.component(Steps.Step.name, Steps.Step)
