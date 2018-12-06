@@ -26,7 +26,7 @@ const actions = {
         if(currentWallet.address !== address) {
             return false;
         } else {
-            commit('LOGIN_WITH_LEDGER', { publicKey, address })
+            commit('LOGIN_WITH_LEDGER', { publicKey:pk, address })
             return true;
         }
     },
