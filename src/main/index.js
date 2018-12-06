@@ -114,7 +114,7 @@ let template = [
       accelerator: 'CmdOrCtrl+W',
       role: 'close'
     }, {
-      label: '切换开发者工具',
+      label: 'Developer Tools (切换开发者工具)',
       accelerator: (function () {
         if (process.platform === 'darwin') {
           return 'Alt+Command+I'
