@@ -154,12 +154,14 @@ import IdentityView from './Identitys/IdentityView'
   }
 
   .div-create {
-    padding-top: 3rem;
-    padding-left: 6.48rem;
+    padding: 0px;
+    margin: 3.5rem auto 2rem;
+    text-align: center;
   }
 
   .div-join {
-    padding-top: 1.88rem;
-    padding-left: 6.48rem;
+    padding: 0px;
+    margin: 2rem auto;
+    text-align: center;
   }
 </style>
