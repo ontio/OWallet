@@ -45,7 +45,7 @@
                 <a-select-option value="ONT">ONT</a-select-option>
                 <a-select-option value="ONG">ONG</a-select-option>
                 <a-select-option v-for="(oep4,index) of oep4s" :key="index" :value="oep4.symbol">
-                    {{oep4.symbol}}
+                    {{oep4.symbol}} - {{oep4.scriptHash}}
                 </a-select-option>
         </a-select>
         <a-input-search :placeholder="$t('sharedWalletHome.amount')" class="input-amount"

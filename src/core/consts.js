@@ -80,3 +80,4 @@ export const CON_NODE = [
 ]
 
 export const NODE_DETAIL = 'https://explorer.ont.io/nodes/detail/'
+export const NODE_NAME_LIST = 'https://ont.io/api/v1/candidate/info/All'

@@ -1,23 +1,36 @@
 import { getNodeUrl} from '../../../core/utils'
-import {CON_NODE, NODE_DETAIL} from '../../../core/consts'
+import {CON_NODE, NODE_DETAIL, NODE_NAME_LIST} from '../../../core/consts'
 import numeral from 'numeral'
 import { Crypto, RestClient, utils, GovernanceTxBuilder} from 'ontology-ts-sdk'
 import {BigNumber} from 'bignumber.js'
 import {dbUpsert, dbFind} from '../../../core/dbService'
+import axios from 'axios';
 var dateFormat = require('dateformat');
-import nodes from '../../../core/nodes.json'
+// import nodes from '../../../core/nodes.json'
 
 //TODO: fetch api to match node names
-function matchNodeName(node) {
-    for (const cnode of nodes) {
-        if (node.pk === cnode.pk) {
-            node.name = cnode.name
-            break;
+async function matchNodeName(list) {
+    let nodes = []
+    try {
+        const res = await axios.get(NODE_NAME_LIST)
+        if(res && res.data && res.data.Result) {
+            nodes = res.data.Result
         }
+    } catch(err) {
+        console.log(err)
     }
-    if(!node.name) {
-        node.name = 'Node_' + node.address.toBase58().substr(0,6);
-    }
+    console.log(nodes)
+    for(const item of list) {
+        for (const cnode of nodes) {
+            if (!cnode || !cnode.PublicKey) {
+                 item.name = 'Node_' + item.address.toBase58().substr(0, 6);
+            }
+            else if (cnode.PublicKey == item.pk) {
+                item.name = cnode.Name
+                break;
+            }
+        }
+    } 
 }
 
 function delay(s) {
@@ -246,7 +259,7 @@ const actions = {
                             pk:k,
                             address: item.address
                         }
-                        matchNodeName(node)
+                        await matchNodeName([node])
                         commit('UPDATE_CURRENT_NODE', {current_node : node})
                         record.nodeName = node.name;
                         record.stakeWallet = address;
@@ -305,8 +318,9 @@ const actions = {
                 item.process = process + '%'
                 item.pk = item.peerPubkey
                 item.detailUrl = NODE_DETAIL + item.pk;
-                matchNodeName(item)
+                // matchNodeName(item)
             })
+            await matchNodeName(list);
             commit('UPDATE_NODE_LIST', {list});
             dispatch('hideLoadingModals')
             return list;
