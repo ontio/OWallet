@@ -23,7 +23,7 @@ async function matchNodeName(list) {
     for(const item of list) {
         for (const cnode of nodes) {
             if (!cnode || !cnode.PublicKey) {
-                 item.name = 'Node_' + item.address.toBase58().substr(0, 6);
+                 item.name = 'Node_' + item.address.toBase58 ? item.address.toBase58().substr(0, 6) : item.address.substr(0, 6);
             }
             else if (cnode.PublicKey == item.pk) {
                 item.name = cnode.Name
@@ -255,18 +255,21 @@ const actions = {
                     let claimableVal = authorizationInfo.withdrawUnfreezePos;
                     if(inAuthorization > 0 || locked > 0 || claimableVal > 0) {
                         const record = formatAuthorizationInfo(authorizationInfo)
-                        const node = {
-                            pk:k,
-                            address: item.address
-                        }
-                        await matchNodeName([node])
-                        commit('UPDATE_CURRENT_NODE', {current_node : node})
-                        record.nodeName = node.name;
+                        // const node = {
+                        //     pk:k,
+                        //     address: item.address
+                        // }
+                        // await matchNodeName([node])
+                        // commit('UPDATE_CURRENT_NODE', {current_node : node})
+                        record.name = '';
+                        record.address = item.address
+                        record.pk = k;
                         record.stakeWallet = address;
                         list.push(record)
                     }
                 }
             }
+            await matchNodeName(list);
             commit('UPDATE_STAKE_HISTORY', {history: list})
             dispatch('hideLoadingModals')                        
             return list;
