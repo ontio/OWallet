@@ -81,8 +81,8 @@ export default {
         const columns = [
             {
                 title: this.$t('nodeMgmt.name'),
-                dataIndex: 'nodeName',
-                key:'nodeName'
+                dataIndex: 'name',
+                key:'name'
             },
             // {
             //     title: this.$t('nodeMgmt.stakeWalletAddress'),
@@ -124,7 +124,7 @@ export default {
         Breadcrumb
     },
     mounted() {
-        this.$store.commit('CLEAR_STAKE_HISTORY')
+        // this.$store.commit('CLEAR_STAKE_HISTORY')
         this.$store.dispatch("fetchWalletsFromDb").then(() => {
             //set payer wallet 
         });
@@ -171,6 +171,7 @@ export default {
         handleAuthorizeLogin(record, item){
             // this.$store.commit('UPDATE_STAKE_AUTHORIZATION_WALLET', {stakeWallet: this.stakeWallet})
             // this.$router.push({name: 'AuthorizeLogin'})
+            this.$store.commit('UPDATE_CURRENT_NODE', {current_node : record})
             this.$store.commit('UPDATE_STAKE_AUTHORIZATION_WALLET', {stakeWallet: this.stakeWallet})
             this.$store.commit('UPDATE_STAKE_WALLET', {stakeWallet: this.stakeWallet})             
             this.$router.push({name: 'AuthorizationMgmt'})
