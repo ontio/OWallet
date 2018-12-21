@@ -146,7 +146,7 @@
           this.latest_url = res.data.html_url
         }
       }).catch(err => {
-        console.lpg(err);
+        console.log(err);
         this.$store.dispatch('hideLoadingModals');
       })
     },

@@ -128,7 +128,8 @@ export default {
     changePassSuccess: 'Change password successfully!',
     exportOntid: 'You are about to export the keystore of identiy with ONT ID:',
     deleteIdentityFailed: 'Delete ONT ID failed',
-    deleteIdentitySuccess: 'Delete ONT ID successfully'
+    deleteIdentitySuccess: 'Delete ONT ID successfully',
+    exportedWIF: 'Your private key (WIF) is:'
   },
 
   dashboard: {
@@ -318,13 +319,14 @@ export default {
     balance: 'Balance',
     scriptHash: 'Script hash',
     add: '+ Add',
-    addOep4: 'Add OEP4 Token',
-    enterScripthash: 'Please enter the script hash of oep4 token',
+    addOep4: 'Add OEP-4 Token',
+    enterScripthash: 'Please enter the OEP-4 token script hash',
     invalidScriptHash: 'The script hash is invalid',
-    addOep4Success: 'Add OEP4 token succeed!',
-    noOep4Contract: 'The OEP4 contract is not found',
+    addOep4Success: 'Add OEP-44 token succeed!',
+    noOep4Contract: 'The OEP-44 contract is not found',
     networkError: 'Network error!Please try later.',
-    oep4Exists: 'You have already added this OEP4 token.'
+    oep4Exists: 'You have already added this OEP-4 token.',
+    go: 'Go'
   },
 
   transfer: {
@@ -525,7 +527,7 @@ Within their 50% share each consensus node will receive their share according to
     switchMainnet: 'Please switch to MainNet.',
     consensusNode: 'Consensus node',
     candidateNode: 'Candidate consensus node',
-    lockedONT: 'Your locked ONT is your authorized stake amount currently held in a smart contract. Once it is available to be withdrawn, it will appear as redeemable ONT.',
+    lockedONT: 'This is your canceled authorized stake amount currently held in a smart contract. Once it is available to be withdrawn, it will appear as redeemable ONT.',
     unboundONG: 'This is the unbound ONG amount of your authorized ONT stake.',
     profitONG: 'This is the transaction fee profit you have made. This will update at the beginning of each new consensus round.',
     getProfitPart: 'Already receiving profit portion',

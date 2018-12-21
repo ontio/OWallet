@@ -128,7 +128,8 @@ export default {
     changePassSuccess: '修改密码成功！',
     exportOntid: '您正要导出ONT ID的keystore:',
     deleteIdentityFailed: '删除ONT ID失败',
-    deleteIdentitySuccess: '删除ONT ID成功。'
+    deleteIdentitySuccess: '删除ONT ID成功。',
+    exportedWIF: '您的私钥（WIF）是：'
   },
 
   dashboard: {
@@ -317,13 +318,14 @@ export default {
     balance: '余额',
     scriptHash: '合约哈希',
     add: '+ 添加',
-    addOep4: '添加OEP4 Token',
-    enterScripthash: '请输入OEP4的合约哈希',
+    addOep4: '添加OEP-4 Token',
+    enterScripthash: '请输入OEP-4的合约哈希',
     invalidScriptHash: '请输入正确的合约哈希',
-    addOep4Success: '添加OEP4 token成功！',
+    addOep4Success: '添加OEP-4 token成功！',
     noOep4Contract: '在链上找不到该OEP4合约',
     networkError: '网络错误！请稍后重试。',
-    oep4Exists: '您已经添加过改OEP4 token。'
+    oep4Exists: '您已经添加过该OEP-4 Token。',
+    go: '查看详情'
   },
 
   transfer: {

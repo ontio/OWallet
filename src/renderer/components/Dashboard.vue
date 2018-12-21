@@ -397,9 +397,9 @@
         </div>
 
         <div class="oep4-container">
-          <span class="asset-label">OEP4 Tokens</span>
+          <span class="asset-label">OEP-4 Tokens</span>
           <a-button type="default" 
-          @click="checkMoreOep4">{{$t('commonWalletHome.checkMore')}}</a-button>
+          @click="checkMoreOep4">{{$t('commonWalletHome.go')}}</a-button>
         </div>
 
 
