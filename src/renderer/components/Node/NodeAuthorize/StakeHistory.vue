@@ -172,8 +172,7 @@ export default {
             // this.$store.commit('UPDATE_STAKE_AUTHORIZATION_WALLET', {stakeWallet: this.stakeWallet})
             // this.$router.push({name: 'AuthorizeLogin'})
             this.$store.commit('UPDATE_CURRENT_NODE', {current_node : record})
-            this.$store.commit('UPDATE_STAKE_AUTHORIZATION_WALLET', {stakeWallet: this.stakeWallet})
-            this.$store.commit('UPDATE_STAKE_WALLET', {stakeWallet: this.stakeWallet})             
+            this.$store.commit('UPDATE_STAKE_AUTHORIZATION_WALLET', {stakeWallet: record.stakeWallet})          
             this.$router.push({name: 'AuthorizationMgmt'})
         },
         changePayerWallet(e) {
@@ -200,6 +199,7 @@ export default {
             } else {
                 this.stakeWallet = this.ledgerWallet
             }
+            this.$store.commit('UPDATE_STAKE_WALLET', {stakeWallet: this.stakeWallet})  
             this.$store.dispatch('searchStakeHistory', {address: this.stakeWallet.address})      
         }
     }
