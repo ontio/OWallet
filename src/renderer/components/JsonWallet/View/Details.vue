@@ -194,7 +194,7 @@
           this.$store.dispatch('hideLoadingModals')
           const wif = pri.serializeWIF();
           this.$success({
-            title: 'The private key(WIF) is:',
+            title: this.$t('wallets.exportedWIF'),
             content: wif
           });
         }

@@ -146,7 +146,7 @@
             <div class="left-half">
                 <div class="oep4-container">
                     <div class="home-title">
-                        <p>OEP4 Tokens</p>
+                        <p>OEP-4 Tokens</p>
                         <span class="refresh-icon" @click="refresh"></span>
                     </div>
                     
