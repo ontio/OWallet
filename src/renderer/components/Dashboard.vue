@@ -373,8 +373,8 @@
               <span>(NEP-5)</span>
             </div>
             <span class="asset-amount">{{nep5Ont}}</span>
-            <a-button type="default" class="commonWallet-btn btn-swap" 
-          @click="toSwap">{{$t('commonWalletHome.swap')}}</a-button>
+            <!-- <a-button type="default" class="commonWallet-btn btn-swap" 
+          @click="toSwap">{{$t('commonWalletHome.swap')}}</a-button> -->
           </div>
 
         </div>
