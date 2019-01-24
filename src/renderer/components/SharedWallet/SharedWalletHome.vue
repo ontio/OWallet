@@ -517,7 +517,7 @@ export default {
             if (response.status === 200 && response.data && response.data.Result) {
                 const txlist = response.data.Result.TxnList
                 const completed = txlist.map(t => {
-                    const asset = t.TransferList[0].AssetName === 'ont'? 'ONT' : 'ONG'
+                    const asset = t.TransferList[0].AssetName.toUpperCase(); 
                     let amount = asset === 'ONT' ? parseInt(t.TransferList[0].Amount)
                                 : Number(t.TransferList[0].Amount).toFixed(9)
                     if(t.TransferList[0].FromAddress === this.sharedWallet.sharedWalletAddress) {

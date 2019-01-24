@@ -527,7 +527,7 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
               //   continue;
               // }
               for(const tx of t.TransferList) {
-                const asset = tx.AssetName === 'ont' ? 'ONT' : 'ONG'
+                const asset = tx.AssetName.toUpperCase() 
                 if(tx.ToAddress === ONG_GOVERNANCE_CONTRACT && asset === 'ONG' && Number(tx.Amount) == 0.01) {
                   continue;
                 }
