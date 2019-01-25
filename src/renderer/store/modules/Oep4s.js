@@ -196,17 +196,18 @@ const actions = {
                         } 
                         for(let o of oep4s) {
                             let amount = tx.Amount
-                            if(o.symbol === tx.AssetName) {
-                                if (tx.FromAddress === this.address) {
+                            if(o.symbol === tx.AssetName || tx.AssetName === 'LCY') { // They give the wrong symbol for token LUCKY
+                                if (tx.FromAddress === address) {
                                     amount = '-' + amount;
                                 } else {
                                     amount = '+' + amount;
                                 }
                                 completed.push({
                                     txHash: t.TxnHash,
-                                    asset: o.symbol,
+                                    asset: tx.AssetName,
                                     amount: amount
                                 })
+                                break;
                             }
                         }
                         
