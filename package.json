@@ -97,6 +97,7 @@
     "global": "^4.3.2",
     "jquery": "^3.3.1",
     "nedb": "^1.8.0",
+    "node-hid": "^0.7.7",
     "numeral": "^2.0.6",
     "ontology-ts-sdk": "^1.0.8",
     "popper.js": "^1.14.3",
@@ -108,7 +109,8 @@
     "vue-i18n": "^8.0.0",
     "vue-router": "^2.5.3",
     "vuedraggable": "^2.16.0",
-    "vuex": "^2.3.1"
+    "vuex": "^2.3.1",
+    "yarn": "^1.13.0"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
