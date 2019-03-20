@@ -95,6 +95,7 @@ import { BigNumber } from 'bignumber.js';
 export default {
     name: 'SendAsset',
     data(){
+        const net = localStorage.getItem('net')
         return {
             gas: 0.01,
             asset:'ONT',
@@ -103,7 +104,8 @@ export default {
             amount: 0,
             to:'',
             validToAddress: true,
-            validAmount: true
+            validAmount: true,
+            net
         }
     },
     computed: {

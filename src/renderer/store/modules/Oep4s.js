@@ -160,13 +160,18 @@ const actions = {
             const temp = []
             const oep4Old = state.oep4s;
             for (let i = 0; i < oep4Old.length; i++) {
-                const bi = await dispatch('queryOep4Balance', {
-                    scriptHash: oep4Old[i].scriptHash,
-                    address,
-                    decimal: oep4Old[i].decimal
-                })
-                temp.push({ ...oep4Old[i]})
-                temp[i].balance = bi;
+                if(oep4Old[i].net === net) {
+                    const bi = await dispatch('queryOep4Balance', {
+                      scriptHash: oep4Old[i].scriptHash,
+                      address,
+                      decimal: oep4Old[i].decimal
+                    })
+                    temp.push({
+                      ...oep4Old[i],
+                      balance: bi
+                    })
+                }
+                
             }
             commit('UPDATE_OEP4S', {oep4s: temp})
             commit('UPDATE_TRANSFER_BALANCE', {
@@ -175,6 +180,7 @@ const actions = {
             })
             dispatch('hideLoadingModals');            
         }catch(err) {
+            dispatch('hideLoadingModals');
             console.log(err);
             alert('Network error.Please try later.')
         }
@@ -216,6 +222,9 @@ const actions = {
                 }
                 commit('UPDATE_OEP4_TX_LIST', {txList: completed})
             }
+        }).catch(err => {
+            dispatch('hideLoadingModals');
+            console.log(err)
         })
     }
 }

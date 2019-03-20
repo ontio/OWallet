@@ -102,6 +102,7 @@
 import Breadcrumb from '../../Breadcrumb'
 import {mapState} from 'vuex'
 const {BrowserWindow} = require('electron').remote;
+const opn = require('opn')
 
 export default {
     name: 'NodeList',
@@ -191,13 +192,39 @@ export default {
             const h = this.$createElement
             const title = this.$t('nodeMgmt.proportionNextRound')
             const content = this.$t('nodeMgmt.proportionNextRoundTip')
+            const faqLink = this.$t('nodeMgmt.authorizationFAQ')
             this.$info({
                 title: title,
                 content: h('div',{}, [
-                h('p', content),
+                h('p', {
+                    style: {
+                        margin:0
+                    }
+                },content),
+                h('a', {
+                    attrs: {
+                        name: 'FAQ'
+                    },
+                    style: {
+                        color: '#40a9ff',
+                        textDecoration: 'underline'
+                    },
+                    on: {
+                        click: () => {
+                            const url = 'https://medium.com/ontologynetwork/owallet-stake-authorization-faq-4a4bce224122'
+                            opn(url);
+                        }
+                    }
+                }, faqLink),
                 ]),
                 onOk() {},
             });
+        },
+        handleFAQLink(e) {
+            var e = e || window.event;
+            var target = e.target || ev.srcElement;
+            console.log(target)
+            alert('helo')
         },
         toStakeHistory() {
             this.$router.push({name: 'StakeHistory'})
