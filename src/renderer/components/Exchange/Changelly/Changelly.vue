@@ -18,15 +18,7 @@
       <breadcrumb  :current="$t('exchange.exchange')" v-on:backEvent="handleRouteBack"></breadcrumb>
       <!-- Remove this div and enable this.loadPage in mounted() to open in a new window -->
       <div class="changelly"
-        <iframe 
-          src="https://changelly.com/widget/v1?auth=email&from=BTC&to=ONT&merchant_id=su5srryl1mhz4fno&address=&amount=1&ref_id=su5srryl1mhz4fno&color=00cf70" 
-          width="600" 
-          height="500" 
-          class="changelly" 
-          scrolling="no" 
-          style="overflow-y: hidden; border: none" 
-          > Can't load widget 
-        </iframe>
+        <iframe src="https://widget.changelly.com?currencies=&from=btc&to=ont&amount=1&address=&fiat=true&fixedTo=true&theme=default&ref_id=iyaqtolcjujpxd9t" width="100%" height="600" class="changelly" scrolling="no" onLoad="function v(e){var t=e.target,n=t.parentNode,r=t.contentWindow,a=function(){return r.postMessage({width:n.offsetWidth},'https://widget.changelly.com')};window.addEventListener('resize',a),a()};v.apply(this, arguments);" style="overflow-y: hidden; border: none">Can't load widget</iframe>
         </div>
    </div>
 </template>
