@@ -388,7 +388,7 @@
                 <div class="owners-table">
                     <div class="table-item" v-for="(item,index) in sharedWallet.coPayers" :key="item.address" v-if="index<2">
                         <span>{{item.name}}</span>
-                        <span>Address: {{item.address}}</span>
+                        <span>{{item.address}}</span>
                     </div>
                     <div class="check-more" @click="toCopayerDetail">
                         {{$t('sharedWalletHome.checkMore')}}>>
@@ -480,7 +480,7 @@ export default {
             network,
             nodeUrl: url,
             hasLocalCopayer:true,
-            interval: 2000,
+            interval: 10000,
             intervalId: '',
             redeemInfoVisible: false
         }

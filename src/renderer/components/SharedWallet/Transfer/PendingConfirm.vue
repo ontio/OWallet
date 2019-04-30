@@ -199,14 +199,14 @@ export default {
                     return;
                 }
                 const localCopayers = []
-                dbService.find({type:'CommonWallet'}, function (err, accounts) {
+                dbService.find({type: {$in: ['CommonWallet', 'HardwareWallet']}}, function (err, accounts) {
                     if (err) {
                         console.log(err)
                         return;
                     }
                     for (let ac of accounts) {
                         if (nextSigner.address === ac.address) {
-                            that.$store.commit('UPDATE_CURRENT_SIGNER', {account: ac.wallet})
+                            that.$store.commit('UPDATE_CURRENT_SIGNER', {account: {...ac.wallet, type: ac.type}})
                             that.showSign = true;
                             return;
                         }

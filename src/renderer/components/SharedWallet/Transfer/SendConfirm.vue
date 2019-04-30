@@ -190,7 +190,7 @@ export default {
         }),
         localCopayers : {
             get() {
-                const copayers = this.$store.state.CurrentWallet.localCopayers
+                const copayers = [...this.$store.state.CurrentWallet.localCopayers]
                 return copayers.map(c => Object.assign({}, c, {value: c.address, label: c.name}))
             }
         }
@@ -200,7 +200,8 @@ export default {
             var that = this;
                 const coPayers = this.sharedWallet.coPayers;
                 const localCopayers = []
-                dbService.find({type:'CommonWallet'}, function (err, accounts) {
+                dbService.find({type: {$in:['CommonWallet', 'HardwareWallet']}}, function (err, accounts) {
+                    debugger
                     if (err) {
                         console.log(err)
                         return;
@@ -208,7 +209,7 @@ export default {
                     for (let cp of coPayers) {
                         for (let ac of accounts) {
                             if (cp.address === ac.address) {
-                                localCopayers.push(Object.assign({}, cp, {value:ac.address, label:ac.wallet.label}))
+                                localCopayers.push(Object.assign({}, cp, {value:ac.address, label:ac.wallet.label, type: ac.type, wallet: ac.wallet}))
                             }
                         }
                     }
