@@ -324,7 +324,7 @@ export default {
     invalidScriptHash: 'The script hash is invalid',
     addOep4Success: 'Add OEP-44 token succeed!',
     noOep4Contract: 'The OEP-44 contract is not found',
-    networkError: 'Network error!Please try later.',
+    networkError: 'Network error! Please try later.',
     oep4Exists: 'You have already added this OEP-4 token.',
     go: 'Go'
   },

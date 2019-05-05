@@ -212,6 +212,9 @@ export default {
                             alert(res.Result)
                             return;
                         }
+                    }).catch(err => {
+                        console.log(err)
+                        this.$message.error(this.$t('common.networkError'))
                     })
 
                 }

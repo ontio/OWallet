@@ -126,7 +126,10 @@
             this.$store.dispatch('hideLoadingModals')            
             return;
           }
-        })
+        }).catch(err => {
+                    console.log(err)
+                    this.$message.error(this.$t('common.networkError'))
+                })
       },
       saveToDb(identity) {
         const that = this;

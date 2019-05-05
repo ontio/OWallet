@@ -210,7 +210,10 @@ import {legacySignWithLedger} from '../../../../core/ontLedger'
           //         content: 'Transaction hash: ' + utils.reverseHex(tx.getHash())
           //     })
           // }, 100)
-        })
+        }).catch(err => {
+                    console.log(err)
+                    this.$message.error(this.$t('common.networkError'))
+                })
       },
       cancel() {
         this.$router.push({name: 'Identitys'})
