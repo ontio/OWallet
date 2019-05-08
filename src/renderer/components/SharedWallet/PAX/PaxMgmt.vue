@@ -1,0 +1,278 @@
+<style scoped>
+.pax-container {
+    text-align: center;
+    position: relative;
+}
+.btn-ethScan {
+    position: absolute;
+    right:0;
+    top:-40px;
+}
+.status-group {
+    margin:10px auto;
+}
+.table-container {
+    position: relative;;
+}
+.table-container > button {
+    position: absolute;
+    right:0;
+    top:-40px;
+}
+
+.pax-header {
+    position: relative;
+}
+.select-current {
+    width:300px;
+}
+.pax-selectPayer {
+    margin-bottom: 10px;
+    text-align: left;
+}
+.text-small {
+    font-size: 14px;
+    margin-top: 20px;
+}
+</style>
+<template>
+    <div>
+        <breadcrumb :routes="routes" :current="$t('sharedWalletHome.paxMgmt')"></breadcrumb>
+        <div class="pax-container">
+            <div class="pax-header">
+                
+                <!-- <a-button class="btn-ethScan">{{$t('pax.queryEthScan')}}</a-button> -->
+                <a-radio-group :value="status" @change="handleStatusChange" class="status-group">
+                    <a-radio-button value="0">{{$t('sharedWalletHome.unprocessed')}}</a-radio-button>
+                    <a-radio-button value="1">{{$t('sharedWalletHome.processing')}}</a-radio-button>
+                    <a-radio-button value="2">{{$t('sharedWalletHome.completed')}}</a-radio-button>
+                </a-radio-group>
+                <div v-if="status == 1" class="pax-selectPayer">
+                    <label for="">{{$t('pax.selectCurrentSigner')}}</label>
+                    <a-select :options="localCopayers" class="select-current"  @change="handleChangeSponsor"></a-select>
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <a-button type="primary" :disabled="selectedRowKeys.length < 1 || status === '1' && !currentSigner" 
+                v-if="status !== '2'" @click="handleProcess">{{$t('pax.toProcess')}}</a-button>
+                <a-table :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}" 
+                rowKey="Txhash"
+                :columns="columns" 
+                :dataSource="data" 
+                :pagination="pagination"
+                @change="handleTableChange"
+                />
+            </div>
+            
+
+        </div>
+
+        <a-modal
+            :title="$t('pax.toProcess')"
+            :visible="visible"
+            @cancel="handleProcessCancel"
+            @ok="handleProcessOk"
+            >
+            <p>{{$t('pax.selectedNum')}} {{selectedNum}}</p>
+            <p>{{$t('pax.totalAmount')}} {{totalAmount}}</p>
+            <p class="text-small">{{$t('pax.ethTotal')}} {{ethTotal}}</p>
+        </a-modal>
+        
+    </div>
+</template>
+<script>
+import Breadcrumb from '../../Breadcrumb'
+import {PAX_API} from '../../../../core/consts'
+import {formatNumberStr} from '../../../../core/utils'
+import dbService from '../../../../core/dbService'
+
+export default {
+    name: 'PaxMgmt',
+    components: {
+        Breadcrumb
+    },
+    data() {
+        const sharedWallet = JSON.parse(sessionStorage.getItem('sharedWallet'));
+        const routes = [
+            {name: sharedWallet.sharedWalletName, path:'/sharedWallet/home'}
+        ]
+        const columns = [
+            {
+                title: this.$t('pax.ethAddress'),
+                dataIndex: 'EthAddress'
+            },
+            {
+                title: this.$t('pax.ontAddress'),
+                dataIndex: 'OntAddress'
+            },
+            {
+                title: this.$t('pax.amount'),
+                dataIndex: 'AmountStr'
+            },
+            {
+                title: this.$t('pax.date'),
+                dataIndex: 'Updated'
+            },
+        ]
+        return {
+            sharedWallet,
+            status: '0',
+            routes,
+            data:[],
+            columns,
+            selectedRowKeys: [],
+            selectedRowsPerPage: {},
+            pagination: {
+                current:1,
+                pageSize:10,
+                total:30
+            },
+            localCopayers: [],
+            processing_list: [],
+            currentSigner: '',
+            selectedNum:0,
+            totalAmount: 0,
+            ethTotal: 0,
+            visible: false
+        }
+    },
+    mounted() {
+        this.updateLocalCopayers()
+        this.fetchList();
+        this.queryEthScan()
+    },
+    methods: {
+        handleStatusChange(e) {
+            this.status = e.target.value
+            this.fetchList()
+        },
+        onSelectChange (selectedRowKeys,  selectedRows) {
+            console.log('selectedRowKeys changed: ', selectedRowKeys);
+            console.log('selectedRow changed: ', selectedRows);
+            // 更新选择的条目
+            const list = []
+            for(let key of selectedRowKeys) {
+                for(let item of this.data) {
+                    if(key === item.Txhash) {
+                        list.push(item)
+                    }
+                }
+            }
+            this.selectedRowsPerPage[this.pagination.current] = list;
+            this.selectedRowKeys = selectedRowKeys;
+        },
+        handleProcessCancel() {
+            this.visible = false;
+        },
+        handleProcess() {
+            
+            let list = []
+            for(let key in this.selectedRowsPerPage) {
+                list = list.concat(this.selectedRowsPerPage[key])
+            }
+            this.selectedNum = list.length;
+            this.totalAmount = list.reduce((item1, item2) => {
+                console.log(item1.AmountStr)
+                return (item1.AmountStr ? Number(item1.AmountStr) : Number(item1) ) + Number(item2.AmountStr)
+            }, 0)
+            this.visible = true;
+        },
+
+        handleProcessOk() {
+            let list = []
+                for(let key in this.selectedRowsPerPage) {
+                    list = list.concat(this.selectedRowsPerPage[key])
+                }
+            if(this.status === '0') {
+                this.$store.commit('UPDATE_UNPROCESS_LIST', {list})
+                this.$router.push({path:'/sharedWallet/startProcess'})
+            } else if(this.status === '1') {
+                this.$store.commit('UPDATE_PROCESSING_LIST', {list})
+                this.$store.commit('UDPATE_CURRENT_SIGNER', {signer: this.currentSigner})
+                this.$router.push({path: '/sharedWallet/signProcess'})
+            }
+        },
+        handleTableChange(pagination) {
+            console.log(pagination)
+            this.pagination = pagination;
+            this.fetchList()
+        },
+        queryEthScan() {
+            
+        },
+        async fetchList(page,pageSize) {
+            const net = localStorage.getItem('net');
+            if(this.status) {
+                const res = await this.httpService({
+                    method: 'get',
+                    params: {
+                        status: this.status,
+                        limit: this.pagination.pageSize,
+                        offset: this.pagination.current - 1
+                    },
+                    url: (net === 'TEST_NET' ? PAX_API.TestHost : PAX_API.Host) + PAX_API.fetchApprovalList
+                })
+                if(res.ErrorCode === 0) {
+                    this.data = res.Result.map((item) => {
+                        item.AmountStr = formatNumberStr(item.Amount, 18)
+                        if(this.status === '1') {
+                            item.cosigners = JSON.parse(item.CoSigners)
+                        }
+                        return item;
+                    });
+                    if(this.status === '1') {
+                        this.processing_list = this.data;
+                    }
+                    
+                    
+                    const total = res.TotalCount || res.Result.length;
+                    this.pagination.total = total;
+                } 
+            } 
+            
+        },
+        updateLocalCopayers() {
+            var that = this;
+                const coPayers = this.sharedWallet.coPayers;
+                const localCopayers = []
+                dbService.find({type: {$in:['CommonWallet', 'HardwareWallet']}}, function (err, accounts) {
+                    if (err) {
+                        console.log(err)
+                        return;
+                    }
+                    for (let cp of coPayers) {
+                        for (let ac of accounts) {
+                            if (cp.address === ac.address) {
+                                localCopayers.push(Object.assign({}, cp, {value:ac.address, label:ac.wallet.label, type: ac.type, wallet: ac.wallet}))
+                            }
+                        }
+                    }
+                    if (localCopayers.length > 0) {
+                        that.localCopayers = localCopayers;
+                    }
+                })
+        },
+        handleChangeSponsor(value) {
+            console.log(value)
+            this.currentSigner = this.localCopayers.find((item) => (item.address === value));
+            //filter data
+            this.data = this.processing_list.filter((item) => {
+                return this.isCurrentSigner(value, item.cosigners)
+            })
+        },
+        isCurrentSigner(address, cosigners) {
+            for(let i = cosigners.length -1; i > -1; i--) {
+                if(cosigners[i].isSign && !cosigners[i+1].isSign) {
+                    if(address === cosigners[i+1].address) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            }
+            return false;
+        }
+    }
+}
+</script>

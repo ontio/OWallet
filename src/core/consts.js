@@ -81,3 +81,10 @@ export const CON_NODE = [
 
 export const NODE_DETAIL = 'https://explorer.ont.io/nodes/detail/'
 export const NODE_NAME_LIST = 'https://ont.io/api/v1/candidate/info/All'
+
+export const PAX_API = {
+  Host: '',
+  TestHost: 'http://172.168.3.61:20800',
+  fetchApprovalList: '/api/v1/approvals',
+  updateApprovals: '/api/v1/processapplist'
+}

@@ -374,6 +374,9 @@
                     <a-button class="asset-btn" type="primary" @click="shwoReceive">
                         <i class="arrow-down"></i>
                         {{$t('sharedWalletHome.receive')}}</a-button>
+                    
+                    <a-button class="asset-btn" type="primary" @click="shwoPaxMgmt">
+                        {{$t('sharedWalletHome.paxMgmt')}}</a-button>
                 </div>
 
 
@@ -711,6 +714,9 @@ export default {
       },
       handleModalOk() {
         this.redeemInfoVisible = false;
+      },
+      shwoPaxMgmt() {
+          this.$router.push({path: '/sharedWallet/paxMgmt'})
       }
     }
 }

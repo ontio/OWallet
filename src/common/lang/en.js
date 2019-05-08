@@ -289,7 +289,36 @@ export default {
     sign: 'Sign',
     checkMore: 'Check more',
     publicKey: 'Public key',
-    redeemOng: 'Redeem ONG'
+    redeemOng: 'Redeem ONG',
+    paxMgmt: 'PAX management',
+    unprocessed: 'Unprocessed',
+    processing: 'In processing',
+    completed: 'Completed'
+  },
+
+  pax: {
+    ethAddress: 'Eth Address',
+    ontAddress: 'Ont Address',
+    amount: 'Amount',
+    date: 'Date',
+    toProcess: 'To process',
+    paxStart: 'Start',
+    selectCurrentSigner: 'Select current signer: ',
+    back: 'Back',
+    confirm: 'Confirm',
+    sponsorSign: 'Sponsor sign',
+    inputPassword: 'Input the password of current signer',
+    queryEthScan: 'Query Total Eth amount',
+    currentSign: 'Current signer sign',
+    txToSend: 'Number of transactions to send: ',
+    txSent: 'Number of transactoins sent succeed: ',
+    sendingTx: 'Sending transactoins',
+    selectedNum: 'Number of selected orders: ',
+    totalAmount: 'Total amount of selected orders: ',
+    ethTotal: 'Total amount of received ETH: ',
+    startProcessSuccess: 'Start process succeed.',
+    signSuccess: 'Sign transactions succeed.',
+    ledgerSignMultiTimes: 'You may have to sign multi times on your ledger device'
   },
 
   commonWalletHome: {

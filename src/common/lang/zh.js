@@ -284,11 +284,40 @@ export default {
     balance: '余额',
     confirmation: '确认',
     agreeToSend: '我同意发送资产',
-    signSequence: '选择签名人数',
+    signSequence: '签名顺序',
     sign: '签名',
     checkMore: '查看更多',
     publicKey: '公钥',
-    redeemOng: '提取ONG'
+    redeemOng: '提取ONG',
+    paxMgmt: 'PAX管理',
+    unprocessed: '未处理',
+    processing: '处理中',
+    completed: '已完成'
+  },
+
+  pax: {
+    ethAddress: 'Eth 地址',
+    ontAddress: 'ONT 地址',
+    amount: '数额',
+    date: '日期',
+    toProcess: '去处理',
+    paxStart: '发起', 
+    selectCurrentSigner: '选择当前签名钱包: ',
+    back: '返回',
+    confirm: '确认',
+    sponsorSign: '发起人签名',
+    inputPassword: '输入当前签名钱包密码',
+    queryEthScan: '查询Eth转出总额',
+    currentSign: '当前签名者签名',
+    txToSend: '要发送上链的交易个数:',
+    txSent: '已发送上链的交易个数: ',
+    sendingTx: '正在发送交易上链:',
+    selectedNum: '已选择条目数量: ',
+    totalAmount: '已选择条目的PAX总额: ',
+    ethTotal: '已收到的ETH总额: ',
+    startProcessSuccess: '发起处理流程成功',
+    signSuccess: '签名交易成功',
+    ledgerSignMultiTimes: '您可能需要在ledger设备上进行多次签名'
   },
 
   commonWalletHome: {
