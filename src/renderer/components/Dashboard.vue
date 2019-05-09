@@ -367,15 +367,15 @@
             <span class="asset-amount">{{balance.ong}}</span>
           </div>
           <!-- <div class="asset-value">{{'$900'}}</div> -->
-          <div class="asset-ong" v-if="currentWallet.key">
+          <!-- <div class="asset-ong" v-if="currentWallet.key">
             <div class="asset-label nep5-label">
               <span>ONT</span>
               <span>(NEP-5)</span>
             </div>
             <span class="asset-amount">{{nep5Ont}}</span>
-            <!-- <a-button type="default" class="commonWallet-btn btn-swap" 
-          @click="toSwap">{{$t('commonWalletHome.swap')}}</a-button> -->
-          </div>
+            <a-button type="default" class="commonWallet-btn btn-swap" 
+          @click="toSwap">{{$t('commonWalletHome.swap')}}</a-button>
+          </div> -->
 
         </div>
 
@@ -491,16 +491,17 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
         waitBoundOng: 0,
         completedTx: [],
         intervalId: '',
-        interval:3000,
+        interval:10000,
         redeemInfoVisible: false
       }
     },
     mounted: function () {
       this.refresh()
+      this.$store.dispatch('queryBalanceForOep4', this.currentWallet.address)
       this.intervalId = setInterval(() => {
           this.getBalance();
           this.getTransactions();
-          this.getNep5Balance();
+          // this.getNep5Balance();
       }, this.interval)
     },
     computed: {
@@ -615,7 +616,7 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
         }, 500)
         this.getBalance();
         this.getTransactions();
-        this.getNep5Balance();
+        // this.getNep5Balance();
       },
       sendAsset() {
         if(Number(this.balance.ong) < 0.01) {
@@ -623,7 +624,6 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
           return;
         }
         this.$store.commit('CLEAR_CURRENT_TRANSFER');
-        this.$store.dispatch('queryBalanceForOep4', this.currentWallet.address)
         this.$router.push({name: 'CommonSendHome'})
       },
       commnReceive() {

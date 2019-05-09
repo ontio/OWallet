@@ -209,7 +209,7 @@ export default {
     return {
       localOntid: [],
       intervalId: "",
-      interval: 5000,
+      interval: 10000,
       refundClicked: false,
       walletPassModal: false,
       walletPassword: "",

@@ -6,7 +6,9 @@ import App from './App'
 import router from './router'
 import store from './store'
 
-import $ from 'jquery'
+import { initNetwork } from '../core/network'
+initNetwork();
+
 import 'font-awesome/css/font-awesome.css'
 import {Button, message, Steps, Input , Form, Icon, Select, Spin, Alert, Modal, Slider,Radio,
   Row, Col, InputNumber, Layout, Menu, Breadcrumb, Checkbox, Tooltip, Table, Dropdown} from 'ant-design-vue'
@@ -21,19 +23,7 @@ Vue.use(VeeValidate)
 import i18n from '../common/lang'
 import service from '../core/utils'
 Vue.prototype.httpService = service;
-// import VueI18n from 'vue-i18n'
-// import LangStorage from '../core/lang'
-// import zh from '../common/lang/zh'
-// import en from '../common/lang/en'
 
-// Vue.use(VueI18n)
-// const i18n = new VueI18n({
-//   locale: LangStorage.getLang('en'),  // 语言标识
-//   messages: {
-//     'zh': zh,
-//     'en': en
-//   }
-// })
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios

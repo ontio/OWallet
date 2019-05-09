@@ -97,7 +97,7 @@ export default {
             type,
             password:'',
             nodeUrl: url,
-            interval:3000,
+            interval:10000,
             invervalId:'',
             publicKey:'',
             ledgerStatus:''

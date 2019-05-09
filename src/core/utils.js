@@ -38,12 +38,17 @@ export function getNodeUrl() {
     // return 'http://139.219.128.220:20334' //for test 
 }
 
-export function formatNumberStr(num, decimal = 0, showDivision = true) {
-    const val = new BigNumber(num).dividedBy(Math.pow(10, decimal)).toNumber()
-    if(showDivision) {
-        return numeral(val).format('0,0')
+export function convertNumber2Str(num, decimal = 0, division) {
+    const val = new BigNumber(num).dividedBy(Math.pow(10, decimal))
+    if(division) {
+      return val.toFixed(8);
     }
     return val.toString();
+}
+
+export function convertStr2Number(str, decimal = 0) {
+    const val = new BigNumber(num).times(Math.pow(10, decimal))
+    return val.toNumber();
 }
 
 export function decryptWallet(wallet, password, scrypt = DEFAULT_SCRYPT) {

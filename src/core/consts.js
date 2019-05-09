@@ -6,6 +6,20 @@ export const ONT_CONTRACT = '0000000000000000000000000000000000000001';
 export const TEST_NET = 'http://polaris1.ont.io';
 export const MAIN_NET = 'http://dappnode1.ont.io';
 
+export const TEST_NET_LIST = [
+  'http://polaris1.ont.io',
+  'http://polaris2.ont.io',
+  'http://polaris3.ont.io',
+  'http://polaris4.ont.io',
+  'http://polaris5.ont.io'
+]
+
+export const MAIN_NET_LIST = [
+  'http://dappnode1.ont.io',
+  'http://dappnode2.ont.io',
+  'http://dappnode3.ont.io',
+  'http://dappnode4.ont.io',
+]
 //test environment
 export const ONT_PASS_NODE = 'https://app.ont.io'
 //prod 

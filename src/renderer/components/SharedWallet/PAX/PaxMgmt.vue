@@ -46,8 +46,9 @@
                     <a-radio-button value="0">{{$t('sharedWalletHome.unprocessed')}}</a-radio-button>
                     <a-radio-button value="1">{{$t('sharedWalletHome.processing')}}</a-radio-button>
                     <a-radio-button value="2">{{$t('sharedWalletHome.completed')}}</a-radio-button>
+                    <a-radio-button value="3">{{$t('pax.txCompleted')}}</a-radio-button>
                 </a-radio-group>
-                <div v-if="status == 1" class="pax-selectPayer">
+                <div v-if="status === '1' " class="pax-selectPayer">
                     <label for="">{{$t('pax.selectCurrentSigner')}}</label>
                     <a-select :options="localCopayers" class="select-current"  @change="handleChangeSponsor"></a-select>
                 </div>
@@ -55,8 +56,8 @@
             
             <div class="table-container">
                 <a-button type="primary" :disabled="selectedRowKeys.length < 1 || status === '1' && !currentSigner" 
-                v-if="status !== '2'" @click="handleProcess">{{$t('pax.toProcess')}}</a-button>
-                <a-table :rowSelection="status === '2' ? null : {selectedRowKeys: selectedRowKeys, onChange: onSelectChange}" 
+                v-if="status === '0' || status === '1' " @click="handleProcess">{{$t('pax.toProcess')}}</a-button>
+                <a-table :rowSelection="(status === '2' || status === '3') ? null : {selectedRowKeys: selectedRowKeys, onChange: onSelectChange}" 
                 rowKey="Txhash"
                 :columns="columns" 
                 :dataSource="data" 
@@ -76,7 +77,6 @@
             >
             <p>{{$t('pax.selectedNum')}} {{selectedNum}}</p>
             <p>{{$t('pax.totalAmount')}} {{totalAmount}}</p>
-            <p class="text-small">{{$t('pax.ethTotal')}} {{ethTotal}}</p>
         </a-modal>
         
     </div>
@@ -84,8 +84,9 @@
 <script>
 import Breadcrumb from '../../Breadcrumb'
 import {PAX_API} from '../../../../core/consts'
-import {formatNumberStr} from '../../../../core/utils'
+import {convertNumber2Str} from '../../../../core/utils'
 import dbService from '../../../../core/dbService'
+import { BigNumber } from 'bignumber.js'
 const opn = require('opn')
 
 export default {
@@ -178,9 +179,8 @@ export default {
             }
             this.selectedNum = list.length;
             this.totalAmount = list.reduce((item1, item2) => {
-                console.log(item1.AmountStr)
-                return (item1.AmountStr ? Number(item1.AmountStr) : Number(item1) ) + Number(item2.AmountStr)
-            }, 0)
+                return (item1.AmountStr ? new BigNumber(item1.AmountStr) : new BigNumber(item1) ).plus(new BigNumber(item2.AmountStr))
+            }, 0).toFixed(8)
             this.visible = true;
         },
 
@@ -217,7 +217,7 @@ export default {
                 })
                 if(res.ErrorCode === 0) {
                     this.data = res.Result.map((item) => {
-                        item.AmountStr = formatNumberStr(item.Amount, 18)
+                        item.AmountStr = convertNumber2Str(item.Amount, 18, 8)
                         if(this.status === '1') {
                             item.cosigners = JSON.parse(item.CoSigners)
                         }

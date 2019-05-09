@@ -320,7 +320,8 @@ export default {
     signSuccess: '签名交易成功',
     ledgerSignMultiTimes: '您可能需要在ledger设备上进行多次签名',
     hasSignedSent: '注意！这些交易已经被签名并已发送到链上。请检查已完成的数据。',
-    toEthScan: '查看ETH Scan'
+    toEthScan: '查看ETH Scan',
+    txCompleted: '已上链'
   },
 
   commonWalletHome: {

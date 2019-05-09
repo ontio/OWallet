@@ -157,7 +157,7 @@ export default {
         this.intervalId = setInterval(()=>{
             // this.$store.dispatch('fetchNodeList')
             this.$store.dispatch('fetchBlockCountdown')
-        }, 5000)  
+        }, 10000)  
     },
     beforeDestroy(){
         clearInterval(this.intervalId);

@@ -223,7 +223,7 @@ export default {
     }
     const currentWallet = JSON.parse(sessionStorage.getItem('currentWallet'));
     return {
-      interval:3000,
+      interval:10000,
       invervalId: '',
       currentWallet,
       checked: false,

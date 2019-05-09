@@ -245,6 +245,7 @@ export default {
                 this.$message.error(this.$t('pax.hasSignedSent'), 10)
                 return;
             }
+            this.sending = true;
 
             const pks = this.sharedWallet.coPayers.map(p => new Crypto.PublicKey(p.publickey))
             const txbodyhashes = [];
@@ -270,7 +271,6 @@ export default {
                 }
                 
                 for(let item of this.processing_list) {
-                    debugger
                     const tx = Transaction.deserialize(item.Txbodyhash)
                     console.log(tx)
                     TransactionBuilder.signTx(tx, M, pks, pri)
@@ -348,6 +348,7 @@ export default {
                 url: (net === 'TEST_NET' ? PAX_API.TestHost : PAX_API.Host) + PAX_API.updateApprovals
             })
             console.log(result)
+            this.sending = false;
             if(result && result.ErrorCode === 0) {
                 this.$message.success(this.$t('pax.signSuccess'))
                 this.$router.push({path: '/sharedWallet/paxMgmt'})
