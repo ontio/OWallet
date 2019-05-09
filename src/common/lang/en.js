@@ -303,6 +303,7 @@ export default {
     date: 'Date',
     toProcess: 'To process',
     paxStart: 'Start',
+    paxSign: 'Sign',
     selectCurrentSigner: 'Select current signer: ',
     back: 'Back',
     confirm: 'Confirm',
@@ -318,7 +319,9 @@ export default {
     ethTotal: 'Total amount of received ETH: ',
     startProcessSuccess: 'Start process succeed.',
     signSuccess: 'Sign transactions succeed.',
-    ledgerSignMultiTimes: 'You may have to sign multi times on your ledger device'
+    ledgerSignMultiTimes: 'You may have to sign multi times on your ledger device',
+    hasSignedSent: 'These transactions has been signed and sent. Please review the completed data.',
+    toEthScan: 'TO Eth Scan'
   },
 
   commonWalletHome: {

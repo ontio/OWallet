@@ -302,6 +302,7 @@ export default {
     date: '日期',
     toProcess: '去处理',
     paxStart: '发起', 
+    paxSign: '签名',
     selectCurrentSigner: '选择当前签名钱包: ',
     back: '返回',
     confirm: '确认',
@@ -317,7 +318,9 @@ export default {
     ethTotal: '已收到的ETH总额: ',
     startProcessSuccess: '发起处理流程成功',
     signSuccess: '签名交易成功',
-    ledgerSignMultiTimes: '您可能需要在ledger设备上进行多次签名'
+    ledgerSignMultiTimes: '您可能需要在ledger设备上进行多次签名',
+    hasSignedSent: '注意！这些交易已经被签名并已发送到链上。请检查已完成的数据。',
+    toEthScan: '查看ETH Scan'
   },
 
   commonWalletHome: {

@@ -86,5 +86,7 @@ export const PAX_API = {
   Host: '',
   TestHost: 'http://172.168.3.61:20800',
   fetchApprovalList: '/api/v1/approvals',
-  updateApprovals: '/api/v1/processapplist'
+  updateApprovals: '/api/v1/processapplist',
+  EthScanTest: 'https://ropsten.etherscan.io/address/0x60275d9b241e5eb3b9acbf5a15107d1242528ee6#tokentxns',
+  EthScanMain: ''
 }

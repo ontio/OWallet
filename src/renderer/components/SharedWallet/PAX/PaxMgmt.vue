@@ -41,7 +41,7 @@
         <div class="pax-container">
             <div class="pax-header">
                 
-                <!-- <a-button class="btn-ethScan">{{$t('pax.queryEthScan')}}</a-button> -->
+                <a-button class="btn-ethScan" @click="toEthScan">{{$t('pax.toEthScan')}}</a-button>
                 <a-radio-group :value="status" @change="handleStatusChange" class="status-group">
                     <a-radio-button value="0">{{$t('sharedWalletHome.unprocessed')}}</a-radio-button>
                     <a-radio-button value="1">{{$t('sharedWalletHome.processing')}}</a-radio-button>
@@ -56,7 +56,7 @@
             <div class="table-container">
                 <a-button type="primary" :disabled="selectedRowKeys.length < 1 || status === '1' && !currentSigner" 
                 v-if="status !== '2'" @click="handleProcess">{{$t('pax.toProcess')}}</a-button>
-                <a-table :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}" 
+                <a-table :rowSelection="status === '2' ? null : {selectedRowKeys: selectedRowKeys, onChange: onSelectChange}" 
                 rowKey="Txhash"
                 :columns="columns" 
                 :dataSource="data" 
@@ -86,6 +86,7 @@ import Breadcrumb from '../../Breadcrumb'
 import {PAX_API} from '../../../../core/consts'
 import {formatNumberStr} from '../../../../core/utils'
 import dbService from '../../../../core/dbService'
+const opn = require('opn')
 
 export default {
     name: 'PaxMgmt',
@@ -140,9 +141,13 @@ export default {
     mounted() {
         this.updateLocalCopayers()
         this.fetchList();
-        this.queryEthScan()
     },
     methods: {
+        toEthScan() {
+            const net = localStorage.getItem('net');
+            let url = net === 'TEST_NET' ? PAX_API.EthScanTest : PAX_API.EthScanMain;
+            opn(url)
+        },
         handleStatusChange(e) {
             this.status = e.target.value
             this.fetchList()
@@ -197,9 +202,6 @@ export default {
             console.log(pagination)
             this.pagination = pagination;
             this.fetchList()
-        },
-        queryEthScan() {
-            
         },
         async fetchList(page,pageSize) {
             const net = localStorage.getItem('net');

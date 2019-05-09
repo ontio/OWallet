@@ -166,6 +166,7 @@
          <a-modal
             :title="$t('pax.sendingTx')"
             :visible="visible"
+            :footer="null"
             >
             <p>{{$t('pax.txToSend')}} {{txToSend}}</p>
             <p>{{$t('pax.txSent')}} {{txSent}}</p>
@@ -234,8 +235,17 @@ export default {
             if(this.processing_list.length === 0) {
                 return;
             }
+           
             this.$store.dispatch('showLoadingModals')
             const M = this.sharedWallet.requiredNumber;
+            //避免已发交易被再签
+            const txBefore = Transaction.deserialize(this.processing_list[0].Txbodyhash)
+            const sigNumBefore = txBefore.sigs[0].sigData.length;
+            if(sigNumBefore >= M) {
+                this.$message.error(this.$t('pax.hasSignedSent'), 10)
+                return;
+            }
+
             const pks = this.sharedWallet.coPayers.map(p => new Crypto.PublicKey(p.publickey))
             const txbodyhashes = [];
             const txhashes = [];
@@ -355,8 +365,14 @@ export default {
                 if(res.Error === 0) {
                     return true;
                 } else {
+                    if(res.Result.indexOf('balance insufficient') > -1 ) {
+                        this.$message.error(this.$t('common.balanceInsufficient'), 5)
+                    } else if(res.Result.indexOf('cover gas cost') > -1){
+                        this.$message.error(this.$t('common.ongNoEnough'), 5)
+                    } else {
+                        this.$message.error(res.Result, 5)
+                    }
                     this.$store.dispatch('hideLoadingModals')
-                    this.$message.error(res.Result)
                     return false;
                 }
             }catch(err) {
