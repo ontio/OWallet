@@ -34,6 +34,10 @@
     font-size: 14px;
     margin-top: 20px;
 }
+.detail-link {
+    text-align: center;
+    cursor: pointer;
+}
 </style>
 <template>
     <div>
@@ -59,11 +63,15 @@
                 v-if="status === '0' || status === '1' " @click="handleProcess">{{$t('pax.toProcess')}}</a-button>
                 <a-table :rowSelection="(status === '2' || status === '3') ? null : {selectedRowKeys: selectedRowKeys, onChange: onSelectChange}" 
                 rowKey="Txhash"
-                :columns="columns" 
+                :columns="currentColumns" 
                 :dataSource="data" 
                 :pagination="pagination"
                 @change="handleTableChange"
-                />
+                >
+                <div slot="action" slot-scope="text, record" class="detail-link" v-if="status === '3' ">
+                    <a-icon type="arrow-right" @click="handleOpenTxDetail(record)" v-if="record.Senthash" />
+                </div>
+                </a-table>
             </div>
             
 
@@ -115,7 +123,7 @@ export default {
             {
                 title: this.$t('pax.date'),
                 dataIndex: 'Updated'
-            },
+            }
         ]
         return {
             sharedWallet,
@@ -123,6 +131,7 @@ export default {
             routes,
             data:[],
             columns,
+            currentColumns: columns,
             selectedRowKeys: [],
             selectedRowsPerPage: {},
             pagination: {
@@ -151,7 +160,26 @@ export default {
         },
         handleStatusChange(e) {
             this.status = e.target.value
+            if(this.status === '3') {
+                this.currentColumns =[...this.columns, 
+                {
+                    title: this.$t('pax.txDetail'),
+                    key: 'action',
+                    scopedSlots: {customRender:'action'}
+                }]
+            } else {
+                this.currentColumns = this.columns;
+            }
             this.fetchList()
+        },
+        handleOpenTxDetail(record) {
+            if(!record.Senthash) return;
+            let url = `https://explorer.ont.io/transaction/${record.Senthash}`
+            const net = localStorage.getItem('net')
+            if(net === 'TEST_NET') {
+                url = url+ '/testnet'
+            }
+            opn(url)
         },
         onSelectChange (selectedRowKeys,  selectedRows) {
             console.log('selectedRowKeys changed: ', selectedRowKeys);
@@ -211,7 +239,8 @@ export default {
                     params: {
                         status: this.status,
                         limit: this.pagination.pageSize,
-                        offset: this.pagination.current - 1
+                        offset: this.pagination.current - 1,
+                        order: 0 // 时间倒序
                     },
                     url: (net === 'TEST_NET' ? PAX_API.TestHost : PAX_API.Host) + PAX_API.fetchApprovalList
                 })

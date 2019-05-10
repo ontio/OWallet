@@ -315,6 +315,7 @@ export default {
                     data.status = 2;
                 }
                 if(M <= sigNum) {
+                    const senthashs = [];
                     this.$store.dispatch('hideLoadingModals')
                     this.visible = true;
                     this.txToSend = txbodyhashes.length;
@@ -322,12 +323,14 @@ export default {
                         const txRes = await this.sendTx(txData)
                         if(txRes) {
                             this.txSent ++;
+                            senthashs.push(txRes)
                         } else {
                             // send tx failed
                             this.visible = false;
                             return;
                         }
                     }
+                    data.senthashs =  senthashs;
                     setTimeout(()=> {
                         this.visible = false;
                         if(this.txToSend === this.txSent && this.txSent > 0) {
@@ -364,7 +367,7 @@ export default {
                 const res = await restClient.sendRawTransaction(txData)
                 console.log(res)
                 if(res.Error === 0) {
-                    return true;
+                    return res.Result;
                 } else {
                     if(res.Result.indexOf('balance insufficient') > -1 ) {
                         this.$message.error(this.$t('common.balanceInsufficient'), 5)
@@ -374,11 +377,11 @@ export default {
                         this.$message.error(res.Result, 5)
                     }
                     this.$store.dispatch('hideLoadingModals')
-                    return false;
+                    return '';
                 }
             }catch(err) {
                 console.log(err)
-                return false;
+                return '';
             }
         }
     }
