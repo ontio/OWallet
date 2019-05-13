@@ -352,7 +352,7 @@
         </div>
         <div class="wallet-balance">
           <span>{{$t('sharedWalletHome.balance')}}</span>
-          <span class="refresh-icon" @click="refresh"></span>
+          <span class="refresh-icon" @click="refresh(true)"></span>
           <div class="wallet-type"></div>
         </div>
         <div>
@@ -383,12 +383,12 @@
           <div class="claim-ong">
             <div class="claim-ong-item clearfix">
               <span>{{$t('commonWalletHome.claimableOng')}}: </span>
-              <span>{{unboundOng}}</span>
+              <span>{{balance.unboundOng}}</span>
 
             </div>
             <div class="claim-ong-item clearfix">
               <span>{{$t('commonWalletHome.unboundOng')}}: </span>
-              <span>{{waitBoundOng}}</span>
+              <span>{{balance.waitBoundOng}}</span>
             </div>
           </div>
           <a-button type="default" class="commonWallet-btn btn-redeem"
@@ -482,31 +482,28 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
         address: currentWallet.address,
         amount: 0,
         toAddress: '',
-        balance: {ont: 0, ong: 0.0000, ontValue: 0},
         transactions: '',
         asset: 'ONT',
         network: network,
         nodeUrl: url,
-        unboundOng: 0,
-        waitBoundOng: 0,
         completedTx: [],
         intervalId: '',
-        interval:10000,
-        redeemInfoVisible: false
+        interval:15000,
+        redeemInfoVisible: false,
+        requestStart: false
       }
     },
     mounted: function () {
-      this.refresh()
-      this.$store.dispatch('queryBalanceForOep4', this.currentWallet.address)
+      this.refresh(true)
+      // this.$store.dispatch('queryBalanceForOep4', this.currentWallet.address)
       this.intervalId = setInterval(() => {
-          this.getBalance();
-          this.getTransactions();
-          // this.getNep5Balance();
+          this.refresh(false)
       }, this.interval)
     },
     computed: {
       ...mapState({
-        nep5Ont : state => state.CurrentWallet.nep5Ont
+        nep5Ont : state => state.CurrentWallet.nep5Ont,
+        balance: state => state.CurrentWallet.balance
       })
     },
     beforeDestroy(){
@@ -519,7 +516,7 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
       },
       getTransactions() {
         const url = this.network === 'TestNet' ? 'https://polarisexplorer.ont.io' : 'https://explorer.ont.io';
-        this.axios.get(url + '/api/v1/explorer/address/' + this.address + '/10/1').then(response => {
+        return this.axios.get(url + '/api/v1/explorer/address/' + this.address + '/10/1').then(response => {
           if (response.status === 200 && response.data && response.data.Result) {
             const txlist = response.data.Result.TxnList;
             const completed = []
@@ -532,7 +529,7 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
                 if(tx.ToAddress === ONG_GOVERNANCE_CONTRACT && asset === 'ONG' && Number(tx.Amount) == 0.01) {
                   continue;
                 }
-                let amount = asset === 'ONT' ? parseInt(tx.Amount) : new BigNumber(tx.Amount).toString();
+                let amount = asset === 'ONT' ? parseInt(tx.Amount) : tx.Amount;
                 if (tx.FromAddress === this.address) {
                     amount = '-' + amount;
                 } else {
@@ -547,12 +544,15 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
               
             }
             this.completedTx = completed;
+            return true; // fetch tx history succeed
           } else {
             console.log(response)
+            return true;
           }
         }).catch(err => {
           console.log(err);
           this.$message.error(this.$t('dashboard.getTransErr'))
+          return false; // fetch tx history failed
         })
       },
       getUnclaimOng() {
@@ -565,25 +565,11 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
         })
       },
       getBalance() {
-        const urlNode = this.network === 'TestNet' ? 'https://polarisexplorer.ont.io' : 'https://explorer.ont.io';
-        const url = `${urlNode}/api/v1/explorer/address/balance/${this.address}`
-        axios.get(url).then(res => {
-          if (res.data.Result) {
-            for (let r of res.data.Result) {
-              if (r.AssetName === 'ong') {
-                this.balance.ong = r.Balance;
-              }
-              if (r.AssetName === 'waitboundong') {
-                this.waitBoundOng = r.Balance;
-              }
-              if (r.AssetName === 'unboundong') {
-                this.unboundOng = r.Balance;
-              }
-              if (r.AssetName === 'ont') {
-                this.balance.ont = r.Balance;
-              }
-            }
+        return this.$store.dispatch('getNativeBalance', {address: this.address}).then(res => {
+          if(!res){
+            this.$message.error(this.$t('dashboard.getBalanceErr'))
           }
+          return res;
         })
       },
       getNep5Balance() {
@@ -608,14 +594,27 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
           }
         })
       },
-      refresh() {
-        this.$store.dispatch('showLoadingModals')
-        const that = this
-        setTimeout(() => {
-            that.$store.dispatch('hideLoadingModals')
-        }, 500)
-        this.getBalance();
-        this.getTransactions();
+      refresh(showLoading) {
+        // this.$store.dispatch('showLoadingModals')
+        // const that = this
+        // setTimeout(() => {
+        //     that.$store.dispatch('hideLoadingModals')
+        // }, 500)
+        if(showLoading) {
+          this.$store.dispatch('showLoadingModals')
+        } 
+        if(this.requestStart) {
+          return;
+        }
+        this.requestStart = true;
+        Promise.all([
+          this.getBalance(),
+          this.getTransactions()
+        ]).then(res => {
+          this.requestStart = false;
+          this.$store.dispatch('hideLoadingModals')
+        })
+        
         // this.getNep5Balance();
       },
       sendAsset() {
@@ -630,12 +629,12 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
         this.$router.push({path: '/commonWalletReceive/commonWallet'})
       },
       redeemOng() {
-          if(this.unboundOng == 0) {
+          if(this.balance.unboundOng == 0) {
             this.redeemInfoVisible = true;
             return;
           }
           const redeem = {
-              claimableOng : this.unboundOng,
+              claimableOng : this.balance.unboundOng,
               balance: this.balance.ong
           }
         this.$store.commit('UPDATE_CURRENT_REDEEM', {redeem: redeem})

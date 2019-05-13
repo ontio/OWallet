@@ -19,7 +19,6 @@ const oep4s = localStorage.getItem('oep4s')? JSON.parse(localStorage.getItem('oe
 
 const state = {
     oep4s,
-    balance:{ont:0, ong:0},
     completedTx: []
 }
 
@@ -28,9 +27,6 @@ const mutations = {
         const oep4s = [...state.oep4s, payload.newOep4]
         localStorage.setItem('oep4s', JSON.stringify(oep4s))
         state.oep4s = oep4s;
-    },
-    UPDATE_ONT_BALANCE(state, payload) {
-        state.balance = payload.balance
     },
     UPDATE_OEP4S(state, payload) {
         state.oep4s = payload.oep4s
@@ -57,7 +53,6 @@ const actions = {
                 const newOep4 = {name, symbol, scriptHash, decimal, balance, net}
                 commit('ADD_OEP4', {newOep4})
                 dispatch('registerOep4Info', scriptHash)
-                dispatch('queryBalanceForOep4', address)
                 dispatch('queryTxForOep4', {address, oep4s: [...state.oep4s, newOep4]})
                 return 'ADD_SUCCESS'
             }
@@ -139,53 +134,35 @@ const actions = {
         }
     },
     async queryBalanceForOep4({commit, dispatch, state}, address) {
-        const net = localStorage.getItem('net')
-        const urlNode = net === 'TEST_NET' ? 'https://polarisexplorer.ont.io' : 'https://explorer.ont.io';
-        const url = `${urlNode}/api/v1/explorer/address/balance/${address}`
         dispatch('showLoadingModals');
         try {
-            const res = await axios.get(url)
-            let ontBalance = {ont:0, ong:0};
-            if (res.data.Result) {
-                for (let r of res.data.Result) {
-                    if (r.AssetName === 'ong') {
-                        ontBalance.ong = r.Balance;
+            const net = localStorage.getItem('net');
+
+            const temp = await Promise.all(state.oep4s.map((item) => {
+                    if(item.net !== net) { // 避免多余的查询
+                        return Promise.resolve(0)
                     }
-                    if (r.AssetName === 'ont') {
-                        ontBalance.ont = r.Balance;
-                    }
-                }
-                commit('UPDATE_ONT_BALANCE', {balance: ontBalance})
-            }
-            const temp = []
-            const oep4Old = state.oep4s;
-            for (let i = 0; i < oep4Old.length; i++) {
-                if(oep4Old[i].net === net) {
-                    const bi = await dispatch('queryOep4Balance', {
-                      scriptHash: oep4Old[i].scriptHash,
-                      address,
-                      decimal: oep4Old[i].decimal
+                    return dispatch('queryOep4Balance', {
+                        scriptHash: item.scriptHash,
+                        address,
+                        decimal: item.decimal
                     })
-                    temp.push({
-                      ...oep4Old[i],
-                      balance: bi
-                    })
-                }
-                
-            }
-            commit('UPDATE_OEP4S', {oep4s: temp})
-            commit('UPDATE_TRANSFER_BALANCE', {
-                balance: ontBalance,
-                oep4s: temp
-            })
+                })
+            )
+            console.log(temp);
+            const newOep4s = state.oep4s.map((item, index) => ({
+                ...item,
+                balance: temp[index]
+            }))
+            commit('UPDATE_OEP4S', {oep4s: newOep4s})
             dispatch('hideLoadingModals');            
-        }catch(err) {
+        } catch(err) {
             dispatch('hideLoadingModals');
             console.log(err);
             alert('Network error.Please try later.')
         }
     },
-    async queryTxForOep4({commit}, {address,oep4s}) {
+    async queryTxForOep4({commit, dispatch}, {address,oep4s}) {
         const net = localStorage.getItem('net')
         const url = net === 'TEST_NET' ? 'https://polarisexplorer.ont.io' : 'https://explorer.ont.io';
         axios.get(url + '/api/v1/explorer/address/' + address + '/10/1').then(response => {

@@ -6,8 +6,6 @@ import App from './App'
 import router from './router'
 import store from './store'
 
-import { initNetwork } from '../core/network'
-initNetwork();
 
 import 'font-awesome/css/font-awesome.css'
 import {Button, message, Steps, Input , Form, Icon, Select, Spin, Alert, Modal, Slider,Radio,

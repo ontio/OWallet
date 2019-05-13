@@ -133,7 +133,8 @@ export default {
   },
 
   dashboard: {
-    getTransErr: 'Fetch transaction history failed. Network error.'
+    getTransErr: 'Fetch transaction history failed. Network error. Plese try later.',
+    getBalanceErr: 'Fetch balance failed. Network error. Plese try later.'
   },
 
   createJsonWallet: {

@@ -1,4 +1,4 @@
-
+import axios from 'axios'
 
 
 const state = {
@@ -10,6 +10,12 @@ const state = {
         coPayers: [],
         requiredNumber:'',
         totalNumber:''
+    },
+    balance: {
+        ont: 0,
+        ong: 0,
+        waitBoundOng:0,
+        unboundOng: 0
     },
     transfer: {
         balance : {
@@ -54,11 +60,8 @@ const mutations = {
     UPDATE_CURRENT_SIGNER(state, payload) {
         state.currentSigner = payload.account
     },
-    UPDATE_TRANSFER_BALANCE(state, payload) {
-        state.transfer.balance = payload.balance;
-        if(payload.oep4s) {
-            state.transfer.oep4s = payload.oep4s
-        }
+    UPDATE_NATIVE_BALANCE(state, payload) {
+        state.balance = payload.balance
     },
     CLEAR_CURRENT_TRANSFER(state, payload) {
         state.transfer = {
@@ -92,6 +95,37 @@ const mutations = {
 const actions = {
     clearTransferBalance({commit}) {
         commit('CLEAR_CURRENT_TRANSFER')
+    },
+    getNativeBalance({commit}, {address}) {
+        const network = localStorage.getItem('net')
+        const urlNode = network === 'TestNet' ? 'https://polarisexplorer.ont.io' : 'https://explorer.ont.io';
+        const url = `${urlNode}/api/v1/explorer/address/balance/${address}`
+        const balance = {}
+        return axios.get(url).then(res => {
+          if (res.data.Result) {
+            for (let r of res.data.Result) {
+              if (r.AssetName === 'ong') {
+                balance.ong = r.Balance;
+              }
+              if (r.AssetName === 'waitboundong') {
+                balance.waitBoundOng = r.Balance;
+              }
+              if (r.AssetName === 'unboundong') {
+                balance.unboundOng = r.Balance;
+              }
+              if (r.AssetName === 'ont') {
+                balance.ont = r.Balance;
+              }
+            }
+            commit('UPDATE_NATIVE_BALANCE', {
+              balance
+            })
+            return balance; // get balance succeed
+          }
+        }).catch(err => {
+          console.log(err)
+          return null; // get balance failed
+        })
     }
 }
 

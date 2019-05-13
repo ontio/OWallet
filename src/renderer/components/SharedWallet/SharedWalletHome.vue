@@ -353,12 +353,12 @@
                     <div class="claim-ong">
                         <div class="claim-ong-item clearfix">
                         <span>{{$t('commonWalletHome.claimableOng')}}: </span>
-                        <span>{{unboundOng}}</span>
+                        <span>{{balance.unboundOng}}</span>
 
                         </div>
                         <div class="claim-ong-item clearfix">
                         <span>{{$t('commonWalletHome.unboundOng')}}: </span>
-                        <span>{{waitBoundOng}}</span>
+                        <span>{{balance.waitBoundOng}}</span>
                         </div>
                     </div>
                     <a-button type="default" class="commonWallet-btn btn-redeem"
@@ -470,9 +470,6 @@ export default {
         return {
             amount: 0,
             toAddress: '',
-            balance: {ont: 0, ong: 0.0000, ontValue:0},
-            unboundOng: 0,
-            waitBoundOng: 0,
             transactions: '',
             nodeUrl:url,
             sharedWallet,
@@ -483,9 +480,10 @@ export default {
             network,
             nodeUrl: url,
             hasLocalCopayer:true,
-            interval: 10000,
+            interval: 15000,
             intervalId: '',
-            redeemInfoVisible: false
+            redeemInfoVisible: false,
+            requestStart: false
         }
     },
     components: {
@@ -493,13 +491,11 @@ export default {
         RedeemInfoIcon
     },
     mounted(){
-        this.refresh()
+        this.refresh(true)
         this.ifHasLocalCopayer();
         let that = this;
         this.intervalId = setInterval(() => {
-            this.getTransactions();
-            this.getBalance();
-            this.getPendingTx();
+            this.refresh(false)
         }, this.interval)
     },
     beforeDestroy(){
@@ -507,7 +503,7 @@ export default {
     },
     computed: {
         ...mapState({
-            // sharedWallet: state => state.CurrentWallet.wallet
+             balance: state => state.CurrentWallet.balance
         })
     },
     methods:{
@@ -516,7 +512,7 @@ export default {
         },
         getTransactions() {
             const url = this.network === 'TestNet' ? 'https://polarisexplorer.ont.io' : 'https://explorer.ont.io';
-            this.axios.get(url + '/api/v1/explorer/address/' + this.sharedWallet.sharedWalletAddress + '/10/1').then(response => {
+            return this.axios.get(url + '/api/v1/explorer/address/' + this.sharedWallet.sharedWalletAddress + '/10/1').then(response => {
             if (response.status === 200 && response.data && response.data.Result) {
                 const txlist = response.data.Result.TxnList
                 const completed = txlist.map(t => {
@@ -535,38 +531,52 @@ export default {
                     }
                 })
                 this.completedTx = completed;
+                return true;
             } else {
                 console.log(response)
+                return false;
             }
+            }).catch(err=> {
+                console.log(err);
+                this.$message.error(this.$t('dashboard.getTransErr'))
+                return false; // fetch tx history failed
             })
         },
         getBalance() {
             const urlNode = this.network === 'TestNet' ? 'https://polarisexplorer.ont.io' : 'https://explorer.ont.io';
             const url = `${urlNode}/api/v1/explorer/address/balance/${this.sharedWallet.sharedWalletAddress}`
-            axios.get(url).then(res => {
+            return axios.get(url).then(res => {
+                const balance = {}
             if (res.data.Result) {
                 for (let r of res.data.Result) {
                     if (r.AssetName === 'ong') {
-                        this.balance.ong = r.Balance;
+                        balance.ong = r.Balance;
                     }
                     if (r.AssetName === 'waitboundong') {
-                        this.waitBoundOng = r.Balance;
+                        balance.waitBoundOng = r.Balance;
                     }
                     if (r.AssetName === 'unboundong') {
-                        this.unboundOng = r.Balance;
+                        balance.unboundOng = r.Balance;
                     }
                     if (r.AssetName === 'ont') {
-                        this.balance.ont = r.Balance;
+                        balance.ont = r.Balance;
                     }
                 }
                 //pending tx has redeem tx,set unbound ong to 0;
                 for(const tx of this.pendingTx) {
                     if(tx.receiveaddress === tx.sendaddress && tx.assetName === 'ONG' &&
                     (tx.amount - this.unboundOng) == 0)  {
-                        this.unboundOng = 0;
+                        balance.unboundOng = 0;
                     }
                 }
+                this.$store.commit('UPDATE_NATIVE_BALANCE', {
+                    balance
+                })
             }
+                return true;
+            }).catch(err => {
+                 this.$message.error(this.$t('dashboard.getBalanceErr'))
+                 return false;
             })
 
         },
@@ -611,14 +621,23 @@ export default {
         toCopayerDetail() {
             this.$router.push({path:'/sharedWallet/copayers'})
         },
-        refresh() {
-            this.$store.dispatch('showLoadingModals')
-            setTimeout(() => {
+        refresh(showLoading) {
+            if(showLoading) {
+                this.$store.dispatch('showLoadingModals')
+            } 
+            if(this.requestStart) {
+                return;
+            }
+            this.requestStart = true;
+            Promise.all([
+                this.getTransactions(),
+                this.getBalance(),
+                this.getPendingTx()
+            ]).then(res => {
+                this.requestStart = false;
                 this.$store.dispatch('hideLoadingModals')
-            }, 100)
-            this.getTransactions();
-            this.getBalance();
-            this.getPendingTx();
+            })
+            
         },
         back() {
             this.$router.push({name:'Dashboard'})
@@ -630,7 +649,6 @@ export default {
             }
             this.$store.commit('CLEAR_CURRENT_TRANSFER');
             this.$store.commit('UPDATE_TRANSFER_REDEEM_TYPE', {type: false});
-            this.$store.commit('UPDATE_TRANSFER_BALANCE', {balance: this.balance})
             this.$router.push({path:'/sharedWallet/sendTransfer'})
         },
         shwoReceive() {

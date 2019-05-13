@@ -133,7 +133,7 @@ export default {
   },
 
   dashboard: {
-    getTransErr: '交易记录获取失败，网络错误。'
+    getTransErr: '交易记录获取失败，网络错误。请稍后重试。'
   },
 
   createJsonWallet: {
