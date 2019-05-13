@@ -515,7 +515,8 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
         this.$router.push({name: 'Wallets'})
       },
       getTransactions() {
-        const url = this.network === 'TestNet' ? 'https://polarisexplorer.ont.io' : 'https://explorer.ont.io';
+        const net = localStorage.getItem('net');
+        const url = net === 'TEST_NET' ? 'https://polarisexplorer.ont.io' : 'https://explorer.ont.io';
         return this.axios.get(url + '/api/v1/explorer/address/' + this.address + '/10/1').then(response => {
           if (response.status === 200 && response.data && response.data.Result) {
             const txlist = response.data.Result.TxnList;

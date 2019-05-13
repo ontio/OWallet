@@ -98,7 +98,7 @@ const actions = {
     },
     getNativeBalance({commit}, {address}) {
         const network = localStorage.getItem('net')
-        const urlNode = network === 'TestNet' ? 'https://polarisexplorer.ont.io' : 'https://explorer.ont.io';
+        const urlNode = network === 'TEST_NET' ? 'https://polarisexplorer.ont.io' : 'https://explorer.ont.io';
         const url = `${urlNode}/api/v1/explorer/address/balance/${address}`
         const balance = {}
         return axios.get(url).then(res => {

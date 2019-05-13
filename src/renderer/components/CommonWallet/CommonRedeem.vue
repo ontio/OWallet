@@ -100,7 +100,8 @@ export default {
             interval:10000,
             invervalId:'',
             publicKey:'',
-            ledgerStatus:''
+            ledgerStatus:'',
+            sending: false
         }
     },
     computed:{
