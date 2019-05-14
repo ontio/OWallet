@@ -54,7 +54,7 @@
                 </a-radio-group>
                 <div v-if="status === '1' " class="pax-selectPayer">
                     <label for="">{{$t('pax.selectCurrentSigner')}}</label>
-                    <a-select :options="localCopayers" class="select-current"  @change="handleChangeSponsor"></a-select>
+                    <a-select :options="localCopayers" class="select-current"  @change="handleChangeCurrentSigner"></a-select>
                 </div>
             </div>
             
@@ -239,7 +239,7 @@ export default {
                     params: {
                         status: this.status,
                         limit: this.pagination.pageSize,
-                        offset: this.pagination.current - 1,
+                        offset: (this.pagination.current - 1)*this.pagination.pageSize,
                         order: 0 // 时间倒序
                     },
                     url: (net === 'TEST_NET' ? PAX_API.TestHost : PAX_API.Host) + PAX_API.fetchApprovalList
@@ -252,10 +252,13 @@ export default {
                         }
                         return item;
                     });
+
                     if(this.status === '1') {
                         this.processing_list = this.data;
                     }
-                    
+                    if(this.currentSigner) {
+                        this.handleChangeCurrentSigner(this.currentSigner.address)
+                    }
                     
                     const total = res.TotalCount || res.Result.length;
                     this.pagination.total = total;
@@ -284,7 +287,7 @@ export default {
                     }
                 })
         },
-        handleChangeSponsor(value) {
+        handleChangeCurrentSigner(value) {
             console.log(value)
             this.currentSigner = this.localCopayers.find((item) => (item.address === value));
             //filter data
