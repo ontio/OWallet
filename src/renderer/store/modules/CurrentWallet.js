@@ -63,6 +63,9 @@ const mutations = {
     UPDATE_NATIVE_BALANCE(state, payload) {
         state.balance = payload.balance
     },
+    CLEAR_NATIVE_BALANCE(state, payload) {
+        state.balance = {}
+    },
     CLEAR_CURRENT_TRANSFER(state, payload) {
         state.transfer = {
             balance: {

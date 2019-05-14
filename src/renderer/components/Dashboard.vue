@@ -493,6 +493,9 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
         requestStart: false
       }
     },
+    created() {
+      this.$store.commit('CLEAR_NATIVE_BALANCE')
+    },
     mounted: function () {
       this.refresh(true)
       // this.$store.dispatch('queryBalanceForOep4', this.currentWallet.address)
@@ -612,6 +615,7 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
           this.getBalance(),
           this.getTransactions()
         ]).then(res => {
+          console.log(res)
           this.requestStart = false;
           this.$store.dispatch('hideLoadingModals')
         })

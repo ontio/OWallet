@@ -57,11 +57,12 @@
             </div>
             <div class="stake-btn-container">
                 <!-- <p class="font-medium"><a-icon type="exclamation-circle" /> {{$t('nodeMgmt.userParticipate')}}</p> -->
-                <a-button type="primary" class="btn-next" @click="handleSearch">{{$t('nodeStake.search')}}</a-button>
+                <a-button type="primary" class="btn-next" @click="handleSearch" :disabled="requesting">{{$t('nodeStake.search')}}</a-button>
             </div>
         </div>
         <a-table :columns="columns"
         :dataSource="stakeHistory"
+        :loading="requesting"
         >
         <div slot="action" slot-scope="text, record" class="detail-link">
             <a-icon type="arrow-right" @click="handleAuthorizeLogin(record)"/>
@@ -117,7 +118,8 @@ export default {
             payerWalletType: 'commonWallet',
             payerWalletValue: undefined,
             stakeWallet:'',
-            payerWallet: ''
+            payerWallet: '',
+            requesting: false
         }
     },
     components:{
@@ -200,7 +202,10 @@ export default {
                 this.stakeWallet = this.ledgerWallet
             }
             this.$store.commit('UPDATE_STAKE_WALLET', {stakeWallet: this.stakeWallet})  
-            this.$store.dispatch('searchStakeHistory', {address: this.stakeWallet.address})      
+            this.requesting = true;
+            this.$store.dispatch('searchStakeHistory', {address: this.stakeWallet.address}).then(res => {
+                this.requesting = false;
+            })      
         }
     }
 }
