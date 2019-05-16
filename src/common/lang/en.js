@@ -294,7 +294,8 @@ export default {
     paxMgmt: 'PAX management',
     unprocessed: 'Unprocessed',
     processing: 'In processing',
-    completed: 'Completed'
+    completed: 'Completed',
+    txMgmt: 'Transaction management'
   },
 
   pax: {
@@ -325,6 +326,12 @@ export default {
     toEthScan: 'To Eth Scan',
     txCompleted: 'Transaction completed',
     txDetail: 'Detail'
+  },
+
+  sharedTx: {
+    startTx: 'Start multi-sign transaction',
+    signTx: 'Sign multi-sign transaction',
+    selectSponsor: 'Select sponsor'
   },
 
   commonWalletHome: {

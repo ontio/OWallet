@@ -127,11 +127,11 @@
     font-family: AvenirNext-Medium;
     font-size: 14px;
     color: #FFFFFF;
-    width:100px;
+    min-width:100px;
     height:34px;
     margin-right: 40px;
-    margin-bottom:60px;
-    margin-top: 30px;
+    margin-bottom:30px;
+    /* margin-top: 30px; */
 }
 .arrow-up {
     width:10px;
@@ -375,8 +375,14 @@
                         <i class="arrow-down"></i>
                         {{$t('sharedWalletHome.receive')}}</a-button>
                     
-                    <a-button class="asset-btn" type="primary" @click="shwoPaxMgmt">
+                    
+                </div>
+
+                <div>
+                    <a-button class="asset-btn" type="primary" @click="showPaxMgmt">
                         {{$t('sharedWalletHome.paxMgmt')}}</a-button>
+                    <a-button class="asset-btn" type="primary" @click="showTxMgmt">
+                        {{$t('sharedWalletHome.txMgmt')}}</a-button>
                 </div>
 
 
@@ -651,7 +657,7 @@ export default {
             this.$store.commit('UPDATE_TRANSFER_REDEEM_TYPE', {type: false});
             this.$router.push({path:'/sharedWallet/sendTransfer'})
         },
-        shwoReceive() {
+        showReceive() {
             this.$router.push({path:'/commonWalletReceive/sharedWallet'})
         },
         pendingTxDetail(tx) {
@@ -735,6 +741,9 @@ export default {
       },
       shwoPaxMgmt() {
           this.$router.push({path: '/sharedWallet/paxMgmt'})
+      },
+      showTxMgmt() {
+          this.$router.push({path: '/sharedWallet/txMgmt'})
       }
     }
 }

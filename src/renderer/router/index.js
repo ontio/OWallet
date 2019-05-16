@@ -117,6 +117,11 @@ export default new Router({
           name: 'SignProcess',
           component: require('@/components/SharedWallet/PAX/SignProcess').default,
         },
+        {
+          path: '/sharedWallet/txMgmt',
+          name: 'SharedTxMgmt',
+          component: require('@/components/SharedWallet/Tx/SharedTxMgmt').default
+        }
 
       ]
     },

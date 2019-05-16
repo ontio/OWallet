@@ -292,7 +292,8 @@ export default {
     paxMgmt: 'PAX管理',
     unprocessed: '未处理',
     processing: '处理中',
-    completed: '已完成'
+    completed: '已完成',
+    txMgmt: '多签交易管理'
   },
 
   pax: {
@@ -323,6 +324,26 @@ export default {
     toEthScan: '查看ETH Scan',
     txCompleted: '已上链',
     txDetail: '查看交易'
+  },
+
+  sharedTx: {
+    startTx: '发起多签交易',
+    signTx: '签名多签交易',
+    selectSponsor: '选择发起人',
+    createTx: '构建多签交易',
+    contractHash: '合约哈希',
+    method: '方法名',
+    parameters: '参数列表',
+    starterSign: '发起人签名',
+    txSerialized: '签名后的交易：',
+    addSign: '增加签名',
+    txContent: '交易内容',
+    currentSign: '当前签名地址',
+    selectSigner: '选择签名地址',
+    addSign: '增加签名',
+    copy: '复制',
+    send: '立即发送',
+    isSendTxTip: '该交易的签名数量以满足要求。是否立即发送交易上链？'
   },
 
   commonWalletHome: {
