@@ -59,6 +59,8 @@
             </div>
             
             <div class="table-container">
+                <a-button type="primary" :disabled="selectedRowKeys.length < 1" @click="handleVarify">
+                    {{$t('pax.toVarify')}}</a-button>
                 <a-button type="primary" :disabled="selectedRowKeys.length < 1 || status === '1' && !currentSigner" 
                 v-if="status === '0' || status === '1' " @click="handleProcess">{{$t('pax.toProcess')}}</a-button>
                 <a-table :rowSelection="(status === '2' || status === '3') ? null : {selectedRowKeys: selectedRowKeys, onChange: onSelectChange}" 
@@ -157,6 +159,34 @@ export default {
             const net = localStorage.getItem('net');
             let url = net === 'TEST_NET' ? PAX_API.EthScanTest : PAX_API.EthScanMain;
             opn(url)
+        },
+        async handleVarify() {
+            let list = []
+            for(let key in this.selectedRowsPerPage) {
+                list = list.concat(this.selectedRowsPerPage[key])
+            }
+            const data = {
+                txhashs: [],
+                ercaddresses: [],
+                oep4addresses: [],
+                amounts: []
+            }
+            list.forEach(item => {
+                data.txhashs.push(item.TxHash),
+                data.ercaddresses.push(item.EthAddress),
+                data.oep4addresses.push(item.OntAddress),
+                data.amounts.push(item.Amount)
+            })
+            
+            this.$store.dispatch('showLoadingModals')        
+            const net = localStorage.getItem('net');
+            const result = await this.httpService({
+                method:'post',
+                data,
+                url: (net === 'TEST_NET' ? PAX_API.TestHost : PAX_API.Host) + PAX_API.validateTx
+            })
+            console.log(result)
+            
         },
         handleStatusChange(e) {
             this.status = e.target.value

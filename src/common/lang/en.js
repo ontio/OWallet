@@ -322,7 +322,7 @@ export default {
     signSuccess: 'Sign transactions succeed.',
     ledgerSignMultiTimes: 'You may have to sign multi times on your ledger device',
     hasSignedSent: 'These transactions has been signed and sent. Please review the completed data.',
-    toEthScan: 'TO Eth Scan',
+    toEthScan: 'To Eth Scan',
     txCompleted: 'Transaction completed',
     txDetail: 'Detail'
   },

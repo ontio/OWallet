@@ -98,9 +98,11 @@ export const NODE_NAME_LIST = 'https://ont.io/api/v1/candidate/info/All'
 
 export const PAX_API = {
   Host: '',
-  TestHost: 'http://172.168.3.61:20800',
+  // TestHost: 'http://172.168.3.61:20800',
+  TestHost: 'http://18.139.19.52:20800',
   fetchApprovalList: '/api/v1/approvals',
   updateApprovals: '/api/v1/processapplist',
+  validateTx: '/api/v1/validatetx',
   EthScanTest: 'https://ropsten.etherscan.io/address/0x60275d9b241e5eb3b9acbf5a15107d1242528ee6#tokentxns',
   EthScanMain: ''
 }
