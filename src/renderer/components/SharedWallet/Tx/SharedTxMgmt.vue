@@ -6,7 +6,7 @@
 </style>
 <template>
     <div>
-        <breadcrumb :routes="routes" :current="$t('sharedWalletHome.txMgmt')"></breadcrumb>
+        <breadcrumb :routes="routes" :current="$t('sharedWalletHome.txMgmt')" @backEvent="handleBack"></breadcrumb>
         <div class="pax-container">
             <div class="pax-header">
                 
@@ -44,7 +44,7 @@ export default {
         ]
         return {
             routes,
-            status: '1',
+            status: '0',
             localCopayers: [],
             sharedWallet
         }
@@ -55,6 +55,9 @@ export default {
     methods: {
         handleStatusChange(e) {
            this.status = e.target.value
+        },
+        handleBack() {
+            this.$router.push({path: '/Wallets'});
         },
         updateLocalCopayers() {
             var that = this;

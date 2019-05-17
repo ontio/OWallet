@@ -14,12 +14,14 @@
 .table-container {
     position: relative;;
 }
-.table-container > button {
-    position: absolute;
-    right:0;
-    top:-40px;
-}
 
+.table-btns {
+    text-align: right;
+    margin-bottom:5px;
+}
+.table-btns button {
+    margin-left: 15px;
+}
 .pax-header {
     position: relative;
 }
@@ -41,11 +43,11 @@
 </style>
 <template>
     <div>
-        <breadcrumb :routes="routes" :current="$t('sharedWalletHome.paxMgmt')"></breadcrumb>
+        <breadcrumb :routes="routes" :current="$t('sharedWalletHome.paxMgmt')" @backEvent="handleBack"></breadcrumb>
         <div class="pax-container">
             <div class="pax-header">
                 
-                <a-button class="btn-ethScan" @click="toEthScan">{{$t('pax.toEthScan')}}</a-button>
+                <!-- <a-button class="btn-ethScan" @click="toEthScan">{{$t('pax.toEthScan')}}</a-button> -->
                 <a-radio-group :value="status" @change="handleStatusChange" class="status-group">
                     <a-radio-button value="0">{{$t('sharedWalletHome.unprocessed')}}</a-radio-button>
                     <a-radio-button value="1">{{$t('sharedWalletHome.processing')}}</a-radio-button>
@@ -57,12 +59,13 @@
                     <a-select :options="localCopayers" class="select-current"  @change="handleChangeCurrentSigner"></a-select>
                 </div>
             </div>
-            
-            <div class="table-container">
-                <a-button type="primary" :disabled="selectedRowKeys.length < 1" @click="handleVarify">
+            <div class="table-btns">
+                    <a-button type="primary" :disabled="selectedRowKeys.length < 1" @click="handleVarify">
                     {{$t('pax.toVarify')}}</a-button>
-                <a-button type="primary" :disabled="selectedRowKeys.length < 1 || status === '1' && !currentSigner" 
-                v-if="status === '0' || status === '1' " @click="handleProcess">{{$t('pax.toProcess')}}</a-button>
+                    <a-button type="primary" :disabled="selectedRowKeys.length < 1 || status === '1' && !currentSigner" 
+                    v-if="status === '0' || status === '1' " @click="handleProcess">{{$t('pax.toProcess')}}</a-button>
+                </div>
+           
                 <a-table :rowSelection="(status === '2' || status === '3') ? null : {selectedRowKeys: selectedRowKeys, onChange: onSelectChange}" 
                 rowKey="Txhash"
                 :columns="currentColumns" 
@@ -70,11 +73,10 @@
                 :pagination="pagination"
                 @change="handleTableChange"
                 >
-                <div slot="action" slot-scope="text, record" class="detail-link" v-if="status === '3' ">
-                    <a-icon type="arrow-right" @click="handleOpenTxDetail(record)" v-if="record.Senthash" />
+                <div slot="action" slot-scope="text, record" class="detail-link" >
+                    <a-icon type="arrow-right" @click="handleOpenTxDetail(record)" />
                 </div>
                 </a-table>
-            </div>
             
 
         </div>
@@ -87,6 +89,18 @@
             >
             <p>{{$t('pax.selectedNum')}} {{selectedNum}}</p>
             <p>{{$t('pax.totalAmount')}} {{totalAmount}}</p>
+        </a-modal>
+
+        <a-modal
+            :title="$t('pax.varifyResult')"
+            :visible="varifyFailedList.length > 0"
+            @cancel="handleShowVarifyResultCancel"
+            :footer="null"
+            >
+            <p>{{$t('pax.failedTxhashes')}}</p>
+            <p v-for="item of varifyFailedList" :key="item.txhash">
+                <a :href="item.url">{{item.txhash}}</a>
+            </p>
         </a-modal>
         
     </div>
@@ -125,6 +139,11 @@ export default {
             {
                 title: this.$t('pax.date'),
                 dataIndex: 'Updated'
+            },
+            {
+                title: this.$t('pax.txDetail'),
+                key: 'action',
+                scopedSlots: {customRender:'action'}
             }
         ]
         return {
@@ -147,7 +166,8 @@ export default {
             selectedNum:0,
             totalAmount: 0,
             ethTotal: 0,
-            visible: false
+            visible: false,
+            varifyFailedList: []
         }
     },
     mounted() {
@@ -159,6 +179,9 @@ export default {
             const net = localStorage.getItem('net');
             let url = net === 'TEST_NET' ? PAX_API.EthScanTest : PAX_API.EthScanMain;
             opn(url)
+        },
+        handleBack() {
+            this.$router.push({path: '/Wallets'});
         },
         async handleVarify() {
             let list = []
@@ -172,12 +195,11 @@ export default {
                 amounts: []
             }
             list.forEach(item => {
-                data.txhashs.push(item.TxHash),
+                data.txhashs.push(item.Txhash),
                 data.ercaddresses.push(item.EthAddress),
                 data.oep4addresses.push(item.OntAddress),
                 data.amounts.push(item.Amount)
             })
-            
             this.$store.dispatch('showLoadingModals')        
             const net = localStorage.getItem('net');
             const result = await this.httpService({
@@ -185,29 +207,55 @@ export default {
                 data,
                 url: (net === 'TEST_NET' ? PAX_API.TestHost : PAX_API.Host) + PAX_API.validateTx
             })
+            const varifyFailedList = []
+            const ethScanHost = net === 'TEST_NET' ? PAX_API.EthScanTest : PAX_API.EthScanMain
+            for(let i = 0; i < result.Result.length; i++) {
+                if(result.Result[i] !== '0') { // 0: pass; 
+                    varifyFailedList.push(
+                        {
+                           txhash: data.txhashs[i],
+                           url: ethScanHost + data.txhashs[i]
+                        })
+                }  
+            }         
+            this.varifyFailedList = varifyFailedList;   
+            if(varifyFailedList.length === 0) {
+                this.$message.success(this.$t('sharedTx.varifySuccess'))
+            } else {
+                this.$message.error(this.$t('sharedTx.varifyFailed'))
+            }
             console.log(result)
-            
+
+        },
+        handleShowVarifyResultCancel() {
+            this.varifyFailedList = [];
         },
         handleStatusChange(e) {
             this.status = e.target.value
-            if(this.status === '3') {
-                this.currentColumns =[...this.columns, 
-                {
-                    title: this.$t('pax.txDetail'),
-                    key: 'action',
-                    scopedSlots: {customRender:'action'}
-                }]
-            } else {
-                this.currentColumns = this.columns;
-            }
+            // if(this.status === '3') {
+            //     this.currentColumns = [...this.columns, 
+            //     {
+            //         title: this.$t('pax.txDetail'),
+            //         key: 'action',
+            //         scopedSlots: {customRender:'action'}
+            //     }]
+            // } 
+            // else {
+            //     this.currentColumns = [...this.columns]
+            // }
             this.fetchList()
         },
         handleOpenTxDetail(record) {
-            if(!record.Senthash) return;
-            let url = `https://explorer.ont.io/transaction/${record.Senthash}`
-            const net = localStorage.getItem('net')
-            if(net === 'TEST_NET') {
-                url = url+ '/testnet'
+            const net = localStorage.getItem('net');
+            let url = '';
+            if(this.status === '3') {
+                let url = `https://explorer.ont.io/transaction/${record.Senthash}`
+                const net = localStorage.getItem('net')
+                if(net === 'TEST_NET') {
+                    url = url+ '/testnet'
+                }
+            } else {
+                url = (net === 'TEST_NET' ? PAX_API.EthScanTest : PAX_API.EthScanMain) + record.Txhash
             }
             opn(url)
         },

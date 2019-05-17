@@ -17,6 +17,9 @@
 .input-item input, textarea {
     flex:1;
 }
+.input-itme textarea {
+    height:130px;
+}
 .label {
     width:200px;
     margin-right:10px;         
@@ -69,6 +72,7 @@
         <a-modal
             :title="$t('sharedTx.startTx')"
             :visible="visible"
+            @cancel="handleOk"
             >
             <template slot="footer">
                 <a-button type="primary"  @click="handleOk">
@@ -82,7 +86,7 @@
 </template>
 <script>
 import CommonSignShared from '../../Common/CommonSignShared'
-import {utils, TransactionBuilder, Crypto} from 'ontology-ts-sdk'
+import {utils, TransactionBuilder, Crypto, Parameter, ParameterType} from 'ontology-ts-sdk'
 export default {
     name: 'StartSharedTx',
     props: ['sharedWallet','localSigners'],
@@ -96,8 +100,8 @@ export default {
             sponsorPayer: '',
             visible: false,
             serializedTx: '',
-            contractHash: '',
-            method: '',
+            contractHash: 'b06f8eaf757030c7a944ce2a072017bde1e72308',
+            method: 'init',
             parameters: ''
         }
     },
@@ -113,6 +117,8 @@ export default {
             }
         },
         varifyForm() {
+            this.contractHash = this.contractHash.trim();
+            this.method = this.method.trim();
             if(!this.contractHash || !this.method) {
                 return false;
             }
@@ -128,15 +134,29 @@ export default {
             }
             return true;
         },
+        convertParams() {
+            if(!this.parameters) {
+                return [];
+            }
+            const params = JSON.parse(this.parameters);
+            return params.map(item => {
+                    if(item.type === 'Address') {
+                        item.value = new Crypto.Address(item.value).serialize();
+                    }
+                    return new Parameter('', item.type, item.value);
+                })
+        },
         confirm() {
             const isFirstSign = true;
             if(this.varifyForm()) {
                 const contractAddr = new Crypto.Address(utils.reverseHex(this.contractHash))
-                const params = JSON.parse(this.parameters)
-                const payer = new Crypto.Address(this.sharedWallet.address)
-                const tx = TransactionBuilder.makeInvokeTransaction(this.method, params, contractAddr, '500', '20000', payer);
+                const params = this.convertParams();
+                const payer = new Crypto.Address(this.sharedWallet.sharedWalletAddress)
+                const tx = TransactionBuilder.makeInvokeTransaction(this.method, params, contractAddr, '500', '200000', payer);
                 this.tx = tx.serialize();
-                this.$refs.commonSign.signSharedTx(isFirstSign);
+                this.$refs.commonSign.signSharedTx(isFirstSign, this.tx);
+            } else {
+                this.$message.error(this.$t('sharedTx.paramsError'))
             }
         },
         handleTxSigned(tx) {

@@ -1,4 +1,15 @@
 <style scoped>
+.sign-container {
+    display: flex;
+}
+.label {
+    width:200px;
+     margin-right:10px;
+}
+.sign-content {
+    flex:1;
+   
+}
 
 </style>
 <template>
@@ -23,20 +34,22 @@
 <script>
 import {mapState} from 'vuex'
 import {DEFAULT_SCRYPT} from '../../../core/consts'
-import {getNodeUrl} from '../../../core/utils'
+import {getNodeUrl, decryptWallet} from '../../../core/utils'
 import {legacySignWithLedger} from '../../../core/ontLedger'
-import {Crypto, TransactionBuilder, TxSignature, utils, RestClient} from 'ontology-ts-sdk'
+import {Crypto, Transaction, TransactionBuilder, TxSignature, utils, RestClient} from 'ontology-ts-sdk'
 
 export default {
     name: 'SignSharedTx',
-    props: ['tx', 'wallet'],
+    props: ['wallet'],
     data() {
+        const sharedWallet = JSON.parse(sessionStorage.getItem('sharedWallet'));
         return {
-            password: ''
+            password: '',
+            sharedWallet
         }
     },
     mounted(){
-        if(!this.wallet.key) {//common wallet
+        if(this.wallet.type === 'HardwareWallet') {
             this.$store.dispatch('getLedgerStatus')
         }
     },
@@ -52,16 +65,15 @@ export default {
         })
     },
     methods: {
-        async signSharedTx(isFirstSign) {
+        async signSharedTx(isFirstSign, tx) {
             if(this.wallet.type === 'CommonWallet' && !this.password 
             || this.wallet.type === 'HardwareWallet' && !this.ledgerPk) {
                 return;
             }
-            const M = this.wallet.requiredNumber;
-            const pks = this.wallet.coPayers.map(p => new Crypto.PublicKey(p.publickey))
-           const txTemp = Transaction.deserialize(this.tx)
+            const M = this.sharedWallet.requiredNumber;
+            const pks = this.sharedWallet.coPayers.map(p => new Crypto.PublicKey(p.publickey))
+           const txTemp = Transaction.deserialize(tx)
             if (this.wallet.type === 'CommonWallet') {
-                const enc = new Crypto.PrivateKey(this.wallet.wallet.key)
                 const pri = decryptWallet({
                     key: this.wallet.wallet.key,
                     address: this.wallet.address,

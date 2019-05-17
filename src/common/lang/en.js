@@ -325,13 +325,34 @@ export default {
     hasSignedSent: 'These transactions has been signed and sent. Please review the completed data.',
     toEthScan: 'To Eth Scan',
     txCompleted: 'Transaction completed',
-    txDetail: 'Detail'
+    txDetail: 'Detail',
+    toVarify: 'Varify',
+    varifySuccess: 'Varify succeed!',
+    varifyFailed: 'Varify failed!',
+    varifyResult: 'Varified result',
+    failedTxhashes: 'Failed transaction hash:'
   },
 
   sharedTx: {
     startTx: 'Start multi-sign transaction',
     signTx: 'Sign multi-sign transaction',
-    selectSponsor: 'Select sponsor'
+    selectSponsor: 'Select sponsor',
+    createTx: 'Create Transaction',
+    contractHash: 'Contract hash',
+    method: 'Method',
+    parameters: 'Parameters',
+    starterSign: 'Start sign',
+    txSerialized: 'Signed and serialized transaction：',
+    addSign: 'Add signature',
+    txContent: 'Transaction data',
+    currentSign: 'Current signer',
+    selectSigner: 'Select wallet to sign',
+    addSign: 'Add signature',
+    copy: 'Copy',
+    send: 'Send now',
+    isSendTxTip: 'The transaction can be sent to the blockchain now. Confirm to send?',
+    txSentSuccess: 'Send transaction succeed.',
+    paramsError: 'Error parameters. Please check the input.'
   },
 
   commonWalletHome: {

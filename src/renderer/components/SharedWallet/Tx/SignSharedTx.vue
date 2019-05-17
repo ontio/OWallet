@@ -17,6 +17,9 @@
 .input-item input, textarea {
     flex:1;
 }
+.input-itme textarea {
+    height:130px;
+}
 .label {
     width:200px;
     margin-right:10px;         
@@ -47,7 +50,6 @@
         
             <common-sign-shared
                 ref="commonSign"
-                :tx="txbody" 
                 :wallet="signer" 
                 @sharedTxSigned="handleTxSigned">
             </common-sign-shared>
@@ -61,12 +63,13 @@
         <a-modal
             :title="$t('sharedTx.addSign')"
             :visible="visible"
+            @cancel="handleCopy"
             >
             <template slot="footer">
                 <a-button type="default"  @click="handleCopy">
                 {{$t('sharedTx.copy')}}
                 </a-button>
-                <a-button  type="primary" key="submit" :loading="loading" @click="handleSend">
+                <a-button  type="primary" key="submit" :loading="loading" @click="handleSend" v-if="canSendTx">
                 {{$t('sharedTx.send')}}
                 </a-button>
             </template>
@@ -115,8 +118,11 @@ export default {
         },
         confirm() {
             const isFirstSign = false;
+            this.txbody = this.txbody.trim();
             if(this.varifyForm()) {
-                this.$refs.commonSign.signSharedTx(isFirstSign);
+                this.$refs.commonSign.signSharedTx(isFirstSign, this.txbody);
+            } else {
+                this.$message.error(this.$t('sharedTx.paramsError'))
             }
         },
          handleTxSigned(tx) {
@@ -144,12 +150,14 @@ export default {
              //send tx
              const nodeUrl = getNodeUrl();
             const restClient = new RestClient(nodeUrl);
+            this.$store.dispatch('showLoadingModals')
             try {
                 const res = await restClient.sendRawTransaction(this.serializedTx)
                 console.log(res)
                 if(res.Error === 0) {
-                    this.$message.success(this.$t('sharedTx.txSentSuccess'))
-                    // this.clearData();
+                    this.$store.dispatch('hideLoadingModals')
+                    this.$message.success(this.$t('sharedTx.txSentSuccess'), 3)
+                    this.clearData();
                     return res.Result;
                 } else {
                     if(res.Result.indexOf('balance insufficient') > -1 ) {

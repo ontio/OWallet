@@ -133,7 +133,8 @@ export default {
   },
 
   dashboard: {
-    getTransErr: '交易记录获取失败，网络错误。请稍后重试。'
+    getTransErr: '交易记录获取失败，网络错误。请稍后重试。',
+    getBalanceErr: '余额获取失败。网络错误，请稍后重试。'
   },
 
   createJsonWallet: {
@@ -323,7 +324,12 @@ export default {
     hasSignedSent: '注意！这些交易已经被签名并已发送到链上。请检查已完成的数据。',
     toEthScan: '查看ETH Scan',
     txCompleted: '已上链',
-    txDetail: '查看交易'
+    txDetail: '查看交易',
+    toVarify: '验证',
+    varifySuccess: '验证失败',
+    varifyFailed: '验证通过',
+    varifyResult: '验证结果',
+    failedTxhashes: '验证失败的交易哈希'
   },
 
   sharedTx: {
@@ -343,7 +349,9 @@ export default {
     addSign: '增加签名',
     copy: '复制',
     send: '立即发送',
-    isSendTxTip: '该交易的签名数量以满足要求。是否立即发送交易上链？'
+    isSendTxTip: '该交易的签名数量已满足要求。是否立即发送交易上链？',
+    txSentSuccess: '发送交易上链成功。',
+    paramsError: '输入参数有误。请检查。'
   },
 
   commonWalletHome: {

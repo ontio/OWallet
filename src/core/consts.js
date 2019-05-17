@@ -103,6 +103,6 @@ export const PAX_API = {
   fetchApprovalList: '/api/v1/approvals',
   updateApprovals: '/api/v1/processapplist',
   validateTx: '/api/v1/validatetx',
-  EthScanTest: 'https://ropsten.etherscan.io/address/0x60275d9b241e5eb3b9acbf5a15107d1242528ee6#tokentxns',
-  EthScanMain: ''
+  EthScanTest: 'https://ropsten.etherscan.io/tx/',
+  EthScanMain: 'https://etherscan.io/tx/'
 }

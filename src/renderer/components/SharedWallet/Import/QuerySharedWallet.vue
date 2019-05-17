@@ -100,16 +100,18 @@ export default {
                     sharedWalletAddress: this.searchText
                 }
             }).then(res => {
-                if(res.status === 200) {
+                if(res.status === 200 && res.data.sharedWalletAddress) {
                     this.sharedWallet = res.data
                     this.$store.commit('UPDATE_SHARED_WALLET', {sharedWallet: res.data})
+                    this.$store.commit('ADD_IMPORT_SHARED_STEP');
                 } else {
-                    this.$store.commit('UPDATE_SHARED_WALLET', {sharedWallet: null} )                   
+                    this.$store.commit('UPDATE_SHARED_WALLET', {sharedWallet: null} )  
+                    this.$message.error(this.$t('importSharedWallet.notFound'))                 
                 } 
-                this.$store.commit('ADD_IMPORT_SHARED_STEP');
+                // this.$store.commit('ADD_IMPORT_SHARED_STEP');
             }).catch(err => {
                 this.$store.commit('UPDATE_SHARED_WALLET', {sharedWallet: null} )                   
-                this.$store.commit('ADD_IMPORT_SHARED_STEP');
+                // this.$store.commit('ADD_IMPORT_SHARED_STEP');
             })
         },
     }
