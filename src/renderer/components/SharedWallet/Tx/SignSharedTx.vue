@@ -158,6 +158,13 @@ export default {
                     this.$store.dispatch('hideLoadingModals')
                     this.$message.success(this.$t('sharedTx.txSentSuccess'), 3)
                     this.clearData();
+                    const title = this.$t('common.transSentSuccess')
+                    setTimeout(() => {
+                        this.$success({
+                            title: title,
+                            content: 'Transaction hash: ' + res.Result
+                        })
+                    }, 100)
                     return res.Result;
                 } else {
                     if(res.Result.indexOf('balance insufficient') > -1 ) {

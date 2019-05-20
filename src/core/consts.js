@@ -97,7 +97,7 @@ export const NODE_DETAIL = 'https://explorer.ont.io/nodes/detail/'
 export const NODE_NAME_LIST = 'https://ont.io/api/v1/candidate/info/All'
 
 export const PAX_API = {
-  Host: '',
+  Host: 'http://18.138.83.180:20800',
   // TestHost: 'http://172.168.3.61:20800',
   TestHost: 'http://18.139.19.52:20800',
   fetchApprovalList: '/api/v1/approvals',
