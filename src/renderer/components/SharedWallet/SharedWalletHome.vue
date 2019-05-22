@@ -652,6 +652,8 @@ export default {
                 return;
             }
             this.$store.commit('CLEAR_CURRENT_TRANSFER');
+            const wallet = {address: this.sharedWallet.sharedWalletAddress}
+            this.$store.commit('UPDATE_CURRENT_WALLET', {wallet})
             this.$store.commit('UPDATE_TRANSFER_REDEEM_TYPE', {type: false});
             this.$router.push({path:'/sharedWallet/sendTransfer'})
         },

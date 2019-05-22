@@ -96,9 +96,9 @@ export default {
     name: 'SendAsset',
     data(){
         const net = localStorage.getItem('net')
-        const currentWallet = JSON.parse(sessionStorage.getItem('currentWallet'));
+        // const currentWallet = JSON.parse(sessionStorage.getItem('currentWallet'));
         return {
-            address: currentWallet.address,
+            // address: currentWallet.address,
             gas: 0.01,
             asset:'ONT',
             scriptHash: '',
@@ -113,7 +113,8 @@ export default {
     },
     computed: {
         ...mapState({
-            balance: state => state.CurrentWallet.balance
+            balance: state => state.CurrentWallet.balance,
+            address: state => state.CurrentWallet.wallet.address
         }),
         oep4s() {
             return this.$store.state.Oep4s.oep4s.filter(item => item.net === this.net)

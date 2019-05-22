@@ -628,6 +628,8 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
           return;
         }
         this.$store.commit('CLEAR_CURRENT_TRANSFER');
+        const wallet = {address: this.address}
+        this.$store.commit('UPDATE_CURRENT_WALLET', {wallet})
         this.$router.push({name: 'CommonSendHome'})
       },
       commnReceive() {
