@@ -377,8 +377,9 @@
                 </div>
 
                 <div>
-                    <a-button class="asset-btn" type="primary" @click="showPaxMgmt">
-                        {{$t('sharedWalletHome.paxMgmt')}}</a-button>
+                    <!-- hide pax -->
+                    <!-- <a-button class="asset-btn" type="primary" @click="showPaxMgmt">
+                        {{$t('sharedWalletHome.paxMgmt')}}</a-button> -->
                     <a-button class="asset-btn" type="primary" @click="showTxMgmt">
                         {{$t('sharedWalletHome.txMgmt')}}</a-button>
                 </div>
