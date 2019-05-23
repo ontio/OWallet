@@ -1,37 +1,39 @@
 import $ from 'jquery'
+const state = {
+  showLoading: false
+}
+
+const mutations = {
+  SHOW_LOADING_MODALS(state) {
+    state.showLoading = true;
+  },
+  HIDE_LOADING_MODALS(state) {
+    state.showLoading = false
+  }
+}
 
 const actions = {
-  showLoadingModals() {
-    $("#loadingModal").modal('show')
+  showLoadingModals({commit}) {
+    // $("#loadingModal").modal('show')
+    commit('SHOW_LOADING_MODALS')
   },
-  hideLoadingModals() {
+  hideLoadingModals({commit}) {
     // Wait for the animation to end
+    commit('HIDE_LOADING_MODALS')
     
-        setTimeout(()=>{
-          $("#loadingModal").modal('hide')
-          $('body').removeClass('modal-open');
-          if ($('.modal-backdrop')) {
-            $('.modal-backdrop').remove();
-          }
-        }, 500)
-    // $(document).ready(function(){
-    //   $('#loadingModal').on('shown.bs.modal', function () {
-    //     $("#loadingModal").modal('hide')
-    //     $('.modal-backdrop').hide();
-    //     // $('.modal-backdrop').hide();
-    //     // setTimeout(()=>{
-    //     //   $('body').removeClass('modal-open');
-    //     //   if ($('.modal-backdrop')) {
-    //     //     $('.modal-backdrop').remove();
-    //     //   }
-    //     // }, 500)
-
-    //   })
-    // })
+        // setTimeout(()=>{
+        //   $("#loadingModal").modal('hide')
+        //   $('body').removeClass('modal-open');
+        //   if ($('.modal-backdrop')) {
+        //     $('.modal-backdrop').remove();
+        //   }
+        // }, 500)
     
   }
 }
 
 export default {
-  actions
+  actions,
+  mutations,
+  state
 }

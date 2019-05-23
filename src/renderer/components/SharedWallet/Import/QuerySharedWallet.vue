@@ -95,21 +95,27 @@ export default {
         next() {
             const net = localStorage.getItem('net')
             const ontPassNode = net === 'TEST_NET' ? ONT_PASS_NODE : ONT_PASS_NODE_PRD
+            this.$store.dispatch('showLoadingModals')
             axios.get(ontPassNode+ONT_PASS_URL.QuerySharedWallet, {
                 params: {
                     sharedWalletAddress: this.searchText
                 }
             }).then(res => {
-                if(res.status === 200) {
+                this.$store.dispatch('hideLoadingModals')
+                if(res.status === 200 && res.data.sharedWalletAddress) {
                     this.sharedWallet = res.data
                     this.$store.commit('UPDATE_SHARED_WALLET', {sharedWallet: res.data})
+                    this.$store.commit('ADD_IMPORT_SHARED_STEP');
                 } else {
-                    this.$store.commit('UPDATE_SHARED_WALLET', {sharedWallet: null} )                   
+                    this.$store.commit('UPDATE_SHARED_WALLET', {sharedWallet: null} )  
+                    this.$message.error(this.$t('importSharedWallet.notFound'))                 
                 } 
-                this.$store.commit('ADD_IMPORT_SHARED_STEP');
+                // this.$store.commit('ADD_IMPORT_SHARED_STEP');
             }).catch(err => {
-                this.$store.commit('UPDATE_SHARED_WALLET', {sharedWallet: null} )                   
-                this.$store.commit('ADD_IMPORT_SHARED_STEP');
+                this.$store.dispatch('hideLoadingModals')
+                this.$store.commit('UPDATE_SHARED_WALLET', {sharedWallet: null} )   
+                this.$message.error(this.$t('commonWalletHome.networkError'))                
+                // this.$store.commit('ADD_IMPORT_SHARED_STEP');
             })
         },
     }

@@ -223,7 +223,7 @@ export default {
     }
     const currentWallet = JSON.parse(sessionStorage.getItem('currentWallet'));
     return {
-      interval:3000,
+      interval:10000,
       invervalId: '',
       currentWallet,
       checked: false,
@@ -302,6 +302,9 @@ export default {
                   content: 'Transaction hash: ' + utils.reverseHex(tx.getHash())
               })
           }, 100)
+        }).catch(err => {
+          console.log(err)
+          this.$message.error(this.$t('common.networkError'))
         })
       },
     submit() {

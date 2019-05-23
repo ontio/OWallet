@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import {varifyPositiveInt, varifyOngValue} from '../../../../core/utils.js'
+import {varifyPositiveInt, varifyOngValue, validateAddress} from '../../../../core/utils.js'
 import {mapState} from 'vuex'
 import { BigNumber } from 'bignumber.js';
 
@@ -96,7 +96,9 @@ export default {
     name: 'SendAsset',
     data(){
         const net = localStorage.getItem('net')
+        // const currentWallet = JSON.parse(sessionStorage.getItem('currentWallet'));
         return {
+            // address: currentWallet.address,
             gas: 0.01,
             asset:'ONT',
             scriptHash: '',
@@ -105,16 +107,21 @@ export default {
             to:'',
             validToAddress: true,
             validAmount: true,
-            net
+            net,
+            selectedOep4: {}
         }
     },
     computed: {
         ...mapState({
-            balance: state => state.CurrentWallet.transfer.balance,
-            oep4s: state => state.CurrentWallet.transfer.oep4s
-        })
+            balance: state => state.CurrentWallet.balance,
+            address: state => state.CurrentWallet.wallet.address
+        }),
+        oep4s() {
+            return this.$store.state.Oep4s.oep4s.filter(item => item.net === this.net)
+        }
     },
     mounted() {
+        this.$store.dispatch('queryBalanceForOep4', this.address)
         const transfer = this.$store.state.CurrentWallet.transfer
         this.gas = transfer.gas;
         this.asset = transfer.asset;
@@ -124,7 +131,7 @@ export default {
 
     methods: {
         validateToAddress() {
-            if(!this.to || this.to.length !== 34 || this.to[0] !== 'A') {
+            if(!this.to || !validateAddress(this.to)) {
                 this.validToAddress = false;
                 return;
             }
@@ -135,12 +142,13 @@ export default {
                 this.validAmount = false;
                 return;
             }
-            if(this.asset === 'ONG' && !varifyOngValue(this.amount)) {
+            else if(!varifyOngValue(this.amount)) {
                 this.validAmount = false;
                 return;
-            }
+            } 
             if(this.asset === 'ONT' && Number(this.amount) > Number(this.balance.ont) 
-             || this.asset === 'ONG' && Number(this.amount) > Number(this.balance.ong)) {
+             || this.asset === 'ONG' && Number(this.amount) > Number(this.balance.ong)
+             || Number(this.amount) > Number(this.selectedOep4.balance)) {
                  this.validAmount = false;
                  this.$message.error(this.$t('transfer.exceedBalance'))
                  return;
@@ -160,6 +168,7 @@ export default {
                     if(this.oep4s[i].symbol === value) {
                         this.scriptHash = this.oep4s[i].scriptHash
                         this.decimal = this.oep4s[i].decimal
+                        this.selectedOep4 = this.oep4s[i]
                         break;
                     }
                 }

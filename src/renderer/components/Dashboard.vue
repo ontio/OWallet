@@ -352,7 +352,7 @@
         </div>
         <div class="wallet-balance">
           <span>{{$t('sharedWalletHome.balance')}}</span>
-          <span class="refresh-icon" @click="refresh"></span>
+          <span class="refresh-icon" @click="refresh(true)"></span>
           <div class="wallet-type"></div>
         </div>
         <div>
@@ -367,15 +367,15 @@
             <span class="asset-amount">{{balance.ong}}</span>
           </div>
           <!-- <div class="asset-value">{{'$900'}}</div> -->
-          <div class="asset-ong" v-if="currentWallet.key">
+          <!-- <div class="asset-ong" v-if="currentWallet.key">
             <div class="asset-label nep5-label">
               <span>ONT</span>
               <span>(NEP-5)</span>
             </div>
             <span class="asset-amount">{{nep5Ont}}</span>
-            <!-- <a-button type="default" class="commonWallet-btn btn-swap" 
-          @click="toSwap">{{$t('commonWalletHome.swap')}}</a-button> -->
-          </div>
+            <a-button type="default" class="commonWallet-btn btn-swap" 
+          @click="toSwap">{{$t('commonWalletHome.swap')}}</a-button>
+          </div> -->
 
         </div>
 
@@ -383,12 +383,12 @@
           <div class="claim-ong">
             <div class="claim-ong-item clearfix">
               <span>{{$t('commonWalletHome.claimableOng')}}: </span>
-              <span>{{unboundOng}}</span>
+              <span>{{balance.unboundOng}}</span>
 
             </div>
             <div class="claim-ong-item clearfix">
               <span>{{$t('commonWalletHome.unboundOng')}}: </span>
-              <span>{{waitBoundOng}}</span>
+              <span>{{balance.waitBoundOng}}</span>
             </div>
           </div>
           <a-button type="default" class="commonWallet-btn btn-redeem"
@@ -482,30 +482,31 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
         address: currentWallet.address,
         amount: 0,
         toAddress: '',
-        balance: {ont: 0, ong: 0.0000, ontValue: 0},
         transactions: '',
         asset: 'ONT',
         network: network,
         nodeUrl: url,
-        unboundOng: 0,
-        waitBoundOng: 0,
         completedTx: [],
         intervalId: '',
-        interval:3000,
-        redeemInfoVisible: false
+        interval:15000,
+        redeemInfoVisible: false,
+        requestStart: false
       }
     },
+    created() {
+      this.$store.commit('CLEAR_NATIVE_BALANCE')
+    },
     mounted: function () {
-      this.refresh()
+      this.refresh(true)
+      // this.$store.dispatch('queryBalanceForOep4', this.currentWallet.address)
       this.intervalId = setInterval(() => {
-          this.getBalance();
-          this.getTransactions();
-          this.getNep5Balance();
+          this.refresh(false)
       }, this.interval)
     },
     computed: {
       ...mapState({
-        nep5Ont : state => state.CurrentWallet.nep5Ont
+        nep5Ont : state => state.CurrentWallet.nep5Ont,
+        balance: state => state.CurrentWallet.balance
       })
     },
     beforeDestroy(){
@@ -517,8 +518,9 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
         this.$router.push({name: 'Wallets'})
       },
       getTransactions() {
-        const url = this.network === 'TestNet' ? 'https://polarisexplorer.ont.io' : 'https://explorer.ont.io';
-        this.axios.get(url + '/api/v1/explorer/address/' + this.address + '/10/1').then(response => {
+        const net = localStorage.getItem('net');
+        const url = net === 'TEST_NET' ? 'https://polarisexplorer.ont.io' : 'https://explorer.ont.io';
+        return this.axios.get(url + '/api/v1/explorer/address/' + this.address + '/10/1').then(response => {
           if (response.status === 200 && response.data && response.data.Result) {
             const txlist = response.data.Result.TxnList;
             const completed = []
@@ -531,7 +533,7 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
                 if(tx.ToAddress === ONG_GOVERNANCE_CONTRACT && asset === 'ONG' && Number(tx.Amount) == 0.01) {
                   continue;
                 }
-                let amount = asset === 'ONT' ? parseInt(tx.Amount) : new BigNumber(tx.Amount).toString();
+                let amount = asset === 'ONT' ? parseInt(tx.Amount) : tx.Amount;
                 if (tx.FromAddress === this.address) {
                     amount = '-' + amount;
                 } else {
@@ -546,12 +548,15 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
               
             }
             this.completedTx = completed;
+            return true; // fetch tx history succeed
           } else {
             console.log(response)
+            return true;
           }
         }).catch(err => {
           console.log(err);
           this.$message.error(this.$t('dashboard.getTransErr'))
+          return false; // fetch tx history failed
         })
       },
       getUnclaimOng() {
@@ -564,25 +569,11 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
         })
       },
       getBalance() {
-        const urlNode = this.network === 'TestNet' ? 'https://polarisexplorer.ont.io' : 'https://explorer.ont.io';
-        const url = `${urlNode}/api/v1/explorer/address/balance/${this.address}`
-        axios.get(url).then(res => {
-          if (res.data.Result) {
-            for (let r of res.data.Result) {
-              if (r.AssetName === 'ong') {
-                this.balance.ong = r.Balance;
-              }
-              if (r.AssetName === 'waitboundong') {
-                this.waitBoundOng = r.Balance;
-              }
-              if (r.AssetName === 'unboundong') {
-                this.unboundOng = r.Balance;
-              }
-              if (r.AssetName === 'ont') {
-                this.balance.ont = r.Balance;
-              }
-            }
+        return this.$store.dispatch('getNativeBalance', {address: this.address}).then(res => {
+          if(!res){
+            this.$message.error(this.$t('dashboard.getBalanceErr'))
           }
+          return res;
         })
       },
       getNep5Balance() {
@@ -607,15 +598,29 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
           }
         })
       },
-      refresh() {
-        this.$store.dispatch('showLoadingModals')
-        const that = this
-        setTimeout(() => {
-            that.$store.dispatch('hideLoadingModals')
-        }, 500)
-        this.getBalance();
-        this.getTransactions();
-        this.getNep5Balance();
+      refresh(showLoading) {
+        // this.$store.dispatch('showLoadingModals')
+        // const that = this
+        // setTimeout(() => {
+        //     that.$store.dispatch('hideLoadingModals')
+        // }, 500)
+        if(showLoading) {
+          this.$store.dispatch('showLoadingModals')
+        } 
+        if(this.requestStart) {
+          return;
+        }
+        this.requestStart = true;
+        Promise.all([
+          this.getBalance(),
+          this.getTransactions()
+        ]).then(res => {
+          console.log(res)
+          this.requestStart = false;
+          this.$store.dispatch('hideLoadingModals')
+        })
+        
+        // this.getNep5Balance();
       },
       sendAsset() {
         if(Number(this.balance.ong) < 0.01) {
@@ -623,19 +628,20 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
           return;
         }
         this.$store.commit('CLEAR_CURRENT_TRANSFER');
-        this.$store.dispatch('queryBalanceForOep4', this.currentWallet.address)
+        const wallet = {address: this.address}
+        this.$store.commit('UPDATE_CURRENT_WALLET', {wallet})
         this.$router.push({name: 'CommonSendHome'})
       },
       commnReceive() {
         this.$router.push({path: '/commonWalletReceive/commonWallet'})
       },
       redeemOng() {
-          if(this.unboundOng == 0) {
+          if(this.balance.unboundOng == 0) {
             this.redeemInfoVisible = true;
             return;
           }
           const redeem = {
-              claimableOng : this.unboundOng,
+              claimableOng : this.balance.unboundOng,
               balance: this.balance.ong
           }
         this.$store.commit('UPDATE_CURRENT_REDEEM', {redeem: redeem})

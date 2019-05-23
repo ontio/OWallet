@@ -232,7 +232,7 @@ export default {
         this.refresh();
         this.intervalId = setInterval(()=>{
             this.refresh();            
-        }, 5000)
+        }, 10000)
     },
     beforeDestroy(){
         clearInterval(this.intervalId)

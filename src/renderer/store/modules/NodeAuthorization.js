@@ -25,7 +25,7 @@ async function matchNodeName(list) {
             if (!cnode || !cnode.PublicKey) {
                  item.name = 'Node_' + item.address.toBase58 ? item.address.toBase58().substr(0, 6) : item.address.substr(0, 6);
             }
-            else if (cnode.PublicKey == item.pk) {
+            else if (cnode.PublicKey === item.pk || cnode.PublicKey  === item.peerPubkey) {
                 item.name = cnode.Name
                 break;
             }
@@ -104,7 +104,8 @@ const state = {
     peerUnboundOng: 0,
     stakeHistory: [],
     stake_authorization_wallet: '',
-    peerPoolMap:[]
+    peerPoolMap:[],
+    sortedNodeList: []
 }
 
 const mutations = {
@@ -177,6 +178,9 @@ const mutations = {
     },
     CLEAR_STAKE_HISTORY(state, payload) {
         state.stakeHistory = []
+    },
+    UPDATE_SORTED_NODE_LIST(state, {list}) {
+        state.sortedNodeList = list;
     }
 }
 
@@ -234,41 +238,62 @@ const actions = {
             return splitFee
         }
     },
-    async searchStakeHistory({commit, dispatch}, {address}) {
+    async searchStakeHistory({commit, dispatch, state}, {address}) {
         const url = getNodeUrl();
         const list = []
-        dispatch('showLoadingModals')
+        if (state.sortedNodeList.length === 0) {
+          await dispatch('fetchAllSortedNodeList')
+        }
+        const userAddr = new Crypto.Address(address);
         try {
-            const peerMap = await GovernanceTxBuilder.getPeerPoolMap(url);
-            for (let k in peerMap) {
-                let item = peerMap[k];
-                if (item.status !== 1 && item.status !== 2) {
-                    //consensus nodes and candidate nodes
-                    continue;
+            const infoTemp = await Promise.all(state.sortedNodeList.map(item => {
+                return GovernanceTxBuilder.getAuthorizeInfo(item.peerPubkey, userAddr, url)
+            }))
+            console.log(infoTemp)
+            infoTemp.filter(item => item && item.consensusPos).forEach(item => {
+                let inAuthorization = item.consensusPos + item.freezePos +
+                  item.newPos;
+                let locked = item.withdrawPos + item.withdrawFreezePos;
+                let claimableVal = item.withdrawUnfreezePos;
+                if (inAuthorization > 0 || locked > 0 || claimableVal > 0) {
+                  const record = formatAuthorizationInfo(item)
+                  // const node = {
+                  //     pk:k,
+                  //     address: item.address
+                  // }
+                  // await matchNodeName([node])
+                  // commit('UPDATE_CURRENT_NODE', {current_node : node})
+                  record.name = '';
+                  record.address = item.address
+                  record.pk = item.peerPubkey;
+                  record.stakeWallet = address;
+                  list.push(record)
                 }
-                const userAddr = new Crypto.Address(address);
-                const authorizationInfo = await GovernanceTxBuilder.getAuthorizeInfo(k, userAddr, url)
-                if (authorizationInfo){
-                    let inAuthorization = authorizationInfo.consensusPos + authorizationInfo.freezePos
-                        + authorizationInfo.newPos;
-                    let locked = authorizationInfo.withdrawPos + authorizationInfo.withdrawFreezePos;
-                    let claimableVal = authorizationInfo.withdrawUnfreezePos;
-                    if(inAuthorization > 0 || locked > 0 || claimableVal > 0) {
-                        const record = formatAuthorizationInfo(authorizationInfo)
-                        // const node = {
-                        //     pk:k,
-                        //     address: item.address
-                        // }
-                        // await matchNodeName([node])
-                        // commit('UPDATE_CURRENT_NODE', {current_node : node})
-                        record.name = '';
-                        record.address = item.address
-                        record.pk = k;
-                        record.stakeWallet = address;
-                        list.push(record)
-                    }
-                }
-            }
+            })
+            // for (let item of state.sortedNodeList) {
+            //     const userAddr = new Crypto.Address(address);
+            //     const authorizationInfo = await GovernanceTxBuilder.getAuthorizeInfo(item.peerPubkey, userAddr, url)
+            //     if (authorizationInfo){
+            //         let inAuthorization = authorizationInfo.consensusPos + authorizationInfo.freezePos
+            //             + authorizationInfo.newPos;
+            //         let locked = authorizationInfo.withdrawPos + authorizationInfo.withdrawFreezePos;
+            //         let claimableVal = authorizationInfo.withdrawUnfreezePos;
+            //         if(inAuthorization > 0 || locked > 0 || claimableVal > 0) {
+            //             const record = formatAuthorizationInfo(authorizationInfo)
+            //             // const node = {
+            //             //     pk:k,
+            //             //     address: item.address
+            //             // }
+            //             // await matchNodeName([node])
+            //             // commit('UPDATE_CURRENT_NODE', {current_node : node})
+            //             record.name = '';
+            //             record.address = item.address
+            //             record.pk = item.peerPubkey;
+            //             record.stakeWallet = address;
+            //             list.push(record)
+            //         }
+            //     }
+            // }
             await matchNodeName(list);
             commit('UPDATE_STAKE_HISTORY', {history: list})
             dispatch('hideLoadingModals')                        
@@ -279,28 +304,17 @@ const actions = {
             return [];
         }
     },
-    async fetchNodeList({commit, dispatch, state}) {
+    async fetchAllSortedNodeList({commit, dispatch}) {
         const url = getNodeUrl();
-        try{
+        try {
             const peerMap = await GovernanceTxBuilder.getPeerPoolMap(url);
             const list = []
             for (let k in peerMap) {
-                let item = peerMap[k];
-                if(item.status !== 1 && item.status !== 2) {// consensus nodes and candidate nodes
-                    continue;
-                }
-                // if (!isMainnetConNode(item.peerPubkey)) {
-                //     continue;
-                // }
-                const attr = await GovernanceTxBuilder.getAttributes(item.peerPubkey, url);
-                item.maxAuthorize = attr.maxAuthorize;
-                item.maxAuthorizeStr = numeral(item.maxAuthorize).format('0,0')
-                item.totalPosStr = numeral(item.totalPos).format('0,0')
-                const nodeProportion = attr.t1PeerCost + '%'
-                const userProportion = (100 - attr.t1PeerCost) + '%'
-                // item.nodeProportion = nodeProportion + ' / ' + userProportion
-                item.nodeProportion =  userProportion
-                list.push(item);
+              let item = peerMap[k];
+              if (item.status !== 1 && item.status !== 2) { // consensus nodes and candidate nodes
+                continue;
+              }
+              list.push(item)
             }
             list.sort((v1, v2) => {
                 if ((v2.initPos + v2.totalPos) > (v1.initPos + v1.totalPos)) {
@@ -311,24 +325,56 @@ const actions = {
                     return 0;
                 }
             })
+            list.forEach((item, index) => {item.rank = index + 1})
+            await matchNodeName(list);
+            commit('UPDATE_SORTED_NODE_LIST', {list})
+            dispatch('hideLoadingModals')
+            return list;
+        } catch(err) {
+            console.log(err)
+            dispatch('hideLoadingModals')
+            return [];
+        }
+    },
+    async fetchNodeList({commit, dispatch, state}, {pageSize, pageNum}) {
+        const url = getNodeUrl();
+        if(state.sortedNodeList.length === 0) {
+            await dispatch('fetchAllSortedNodeList')
+        }
+        try{
+            const nodes = state.sortedNodeList.slice(pageNum*pageSize, (pageNum+1) * pageSize).filter(item => item.peerPubkey)
+            console.log(nodes)
+            const listTemp = await Promise.all(nodes.map((item) => {
+              return GovernanceTxBuilder.getAttributes(item.peerPubkey, url)
+            }))
+            nodes.forEach((item, i) => {
+                const attr = listTemp[i];
+                item.maxAuthorize = attr.maxAuthorize;
+                item.maxAuthorizeStr = numeral(item.maxAuthorize).format('0,0')
+                item.totalPosStr = numeral(item.totalPos).format('0,0')
+                const nodeProportion = attr.t1PeerCost + '%'
+                const userProportion = (100 - attr.t1PeerCost) + '%'
+                // item.nodeProportion = nodeProportion + ' / ' + userProportion
+                item.nodeProportion = userProportion
+            })
+            const list = nodes;
             list.forEach((item, index) => {
-                item.rank = index + 1;
                 item.currentStake = numeral(item.initPos + item.totalPos).format('0,0');
                 let process = Number((item.totalPos + item.initPos) * 100 / (item.initPos + item.maxAuthorize)).toFixed(2)
                 if(process > 100) {
                     process = 100;
                 }
                 item.process = process + '%'
-                item.pk = item.peerPubkey
-                item.detailUrl = NODE_DETAIL + item.pk;
+                item.detailUrl = NODE_DETAIL + item.peerPubkey;
                 // matchNodeName(item)
             })
-            await matchNodeName(list);
+            
             commit('UPDATE_NODE_LIST', {list});
             dispatch('hideLoadingModals')
             return list;
         } catch(err) {
-            console.log(err)           
+            console.log(err) 
+            dispatch('hideLoadingModals')
             return [];
         }
     },

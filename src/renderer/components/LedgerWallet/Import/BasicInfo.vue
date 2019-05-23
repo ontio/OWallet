@@ -49,7 +49,7 @@
     data() {
       return {
         intervalId: '',
-        interval: 1000,
+        interval: 3000,
         label: '',
         ledgerStatus: '',
         neo: false

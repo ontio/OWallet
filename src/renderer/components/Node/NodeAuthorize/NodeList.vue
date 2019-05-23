@@ -73,7 +73,9 @@
         </div>
         <a-table :columns="columns"
             :dataSource="node_list"
-            :loading="node_list.length < 1"
+            :loading= "requesting"
+            :pagination="pagination"
+            @change="handleTableChange"
         >
             <div slot="nodeProportionTitle"  class="proportion-title">
                 <p>{{$t('nodeMgmt.proportionNextRound')}}
@@ -146,18 +148,27 @@ export default {
         ]
         return {
             columns,
-            intervalId:''
+            intervalId:'',
+            pagination: {
+                current:1,
+                pageSize:10,
+                total:30
+            },
+            requesting: false
         }
     },
     mounted(){
         //loop to fetch data
         // this.$store.dispatch('showLoadingModals');
-        this.$store.dispatch('fetchNodeList')
+        this.$store.dispatch('fetchAllSortedNodeList').then(res => {
+            this.pagination.total = res.length;
+             this.fetchList()
+        })
         this.$store.dispatch('fetchBlockCountdown')
         this.intervalId = setInterval(()=>{
             // this.$store.dispatch('fetchNodeList')
             this.$store.dispatch('fetchBlockCountdown')
-        }, 5000)  
+        }, 10000)  
     },
     beforeDestroy(){
         clearInterval(this.intervalId);
@@ -187,6 +198,20 @@ export default {
 
             // Load a remote URL
             win.loadURL(record.detailUrl);
+        },
+        handleTableChange(pagination) {
+            console.log(pagination)
+            this.pagination = pagination;
+            this.fetchList()
+        },
+        fetchList() {
+            this.requesting = true;
+            this.$store.dispatch('fetchNodeList', {
+                pageSize: this.pagination.pageSize,
+                pageNum: this.pagination.current - 1
+            }).then(res => {
+                this.requesting = false;
+            })
         },
         showProportionTip() {
             const h = this.$createElement

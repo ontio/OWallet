@@ -237,7 +237,6 @@ export default {
     computed:{
         ...mapState({
             oep4s: state => state.Oep4s.oep4s,
-            balance: state => state.Oep4s.balance,
             completedTx: state => state.Oep4s.completedTx
         })
     },
@@ -285,12 +284,7 @@ export default {
             })
         },
         sendAsset() {
-            if(Number(this.balance.ong) < 0.01) {
-            this.$message.warning(this.$t('common.ongNoEnough'))
-            return;
-            }
             this.$store.commit('CLEAR_CURRENT_TRANSFER');
-            this.$store.dispatch('queryBalanceForOep4', this.currentWallet.address)
             this.$router.push({name: 'CommonSendHome'})
         },
         commnReceive() {

@@ -53,22 +53,40 @@
 .input-pass {
     margin-bottom:50px;
 }
+
+.ledger-status {
+    margin-bottom:40px;
+}
 </style>
 <template>
     <div class="clearfix">
         <p class="label">{{$t('sharedWalletHome.confirmation')}}</p>
         <div class="input-content">
-            <div>
+            <div >
                 <a-checkbox @change="onChange" :checked="checked" class="input-check">{{$t('sharedWalletHome.agreeToSend')}}</a-checkbox>
 
-                <a-input type="password" class="input-pass" :placeholder="$t('sharedWalletHome.inputPassToTransfer')" v-model="password"></a-input>
+                <div v-if="sponsorWallet.type === 'CommonWallet'">
+                    <a-input type="password" class="input-pass" :placeholder="$t('sharedWalletHome.inputPassToTransfer')" v-model="password"></a-input>
+                </div>
+
+                <div class="ledger-status" v-if="sponsorWallet.type === 'HardwareWallet'">
+                    <div class="font-bold" style="margin-bottom: 15px;">{{$t('ledgerWallet.connectApp')}}</div>
+                    <span class="font-medium-black">{{$t('ledgerWallet.status')}}: </span>
+                    <span class="font-medium">{{ledgerStatus}} </span>
+                </div>
             </div>
-        <div class="input-btns">
-            <a-button type="default" class="btn-cancel" @click="back">{{$t('sharedWalletHome.back')}}</a-button>
-            <a-button type="primary" class="btn-next" @click="submit"  :disabled="sending">
-                {{$t('sharedWalletHome.submit')}}
-                </a-button>
-        </div>
+
+        
+            <div class="input-btns" >
+                <a-button type="default" class="btn-cancel" @click="back">{{$t('sharedWalletHome.back')}}</a-button>
+                <a-button type="primary" class="btn-next" @click="submit"  
+                :disabled="sending || !checked
+                || sponsorWallet.type === 'CommonWallet' && !password
+                || sponsorWallet.type === 'HardwareWallet' && !ledgerPk">
+                    {{$t('sharedWalletHome.submit')}}
+                    </a-button>
+            </div>
+                
         </div>
 
     </div>
@@ -77,11 +95,12 @@
 <script>
 import {mapState} from 'vuex'
 import draggable from 'vuedraggable'
-import {OntAssetTxBuilder, Crypto, TransactionBuilder, utils} from 'ontology-ts-sdk'
+import {OntAssetTxBuilder, Crypto, TransactionBuilder, TxSignature, utils} from 'ontology-ts-sdk'
 import {ONT_PASS_NODE, ONT_PASS_NODE_PRD, ONT_PASS_URL, DEFAULT_SCRYPT} from '../../../../core/consts'
 import axios from 'axios'
 import dbService from '../../../../core/dbService'
 import { BigNumber } from 'bignumber.js';
+import {legacySignWithLedger} from '../../../../core/ontLedger'
 
 export default {
     name:'InputPassword',
@@ -91,7 +110,7 @@ export default {
             sharedWallet,
             payers: [],
             password:'',
-            sponsorWallet:null,
+            sponsorWallet:{},
             checked: false,
             sending:false
         }
@@ -99,7 +118,9 @@ export default {
     computed:{
         ...mapState({
             transfer: state => state.CurrentWallet.transfer,
-            redeem: state => state.CurrentWallet.redeem
+            redeem: state => state.CurrentWallet.redeem,
+            ledgerStatus: state => state.LedgerConnector.ledgerStatus,
+            ledgerPk : state => state.LedgerConnector.publicKey,            
         })
     },
 
@@ -108,12 +129,22 @@ export default {
         this.payers = this.transfer.coPayers;
         const that = this
 
-        dbService.findOne({address: this.transfer.coPayers[0].address}, function(err, doc) {
-            if(err) {
-                console.log(err)
-            }
-            that.sponsorWallet = doc.wallet
-        })
+        // dbService.findOne({address: this.transfer.coPayers[0].address}, function(err, doc) {
+        //     if(err) {
+        //         console.log(err)
+        //     }
+        //     that.sponsorWallet = doc.wallet
+        // })
+        this.sponsorWallet = this.transfer.coPayers[0]
+        //get ledger status
+        if(this.sponsorWallet.type === 'HardwareWallet') {
+            this.$store.dispatch('getLedgerStatus')
+        }
+    },
+    beforeDestroy(){
+        if(this.sponsorWallet.type === 'HardwareWallet') {
+            this.$store.dispatch('stopGetLedgerStatus')
+        }
     },
     components:{
         draggable
@@ -125,12 +156,8 @@ export default {
         onChange(){
             this.checked = !this.checked;
         },
-        submit() {
-            if(!this.password || !this.checked) {
-                this.$message.error(this.$t('common.confirmPwdTips'));
-                return;
-            }
-            if(this.password && this.checked && !this.sending) {
+        async submit() {
+            if(!this.sending) {
             this.sending = true;
             let tx, amount, gasPrice;
             const tokenType = this.transfer.asset;
@@ -157,18 +184,37 @@ export default {
             const M = this.sharedWallet.requiredNumber;
             const pks = this.sharedWallet.coPayers.map(p => new Crypto.PublicKey(p.publickey))
             //sponsorWallet
-            const enc = new Crypto.PrivateKey(this.sponsorWallet.key)
-            let pri;
-            try {
-                pri = enc.decrypt(this.password, new Crypto.Address(this.sponsorWallet.address), this.sponsorWallet.salt, DEFAULT_SCRYPT)
-            }catch(err) {
-                this.$store.dispatch('hideLoadingModals')
-                this.sending = false;
-                console.log(err);
-                this.$message.error(this.$t('common.pwdErr'))
-                return;
+            
+            if (this.sponsorWallet.type === 'CommonWallet') {
+                const enc = new Crypto.PrivateKey(this.sponsorWallet.wallet.key)
+                let pri;
+                try {
+                    pri = enc.decrypt(this.password, new Crypto.Address(this.sponsorWallet.address), this.sponsorWallet.wallet.salt, DEFAULT_SCRYPT)
+                }catch(err) {
+                    this.$store.dispatch('hideLoadingModals')
+                    this.sending = false;
+                    console.log(err);
+                    this.$message.error(this.$t('common.pwdErr'))
+                    return;
+                }
+                TransactionBuilder.signTx(tx, M, pks, pri)
+            } else {
+                const txData = tx.serializeUnsignedData();
+                let res;
+                try {
+                    res = await legacySignWithLedger(txData)
+                } catch(err) {
+                    this.ledgerStatus = '';
+                      this.$store.dispatch('hideLoadingModals')
+                      alert(err.message)
+                    return;
+                }
+                const sig = new TxSignature();
+                sig.M = M;
+                sig.pubKeys = pks;
+                sig.sigData = ['01' + res];
+                tx.sigs.push(sig);
             }
-            TransactionBuilder.signTx(tx, M, pks, pri)
             const txHash = utils.reverseHex(tx.getHash());
             const txData = tx.serialize();
             //save transaction to backend

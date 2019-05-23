@@ -90,6 +90,7 @@ export default {
   position: fixed;
   left: 0;
   background-color: #373a42;
+  z-index: 1001;
 }
 
 .logo-img {

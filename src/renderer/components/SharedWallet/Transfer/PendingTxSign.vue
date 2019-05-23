@@ -58,11 +58,22 @@
             <div>
                 <a-checkbox @change="onChange" :checked="checked" class="input-check">{{$t('sharedWalletHome.agreeToSend')}}</a-checkbox>
 
-                <a-input type="password" class="input-pass" :placeholder="$t('sharedWalletHome.inputPassToTransfer')" v-model="password"></a-input>
+                <div v-if="currentSigner.type === 'CommonWallet'">
+                    <a-input type="password" class="input-pass" :placeholder="$t('sharedWalletHome.inputPassToTransfer')" v-model="password"></a-input>
+                </div>
+
+                <div class="ledger-status" v-if="currentSigner.type === 'HardwareWallet'">
+                    <div class="font-bold" style="margin-bottom: 15px;">{{$t('ledgerWallet.connectApp')}}</div>
+                    <span class="font-medium-black">{{$t('ledgerWallet.status')}}: </span>
+                    <span class="font-medium">{{ledgerStatus}} </span>
+                </div>
             </div>
         <div class="input-btns">
             <a-button type="danger" class="btn-cancel" @click="back">{{$t('sharedWalletHome.back')}}</a-button>
-            <a-button type="primary" class="btn-next" @click="submit" >
+            <a-button type="primary" class="btn-next" @click="submit" 
+            :disabled="sending || !checked
+                || currentSigner.type === 'CommonWallet' && !password
+                || currentSigner.type === 'HardwareWallet' && !ledgerPk">
                 {{$t('sharedWalletHome.submit')}}
                 </a-button>
         </div>
@@ -73,10 +84,11 @@
 
 <script>
 import {mapState} from 'vuex'
-import {OntAssetTxBuilder, Crypto, TransactionBuilder, Transaction, RestClient, utils} from 'ontology-ts-sdk'
+import {OntAssetTxBuilder, Crypto, TransactionBuilder, Transaction, RestClient, utils, TxSignature} from 'ontology-ts-sdk'
 import {ONT_PASS_NODE, ONT_PASS_NODE_PRD, ONT_PASS_URL, DEFAULT_SCRYPT, TEST_NET, MAIN_NET} from '../../../../core/consts'
 import axios from 'axios'
 import dbService from '../../../../core/dbService'
+import {legacySignWithLedger} from '../../../../core/ontLedger'
 
 export default {
     name:'PendingTxSign',
@@ -93,7 +105,6 @@ export default {
             sharedWallet,
             payers: [],
             password:'',
-            sponsorWallet:null,
             checked: false,
             sending:false,
             nodeUrl: url
@@ -102,8 +113,20 @@ export default {
     computed:{
         ...mapState({
             pendingTx: state => state.CurrentWallet.pendingTx,
-            currentSigner: state => state.CurrentWallet.currentSigner
+            currentSigner: state => state.CurrentWallet.currentSigner,
+            ledgerStatus: state => state.LedgerConnector.ledgerStatus,
+            ledgerPk : state => state.LedgerConnector.publicKey, 
         })
+    },
+    mounted() {
+        if(this.currentSigner.type === 'HardwareWallet') {
+            this.$store.dispatch('getLedgerStatus')
+        }
+    },
+    beforeDestroy(){
+        if(this.currentSigner.type === 'HardwareWallet') {
+            this.$store.dispatch('stopGetLedgerStatus')
+        }
     },
     methods:{
         back(){
@@ -112,34 +135,45 @@ export default {
         onChange(){
             this.checked = !this.checked;
         },
-        submit() {
-            if(!this.checked) {
-                alert('Please confirm before submit.')
-                return;
-            }
-            if(!this.password) {
-                alert('Please input password before submit.')
-                return;
-            }
-            if(this.password && this.checked) {
+        async submit() {
+            if(!this.sending) {
                 this.sending = true;
                 this.$store.dispatch('showLoadingModals')
                 //sign and decide to send
                 const tx = Transaction.deserialize(this.pendingTx.transactionbodyhash);
                 const txHash = this.pendingTx.transactionidhash;
-                const enc = new Crypto.PrivateKey(this.currentSigner.key);
-                let pri;
-                try {
-                    pri = enc.decrypt(this.password, new Crypto.Address(this.currentSigner.address), this.currentSigner.salt, DEFAULT_SCRYPT)
-                }catch(err) {
-                    console.log(err)
-                    alert('Password error')
-                    this.sending = false;
-                    this.$store.dispatch('hideLoadingModals')
-                }
                 const M = tx.sigs[0].M;
                 const pks = tx.sigs[0].pubKeys;
-                TransactionBuilder.signTx(tx, M, pks, pri);
+                 if (this.currentSigner.type === 'CommonWallet') {
+                    const enc = new Crypto.PrivateKey(this.currentSigner.key)
+                    let pri;
+                    try {
+                        pri = enc.decrypt(this.password, new Crypto.Address(this.currentSigner.address), this.currentSigner.salt, DEFAULT_SCRYPT)
+                    }catch(err) {
+                        this.$store.dispatch('hideLoadingModals')
+                        this.sending = false;
+                        console.log(err);
+                        this.$message.error(this.$t('common.pwdErr'))
+                        return;
+                    }
+                    TransactionBuilder.signTx(tx, M, pks, pri)
+                } else {
+                    const txData = tx.serializeUnsignedData();
+                    let res;
+                    try {
+                        res = await legacySignWithLedger(txData)
+                    } catch(err) {
+                        this.ledgerStatus = '';
+                        this.$store.dispatch('hideLoadingModals')
+                        alert(err.message)
+                        return;
+                    }
+                    const sig = new TxSignature();
+                    sig.M = M;
+                    sig.pubKeys = pks;
+                    const sigVal = '01' + res;
+                    tx.sigs[0].sigData.push(sigVal);
+                }
                 //send
                 const net = localStorage.getItem('net')
                 const ontPassNode = net === 'TEST_NET' ? ONT_PASS_NODE : ONT_PASS_NODE_PRD
@@ -178,6 +212,9 @@ export default {
                             alert(res.Result)
                             return;
                         }
+                    }).catch(err => {
+                        console.log(err)
+                        this.$message.error(this.$t('common.networkError'))
                     })
 
                 }

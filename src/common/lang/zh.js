@@ -133,7 +133,8 @@ export default {
   },
 
   dashboard: {
-    getTransErr: '交易记录获取失败，网络错误。'
+    getTransErr: '交易记录获取失败，网络错误。请稍后重试。',
+    getBalanceErr: '余额获取失败。网络错误，请稍后重试。'
   },
 
   createJsonWallet: {
@@ -284,11 +285,73 @@ export default {
     balance: '余额',
     confirmation: '确认',
     agreeToSend: '我同意发送资产',
-    signSequence: '选择签名人数',
+    signSequence: '签名顺序',
     sign: '签名',
     checkMore: '查看更多',
     publicKey: '公钥',
-    redeemOng: '提取ONG'
+    redeemOng: '提取ONG',
+    paxMgmt: 'PAX管理',
+    unprocessed: '未处理',
+    processing: '处理中',
+    completed: '已完成',
+    txMgmt: '多签交易管理'
+  },
+
+  pax: {
+    ethAddress: 'Eth 地址',
+    ontAddress: 'ONT 地址',
+    amount: '数额',
+    date: '日期',
+    toProcess: '去处理',
+    paxStart: '发起', 
+    paxSign: '签名',
+    selectCurrentSigner: '选择当前签名钱包: ',
+    back: '返回',
+    confirm: '确认',
+    sponsorSign: '发起人签名',
+    inputPassword: '输入当前签名钱包密码',
+    queryEthScan: '查询Eth转出总额',
+    currentSign: '当前签名者签名',
+    txToSend: '要发送上链的交易个数:',
+    txSent: '已发送上链的交易个数: ',
+    sendingTx: '正在发送交易上链:',
+    selectedNum: '已选择条目数量: ',
+    totalAmount: '已选择条目的PAX总额: ',
+    ethTotal: '已收到的ETH总额: ',
+    startProcessSuccess: '发起处理流程成功',
+    signSuccess: '签名交易成功',
+    ledgerSignMultiTimes: '您可能需要在ledger设备上进行多次签名',
+    hasSignedSent: '注意！这些交易已经被签名并已发送到链上。请检查已完成的数据。',
+    toEthScan: '查看ETH Scan',
+    txCompleted: '已上链',
+    txDetail: '查看交易',
+    toVarify: '验证',
+    varifySuccess: '验证失败',
+    varifyFailed: '验证通过',
+    varifyResult: '验证结果',
+    failedTxhashes: '验证失败的交易哈希'
+  },
+
+  sharedTx: {
+    startTx: '发起多签交易',
+    signTx: '签名多签交易',
+    selectSponsor: '选择发起人',
+    createTx: '构建多签交易',
+    contractHash: '合约哈希',
+    method: '方法名',
+    parameters: '参数列表',
+    starterSign: '发起人签名',
+    txSerialized: '签名后的交易：',
+    addSign: '增加签名',
+    txContent: '交易内容',
+    currentSign: '当前签名地址',
+    selectSigner: '选择签名地址',
+    addSign: '增加签名',
+    copy: '复制',
+    send: '立即发送',
+    isSendTxTip: '该交易的签名数量已满足要求。是否立即发送交易上链？',
+    txSentSuccess: '发送交易上链成功。',
+    paramsError: '输入参数有误。请检查。'
   },
 
   commonWalletHome: {

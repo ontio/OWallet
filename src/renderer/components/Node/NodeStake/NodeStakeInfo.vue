@@ -209,7 +209,7 @@ export default {
     return {
       localOntid: [],
       intervalId: "",
-      interval: 5000,
+      interval: 10000,
       refundClicked: false,
       walletPassModal: false,
       walletPassword: "",
@@ -397,7 +397,10 @@ export default {
                 content: 'Transaction hash: ' + utils.reverseHex(tx.getHash())
             })
         }, 100)
-        })
+        }).catch(err => {
+                    console.log(err)
+                    this.$message.error(this.$t('common.networkError'))
+                })
     },
     handleRecall() {
       const userAddr = new Crypto.Address(this.stakeWallet.address);

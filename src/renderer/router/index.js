@@ -101,7 +101,28 @@ export default new Router({
           path: '/sharedWallet/copayers',
           name: 'SharedWalletCopayer',
           component: require('@/components/SharedWallet/View/SharedWalletCopayer').default,
+        },
+        {
+          path: '/sharedWallet/paxMgmt',
+          name: 'PaxMgmt',
+          component: require('@/components/SharedWallet/PAX/PaxMgmt').default,
+        },
+        {
+          path: '/sharedWallet/startProcess',
+          name: 'StartProcess',
+          component: require('@/components/SharedWallet/PAX/StartProcess').default,
+        },
+        {
+          path: '/sharedWallet/signProcess',
+          name: 'SignProcess',
+          component: require('@/components/SharedWallet/PAX/SignProcess').default,
+        },
+        {
+          path: '/sharedWallet/txMgmt',
+          name: 'SharedTxMgmt',
+          component: require('@/components/SharedWallet/Tx/SharedTxMgmt').default
         }
+
       ]
     },
     {

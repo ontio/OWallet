@@ -133,7 +133,8 @@ export default {
   },
 
   dashboard: {
-    getTransErr: 'Fetch transaction history failed. Network error.'
+    getTransErr: 'Fetch transaction history failed. Network error. Plese try later.',
+    getBalanceErr: 'Fetch balance failed. Network error. Plese try later.'
   },
 
   createJsonWallet: {
@@ -289,7 +290,69 @@ export default {
     sign: 'Sign',
     checkMore: 'Check more',
     publicKey: 'Public key',
-    redeemOng: 'Redeem ONG'
+    redeemOng: 'Redeem ONG',
+    paxMgmt: 'PAX management',
+    unprocessed: 'Unprocessed',
+    processing: 'In processing',
+    completed: 'Completed',
+    txMgmt: 'Transaction management'
+  },
+
+  pax: {
+    ethAddress: 'Eth Address',
+    ontAddress: 'Ont Address',
+    amount: 'Amount',
+    date: 'Date',
+    toProcess: 'To process',
+    paxStart: 'Start',
+    paxSign: 'Sign',
+    selectCurrentSigner: 'Select current signer: ',
+    back: 'Back',
+    confirm: 'Confirm',
+    sponsorSign: 'Sponsor sign',
+    inputPassword: 'Input the password of current signer',
+    queryEthScan: 'Query Total Eth amount',
+    currentSign: 'Current signer sign',
+    txToSend: 'Number of transactions to send: ',
+    txSent: 'Number of transactoins sent succeed: ',
+    sendingTx: 'Sending transactoins',
+    selectedNum: 'Number of selected orders: ',
+    totalAmount: 'Total amount of selected orders: ',
+    ethTotal: 'Total amount of received ETH: ',
+    startProcessSuccess: 'Start process succeed.',
+    signSuccess: 'Sign transactions succeed.',
+    ledgerSignMultiTimes: 'You may have to sign multi times on your ledger device',
+    hasSignedSent: 'These transactions has been signed and sent. Please review the completed data.',
+    toEthScan: 'To Eth Scan',
+    txCompleted: 'Transaction completed',
+    txDetail: 'Detail',
+    toVarify: 'Varify',
+    varifySuccess: 'Varify succeed!',
+    varifyFailed: 'Varify failed!',
+    varifyResult: 'Varified result',
+    failedTxhashes: 'Failed transaction hash:'
+  },
+
+  sharedTx: {
+    startTx: 'Start multi-sign transaction',
+    signTx: 'Sign multi-sign transaction',
+    selectSponsor: 'Select sponsor',
+    createTx: 'Create Transaction',
+    contractHash: 'Contract hash',
+    method: 'Method',
+    parameters: 'Parameters',
+    starterSign: 'Start sign',
+    txSerialized: 'Signed and serialized transaction：',
+    addSign: 'Add signature',
+    txContent: 'Transaction data',
+    currentSign: 'Current signer',
+    selectSigner: 'Select wallet to sign',
+    addSign: 'Add signature',
+    copy: 'Copy',
+    send: 'Send now',
+    isSendTxTip: 'The transaction can be sent to the blockchain now. Confirm to send?',
+    txSentSuccess: 'Send transaction succeed.',
+    paramsError: 'Error parameters. Please check the input.'
   },
 
   commonWalletHome: {
@@ -324,7 +387,7 @@ export default {
     invalidScriptHash: 'The script hash is invalid',
     addOep4Success: 'Add OEP-44 token succeed!',
     noOep4Contract: 'The OEP-44 contract is not found',
-    networkError: 'Network error!Please try later.',
+    networkError: 'Network error! Please try later.',
     oep4Exists: 'You have already added this OEP-4 token.',
     go: 'Go'
   },

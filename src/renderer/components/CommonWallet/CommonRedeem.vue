@@ -97,10 +97,11 @@ export default {
             type,
             password:'',
             nodeUrl: url,
-            interval:3000,
+            interval:10000,
             invervalId:'',
             publicKey:'',
-            ledgerStatus:''
+            ledgerStatus:'',
+            sending: false
         }
     },
     computed:{
@@ -170,7 +171,10 @@ export default {
                     content: 'Transaction hash: ' + utils.reverseHex(tx.getHash())
                 })
             }, 100)
-        })
+        }).catch(err => {
+                    console.log(err)
+                    this.$message.error(this.$t('common.networkError'))
+                })
       },
         submit() {
             if(this.type === 'commonWallet' &&!this.password) {

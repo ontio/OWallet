@@ -6,6 +6,20 @@ export const ONT_CONTRACT = '0000000000000000000000000000000000000001';
 export const TEST_NET = 'http://polaris1.ont.io';
 export const MAIN_NET = 'http://dappnode1.ont.io';
 
+export const TEST_NET_LIST = [
+  'http://polaris1.ont.io',
+  'http://polaris2.ont.io',
+  'http://polaris3.ont.io',
+  'http://polaris4.ont.io',
+  'http://polaris5.ont.io'
+]
+
+export const MAIN_NET_LIST = [
+  'http://dappnode1.ont.io',
+  'http://dappnode2.ont.io',
+  'http://dappnode3.ont.io',
+  'http://dappnode4.ont.io',
+]
 //test environment
 export const ONT_PASS_NODE = 'https://app.ont.io'
 //prod 
@@ -81,3 +95,14 @@ export const CON_NODE = [
 
 export const NODE_DETAIL = 'https://explorer.ont.io/nodes/detail/'
 export const NODE_NAME_LIST = 'https://ont.io/api/v1/candidate/info/All'
+
+export const PAX_API = {
+  Host: 'http://18.138.83.180:20800',
+  // TestHost: 'http://172.168.3.61:20800',
+  TestHost: 'http://18.139.19.52:20800',
+  fetchApprovalList: '/api/v1/approvals',
+  updateApprovals: '/api/v1/processapplist',
+  validateTx: '/api/v1/validatetx',
+  EthScanTest: 'https://ropsten.etherscan.io/tx/',
+  EthScanMain: 'https://etherscan.io/tx/'
+}
