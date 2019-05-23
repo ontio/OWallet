@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import {varifyPositiveInt, varifyOngValue} from '../../../../core/utils.js'
+import {varifyPositiveInt, varifyOngValue, validateAddress} from '../../../../core/utils.js'
 import {mapState} from 'vuex'
 import { BigNumber } from 'bignumber.js';
 
@@ -131,7 +131,7 @@ export default {
 
     methods: {
         validateToAddress() {
-            if(!this.to || this.to.length !== 34 || this.to[0] !== 'A') {
+            if(!this.to || !validateAddress(this.to)) {
                 this.validToAddress = false;
                 return;
             }

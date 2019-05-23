@@ -65,6 +65,16 @@ export function decryptWallet(wallet, password, scrypt = DEFAULT_SCRYPT) {
     return pri;
 }
 
+export function validateAddress(address) {
+  try {
+    const addr = new Crypto.Address(address)
+    addr.serialize();
+    return true;
+  }catch(err) {
+    return false;
+  }
+}
+
 // 创建axios实例
 const service = axios.create({
   timeout: 15000 // 请求超时时间
