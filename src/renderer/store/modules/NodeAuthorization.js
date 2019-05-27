@@ -314,6 +314,7 @@ const actions = {
               if (item.status !== 1 && item.status !== 2) { // consensus nodes and candidate nodes
                 continue;
               }
+              item.pk = item.peerPubkey;
               list.push(item)
             }
             list.sort((v1, v2) => {

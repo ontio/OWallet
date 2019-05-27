@@ -1,8 +1,8 @@
 {
   "name": "owallet",
-  "productName": "OWallet for PAX",
+  "productName": "OWallet",
   "homepage": "http://ont.io",
-  "version": "v0.9.8",
+  "version": "v0.9.9",
   "author": "Ontology Foundation Ltd. <devops@ont.io>",
   "description": "OWallet is a comprehensive Ontology desktop wallet",
   "license": "Apache-2.0",
