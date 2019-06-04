@@ -242,8 +242,9 @@ export default {
             axios.post(url, body).then(res => {
                 console.log(res)
                 if(res.status === 200) {
-                    if(res.data && res.data.error !== 0) {
+                    if(res.data && res.data.Error && res.data.Error !== 0) {
                         this.$message.error(this.$t('sharedWalletHome.createTransferFailed'))
+                        this.$store.dispatch('hideLoadingModals')
                         return;
                     }
                     this.sending = false;

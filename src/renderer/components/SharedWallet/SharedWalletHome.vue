@@ -368,11 +368,11 @@
                     <redeem-info-icon></redeem-info-icon>
                 </div>
 
-                <div class="oep4-container">
-                <span class="asset-label">OEP-4 Tokens</span>
-                <a-button type="default" 
-                @click="checkMoreOep4">{{$t('commonWalletHome.go')}}</a-button>
-                </div>
+                <!-- <div class="oep4-container">
+                    <span class="asset-label">OEP-4 Tokens</span>
+                    <a-button type="default" 
+                    @click="checkMoreOep4">{{$t('commonWalletHome.go')}}</a-button>
+                </div> -->
 
 
                 <div v-if="hasLocalCopayer">
@@ -733,7 +733,7 @@ export default {
             this.$message.success(this.$t('common.copied'))
       },
       redeemOng() {
-          if(this.unboundOng == 0) {
+          if(this.balance.unboundOng == 0) {
             this.redeemInfoVisible = true;
             return;
           }
@@ -745,7 +745,7 @@ export default {
             this.$store.commit('UPDATE_TRANSFER_REDEEM_TYPE', {type: true});
             
             const redeem = {
-                claimableOng : this.unboundOng,
+                claimableOng : this.balance.unboundOng,
                 balance: this.balance.ong
             }
             this.$store.commit('UPDATE_CURRENT_REDEEM', {redeem: redeem})
