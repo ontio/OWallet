@@ -294,7 +294,8 @@ export default {
     unprocessed: '未处理',
     processing: '处理中',
     completed: '已完成',
-    txMgmt: '多签交易管理'
+    txMgmt: '多签交易管理',
+    createTransferFailed: '创建转账交易失败'
   },
 
   pax: {

@@ -95,7 +95,7 @@
 <script>
 import {mapState} from 'vuex'
 import draggable from 'vuedraggable'
-import {OntAssetTxBuilder, Crypto, TransactionBuilder, TxSignature, utils} from 'ontology-ts-sdk'
+import {OntAssetTxBuilder, Crypto, TransactionBuilder, TxSignature, utils, Oep4} from 'ontology-ts-sdk'
 import {ONT_PASS_NODE, ONT_PASS_NODE_PRD, ONT_PASS_URL, DEFAULT_SCRYPT} from '../../../../core/consts'
 import axios from 'axios'
 import dbService from '../../../../core/dbService'
@@ -173,11 +173,18 @@ export default {
             //create transaction
                 const from = new Crypto.Address(this.sharedWallet.sharedWalletAddress)
                 const to = new Crypto.Address(this.transfer.to);
-                amount = tokenType === 'ONT' ? this.transfer.amount : new BigNumber(this.transfer.amount).multipliedBy(1e9);
-                
-                const gas = new BigNumber(this.transfer.gas).multipliedBy(1e9);
-                gasPrice = gas.div(gasLimit).toString();
-                tx = OntAssetTxBuilder.makeTransferTx(tokenType, from, to, amount, gasPrice, gasLimit, from);
+                if(tokenType === 'ONT' || tokenType === 'ONG') {
+                    amount = tokenType === 'ONT' ? this.transfer.amount : new BigNumber(this.transfer.amount).multipliedBy(1e9);
+                    const gas = new BigNumber(this.transfer.gas).multipliedBy(1e9);
+                    gasPrice = gas.div(gasLimit).toString();
+                    tx = OntAssetTxBuilder.makeTransferTx(tokenType, from, to, amount, gasPrice, gasLimit, from);
+                } else { // now only supports oep4
+                    const contractAddr = new Crypto.Address(utils.reverseHex(this.transfer.scriptHash));
+                    const oep4 = new Oep4.Oep4TxBuilder(contractAddr);
+                    const amount = new BigNumber(this.transfer.amount).multipliedBy(Math.pow(10, this.transfer.decimal)).toString()
+                    tx = oep4.makeTransferTx(from, to, amount, gasPrice, gasLimit, from);
+                }
+               
             }    
             this.$store.dispatch('showLoadingModals')
             //sign tx
@@ -235,6 +242,10 @@ export default {
             axios.post(url, body).then(res => {
                 console.log(res)
                 if(res.status === 200) {
+                    if(res.data && res.data.error !== 0) {
+                        this.$message.error(this.$t('sharedWalletHome.createTransferFailed'))
+                        return;
+                    }
                     this.sending = false;
                     this.$emit('inputPassNext')
                     // //save signed tx

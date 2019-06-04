@@ -6,6 +6,7 @@ const state = {
         // for json and hardware wallet
         publicKey: '',
         address: '',
+        name: '',
         //for shared wallet
         coPayers: [],
         requiredNumber:'',

@@ -497,6 +497,12 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
       this.$store.commit('CLEAR_NATIVE_BALANCE')
     },
     mounted: function () {
+      //UPDATE_CURRENT_WALLET
+      const wallet = {
+            address: this.address,
+            name: this.currentWallet.label
+          }
+      this.$store.commit('UPDATE_CURRENT_WALLET', {wallet})
       this.refresh(true)
       // this.$store.dispatch('queryBalanceForOep4', this.currentWallet.address)
       this.intervalId = setInterval(() => {
@@ -628,8 +634,7 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
           return;
         }
         this.$store.commit('CLEAR_CURRENT_TRANSFER');
-        const wallet = {address: this.address}
-        this.$store.commit('UPDATE_CURRENT_WALLET', {wallet})
+        
         this.$router.push({name: 'CommonSendHome'})
       },
       commnReceive() {
