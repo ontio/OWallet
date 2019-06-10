@@ -294,7 +294,8 @@ export default {
     unprocessed: '未处理',
     processing: '处理中',
     completed: '已完成',
-    txMgmt: '多签交易管理'
+    txMgmt: '多签交易管理',
+    createTransferFailed: '创建转账交易失败'
   },
 
   pax: {
@@ -326,8 +327,8 @@ export default {
     txCompleted: '已上链',
     txDetail: '查看交易',
     toVarify: '验证',
-    varifySuccess: '验证失败',
-    varifyFailed: '验证通过',
+    varifySuccess: '验证通过',
+    varifyFailed: '验证失败',
     varifyResult: '验证结果',
     failedTxhashes: '验证失败的交易哈希'
   },

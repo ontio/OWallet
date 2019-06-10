@@ -258,9 +258,11 @@
     top: 5px;
 }
 .claim-ong-container {
-    margin: 30px 0;
+    margin-bottom:20px;
   }
-
+.oep4-container {
+    margin-bottom:20px;
+}
   .claim-ong {
     float: left;
   }
@@ -365,6 +367,12 @@
                     @click="redeemOng">{{$t('commonWalletHome.redeem')}}</a-button>
                     <redeem-info-icon></redeem-info-icon>
                 </div>
+
+                <!-- <div class="oep4-container">
+                    <span class="asset-label">OEP-4 Tokens</span>
+                    <a-button type="default" 
+                    @click="checkMoreOep4">{{$t('commonWalletHome.go')}}</a-button>
+                </div> -->
 
 
                 <div v-if="hasLocalCopayer">
@@ -496,6 +504,13 @@ export default {
         RedeemInfoIcon
     },
     mounted(){
+        // UPDATE CURRENT WALLET
+        const wallet = {
+                address: this.sharedWallet.sharedWalletAddress,
+                name: this.sharedWallet.sharedWalletName
+            }
+        this.$store.commit('UPDATE_CURRENT_WALLET', {wallet})
+
         this.refresh(true)
         this.ifHasLocalCopayer();
         let that = this;
@@ -653,8 +668,7 @@ export default {
                 return;
             }
             this.$store.commit('CLEAR_CURRENT_TRANSFER');
-            const wallet = {address: this.sharedWallet.sharedWalletAddress}
-            this.$store.commit('UPDATE_CURRENT_WALLET', {wallet})
+            
             this.$store.commit('UPDATE_TRANSFER_REDEEM_TYPE', {type: false});
             this.$router.push({path:'/sharedWallet/sendTransfer'})
         },
@@ -719,7 +733,7 @@ export default {
             this.$message.success(this.$t('common.copied'))
       },
       redeemOng() {
-          if(this.unboundOng == 0) {
+          if(this.balance.unboundOng == 0) {
             this.redeemInfoVisible = true;
             return;
           }
@@ -731,7 +745,7 @@ export default {
             this.$store.commit('UPDATE_TRANSFER_REDEEM_TYPE', {type: true});
             
             const redeem = {
-                claimableOng : this.unboundOng,
+                claimableOng : this.balance.unboundOng,
                 balance: this.balance.ong
             }
             this.$store.commit('UPDATE_CURRENT_REDEEM', {redeem: redeem})
@@ -745,6 +759,9 @@ export default {
       },
       showTxMgmt() {
           this.$router.push({path: '/sharedWallet/txMgmt'})
+      },
+      checkMoreOep4() {
+        this.$router.push({name: 'Oep4Home'})
       }
     }
 }

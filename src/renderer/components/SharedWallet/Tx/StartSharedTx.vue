@@ -100,8 +100,8 @@ export default {
             sponsorPayer: '',
             visible: false,
             serializedTx: '',
-            contractHash: 'b06f8eaf757030c7a944ce2a072017bde1e72308',
-            method: 'init',
+            contractHash: '',
+            method: '',
             parameters: ''
         }
     },

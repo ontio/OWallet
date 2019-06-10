@@ -295,7 +295,8 @@ export default {
     unprocessed: 'Unprocessed',
     processing: 'In processing',
     completed: 'Completed',
-    txMgmt: 'Transaction management'
+    txMgmt: 'Transaction management',
+    createTransferFailed: 'Create transfer transaction failed'
   },
 
   pax: {

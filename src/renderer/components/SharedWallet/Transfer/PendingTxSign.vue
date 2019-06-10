@@ -184,23 +184,32 @@ export default {
                     signedAddress: this.currentSigner.address,
                     signedHash: tx.serialize()
                 }
-                axios.post(url, body).then(res => {
-                    if(res.status === 200) {
-                        console.log('signed')
+                const res = await axios.post(url, body)
+                    if(res.data && res.data.Error && res.data.Error !== 0) {
+                        this.$message.error(res.data.Desc)
+                        this.$store.dispatch('hideLoadingModals')
+                        this.sending = false;
+                        return;
                     }
-                })
+              
+                // await this.httpService({
+                //     method: 'post',
+                //     data: body,
+                //     url
+                // })
                 //decide to send to chain
                 const sigNum = tx.sigs[0].sigData.length;
                 if(M <= sigNum) {
                     //send tx
+                    const that = this;
                     const restClient = new RestClient(this.nodeUrl);
-                    restClient.sendRawTransaction(tx.serialize()).then(res => {
+                    const res = await restClient.sendRawTransaction(tx.serialize())
                         console.log(res)
                         this.$store.dispatch('hideLoadingModals')
                         if(res.Error === 0) {
-                            this.$message.success(this.$t('common.transSentSuccess'))
+                            this.$message.success(that.$t('common.transSentSuccess'))
                             this.$emit('submitEvent')
-                            const title = this.$t('common.transSentSuccess')
+                            const title = that.$t('common.transSentSuccess')
                             setTimeout(() => {
                                 this.$success({
                                     title: title,
@@ -212,10 +221,7 @@ export default {
                             alert(res.Result)
                             return;
                         }
-                    }).catch(err => {
-                        console.log(err)
-                        this.$message.error(this.$t('common.networkError'))
-                    })
+                    
 
                 }
                 this.$store.dispatch('hideLoadingModals')

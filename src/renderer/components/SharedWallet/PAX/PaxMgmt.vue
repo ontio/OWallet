@@ -220,9 +220,9 @@ export default {
             }         
             this.varifyFailedList = varifyFailedList;   
             if(varifyFailedList.length === 0) {
-                this.$message.success(this.$t('sharedTx.varifySuccess'))
+                this.$message.success(this.$t('pax.varifySuccess'))
             } else {
-                this.$message.error(this.$t('sharedTx.varifyFailed'))
+                this.$message.error(this.$t('pax.varifyFailed'))
             }
             console.log(result)
 

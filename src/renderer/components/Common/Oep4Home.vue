@@ -220,9 +220,7 @@ export default {
         const currentWallet = JSON.parse(sessionStorage.getItem('currentWallet'))
         const net = localStorage.getItem('net')
         return {
-            walletName: currentWallet.label,
             currentWallet,
-            routes: [{name: currentWallet.label, path: '/dashboard'}],
             showModal: false,
             scriptHash: '',
             net: net
@@ -237,13 +235,25 @@ export default {
     computed:{
         ...mapState({
             oep4s: state => state.Oep4s.oep4s,
-            completedTx: state => state.Oep4s.completedTx
-        })
+            completedTx: state => state.Oep4s.completedTx,
+            address: state => state.CurrentWallet.wallet.address
+        }),
+        routes: function() {
+            const address = this.$store.state.CurrentWallet.wallet.address;
+            const currentWallet = JSON.parse(sessionStorage.getItem('currentWallet'))
+            let path = '';
+            if(address === currentWallet.address) {
+                path = '/dashboard'
+            } else {
+                path = '/sharedWallet/home'
+            }
+            return [{name: this.$store.state.CurrentWallet.wallet.name, path}]
+        }
     },
     methods: {
         refresh() {
-            this.$store.dispatch('queryBalanceForOep4', this.currentWallet.address)
-            this.$store.dispatch('queryTxForOep4', {address: this.currentWallet.address, oep4s: this.oep4s})
+            this.$store.dispatch('queryBalanceForOep4', this.address)
+            this.$store.dispatch('queryTxForOep4', {address: this.address, oep4s: this.oep4s})
         },
         handleBack() {
             this.$router.push({name: 'Wallets'})
@@ -269,7 +279,7 @@ export default {
             this.$store.dispatch('showLoadingModals')
             this.$store.dispatch('addOep4Token', {
                 scriptHash: this.scriptHash,
-                address: this.currentWallet.address
+                address: this.address
             }).then(res => {
                 this.$store.dispatch('hideLoadingModals')
                 if(res === 'ADD_SUCCESS') {
@@ -285,7 +295,12 @@ export default {
         },
         sendAsset() {
             this.$store.commit('CLEAR_CURRENT_TRANSFER');
-            this.$router.push({name: 'CommonSendHome'})
+            if(this.address === this.currentWallet.address) {
+                this.$router.push({name: 'CommonSendHome'})
+            } else {
+                this.$store.commit('UPDATE_TRANSFER_REDEEM_TYPE', {type: false});
+                this.$router.push({path:'/sharedWallet/sendTransfer'})
+            }
         },
         commnReceive() {
             this.$router.push({path: '/commonWalletReceive/commonWallet'})
