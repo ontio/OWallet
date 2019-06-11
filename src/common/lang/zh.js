@@ -192,7 +192,8 @@ export default {
     success: '导入钱包成功',
     saveDbFailed: '保存到Keystore失败。请稍后重试。',
     invalidPrivateKey: '请输入正确的私钥',
-    setPassword: '设置密码'
+    setPassword: '设置密码',
+    importFirstDefault: '只导入.dat文件中的默认钱包或第一个钱包'
   },
 
   createSharedWallet: {

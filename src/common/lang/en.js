@@ -193,7 +193,8 @@ export default {
     success: 'Import wallet successfully!',
     saveDbFailed: 'Save to keystore failed. Please try later.',
     invalidPrivateKey: 'Please enter valid private key.',
-    setPassword: 'Set password'
+    setPassword: 'Set password',
+    importFirstDefault: 'Will only import the default wallet or the first wallet in the .dat file'
   },
 
   createSharedWallet: {
