@@ -63,7 +63,7 @@
     left: 4rem;
     height: 5.3rem;
     width: calc(100% - 4rem);
-    z-index: 1000;
+    /* z-index: 1000; */
     box-shadow: 0 -1px 6px 0 #F2F2F2;
     background: #ffffff;
   }
