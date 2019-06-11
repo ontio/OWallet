@@ -75,6 +75,15 @@ export function validateAddress(address) {
   }
 }
 
+export function convertScryptParams({n, r, p, dkLen}) {
+  return {
+    cost: n,
+    blockSize: r,
+    parallel: p,
+    size: dkLen
+  }
+}
+
 // 创建axios实例
 const service = axios.create({
   timeout: 15000 // 请求超时时间

@@ -121,6 +121,10 @@
   .nav-item a {
     font-size:14px !important;
   }
+
+  .tip {
+    font-size:14px;
+  }
 </style>
 <template>
   <div class="container json-import-container">
@@ -189,6 +193,10 @@
 
       <div class="tab-pane fade" id="import-json-dat-pills" role="tabpanel"
            aria-labelledby="import-json-dat-pills-tab">
+        <p>
+          <a-icon type="info-circle-o" class="redeem-info-icon" />
+          <span class="tip">{{$t('importJsonWallet.importFirstDefault')}}</span>
+        </p>
         <a-input class="input" :placeholder="$t('importJsonWallet.label')" v-model="datLabel" name="datLabel"
                  v-validate="{required: true}"></a-input>
         <span class="v-validate-span-errors" v-show="errors.has('datLabel')">{{ errors.first('datLabel') }}</span>
@@ -250,7 +258,7 @@
   import dbService from '../../../../core/dbService'
   import {DEFAULT_SCRYPT} from '../../../../core/consts'
   import $ from 'jquery'
-  import {isHexString} from '../../../../core/utils'
+  import {isHexString, convertScryptParams} from '../../../../core/utils'
 
   export default {
     name: 'BasicInfo',
@@ -363,15 +371,25 @@
         this.dat = files[0]
       },
       validateWalletFile(wallet) {
-        if(!wallet.accounts || wallet.accounts.length < 1) {
+        if(!wallet.scrypt || !wallet.accounts || wallet.accounts.length < 1) {
           return false;
         }
-        //Only import the first account
-        const account = wallet.accounts[0]
-        if(!account.key || !account.address || !account.salt) {
+        //Only import the default account or the first account
+        debugger
+        let  account;
+        for (const acct of wallet.accounts) {
+          if(acct.isDefault || acct.isDefault == 'true') {
+            account = acct;
+            break;
+          }
+        }
+        if(!account) {
+          account = wallet.accounts[0]
+        }
+        if(!account || !account.key || !account.address || !account.salt) {
           return false;
         }
-        return true;
+        return account;
       },
       importAccountForDat() {
         /**
@@ -391,17 +409,19 @@
             return;
           }
           //TODO: validate file content
-          if(!this.validateWalletFile(wallet)) {
+          const account = this.validateWalletFile(wallet)
+          if(!account) {
             this.$store.dispatch('hideLoadingModals')
             this.$message.error(this.$t('importJsonWallet.invalidDatFile'))
             return;
           }
-          const account = wallet.accounts[0]
+          
           const enc = new Crypto.PrivateKey(account.key);
           const address = new Crypto.Address(account.address)
-
+          let scrypt = convertScryptParams(wallet.scrypt) 
+          debugger
           try {
-            enc.decrypt(this.datPassword, address, account.salt, DEFAULT_SCRYPT)
+            enc.decrypt(this.datPassword, address, account.salt, scrypt)
           } catch (err) {
             console.log(err)
             this.$store.dispatch('hideLoadingModals')
