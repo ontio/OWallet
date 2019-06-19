@@ -61,6 +61,7 @@ import { TEST_NET, MAIN_NET, ONT_CONTRACT, ONT_PASS_NODE, DEFAULT_SCRYPT } from 
 import {mapState} from 'vuex'
 import {getDeviceInfo, getPublicKey} from '../../../core/ontLedger'
 import {BigNumber} from 'bignumber.js'
+import { getRestClient } from '../../../core/utils'
 export default {
     name: 'CommonRedeem',
     components: {
@@ -82,12 +83,6 @@ export default {
     },
     data() {
         const net = localStorage.getItem('net');
-        let url = ''
-        if (net === 'TEST_NET') {
-            url = TEST_NET + ':20334'
-        } else {
-            url = MAIN_NET + ':20334'
-        }
         const type = this.$route.params.walletType
         const currentWallet = JSON.parse(sessionStorage.getItem('currentWallet'))
         const routes = [{name: currentWallet.label, path:'/dashboard'}]
@@ -96,7 +91,6 @@ export default {
             routes,
             type,
             password:'',
-            nodeUrl: url,
             interval:10000,
             invervalId:'',
             publicKey:'',
@@ -149,7 +143,7 @@ export default {
         })
       },
       sendTx(tx) {
-          const restClient = new RestClient(this.nodeUrl);
+          const restClient = getRestClient();
           restClient.sendRawTransaction(tx.serialize()).then(res => {
             console.log(res)
             this.$store.dispatch('hideLoadingModals')

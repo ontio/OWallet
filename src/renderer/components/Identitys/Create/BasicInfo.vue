@@ -61,17 +61,12 @@
   import dbService from '../../../../core/dbService'
   import {DEFAULT_SCRYPT, TEST_NET, MAIN_NET} from '../../../../core/consts'
 import {legacySignWithLedger} from '../../../../core/ontLedger'
+import { getRestClient } from '../../../../core/utils'
 
   export default {
     name: 'BasicInfo',
     data() {
       const net = localStorage.getItem('net');
-      let url = ''
-      if (net === 'TEST_NET') {
-          url = TEST_NET + ':20334'
-      } else {
-          url = MAIN_NET + ':20334'
-      }
       return {
         label: "",
         password: "",
@@ -80,8 +75,7 @@ import {legacySignWithLedger} from '../../../../core/ontLedger'
         payerWalletType: 'commonWallet',
         payerWallet: '',
         localCommonWallet:[],
-        payerPassword: '',
-        nodeUrl: url
+        payerPassword: ''
       }
     },
     mounted(){
@@ -187,7 +181,7 @@ import {legacySignWithLedger} from '../../../../core/ontLedger'
         })
       },
       sendTx(tx){
-        const restClient = new RestClient(this.nodeUrl);
+        const restClient = getRestClient();
           restClient.sendRawTransaction(tx.serialize()).then(res => {
           console.log(res)
           this.$store.dispatch('hideLoadingModals')

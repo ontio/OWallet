@@ -1,6 +1,7 @@
 import {
   TEST_NET,
   MAIN_NET,
+  MAIN_NET_LIST,
   DEFAULT_SCRYPT
 } from './consts'
 import axios from 'axios'
@@ -11,8 +12,25 @@ import {
   BigNumber
 } from 'bignumber.js'
 import numeral from 'numeral'
-import {Crypto} from 'ontology-ts-sdk'
+import {Crypto, RestClient} from 'ontology-ts-sdk'
+const opn = require('opn')
+const {
+    BrowserWindow
+  } = require('electron').remote;
 
+export function open(url) {
+  try {
+    opn(url)
+  } catch(err) {
+    let win = new BrowserWindow({width: 800, height: 600, center: true});
+    win.on('closed', () => {
+      win = null
+    })
+
+    // Load a remote URL
+    win.loadURL(url)
+  }
+}
 export function varifyPositiveInt(value) {
     if (!/^[1-9]\d*$/.test(value)) {
         return false;
@@ -33,9 +51,17 @@ export function isHexString(str) {
 }
 
 export function getNodeUrl() {
-    const net = localStorage.getItem('net');
-    return net === 'TEST_NET' ? TEST_NET + ':20334' : MAIN_NET + ':20334'
+    // const net = localStorage.getItem('net');
+    // return net === 'TEST_NET' ? TEST_NET + ':20334' : MAIN_NET + ':20334'
     // return 'http://139.219.128.220:20334' //for test 
+    const node = localStorage.getItem('nodeAddress') || MAIN_NET_LIST[0]
+    return node + ':20334';
+}
+
+export function getRestClient() {
+  let url = getNodeUrl();
+  const restClient = new RestClient(url);
+  return restClient;
 }
 
 export function convertNumber2Str(num, decimal = 0, division) {

@@ -47,7 +47,7 @@
 </template>
 
 <script>
-const { BrowserWindow } = require("electron").remote;
+import { open } from '../../core/utils'
 
 export default {
   name: "TopLeftNav",
@@ -71,13 +71,7 @@ export default {
         url = "https://medium.com/ontologynetwork/owallet-faq-7f4f96784253";
       }
 
-      let win = new BrowserWindow({ width: 800, height: 600, center: true });
-      win.on("closed", () => {
-        win = null;
-      });
-
-      // Load a remote URL
-      win.loadURL(url);
+      open(url)
     }
   }
 };

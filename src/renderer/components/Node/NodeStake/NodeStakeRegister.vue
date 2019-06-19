@@ -119,12 +119,6 @@ export default {
   },
   data() {
     const net = localStorage.getItem('net');
-    let url = ''
-    if (net === 'TEST_NET') {
-        url = TEST_NET + ':20334'
-    } else {
-        url = MAIN_NET + ':20334'
-    }
     return {
       localOntid: [],
       stakeQuantity: 0,
@@ -133,8 +127,7 @@ export default {
       walletModalHandled: false,
       ontidPassword: "",
       walletPassword: "",
-      tx: "",
-      nodeUrl : url
+      tx: ""
     };
   },
   mounted() {

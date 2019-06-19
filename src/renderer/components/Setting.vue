@@ -13,6 +13,14 @@
           </select>
         </div>
 
+        <div class="form-group">
+          <label for="network-selection">{{ $t('setting.nodeAddress') }}</label>
+          <select name="network-selection" id="network-selection" class="form-control" v-model="nodeAddress"
+                  @change="changeNode">
+            <option v-for="item of nodeList" :key="item"  :value="item" >{{item}}</option>
+          </select>
+        </div>
+
         <div class="form-group form-group-top">
           <label for="lang-selection">{{ $t('setting.lang') }}</label>
           <select name="lang-selection" id="lang-selection" class="form-control" v-model="lang"
@@ -39,7 +47,7 @@
 <script>
   import Breadcrumb from './Breadcrumb'
   import LangStorage from './../../core/lang'
-
+  import { TEST_NET_LIST, MAIN_NET_LIST, TEST_NET} from '../../core/consts'
   const {dialog} = require('electron').remote;
 
   export default {
@@ -47,6 +55,8 @@
     data() {
       return {
         net: localStorage.getItem('net') || 'MAIN_NET',
+        nodeAddress: localStorage.getItem('nodeAddress') || MAIN_NET_LIST[0],
+        nodeList: localStorage.getItem('net') === 'TEST_NET' ? TEST_NET_LIST : MAIN_NET_LIST,
         lang: this.$i18n.locale,
         savePath: localStorage.getItem('savePath')
       }
@@ -58,9 +68,24 @@
       changeNet() {
         localStorage.setItem('net', this.net);
         this.$store.commit('UPDATE_SETTING_NETWORK', {network: this.net})
+        if(this.net === 'TEST_NET') {
+          this.nodeList = TEST_NET_LIST;
+          this.nodeAddress = TEST_NET_LIST[0]
+          localStorage.setItem('nodeAddress', this.nodeAddress)
+        } else {
+          this.nodeList = MAIN_NET_LIST;
+          this.nodeAddress = MAIN_NET_LIST[0]
+          localStorage.setItem('nodeAddress', this.nodeAddress)
+        }
         setTimeout(() => {
           const net = this.net === 'TEST_NET' ? this.$t('common.testNet') : this.$t('common.mainNet');
           this.$message.success(this.$t('setting.setNetworkSuccess') + net);
+        }, 100)
+      },
+      changeNode() {
+        localStorage.setItem('nodeAddress', this.nodeAddress)
+        setTimeout(() => {
+          this.$message.success(this.$t('setting.setNodeSuccess') + this.nodeAddress);
         }, 100)
       },
       changeLanguage() {

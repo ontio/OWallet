@@ -2,18 +2,8 @@ import {Oep4, RestClient, Crypto, utils} from 'ontology-ts-sdk'
 import {TEST_NET, MAIN_NET} from '../../../core/consts'
 import { BigNumber } from 'bignumber.js';
 import axios from 'axios';
+import { getRestClient } from '../../../core/utils'
 
-function getRestClient() {
-    const net = localStorage.getItem('net');
-    let url = ''
-    if (net === 'TEST_NET') {
-        url = TEST_NET + ':20334'
-    } else {
-        url = MAIN_NET + ':20334'
-    }
-    const restClient = new RestClient(url);
-    return restClient;
-}
 
 const oep4s = localStorage.getItem('oep4s')? JSON.parse(localStorage.getItem('oep4s')) : [];
 

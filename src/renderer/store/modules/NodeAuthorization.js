@@ -1,5 +1,5 @@
 import { getNodeUrl} from '../../../core/utils'
-import {CON_NODE, NODE_DETAIL, NODE_NAME_LIST} from '../../../core/consts'
+import {NODE_DETAIL, NODE_NAME_LIST} from '../../../core/consts'
 import numeral from 'numeral'
 import { Crypto, RestClient, utils, GovernanceTxBuilder} from 'ontology-ts-sdk'
 import {BigNumber} from 'bignumber.js'
@@ -39,19 +39,6 @@ function delay(s) {
     })
 }
 
-function isMainnetConNode(pk) {
-    const net = localStorage.getItem('net');
-    if (net === 'MAIN_NET') {
-        let isConNode = false;
-        for (const cnode of CON_NODE) {
-            if (cnode.pk === pk) {
-                isConNode = true;
-            }
-        }
-        return isConNode;
-    } 
-    return true;
-}
 
 function formatAuthorizationInfo(info) {
     const authorizationInfo = info;

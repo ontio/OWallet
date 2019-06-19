@@ -80,7 +80,7 @@
     </div>
 </template>
 <script>
-import {getNodeUrl} from '../../../../core/utils'
+import {getNodeUrl, getRestClient} from '../../../../core/utils'
 import {Transaction, Crypto, TransactionBuilder, TxSignature, utils, RestClient} from 'ontology-ts-sdk'
 import CommonSignShared from '../../Common/CommonSignShared'
 
@@ -148,8 +148,7 @@ export default {
 
         async handleSend() {
              //send tx
-             const nodeUrl = getNodeUrl();
-            const restClient = new RestClient(nodeUrl);
+            const restClient = getRestClient();
             this.$store.dispatch('showLoadingModals')
             try {
                 const res = await restClient.sendRawTransaction(this.serializedTx)

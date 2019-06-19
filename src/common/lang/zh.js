@@ -412,12 +412,14 @@ export default {
     pathTit: '当前路径： ',
     path: '钱包保存路径',
     change: '修改',
-    setNetworkSuccess: '网络成功设置成：',
+    setNetworkSuccess: '网络成功设置为：',
     wallets: '钱包',
     ontid: 'ONT ID',
     nodeStake: '节点质押',
     help: '帮助',
-    settings: '设置'
+    settings: '设置',
+    nodeAddress: '节点',
+    setNodeSuccess: '节点成功设置为：'
   },
   ledgerWallet: {
     nameOfLedgerWallet: 'Ledger钱包名称',

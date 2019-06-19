@@ -103,9 +103,7 @@
 <script>
 import Breadcrumb from '../../Breadcrumb'
 import {mapState} from 'vuex'
-const {BrowserWindow} = require('electron').remote;
-const opn = require('opn')
-
+import { open } from '../../../../core/utils'
 export default {
     name: 'NodeList',
     components: {
@@ -160,6 +158,7 @@ export default {
     mounted(){
         //loop to fetch data
         // this.$store.dispatch('showLoadingModals');
+        this.requesting = true;
         this.$store.dispatch('fetchAllSortedNodeList').then(res => {
             this.pagination.total = res.length;
              this.fetchList()
@@ -168,7 +167,7 @@ export default {
         this.intervalId = setInterval(()=>{
             // this.$store.dispatch('fetchNodeList')
             this.$store.dispatch('fetchBlockCountdown')
-        }, 10000)  
+        }, 6000)  
     },
     beforeDestroy(){
         clearInterval(this.intervalId);
@@ -191,13 +190,7 @@ export default {
         },
         handleNodeDetail(record, item) {
             console.log(record);
-           let win = new BrowserWindow({width: 800, height: 600, center: true});
-            win.on('closed', () => {
-            win = null
-            })
-
-            // Load a remote URL
-            win.loadURL(record.detailUrl);
+            open(record.detailUrl)
         },
         handleTableChange(pagination) {
             console.log(pagination)
@@ -237,7 +230,7 @@ export default {
                     on: {
                         click: () => {
                             const url = 'https://medium.com/ontologynetwork/owallet-stake-authorization-faq-4a4bce224122'
-                            opn(url);
+                            open(url);
                         }
                     }
                 }, faqLink),
@@ -263,13 +256,7 @@ export default {
                 url = "https://medium.com/ontologynetwork/owallet-stake-authorization-faq-4a4bce224122";
             }
 
-            let win = new BrowserWindow({ width: 800, height: 600, center: true });
-            win.on("closed", () => {
-                win = null;
-            });
-
-            // Load a remote URL
-            win.loadURL(url);
+            open(url)
         }
     }
 }
