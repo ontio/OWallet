@@ -103,7 +103,8 @@
   import JsonWalletDetails from './JsonWallet/View/Details'
   import SharedWalletDetails from './SharedWallet/View/Details'
   import SetPathModal from './Modals/SetPath'
-const {BrowserWindow} = require('electron').remote
+  import { open } from '../../core/utils'
+
   export default {
     name: 'Wallets',
     data() {
@@ -145,14 +146,9 @@ const {BrowserWindow} = require('electron').remote
       setActiveTab(index) {
         sessionStorage.setItem('Wallets_Tab', index);
       },
-      toLedgerHelp() {
-        let win = new BrowserWindow({width: 800, height: 600, center:true})
-        win.on('closed', () => {
-          win = null
-        })
-        
+      toLedgerHelp() {        
         // Load a remote URL
-        win.loadURL('https://support.ledgerwallet.com/hc/en-us/articles/360007583514')
+        open('https://support.ledgerwallet.com/hc/en-us/articles/360007583514')
       }
     },
     components: {

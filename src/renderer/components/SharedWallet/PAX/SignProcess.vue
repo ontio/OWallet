@@ -176,7 +176,7 @@
 <script>
 import Breadcrumb from '../../Breadcrumb'
 import {mapState} from 'vuex'
-import {getNodeUrl} from '../../../../core/utils'
+import { getRestClient } from '../../../../core/utils'
 import {Transaction, Crypto, TransactionBuilder, TxSignature, utils, RestClient} from 'ontology-ts-sdk'
 import {legacySignWithLedger} from '../../../../core/ontLedger'
 import {PAX_API} from '../../../../core/consts'
@@ -194,7 +194,6 @@ export default {
             {name: this.$t('sharedWalletHome.paxMgmt'), path: '/sharedWallet/paxMgmt'}
         ]
         const payers = sharedWallet.coPayers
-        const nodeUrl = getNodeUrl();
         return {
             routes,
             sharedWallet,
@@ -202,7 +201,6 @@ export default {
             password: '',
             sending: false,
             showSign: true,
-            nodeUrl,
             visible: false,
             txToSend:0,
             txSent: 0
@@ -362,7 +360,7 @@ export default {
         },
         async sendTx(txData) {
              //send tx
-            const restClient = new RestClient(this.nodeUrl);
+            const restClient = getRestClient();
             try {
                 const res = await restClient.sendRawTransaction(txData)
                 console.log(res)

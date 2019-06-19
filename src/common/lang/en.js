@@ -413,12 +413,14 @@ export default {
     pathTit: 'Path: ',
     path: 'Save keystore file path',
     change: 'Change',
-    setNetworkSuccess: 'The network has been set to ',
+    setNetworkSuccess: 'The network has been set to: ',
     wallets: 'Wallets',
     ontid: 'ONT ID',
     nodeStake: 'Node Stake',
     help: 'Help',
-    settings: 'Settings'
+    settings: 'Settings',
+    nodeAddress: 'Node address',
+    setNodeSuccess: 'The node address has been set t: '
   },
 
   ledgerWallet: {

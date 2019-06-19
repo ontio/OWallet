@@ -40,24 +40,18 @@
   import dbService from '../../../../core/dbService'
   import {DEFAULT_SCRYPT, TEST_NET, MAIN_NET} from '../../../../core/consts'
   import $ from 'jquery'
+import { getRestClient } from '../../../../core/utils';
 
   export default {
     name: 'BasicInfo',
     data() {
       const net = localStorage.getItem('net');
-      let url = ''
-      if (net === 'TEST_NET') {
-          url = TEST_NET + ':20334'
-      } else {
-          url = MAIN_NET + ':20334'
-      }
       return {
         tabName: 'keystore', // keystore
 
         keystore: '',
         keystoreLabel: '',
-        keystorePassword: '',
-        nodeUrl: url
+        keystorePassword: ''
       }
     },
     methods: {
@@ -117,7 +111,7 @@
             return;
         }
         const tx = OntidContract.buildGetDDOTx(identity.ontid)
-        const restClient = new RestClient(this.nodeUrl)
+        const restClient = getRestClient()
         restClient.sendRawTransaction(tx.serialize(), true).then(res => {
           if(res.Result) {
             this.saveToDb(identity)

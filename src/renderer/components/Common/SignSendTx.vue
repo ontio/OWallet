@@ -23,7 +23,7 @@
 <script>
 import {mapState} from 'vuex'
 import {DEFAULT_SCRYPT} from '../../../core/consts'
-import {getNodeUrl} from '../../../core/utils'
+import { getRestClient } from '../../../core/utils'
 import {legacySignWithLedger} from '../../../core/ontLedger'
 import {Crypto, TransactionBuilder, TxSignature, utils, RestClient} from 'ontology-ts-sdk'
 export default {
@@ -113,8 +113,7 @@ export default {
             },
             sendTx(tx){
                 this.walletPassword = '';
-                const url = getNodeUrl();
-                const restClient = new RestClient(url);
+                const restClient = getRestClient();
                 restClient.sendRawTransaction(tx.serialize()).then(res => {
                 console.log(res)
                 this.$store.dispatch("hideLoadingModals");

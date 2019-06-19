@@ -126,7 +126,7 @@
   import axios from 'axios';
   import pkg from '../../../package.json'
   const {BrowserWindow} = require('electron').remote;
-  const opn = require('opn')
+  import { open } from '../../core/utils'
 
   export default {
     name: 'Home',
@@ -154,7 +154,7 @@
     methods: {
       handleUpdate() {
         const url = this.latest_url;
-        opn(url);
+        open(url);
         // let win = new BrowserWindow({width: 800, height: 600, center: true});
         // win.on('closed', () => {
         //   win = null

@@ -456,7 +456,7 @@
   import Breadcrumb from './Breadcrumb'
 import { BigNumber } from 'bignumber.js';
 import RedeemInfoIcon from './RedeemInfoIcon'
-const {BrowserWindow} = require('electron').remote;
+import { open, getRestClient } from '../../core/utils'
 const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
   export default {
     name: 'Dashboard',
@@ -468,13 +468,6 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
       const currentWallet = JSON.parse(sessionStorage.getItem('currentWallet'));
       const net = localStorage.getItem('net');
       const network = net && net === 'TEST_NET' ? this.$t('common.testNet') : this.$t('common.mainNet');
-      let url = '';
-
-      if (net === 'TEST_NET') {
-        url = TEST_NET + ':20334'
-      } else {
-        url = MAIN_NET + ':20334'
-      }
 
       return {
         currentWallet,
@@ -485,7 +478,6 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
         transactions: '',
         asset: 'ONT',
         network: network,
-        nodeUrl: url,
         completedTx: [],
         intervalId: '',
         interval:15000,
@@ -566,7 +558,7 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
         })
       },
       getUnclaimOng() {
-        const restClient = new RestClient(this.nodeUrl);
+        const restClient = getRestClient();
         restClient.getAllowance('ong', new Crypto.Address(ONT_CONTRACT), new Crypto.Address(this.address)).then(res => {
           console.log(res.Result)
           this.unclaimOng = new BigNumber(res.Result).div(1e9);
@@ -664,22 +656,14 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
         if (this.network === 'TestNet') {
           url += '/testnet'
         }
-        let win = new BrowserWindow({width: 1280, height: 800, center: true});
-        win.on('closed', () => {
-          win = null
-        })
-        win.loadURL(url)
+        open(url)
       },
       showTxDetail(txHash) {
         let url = `https://explorer.ont.io/transaction/${txHash}`
         if (this.network === 'TestNet') {
           url += '/testnet'
         }
-        let win = new BrowserWindow({width: 1280, height: 800, center: true});
-        win.on('closed', () => {
-          win = null
-        })
-        win.loadURL(url)
+        open(url)
       },
       copy(value) {
             this.$copyText(value);

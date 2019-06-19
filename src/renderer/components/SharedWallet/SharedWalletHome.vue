@@ -465,33 +465,23 @@ import axios from 'axios'
 import Breadcrumb from '../Breadcrumb'
 import { BigNumber } from 'bignumber.js';
 import RedeemInfoIcon from '../RedeemInfoIcon'
-
-const {BrowserWindow} = require('electron').remote;
-
+import { open } from '../../../core/utils'
 export default {
     name:'SharedWalletHome',
     data() {
         const net = localStorage.getItem('net');
         const network = net && net === 'TEST_NET' ? this.$t('common.testNet') : this.$t('common.mainNet');
-        let url = ''
-        if (net === 'TEST_NET') {
-            url = TEST_NET + ':20334'
-        } else {
-            url = MAIN_NET + ':20334'
-        }
         const sharedWallet = JSON.parse(sessionStorage.getItem('sharedWallet'));
         return {
             amount: 0,
             toAddress: '',
             transactions: '',
-            nodeUrl:url,
             sharedWallet,
             pendingTx:[],
             completedTx:[],
             showTransfer: false,
             transferStep: 0,
             network,
-            nodeUrl: url,
             hasLocalCopayer:true,
             interval: 15000,
             intervalId: '',
@@ -711,22 +701,14 @@ export default {
             if(this.network === 'TestNet') {
                 url += '/testnet'
             }
-            let win = new BrowserWindow({width: 1280, height: 800, center: true});
-            win.on('closed', () => {
-            win = null
-            })
-            win.loadURL(url)
+            open(url)
         },
         showTxDetail(txHash) {
             let url = `https://explorer.ont.io/transaction/${txHash}`
             if(this.network === 'TestNet') {
                 url += '/testnet'
             }
-            let win = new BrowserWindow({width: 1280, height: 800, center: true});
-            win.on('closed', () => {
-                win = null
-                })
-            win.loadURL(url)
+            open(url)
         },
       copy() {
             this.$copyText(this.sharedWallet.sharedWalletAddress);

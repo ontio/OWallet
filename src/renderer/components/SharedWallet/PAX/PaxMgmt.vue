@@ -108,10 +108,9 @@
 <script>
 import Breadcrumb from '../../Breadcrumb'
 import {PAX_API} from '../../../../core/consts'
-import {convertNumber2Str} from '../../../../core/utils'
+import {convertNumber2Str, open} from '../../../../core/utils'
 import dbService from '../../../../core/dbService'
 import { BigNumber } from 'bignumber.js'
-const opn = require('opn')
 
 export default {
     name: 'PaxMgmt',
@@ -178,7 +177,7 @@ export default {
         toEthScan() {
             const net = localStorage.getItem('net');
             let url = net === 'TEST_NET' ? PAX_API.EthScanTest : PAX_API.EthScanMain;
-            opn(url)
+            oepn(url)
         },
         handleBack() {
             this.$router.push({path: '/Wallets'});
@@ -257,7 +256,7 @@ export default {
             } else {
                 url = (net === 'TEST_NET' ? PAX_API.EthScanTest : PAX_API.EthScanMain) + record.Txhash
             }
-            opn(url)
+            open(url)
         },
         onSelectChange (selectedRowKeys,  selectedRows) {
             console.log('selectedRowKeys changed: ', selectedRowKeys);

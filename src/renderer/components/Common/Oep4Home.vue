@@ -212,7 +212,7 @@
 import Breadcrumb from '../Breadcrumb'
 import {mapState} from 'vuex'
 import { TEST_NET } from '../../../core/consts'
-const {BrowserWindow} = require('electron').remote;
+import { open } from '../../../core/utils'
 
 export default {
     name: 'Oep4Home',
@@ -310,22 +310,14 @@ export default {
             if (this.net === 'TEST_NET') {
                 url += '/testnet'
             }
-            let win = new BrowserWindow({width: 1280, height: 800, center: true});
-            win.on('closed', () => {
-                win = null
-            })
-            win.loadURL(url)
+            openUrl(url)
         },
         checkMoreTx() {
         let url = `https://explorer.ont.io/address/${this.address}/10/1`
             if (this.net === 'TEST_NET') {
                 url += '/testnet'
             }
-            let win = new BrowserWindow({width: 1280, height: 800, center: true});
-            win.on('closed', () => {
-            win = null
-            })
-            win.loadURL(url)
+            open(url)
         },
     }
 }

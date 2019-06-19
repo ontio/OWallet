@@ -197,6 +197,8 @@ import axios from 'axios';
 import {getDeviceInfo, getPublicKey} from '../../../core/ontLedger'
 import $ from 'jquery'
 import {BigNumber} from 'bignumber.js'
+import { getRestClient } from '../../../core/utils'
+
 export default {
   name: 'SendConfirm',
   mounted: function () {
@@ -215,12 +217,6 @@ export default {
     },
   data() {
     const net = localStorage.getItem('net');
-    let url = ''
-    if (net === 'TEST_NET') {
-        url = TEST_NET + ':20334'
-    } else {
-        url = MAIN_NET + ':20334'
-    }
     const currentWallet = JSON.parse(sessionStorage.getItem('currentWallet'));
     return {
       interval:10000,
@@ -228,7 +224,6 @@ export default {
       currentWallet,
       checked: false,
       password: '',
-      nodeUrl: url,
       isCommonWallet: currentWallet.key ? true: false,
       ledgerStatus: '',
       publicKey: '',
@@ -280,7 +275,7 @@ export default {
         })
       },
       sendTx(tx){
-          const restClient = new RestClient(this.nodeUrl);
+          const restClient = getRestClient();
           restClient.sendRawTransaction(tx.serialize()).then(res => {
           console.log(res)
           this.$store.dispatch('hideLoadingModals')

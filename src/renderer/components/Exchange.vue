@@ -51,6 +51,7 @@ loading {
 <script>
 import axios from "axios";
 import { isNumber, isNullOrUndefined } from "util";
+import { open } from '../../core/utils'
 
 export default {
   name: "Exchange",
@@ -92,10 +93,15 @@ export default {
       return array.long == value;
     },
     handleExchangeChangelly() {
-      this.$router.push({ name: "Changelly" });
+      // this.$router.push({ name: "Changelly" });
+      const changellyURL =
+  "https://widget.changelly.com?currencies=&from=btc&to=ont&amount=1&address=&fiat=true&fixedTo=false&theme=default&ref_id=su5srryl1mhz4fno&merchant_id=su5srryl1mhz4fno";
+      open(changellyURL)
     },
     handleExchangeCryptonex() {
-      this.$router.push({ name: "Cryptonex" });
+      // this.$router.push({ name: "Cryptonex" });
+      const cryptonexURL = "https://wallet.cryptonex.org/member/sign-in";
+      open(cryptonexURL)
     },
     formatPrice(value) {
       if (isNumber(value)) {

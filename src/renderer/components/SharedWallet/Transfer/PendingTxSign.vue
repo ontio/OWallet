@@ -89,25 +89,19 @@ import {ONT_PASS_NODE, ONT_PASS_NODE_PRD, ONT_PASS_URL, DEFAULT_SCRYPT, TEST_NET
 import axios from 'axios'
 import dbService from '../../../../core/dbService'
 import {legacySignWithLedger} from '../../../../core/ontLedger'
+import { getRestClient } from '../../../../core/utils';
 
 export default {
     name:'PendingTxSign',
     data() {
         const net = localStorage.getItem('net');
-        let url = ''
-        if (net === 'TEST_NET') {
-            url = TEST_NET + ':20334'
-        } else {
-            url = MAIN_NET + ':20334'
-        }
         const sharedWallet = JSON.parse(sessionStorage.getItem('sharedWallet'));
         return {
             sharedWallet,
             payers: [],
             password:'',
             checked: false,
-            sending:false,
-            nodeUrl: url
+            sending:false
         }
     },
     computed:{
@@ -202,7 +196,7 @@ export default {
                 if(M <= sigNum) {
                     //send tx
                     const that = this;
-                    const restClient = new RestClient(this.nodeUrl);
+                    const restClient = getRestClient();
                     const res = await restClient.sendRawTransaction(tx.serialize())
                         console.log(res)
                         this.$store.dispatch('hideLoadingModals')
