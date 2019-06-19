@@ -139,18 +139,27 @@ export default {
                 return [];
             }
             const params = JSON.parse(this.parameters);
-            return params.map(item => {
+            try {
+                return params.map(item => {
                     if(item.type === 'Address') {
-                        item.value = new Crypto.Address(item.value).serialize();
+                        item.value = new Crypto.Address(item.value.trim()).serialize();
                     }
-                    return new Parameter('', item.type, item.value);
+                    return new Parameter('', item.type, item.value.trim());
                 })
+            } catch (err) {
+                this.$message.error(this.$t('sharedTx.paramsError'))
+                return null
+            }
+            
         },
         confirm() {
             const isFirstSign = true;
             if(this.varifyForm()) {
                 const contractAddr = new Crypto.Address(utils.reverseHex(this.contractHash))
                 const params = this.convertParams();
+                if(!params) {
+                    return;
+                }
                 const payer = new Crypto.Address(this.sharedWallet.sharedWalletAddress)
                 const tx = TransactionBuilder.makeInvokeTransaction(this.method, params, contractAddr, '500', '200000', payer);
                 this.tx = tx.serialize();

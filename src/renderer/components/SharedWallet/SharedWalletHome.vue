@@ -386,8 +386,8 @@
 
                 <div>
                     <!-- hide pax -->
-                    <!-- <a-button class="asset-btn" type="primary" @click="showPaxMgmt">
-                        {{$t('sharedWalletHome.paxMgmt')}}</a-button> -->
+                    <a-button class="asset-btn" type="primary" @click="showPaxMgmt" v-if="showPax">
+                        {{$t('sharedWalletHome.paxMgmt')}}</a-button>
                     <a-button class="asset-btn" type="primary" @click="showTxMgmt">
                         {{$t('sharedWalletHome.txMgmt')}}</a-button>
                 </div>
@@ -459,13 +459,14 @@
 
 <script>
 import {mapState} from 'vuex'
-import { TEST_NET, MAIN_NET, ONT_PASS_NODE, ONT_PASS_NODE_PRD,ONT_PASS_URL } from '../../../core/consts'
+import { TEST_NET, MAIN_NET, ONT_PASS_NODE, ONT_PASS_NODE_PRD,ONT_PASS_URL, PAX_SC_HASH } from '../../../core/consts'
 import dbService from '../../../core/dbService'
 import axios from 'axios'
 import Breadcrumb from '../Breadcrumb'
 import { BigNumber } from 'bignumber.js';
 import RedeemInfoIcon from '../RedeemInfoIcon'
-import { open } from '../../../core/utils'
+import { open, getRestClient } from '../../../core/utils'
+import { TransactionBuilder, Crypto, utils } from 'ontology-ts-sdk'
 export default {
     name:'SharedWalletHome',
     data() {
@@ -486,12 +487,30 @@ export default {
             interval: 15000,
             intervalId: '',
             redeemInfoVisible: false,
-            requestStart: false
+            requestStart: false,
+            showPax: false
         }
     },
     components: {
         Breadcrumb,
         RedeemInfoIcon
+    },
+    created() {
+        const net = localStorage.getItem('net');
+        const scriptHash = net === 'TEST_NET' ? PAX_SC_HASH.TEST : PAX_SC_HASH.MAIN;
+        const contractAddr = new Crypto.Address(utils.reverseHex(scriptHash));
+        const method = 'getManualSupplyController'
+        const tx = TransactionBuilder.makeInvokeTransaction(method, [], contractAddr, '500', '20000');
+        const restClient = getRestClient();
+        restClient.sendRawTransaction(tx.serialize(), true).then(res => {
+            console.log(res)
+            if(res.Error === 0) {
+                const  controller = new Crypto.Address(res.Result.Result).toBase58();
+                if(controller === this.sharedWallet.sharedWalletAddress) {
+                    this.showPax = true;
+                }
+            }
+        })
     },
     mounted(){
         // UPDATE CURRENT WALLET

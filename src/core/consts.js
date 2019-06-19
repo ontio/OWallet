@@ -75,3 +75,8 @@ export const PAX_API = {
   EthScanTest: 'https://ropsten.etherscan.io/tx/',
   EthScanMain: 'https://etherscan.io/tx/'
 }
+
+export const PAX_SC_HASH = {
+  MAIN: '6bbc07bae862db0d7867e4e5b1a13c663e2b4bc8',
+  TEST: 'b06f8eaf757030c7a944ce2a072017bde1e72308'
+} 
