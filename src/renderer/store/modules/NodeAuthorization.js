@@ -35,12 +35,16 @@ async function matchNodeName(list) {
     }
     for(const item of list) {
         for (const cnode of nodes) {
-            if (!cnode || !cnode.PublicKey) {
-                 item.name = 'Node_' + (item.address.toBase58 ? item.address.toBase58().substr(0, 6) : item.address.substr(0, 6));
-            }
-            else if (cnode.PublicKey === item.pk || cnode.PublicKey  === item.peerPubkey) {
+            if (cnode.PublicKey === item.pk || cnode.PublicKey  === item.peerPubkey) {
                 item.name = cnode.Name
                 break;
+            }
+            else if (!cnode || !cnode.PublicKey) {
+                if (item.address) {
+                    item.name = 'Node_' + (item.address.toBase58 ? item.address.toBase58().substr(0, 6) : item.address.substr(0, 6));
+                } else {
+                    item.name = 'Node_' + item.pk.substr(0, 6)
+                }
             }
         }
     } 
