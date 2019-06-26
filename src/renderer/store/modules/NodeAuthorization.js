@@ -5,25 +5,38 @@ import { Crypto, RestClient, utils, GovernanceTxBuilder} from 'ontology-ts-sdk'
 import {BigNumber} from 'bignumber.js'
 import {dbUpsert, dbFind} from '../../../core/dbService'
 import axios from 'axios';
+import {
+  message
+} from 'ant-design-vue'
+import i18n from '../../../common/lang';
 var dateFormat = require('dateformat');
 // import nodes from '../../../core/nodes.json'
 
 //TODO: fetch api to match node names
 async function matchNodeName(list) {
     let nodes = []
+    const net = localStorage.getItem('net');
     try {
-        const res = await axios.get(NODE_NAME_LIST)
-        if(res && res.data && res.data.Result) {
-            nodes = res.data.Result
-        }
+         if(net === 'MAIN_NET') { // only MainNet nodes have names
+            const res = await axios.get(NODE_NAME_LIST)
+            if (res && res.data && res.data.Result) {
+              nodes = res.data.Result
+            }
+         }
     } catch(err) {
         console.log(err)
     }
     console.log(nodes)
+    if (net === 'TEST_NET') {
+        list.forEach(item => {
+           item.name = 'Node_' + item.pk.substr(0, 6);
+        })
+        return;
+    }
     for(const item of list) {
         for (const cnode of nodes) {
             if (!cnode || !cnode.PublicKey) {
-                 item.name = 'Node_' + item.address.toBase58 ? item.address.toBase58().substr(0, 6) : item.address.substr(0, 6);
+                 item.name = 'Node_' + (item.address.toBase58 ? item.address.toBase58().substr(0, 6) : item.address.substr(0, 6));
             }
             else if (cnode.PublicKey === item.pk || cnode.PublicKey  === item.peerPubkey) {
                 item.name = cnode.Name
@@ -237,7 +250,7 @@ const actions = {
                 return GovernanceTxBuilder.getAuthorizeInfo(item.peerPubkey, userAddr, url)
             }))
             console.log(infoTemp)
-            infoTemp.filter(item => item && item.consensusPos).forEach(item => {
+            infoTemp.forEach(item => {
                 let inAuthorization = item.consensusPos + item.freezePos +
                   item.newPos;
                 let locked = item.withdrawPos + item.withdrawFreezePos;
@@ -251,7 +264,7 @@ const actions = {
                   // await matchNodeName([node])
                   // commit('UPDATE_CURRENT_NODE', {current_node : node})
                   record.name = '';
-                  record.address = item.address
+                //   record.address = item.address // this is user's stake wallet address
                   record.pk = item.peerPubkey;
                   record.stakeWallet = address;
                   list.push(record)
@@ -288,6 +301,7 @@ const actions = {
         } catch(err) {
             dispatch('hideLoadingModals')            
             console.log(err)
+            message.error(i18n.t('commonWalletHome.networkError'))
             return [];
         }
     },
@@ -321,6 +335,7 @@ const actions = {
         } catch(err) {
             console.log(err)
             dispatch('hideLoadingModals')
+            message.error(i18n.t('commonWalletHome.networkError'))
             return [];
         }
     },
