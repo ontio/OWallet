@@ -2,10 +2,19 @@ import {Oep4, RestClient, Crypto, utils} from 'ontology-ts-sdk'
 import {TEST_NET, MAIN_NET} from '../../../core/consts'
 import { BigNumber } from 'bignumber.js';
 import axios from 'axios';
-import { getRestClient } from '../../../core/utils'
+import {
+  getRestClient,
+  getTokenListUrl
+} from '../../../core/utils'
 
 
+// Deprecated
 const oep4s = localStorage.getItem('oep4s')? JSON.parse(localStorage.getItem('oep4s')) : [];
+
+const oep4_selected = {
+    'TEST_NET': [],
+    'MAIN_NET': []
+}
 
 const state = {
     oep4s,

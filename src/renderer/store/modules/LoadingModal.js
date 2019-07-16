@@ -19,7 +19,10 @@ const actions = {
   },
   hideLoadingModals({commit}) {
     // Wait for the animation to end
-    commit('HIDE_LOADING_MODALS')
+    const tid = setTimeout( () => {
+      commit('HIDE_LOADING_MODALS')
+      clearTimeout(tid)
+    }, 500)
     
         // setTimeout(()=>{
         //   $("#loadingModal").modal('hide')

@@ -69,14 +69,7 @@
     margin-bottom: 60px;
     border: none;
   }
-    .refresh-icon {
-    display: inline-block;
-    height: 24px;
-    width: 24px;
-    background: url('../../assets/refresh.png') center center;
-    background-size:cover;
-    cursor: pointer;
-  }
+
   .txList-header {
     padding-bottom: 5px;
     border-bottom: 1px solid #DFE2E9;
@@ -147,7 +140,7 @@
                 <div class="oep4-container">
                     <div class="home-title">
                         <p>OEP-4 Tokens</p>
-                        <span class="refresh-icon" @click="refresh"></span>
+                        <a-icon class="refresh-icon" type="reload" @click="refresh"/>   
                     </div>
                     
                     <div class="oep4-item" v-for="(token,index) of oep4s" :key="index" v-if="token.net === net">
@@ -217,10 +210,8 @@ import { open } from '../../../core/utils'
 export default {
     name: 'Oep4Home',
     data() {
-        const currentWallet = JSON.parse(sessionStorage.getItem('currentWallet'))
         const net = localStorage.getItem('net')
         return {
-            currentWallet,
             showModal: false,
             scriptHash: '',
             net: net
@@ -236,13 +227,13 @@ export default {
         ...mapState({
             oep4s: state => state.Oep4s.oep4s,
             completedTx: state => state.Oep4s.completedTx,
-            address: state => state.CurrentWallet.wallet.address
+            address: state => state.CurrentWallet.wallet.address,
+            currentWallet: state => state.CurrentWallet.wallet
         }),
         routes: function() {
             const address = this.$store.state.CurrentWallet.wallet.address;
-            const currentWallet = JSON.parse(sessionStorage.getItem('currentWallet'))
             let path = '';
-            if(address === currentWallet.address) {
+            if(address === this.$store.state.CurrentWallet.wallet.address) {
                 path = '/dashboard'
             } else {
                 path = '/sharedWallet/home'

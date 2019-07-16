@@ -27,7 +27,7 @@
     }
     .breadcrumb-routes a {
         color: #A5A7A9;
-        font-size:14px;
+        font-size:16px;
         font-family: AvenirNext-Bold;
 
     }
@@ -51,7 +51,7 @@
         <div class="back-icon-container" @click="back">
             <span class="back-icon"></span>
         </div>
-        <div class="breadcrumb-routes" v-for="route in routes">
+        <div class="breadcrumb-routes" v-for="route in routes" :key="route.path">
             <router-link :to="route.path">{{route.name}}</router-link>
             <a-icon type="left" class="left-icon" />
         </div>
@@ -68,6 +68,7 @@ export default {
     methods:{
         back() {
             this.$emit('backEvent');
+            // this.$router.back();
         }
     }
 }

@@ -144,7 +144,7 @@ export default {
                     if(item.type === 'Address') {
                         item.value = new Crypto.Address(item.value.trim()).serialize();
                     }
-                    return new Parameter('', item.type, item.value.trim());
+                    return new Parameter('', item.type, item.value);
                 })
             } catch (err) {
                 this.$message.error(this.$t('sharedTx.paramsError'))

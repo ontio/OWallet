@@ -325,7 +325,10 @@ export default {
       } else if (this.transfer.scriptHash) {
         const contractAddr = new Crypto.Address(utils.reverseHex(this.transfer.scriptHash));
         const oep4 = new Oep4.Oep4TxBuilder(contractAddr);
-        const amount = new BigNumber(this.transfer.amount).multipliedBy(Math.pow(10, this.transfer.decimal)).toString()
+        const val = new BigNumber(this.transfer.amount).multipliedBy(Math.pow(10, this.transfer.decimal));
+        console.log(val)
+        const amount = val.toString()
+        console.log(amount)
          tx = oep4.makeTransferTx(from, to, amount, gasPrice, gasLimit, from);
       }
       
