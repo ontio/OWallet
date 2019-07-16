@@ -16,12 +16,12 @@
   }
 
   .left-half {
-    flex-basis: 50%;
+    flex:1;
     padding-right: 40px;
   }
 
   .right-half {
-    flex-basis: 50%;
+    flex:1;
   }
 
   .asset {
@@ -60,10 +60,8 @@
 
   .wallet-info {
     position: relative;
-    padding-top: 12px;
     font-family: AvenirNext-Regular;
     font-size: 0.88rem;
-    height: 4rem;
   }
 
   .wallet-info p {
@@ -78,98 +76,6 @@
     background-size: cover;
     right: 0;
     top: -12px;
-  }
-
-  .wallet-balance {
-    font-size: 16px;
-    color: #000000;
-    font-family: 'AvenirNext-Bold';
-    position: relative;
-    margin-top: 20px;
-  }
-
-  .wallet-balance :first-child {
-    float: left;
-    margin-right: 20px;
-  }
-
-  .refresh-icon {
-    display: inline-block;
-    height: 24px;
-    width: 24px;
-    background: url('../assets/refresh.png') center center;
-    background-size:cover;
-    cursor: pointer;
-  }
-
-  .asset-ont {
-    height: 2.56rem;
-    line-height: 2.56rem;
-    margin-top: 12px;
-  }
-
-  .asset-ong {
-    height: 2.56rem;
-    line-height: 2.56rem;
-    margin-top: 12px;
-  }
-
-  .asset-label {
-    font-family: AvenirNext-Medium;
-    font-size: 0.88rem;
-    color: #515457;
-    float: left;
-    margin-right: 12px;
-  }
-
-  .asset-amount {
-    font-family: AvenirNext-Medium;
-    font-size: 18px;
-    color: #000000;
-  }
-
-  .asset-value {
-    padding-left: 3rem;
-    font-family: AvenirNext-Medium;
-    font-size: 14px;
-    color: #000000;
-    margin-bottom: 20px;
-  }
-
-  .asset-btn {
-    border-radius: 0;
-    background: #196BD8;
-    font-family: AvenirNext-Medium;
-    font-size: 14px;
-    color: #FFFFFF;
-    width: 100px;
-    height: 34px;
-    margin-right: 40px;
-    margin-bottom: 60px;
-    border: none;
-  }
-
-  .arrow-up {
-    width: 10px;
-    height: 15px;
-    background: url('../assets/sendArrow.png') center center;
-    background-size: cover;
-    display: inline-block;
-    background-repeat: no-repeat;
-    float: left;
-    margin-top: 3px;
-  }
-
-  .arrow-down {
-    width: 10px;
-    height: 15px;
-    background: url('../assets/sendArrow.png') center center;
-    background-size: cover;
-    display: inline-block;
-    background-repeat: no-repeat;
-    float: left;
-    margin-top: 3px;
-    transform: rotate(180deg)
   }
 
   .copayer-header {
@@ -199,11 +105,15 @@
     width:100%;
     float:left;
   }
+  .check-more:hover {
+    color:#619AE5;
+  }
 
   .txList-header {
     padding-bottom: 5px;
     border-bottom: 1px solid #DFE2E9;
     position: relative;
+    margin-bottom:10px;
   }
 
   .txList-header :first-child {
@@ -231,65 +141,13 @@
     overflow: scroll;
   }
 
-  .tx-item {
-    float: left;
-    margin: 5px 0;
-    cursor: pointer;
-  }
-
-  .tx-item :first-child {
-    width: 65%;
-    display: inline-block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-family: AvenirNext-Medium;
-    font-size: 12px;
-    color: #6F7781;
-  }
-
-  .tx-item :last-child {
-    width: 30%;
-    text-align: right;
-    float: right;
-    display: block;
-    font-family: AvenirNext-Medium;
-    font-size: 12px;
-    color: #000000;
-  }
+  
 
   .wallet-pk {
     word-break: break-all;
   }
 
-  .claim-ong-container {
-    margin: 30px 0;
-  }
-
-  .claim-ong {
-    float: left;
-  }
-
-  .claim-ong-item {
-    margin-bottom: 10px;
-    position: relative;
-  }
-
-  .claim-ong-item :first-child {
-    font-family: AvenirNext-Medium;
-    font-size: 12px;
-    color: #515457;
-    margin-right: 8px;
-    width: 100px;
-    display: block;
-    float: left;
-  }
-
-  .claim-ong-item :nth-child(2) {
-    font-family: AvenirNext-Medium;
-    font-size: 12px;
-    color: #000000;
-    float: left;
-  }
+  
 
   .commonWallet-btn {
     width: 70px;
@@ -305,10 +163,7 @@
   .btn-swap {
     margin-left: 30px;
   }
-  .btn-redeem {
-    float: left;
-    margin-left: 30px;
-  }
+  
   .copy-icon {
     width:18px;
     height:18px;
@@ -333,39 +188,52 @@
   margin-bottom:30px;
   align-items:center;
 }
+.icon-add-oep4 {
+  margin-left: 20px;
+  font-size: 20px;
+  cursor: pointer;
+}
+.left-footer {
+  margin-top:20px;
+}
 </style>
 <template>
   <div class="home-container">
     <breadcrumb :current="currentWallet.label" v-on:backEvent="handleBack"></breadcrumb>
-
+    <div class="wallet-info">
+      <p>
+        <span>{{$t('sharedWalletHome.address')}}: {{address}}</span>
+        <span class="copy-icon" @click="copy(address)"></span>
+      </p>
+    </div>
     <div class="content-container">
+      
       <div class="left-half">
-        <div class="wallet-info">
-          <p>
-            <span>{{$t('sharedWalletHome.address')}}: {{address}}</span>
-            <span class="copy-icon" @click="copy(address)"></span>
-          </p>
-          <!-- <div>
-            <span>{{$t('sharedWalletHome.publicKey')}}:</span>
-            <span class="wallet-pk">{{this.publicKey}}</span>
-          </div> -->
-        </div>
         <div class="wallet-balance">
-          <span>{{$t('sharedWalletHome.balance')}}</span>
-          <span class="refresh-icon" @click="refresh(true)"></span>
-          <div class="wallet-type"></div>
+          <div>
+            <span>{{$t('sharedWalletHome.balance')}}</span>
+            <a-icon class="refresh-icon" type="reload" @click="refresh(true)"/>
+          </div>
+          <span class="add-icon" @click="addOep4"></span>
+
         </div>
-        <div>
-          <div class="asset-ont">
+        <div class="asset-container">
+          <div class="asset-item">
             <span class="asset-label">ONT</span>
             <span class="asset-amount">{{balance.ont}}</span>
           </div>
           <!-- <div class="asset-value">${{balance.ontValue}}</div> -->
 
-          <div class="asset-ong">
+          <div class="asset-item">
             <span class="asset-label">ONG</span>
             <span class="asset-amount">{{balance.ong}}</span>
           </div>
+
+          <div class="asset-item" v-for="item of oep4s" :key="item.contract_hash">
+            <span class="asset-label">{{item.symbol}}</span>
+            <span class="asset-amount">{{item.balance}}</span>
+          </div>
+
           <!-- <div class="asset-value">{{'$900'}}</div> -->
           <!-- <div class="asset-ong" v-if="currentWallet.key">
             <div class="asset-label nep5-label">
@@ -379,41 +247,36 @@
 
         </div>
 
-        <div class="claim-ong-container clearfix">
-          <div class="claim-ong">
-            <div class="claim-ong-item clearfix">
-              <span>{{$t('commonWalletHome.claimableOng')}}: </span>
-              <span>{{balance.unboundOng}}</span>
-
+        <div class="left-footer">
+          <div class="claim-ong-container">
+            <div class="claim-ong">
+              <div class="claim-ong-item ">
+                <span>{{$t('commonWalletHome.claimableOng')}}: </span>
+                <span>{{balance.unboundOng}}</span>
+              </div>
+              <div class="claim-ong-item ">
+                <span>{{$t('commonWalletHome.unboundOng')}}: </span>
+                <span>{{balance.waitBoundOng}}</span>
+              </div>
             </div>
-            <div class="claim-ong-item clearfix">
-              <span>{{$t('commonWalletHome.unboundOng')}}: </span>
-              <span>{{balance.waitBoundOng}}</span>
+            <div class="redeem-container">
+              <a-button type="default" class="btn-redeem"
+              @click="redeemOng">{{$t('commonWalletHome.redeem')}}</a-button>
+              <redeem-info-icon></redeem-info-icon>
             </div>
           </div>
-          <a-button type="default" class="commonWallet-btn btn-redeem"
-          @click="redeemOng">{{$t('commonWalletHome.redeem')}}</a-button>
-          <redeem-info-icon></redeem-info-icon>
+
+          <div>
+            <a-button class="asset-btn" type="primary" @click="sendAsset">
+              <i class="fa fa-paper-plane"></i>
+              {{$t('sharedWalletHome.send')}}
+            </a-button>
+            <a-button class="asset-btn" type="primary" @click="commonReceive">
+              <i class="fa fa-qrcode"></i>
+              {{$t('sharedWalletHome.receive')}}
+            </a-button>
+          </div>
         </div>
-
-        <div class="oep4-container">
-          <span class="asset-label">OEP-4 Tokens</span>
-          <a-button type="default" 
-          @click="checkMoreOep4">{{$t('commonWalletHome.go')}}</a-button>
-        </div>
-
-
-        <div>
-          <a-button class="asset-btn" type="primary" @click="sendAsset">
-            <i class="arrow-up"></i>
-            {{$t('sharedWalletHome.send')}}
-          </a-button>
-          <a-button class="asset-btn" type="primary" @click="commnReceive">
-            <i class="arrow-down"></i>
-            {{$t('sharedWalletHome.receive')}}
-          </a-button>
-        </div>
-
 
       </div>
 
@@ -444,6 +307,8 @@
         >
           <p class="font-regular"><span class="font-medium"></span> {{$t('redeemInfo.noClaimableOng')}}</p>
       </a-modal>
+    
+    <oep4-selection :visible="showOep4Selection" @closeOep4Selection="closeOep4Selection" ></oep4-selection>
 
   </div>
 </template>
@@ -456,13 +321,16 @@
   import Breadcrumb from './Breadcrumb'
 import { BigNumber } from 'bignumber.js';
 import RedeemInfoIcon from './RedeemInfoIcon'
-import { open, getRestClient } from '../../core/utils'
+import Oep4Selection from './Common/Oep4Selection'
+import { open, getRestClient, getTransactionListUrl, getBalanceUrl } from '../../core/utils'
 const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
+
   export default {
     name: 'Dashboard',
     components: {
       Breadcrumb,
-      RedeemInfoIcon
+      RedeemInfoIcon,
+      Oep4Selection
     },
     data() {
       const currentWallet = JSON.parse(sessionStorage.getItem('currentWallet'));
@@ -482,7 +350,8 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
         intervalId: '',
         interval:15000,
         redeemInfoVisible: false,
-        requestStart: false
+        requestStart: false,
+        showOep4Selection: false
       }
     },
     created() {
@@ -504,7 +373,8 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
     computed: {
       ...mapState({
         nep5Ont : state => state.CurrentWallet.nep5Ont,
-        balance: state => state.CurrentWallet.balance
+        balance: state => state.CurrentWallet.balance,
+        oep4s: state => state.Tokens.oep4WithBalances
       })
     },
     beforeDestroy(){
@@ -515,10 +385,40 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
       handleBack() {
         this.$router.push({name: 'Wallets'})
       },
-      getTransactions() {
-        const net = localStorage.getItem('net');
-        const url = net === 'TEST_NET' ? 'https://polarisexplorer.ont.io' : 'https://explorer.ont.io';
-        return this.axios.get(url + '/api/v1/explorer/address/' + this.address + '/10/1').then(response => {
+      async getTransactions() {
+        const url = getTransactionListUrl(this.address);
+        try {
+          const res = await this.httpService(url)
+          const txlist = res.result;
+            const completed = []
+            for(const t of txlist) {
+              for(const tx of t.transfers) {
+                const asset = tx.asset_name.toUpperCase() 
+                if(tx.to_address === ONG_GOVERNANCE_CONTRACT && asset === 'ONG' && Number(tx.amount) == 0.01) {
+                  continue;
+                }
+                let amount = asset === 'ONT' ? parseInt(tx.amount) : tx.amount;
+                if (tx.from_address === this.address) {
+                    amount = '-' + amount;
+                } else {
+                  amount = '+' + amount;
+                }
+                completed.push({
+                  txHash: t.tx_hash,
+                  asset,
+                  amount: amount
+                })
+              }              
+              
+            }
+            this.completedTx = completed;
+            return completed; // fetch tx history succeed
+        } catch(err) {
+          console.log(err);
+          this.$message.error(this.$t('dashboard.getTransErr'))
+          return false; // fetch tx history failed
+        }
+        /* return this.axios.get(url + '/api/v1/explorer/address/' + this.address + '/10/1').then(response => {
           if (response.status === 200 && response.data && response.data.Result) {
             const txlist = response.data.Result.TxnList;
             const completed = []
@@ -555,7 +455,7 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
           console.log(err);
           this.$message.error(this.$t('dashboard.getTransErr'))
           return false; // fetch tx history failed
-        })
+        }) */
       },
       getUnclaimOng() {
         const restClient = getRestClient();
@@ -569,6 +469,14 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
       getBalance() {
         return this.$store.dispatch('getNativeBalance', {address: this.address}).then(res => {
           if(!res){
+            this.$message.error(this.$t('dashboard.getBalanceErr'))
+          }
+          return res;
+        })
+      },
+      getOep4Balances() {
+        this.$store.dispatch('fetchTokenBalances', {address: this.address}).then(res => {
+          if(!res) {
             this.$message.error(this.$t('dashboard.getBalanceErr'))
           }
           return res;
@@ -611,7 +519,8 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
         this.requestStart = true;
         Promise.all([
           this.getBalance(),
-          this.getTransactions()
+          this.getTransactions(),
+          this.getOep4Balances(),
         ]).then(res => {
           console.log(res)
           this.requestStart = false;
@@ -629,7 +538,7 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
         
         this.$router.push({name: 'CommonSendHome'})
       },
-      commnReceive() {
+      commonReceive() {
         this.$router.push({path: '/commonWalletReceive/commonWallet'})
       },
       redeemOng() {
@@ -677,6 +586,14 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
       },
       checkMoreOep4() {
         this.$router.push({name: 'Oep4Home'})
+      },
+      addOep4() {
+        this.showOep4Selection = true;
+      },
+      closeOep4Selection() {
+        this.showOep4Selection = false;
+        this.$store.dispatch('showLoadingModals')
+        this.$store.dispatch('fetchTokenBalances', {address: this.address})
       }
     }
   }

@@ -1,5 +1,7 @@
 import axios from 'axios'
-
+import {
+  getBalanceUrl
+ } from '../../../core/utils'
 
 const state = {
     wallet : {
@@ -101,24 +103,22 @@ const actions = {
         commit('CLEAR_CURRENT_TRANSFER')
     },
     getNativeBalance({commit}, {address}) {
-        const network = localStorage.getItem('net')
-        const urlNode = network === 'TEST_NET' ? 'https://polarisexplorer.ont.io' : 'https://explorer.ont.io';
-        const url = `${urlNode}/api/v1/explorer/address/balance/${address}`
+        const url = getBalanceUrl(address, 'NATIVE');
         const balance = {}
         return axios.get(url).then(res => {
-          if (res.data.Result) {
-            for (let r of res.data.Result) {
-              if (r.AssetName === 'ong') {
-                balance.ong = r.Balance;
+          if (res.data.result) {
+            for (let r of res.data.result) {
+              if (r.asset_name === 'ong') {
+                balance.ong = r.balance;
               }
-              if (r.AssetName === 'waitboundong') {
-                balance.waitBoundOng = r.Balance;
+              if (r.asset_name === 'waitboundong') {
+                balance.waitBoundOng = r.balance;
               }
-              if (r.AssetName === 'unboundong') {
-                balance.unboundOng = r.Balance;
+              if (r.asset_name === 'unboundong') {
+                balance.unboundOng = r.balance;
               }
-              if (r.AssetName === 'ont') {
-                balance.ont = r.Balance;
+              if (r.asset_name === 'ont') {
+                balance.ont = r.balance;
               }
             }
             commit('UPDATE_NATIVE_BALANCE', {

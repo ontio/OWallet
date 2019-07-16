@@ -44,7 +44,9 @@ export default {
     balanceInsufficient: 'Sorry, your balance is insufficient.',
     exportIdentity: 'Export keystore',
     deleteIdentity: 'Delete ONT ID',
-    savedbFailed: 'Save to db file failed.Please make sure you have set the path to save the keystore.db file and try again.'
+    savedbFailed: 'Save to db file failed.Please make sure you have set the path to save the keystore.db file and try again.',
+    selectOep4: 'Select OEP-4 token',
+    contractHash: 'Contract hash: '
   },
 
   TopNav: {
@@ -297,7 +299,8 @@ export default {
     processing: 'In processing',
     completed: 'Completed',
     txMgmt: 'Transaction management',
-    createTransferFailed: 'Create transfer transaction failed'
+    createTransferFailed: 'Create transfer transaction failed.',
+    createTransferSuccess: 'Create transfer transaction succeed.'
   },
 
   pax: {

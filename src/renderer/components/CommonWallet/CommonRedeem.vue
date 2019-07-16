@@ -1,5 +1,5 @@
 <style scoped>
-.redeem-container {
+.container {
     width:540px;
     margin:4rem auto;
 }
@@ -26,7 +26,7 @@
     <div>
         <breadcrumb :current="$t('commonWalletHome.redeem')" :routes="routes"
                 v-on:backEvent="backToWallets"></breadcrumb>
-        <div class="redeem-container">
+        <div class="container">
             <div class="label">
                 {{$t('commonWalletHome.redeemCharge')}}
             </div>

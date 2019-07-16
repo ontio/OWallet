@@ -48,7 +48,8 @@ import {mapState} from 'vuex'
 
 <style scoped>
 .fade-enter-active, .fade-leave-active {
-    transition: opacity .5s
+    transition: opacity .5s;
+    opacity: 1;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active, 2.1.8 版本以下 */ {
     opacity: 0

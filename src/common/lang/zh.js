@@ -44,7 +44,9 @@ export default {
     balanceInsufficient : '抱歉，您的余额不足',
     exportIdentity: '导出keystore',
     deleteIdentity: '删除ONT ID',
-    savedbFailed: '保存到keystore.db文件失败。请确保已设置keystore.db保存路径后重新尝试。'
+    savedbFailed: '保存到keystore.db文件失败。请确保已设置keystore.db保存路径后重新尝试。',
+    selectOep4: '选择OEP-4 Token',
+    contractHash: '合约哈希：'
   },
 
   TopNav: {
@@ -296,7 +298,8 @@ export default {
     processing: '处理中',
     completed: '已完成',
     txMgmt: '多签交易管理',
-    createTransferFailed: '创建转账交易失败'
+    createTransferFailed: '创建转账交易失败',
+    createTransferSuccess: '创建转账交易成功'
   },
 
   pax: {

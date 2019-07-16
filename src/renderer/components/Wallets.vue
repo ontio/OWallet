@@ -49,7 +49,7 @@
             <div class="div-join" v-show="viewBtn">
               <router-link class="btn btn-default btn-create" to="ImportJsonWallet">{{$t('wallets.importCommonWallet')}}</router-link>
             </div>
-            <img class="img-wallet-create" v-show="!viewBtn" src="./../assets/add.png" alt="">
+            <img class="img-wallet-create" v-show="!viewBtn" src="./../assets/create-wallet.png" alt="">
           </div>
         </div>
       </div>
@@ -68,7 +68,7 @@
             <div class="div-join" v-show="viewBtn">
               <router-link class="btn btn-default btn-create" to="ImportSharedWallet">{{$t('wallets.joinSharedWallet')}}</router-link>
             </div>
-            <img class="img-wallet-create" v-show="!viewBtn" src="./../assets/add.png" alt="">
+            <img class="img-wallet-create" v-show="!viewBtn" src="./../assets/create-wallet.png" alt="">
           </div>
         </div>
       </div>
@@ -87,7 +87,7 @@
             <div class="div-join div-ledger-join" v-show="viewBtn">
               <router-link class="btn btn-default btn-create" to="ImportLedgerWallet">{{$t('wallets.importLedgerWallet')}}</router-link>
             </div>
-            <img class="img-wallet-create" v-show="!viewBtn" src="./../assets/add.png" alt="">
+            <img class="img-wallet-create" v-show="!viewBtn" src="./../assets/create-wallet.png" alt="">
           </div>
         </div>
       </div>

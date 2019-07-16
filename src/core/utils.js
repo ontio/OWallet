@@ -118,7 +118,9 @@ const service = axios.create({
 // request拦截器
 service.interceptors.request.use(
   config => {
-    store.dispatch('showLoadingModals')
+    if(config.method !== 'get') { // 定时查询的时候不希望页面显示loading
+      store.dispatch('showLoadingModals')
+    }
     return config;
   },
   error => {
@@ -143,3 +145,33 @@ service.interceptors.response.use(
 );
 
 export default service;
+
+export function getExplorerUrl() {
+  const net = localStorage.getItem('net');
+  const url = net === 'TEST_NET' ? 'https://polarisexplorer.ont.io' : 'https://explorer.ont.io';
+  return url;
+}
+
+export function getTransactionListUrl(address, page_size = 10, page_number =1) {
+  const api = `/v2/addresses/${address}/transactions?page_size=${page_size}&page_number=${page_number}`
+  const url = getExplorerUrl() + api;
+  return url;
+}
+
+export function getBalanceUrl(address, token_type = 'NATIVE') {
+   const api = `/v2/addresses/${address}/${token_type}/balances`
+   const url = getExplorerUrl() + api;
+   return url;
+}
+
+export function getTokenListUrl(token_type = 'oep4', page_size = 10, page_number = 1) {
+  const api = `/v2/tokens/${token_type}?page_size=${page_size}&page_number=${page_number}`
+  const url = getExplorerUrl() + api;
+  return url;
+}
+
+export function getTokenBalanceUrl(token_type, address) {
+  const api = `/v2/addresses/${address}/${token_type}/balances`
+  const url = getExplorerUrl() + api;
+  return url;
+}

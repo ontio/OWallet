@@ -8,7 +8,7 @@ import store from './store'
 
 
 import 'font-awesome/css/font-awesome.css'
-import {Button, message, Steps, Input ,Form, Icon, Select, Spin, Alert, Modal, Slider,Radio,
+import {Button, message, Steps, Input ,Form, Icon, Select, Spin, Alert, Modal, Slider,Radio, Pagination,Switch,
   Row, Col, InputNumber, Layout, Menu, Breadcrumb, Checkbox, Tooltip, Table, Dropdown} from 'ant-design-vue'
 
 import VueClipboard from 'vue-clipboard2'
@@ -66,6 +66,8 @@ Vue.component(Radio.Button.name, Radio.Button)
 Vue.component(Tooltip.name, Tooltip)
 Vue.component(Table.name, Table)
 Vue.component(Dropdown.name, Dropdown)
+Vue.component(Pagination.name, Pagination)
+Vue.component(Switch.name, Switch)
 
 
 Vue.prototype.$message = message

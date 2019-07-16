@@ -41,11 +41,11 @@
 <template>
     <div class=" clearfix">
         <p class="label">{{$t('sharedWalletHome.send')}}</p>
-        <a-select v-model="asset" @change="changeAsset" class="select-asset">
+        <a-select v-model="scriptHash" @change="changeAsset" class="select-asset">
                 <a-select-option value="ONT">ONT</a-select-option>
                 <a-select-option value="ONG">ONG</a-select-option>
-                <a-select-option v-for="(oep4,index) of oep4s" :key="index" :value="oep4.symbol">
-                    {{oep4.symbol}} - {{oep4.scriptHash}}
+                <a-select-option v-for="(oep4) of oep4s" :key="oep4.contract_hash" :value="oep4.contract_hash">
+                    {{oep4.symbol}}
                 </a-select-option>
         </a-select>
         <a-input-search :placeholder="$t('sharedWalletHome.amount')" class="input-amount"
@@ -101,7 +101,7 @@ export default {
             // address: currentWallet.address,
             gas: 0.01,
             asset:'ONT',
-            scriptHash: '',
+            scriptHash: 'ONT',
             decimal: 1,
             amount: 0,
             to:'',
@@ -114,14 +114,15 @@ export default {
     computed: {
         ...mapState({
             balance: state => state.CurrentWallet.balance,
-            address: state => state.CurrentWallet.wallet.address
+            address: state => state.CurrentWallet.wallet.address,
+            oep4s: state => state.Tokens.oep4WithBalances
         }),
-        oep4s() {
-            return this.$store.state.Oep4s.oep4s.filter(item => item.net === this.net)
-        }
+        // oep4s() {
+        //     return this.$store.state.Oep4s.oep4s.filter(item => item.net === this.net)
+        // }
     },
     mounted() {
-        this.$store.dispatch('queryBalanceForOep4', this.address)
+        // this.$store.dispatch('queryBalanceForOep4', this.address)
         const transfer = this.$store.state.CurrentWallet.transfer
         this.gas = transfer.gas;
         this.asset = transfer.asset;
@@ -165,13 +166,16 @@ export default {
             this.amount = '0';
             if(value !== 'ONT' && value !=='ONG'){
                 for(let i=0; i<this.oep4s.length; i++){
-                    if(this.oep4s[i].symbol === value) {
-                        this.scriptHash = this.oep4s[i].scriptHash
+                    if(this.oep4s[i].contract_hash === value) {
+                        this.scriptHash = this.oep4s[i].contract_hash
                         this.decimal = this.oep4s[i].decimal
                         this.selectedOep4 = this.oep4s[i]
+                        this.asset = this.oep4s[i].symbol
                         break;
                     }
                 }
+            } else {
+                this.asset = value;
             }
             
             console.log(value)

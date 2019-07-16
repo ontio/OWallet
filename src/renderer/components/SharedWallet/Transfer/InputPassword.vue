@@ -162,6 +162,7 @@ export default {
             let tx, amount, gasPrice;
             const tokenType = this.transfer.asset;
             const gasLimit = '20000';
+            const gas = new BigNumber(this.transfer.gas).multipliedBy(1e9);
             if(this.transfer.isRedeem) {
                 const from = new Crypto.Address(this.sharedWallet.sharedWalletAddress)
                 const to = from
@@ -171,20 +172,19 @@ export default {
                 tx = OntAssetTxBuilder.makeWithdrawOngTx(from, to, amount, from, gasPrice, gasLimit);
             } else {
             //create transaction
+                gasPrice = gas.div(gasLimit).toString();
                 const from = new Crypto.Address(this.sharedWallet.sharedWalletAddress)
                 const to = new Crypto.Address(this.transfer.to);
                 if(tokenType === 'ONT' || tokenType === 'ONG') {
                     amount = tokenType === 'ONT' ? this.transfer.amount : new BigNumber(this.transfer.amount).multipliedBy(1e9);
-                    const gas = new BigNumber(this.transfer.gas).multipliedBy(1e9);
-                    gasPrice = gas.div(gasLimit).toString();
+                    
                     tx = OntAssetTxBuilder.makeTransferTx(tokenType, from, to, amount, gasPrice, gasLimit, from);
                 } else { // now only supports oep4
                     const contractAddr = new Crypto.Address(utils.reverseHex(this.transfer.scriptHash));
                     const oep4 = new Oep4.Oep4TxBuilder(contractAddr);
-                    const amount = new BigNumber(this.transfer.amount).multipliedBy(Math.pow(10, this.transfer.decimal)).toString()
+                    amount = new BigNumber(this.transfer.amount).multipliedBy(Math.pow(10, this.transfer.decimal)).toString()
                     tx = oep4.makeTransferTx(from, to, amount, gasPrice, gasLimit, from);
                 }
-               
             }    
             this.$store.dispatch('showLoadingModals')
             //sign tx
@@ -232,7 +232,7 @@ export default {
                 sendAddress: this.sharedWallet.sharedWalletAddress,
                 receiveAddress: this.transfer.isRedeem ? this.sharedWallet.sharedWalletAddress : this.transfer.to,
                 assetName: tokenType,
-                amount: amount,
+                amount: (tokenType === 'ONT' || tokenType === 'ONG') ? amount : this.transfer.amount,
                 gasLimit,
                 gasPrice,
                 transactionIdHash: txHash,
@@ -249,6 +249,7 @@ export default {
                     }
                     this.sending = false;
                     this.$emit('inputPassNext')
+                    this.$message.success(this.$t('sharedWalletHome.createTransferSuccess'))
                     // //save signed tx
                     // const url2 = ONT_PASS_NODE + ONT_PASS_URL.SignSharedTransfer
                     // const body2 = {

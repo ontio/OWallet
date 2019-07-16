@@ -18,17 +18,17 @@
       <span class="common-delete-icon" @click="deleteWallet()" v-if="!isCommonWallet"></span>
       <a-dropdown v-if="isCommonWallet">
         <a-menu slot="overlay" >
-          <a-menu-item key="1" >
-            <span @click="handleExportWallet()">{{$t('common.exportDat')}}</span>
+          <a-menu-item key="1" @click="handleExportWallet()">
+            <span >{{$t('common.exportDat')}}</span>
           </a-menu-item>
-          <a-menu-item key="2">
-            <span  @click="handleExportWIF()">{{$t('common.exportWIF')}}</span>
+          <a-menu-item key="2" @click="handleExportWIF()">
+            <span  >{{$t('common.exportWIF')}}</span>
           </a-menu-item>
-          <a-menu-item key="3">
-            <span  @click="handleChangePassword()">{{$t('common.changePassword')}}</span>
+          <a-menu-item key="3" @click="handleChangePassword()">
+            <span  >{{$t('common.changePassword')}}</span>
           </a-menu-item>
-          <a-menu-item key="4">
-            <span  @click="deleteWallet()">{{$t('common.deleteWallet')}}</span>
+          <a-menu-item key="4" @click="deleteWallet()">
+            <span  >{{$t('common.deleteWallet')}}</span>
           </a-menu-item>          
         </a-menu>
         <a-button style="margin-left: 8px">
