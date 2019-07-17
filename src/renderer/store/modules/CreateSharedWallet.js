@@ -48,9 +48,10 @@ const mutations = {
 }
 
 const actions = {
-    createSharedWallet({ commit }, body) {
+    createSharedWallet({ commit, dispatch }, body) {
         const net = localStorage.getItem('net')
         const ontPassNode = net === 'TEST_NET' ? ONT_PASS_NODE : ONT_PASS_NODE_PRD
+        dispatch('showLoadingModals')
         return axios.post(ontPassNode + ONT_PASS_URL.CreateSharedWallet, body).then(res => {
             if (res.status === 200 && res.data.Error === 0) {
                 commit('CREATE_SHARED_WALLET', {
@@ -64,12 +65,15 @@ const actions = {
                     wallet: body
                 }
                 dbService.insert(wallet);
+                dispatch('hideLoadingModals')
                 return res.data.Error;
             } else {
+                dispatch('hideLoadingModals')
                 return res.data.Error;
             }
         }).catch(err => {
             console.log(err)
+            dispatch('hideLoadingModals')
             return err;
         })
     }

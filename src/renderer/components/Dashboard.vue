@@ -356,6 +356,7 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
     },
     created() {
       this.$store.commit('CLEAR_NATIVE_BALANCE')
+      this.$store.commit('CLEAR_OEP4S_BALANCE')
     },
     mounted: function () {
       //UPDATE_CURRENT_WALLET

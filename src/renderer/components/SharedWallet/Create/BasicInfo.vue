@@ -12,6 +12,7 @@
                 <a-input class="input" :class="item.pkValid?'':'error-input' " :placeholder="$t('createSharedWallet.publicKey')" v-model="item.publickey"
                 @change="validatePublickey(index,item.publickey)"></a-input>
                 <span class="delete-icon" @click="removePk(index)"></span>
+                <p class="error-pk" v-if="!item.pkValid">{{$t('createSharedWallet.invalidPk')}}</p>
             </div>
             <a-button class="btn-add" style="margin-top:30px;" @click="addNewPk" v-if="pks.length<12">
                 {{$t('createSharedWallet.add')}}
@@ -67,6 +68,10 @@ export default {
             })
         },
         removePk(index) {
+            if(this.pks.length <= 2) {
+                this.$message.error(this.$t('createSharedWallet.pksLte2'))
+                return;
+            }
             const pks = this.pks.slice()
             pks.splice(index, 1)
             this.pks = pks;
@@ -86,21 +91,34 @@ export default {
         },
         validatePublickey(index,value) {
             console.log(index, value)
-            if(value && value.length === 66) {
-                this.pks[index].pkValid = true;
-            } else {
+            if(value && value.length !== 66) {
                 this.pks[index].pkValid = false;
+            } else {
+                this.pks[index].pkValid = true;
             }
         },
         validInput() {
             if(!this.label) {
                 return false;
             }
-            for(let p of this.pks) {
+            for(let i = 0; i < this.pks.length; i++) {
+                const p = this.pks[i];
                 if(!p.name || !p.publickey || !p.nameValid || !p.pkValid) {
                     return false;
                 }
+                for (let j = 0; j < this.pks.length; j++) {
+                    const pp = this.pks[j]
+                    if(i !== j && p.publickey === pp.publickey) {
+                        this.$message.error(this.$t('createSharedWallet.duplicatePks'))
+                        return false;
+                    }
+                    if(i !== j &&  p.name === pp.name) {
+                        this.$message.error(this.$t('createSharedWallet.duplicateNames'))
+                        return false;
+                    }
+                }
             }
+
             return true;
         },
         next() {
@@ -226,6 +244,11 @@ export default {
 
 .error-input {
     border-color: red;
+}
+.error-pk {
+    padding-left: 175px;
+    font-size: 13px;
+    color: red;
 }
 </style>
 

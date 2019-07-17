@@ -21,13 +21,15 @@ const state = {
     oep4Tokens,
     oep4WithBalances: []
 }
-const net = localStorage.getItem('net')
+
 const mutations = {
     UPDATE_OEP4_TOKENS(state, {oep4s}) {
+        const net = localStorage.getItem('net')
         state.oep4Tokens[net] = oep4s;
         localStorage.setItem('oep4Tokens', JSON.stringify(state.oep4Tokens))
     },
     UPDATE_OEP4_TOKEN(state, {oep4}) {
+        const net = localStorage.getItem('net')
         const oep4s = Object.assign({}, state.oep4Tokens[net]);
         if(oep4s[oep4.contract_hash]) {
             for (let k of Object.keys(oep4s)) {
@@ -49,12 +51,16 @@ const mutations = {
     },
     UPDATE_OEP4_BALANCES(state, {balances}) {
         state.oep4WithBalances = balances;
+    },
+    CLEAR_OEP4S_BALANCES(state) {
+        state.oep4WithBalances = []
     }
 }
 
 const actions = {
     async fetchOep4Selections({commit, state}, {page_size, page_number}) {
         const url = getTokenListUrl('oep4', page_size, page_number);
+        const net = localStorage.getItem('net')
         const res = await httpService.get(url)
         console.log(res)
         const list = res.result.records.map(item => {
@@ -75,6 +81,7 @@ const actions = {
     
     async fetchTokenBalances({commit,state}, {address}) {
         const url = getTokenBalanceUrl('oep4',address)
+        const net = localStorage.getItem('net')
         const res = await httpService.get(url)
         const balances = [];
         const oep4s = state.oep4Tokens[net];

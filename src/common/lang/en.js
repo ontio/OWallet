@@ -221,7 +221,11 @@ export default {
     createSuccess: 'Create shared wallet successfully.',
     create: 'Create Shared Wallet',
     walletNameErr: 'Wallet name can not be more than 12 characters',
-    emptyLabel: 'Wallet name can not be empty'
+    emptyLabel: 'Wallet name can not be empty',
+    pksLte2: 'The number of co-payers can not be less than 2. ',
+    invalidPk: 'Invalid public key',
+    duplicatePks: 'There must be no duplicate public key among the co-payers',
+    duplicateNames: 'There must be no duplicate names key among the co-payers'
   },
 
   importSharedWallet: {
@@ -300,7 +304,8 @@ export default {
     completed: 'Completed',
     txMgmt: 'Transaction management',
     createTransferFailed: 'Create transfer transaction failed.',
-    createTransferSuccess: 'Create transfer transaction succeed.'
+    createTransferSuccess: 'Create transfer transaction succeed.',
+    txSendingTochain: 'This transaction is sending to the blockchain now.'
   },
 
   pax: {

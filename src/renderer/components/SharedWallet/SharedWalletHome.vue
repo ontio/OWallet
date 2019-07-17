@@ -502,6 +502,14 @@ export default {
           return res;
         });
     },
+    getOep4Balances() {
+        this.$store.dispatch('fetchTokenBalances', {address: this.sharedWallet.sharedWalletAddress}).then(res => {
+          if(!res) {
+            this.$message.error(this.$t('dashboard.getBalanceErr'))
+          }
+          return res;
+        })
+      },
     getExchangeCurrency() {
       const currency = "ont";
       const goaltype = "USD";
@@ -558,6 +566,7 @@ export default {
       Promise.all([
         this.getTransactions(),
         this.getBalance(),
+        this.getOep4Balances(),
         this.getPendingTx()
       ]).then(res => {
         this.requestStart = false;
@@ -581,6 +590,18 @@ export default {
       this.$router.push({ path: "/commonWalletReceive/sharedWallet" });
     },
     pendingTxDetail(tx) {
+        //判断当前是否在上链中状态
+        const requiredNumber = this.sharedWallet.requiredNumber;
+        let signed = 0
+        for(let c of tx.coPayerSignVOS) {
+            if(c.isSign) {
+                signed++;
+            }
+        }
+        if(requiredNumber <= signed) {
+            this.$message.warning('sharedWalletHome.txSendingTochain')
+            return;
+        }
       this.$store.commit("UPDATE_PENDINGTX", { pendingTx: tx });
       if (tx.receiveaddress === tx.sendaddress && tx.assetName === "ONG") {
         this.$store.commit("UPDATE_TRANSFER_REDEEM_TYPE", { type: true });
