@@ -220,7 +220,11 @@ export default {
     createSuccess: '创建共享钱包成功',
     create: '创建共享钱包',
     walletNameErr: '钱包名称长度不可超过12个字符。',
-    emptyLabel: '钱包名称不能为空.'
+    emptyLabel: '钱包名称不能为空.',
+    pksLte2: '联合支付人数量不能少于2人。',
+    invalidPk: '输入的公钥不正确',
+    duplicatePks: '联合支付人中不能有重复的公钥',
+    duplicatePks: '联合支付人中不能有重复的名称'    
   },
 
   importSharedWallet: {
@@ -299,7 +303,8 @@ export default {
     completed: '已完成',
     txMgmt: '多签交易管理',
     createTransferFailed: '创建转账交易失败',
-    createTransferSuccess: '创建转账交易成功'
+    createTransferSuccess: '创建转账交易成功',
+    txSendingTochain: '该交易正在发送上链。'
   },
 
   pax: {
