@@ -185,7 +185,7 @@ export function getTokenBalanceUrl(token_type, address) {
   return url;
 }
 
-export function validatekeystorePath(path) {
+export function validateKeystorePath(path) {
   const system = os.platform();
   if(system.indexOf('win') > -1) {
     const files = fs.readdirSync(path)
