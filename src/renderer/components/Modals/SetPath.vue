@@ -19,6 +19,7 @@
 <script>
   import $ from 'jquery'
   import {mapState} from 'vuex'
+  import { validateKeystorePath } from '../../../core/utils'
 
   const {dialog} = require('electron').remote;
 
@@ -32,6 +33,15 @@
         dialog.showOpenDialog({properties: ['openDirectory', 'createDirectory']}, (filePath) => {
           if (filePath === undefined) {
             alert('You did not set the path')
+            return;
+          }
+          if (filePath === undefined) {
+            // alert('You did not set the path')
+            this.$message.warning(this.$t('setting.notSetPath'))
+            return;
+          }
+          if (!validateKeystorePath(filePath[0])) {
+            this.$message.warning(this.$t('setting.notInstallationPath'))
             return;
           }
           localStorage.setItem('savePath', filePath)

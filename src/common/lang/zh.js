@@ -61,7 +61,7 @@ export default {
 
   SetPaths: {
     name: '钱包文件存储路径',
-    tips: '* 钱包文件keystore.db保存着您的加密私钥，请确保您的PC安全和做好keystore.db文件的备份。您需要设置keystore文件的保存路径。',
+    tips: '* 钱包文件keystore.db保存着您的加密私钥，请确保您的PC安全和做好keystore.db文件的备份。您需要设置keystore文件的保存路径。请不要设置到OWallet的安装位置以免更新时被覆盖。',
     close: '关闭',
     enter: '去设置'
   },
@@ -418,7 +418,7 @@ export default {
     en: 'English',
     zh: '中文',
     pathTit: '当前路径： ',
-    path: '钱包保存路径',
+    path: '钱包保存路径(请不要设到OWallet的安装位置！)',
     change: '修改',
     setNetworkSuccess: '网络成功设置为：',
     wallets: '钱包',
@@ -427,7 +427,9 @@ export default {
     help: '帮助',
     settings: '设置',
     nodeAddress: '节点',
-    setNodeSuccess: '节点成功设置为：'
+    setNodeSuccess: '节点成功设置为：',
+    notInstallationPath: '请不要设置到Owallet的安装位置。',
+    notSetPath: '未设置keystore保存路径。'
   },
   ledgerWallet: {
     nameOfLedgerWallet: 'Ledger钱包名称',

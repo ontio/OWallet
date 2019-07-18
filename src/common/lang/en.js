@@ -61,7 +61,7 @@ export default {
 
   SetPaths: {
     name: 'Keystore File Path',
-    tips: '*The keystore.db file stores your encrypted private keys. Please make sure your computer is safe and make a backup of your keystore.db file. You need to set a file path for your keystore.',
+    tips: '*The keystore.db file stores your encrypted private keys. Please make sure your computer is safe and make a backup of your keystore.db file. You need to set a file path for your keystore. Please do not set to the installation location of OWallet.',
     close: 'Close',
     enter: 'Set file path'
   },
@@ -419,7 +419,7 @@ export default {
     en: 'English',
     zh: '中文',
     pathTit: 'Path: ',
-    path: 'Save keystore file path',
+    path: 'Save keystore file path（Please do not set to the installation location of OWallet!）',
     change: 'Change',
     setNetworkSuccess: 'The network has been set to: ',
     wallets: 'Wallets',
@@ -428,7 +428,9 @@ export default {
     help: 'Help',
     settings: 'Settings',
     nodeAddress: 'Node address',
-    setNodeSuccess: 'The node address has been set t: '
+    setNodeSuccess: 'The node address has been set t: ',
+    notInstallationPath: 'Please do not set to the installation location of OWallet.',
+    notSetPath: 'You did not set the keystore path.'
   },
 
   ledgerWallet: {
