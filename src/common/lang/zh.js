@@ -224,7 +224,7 @@ export default {
     pksLte2: '联合支付人数量不能少于2人。',
     invalidPk: '输入的公钥不正确',
     duplicatePks: '联合支付人中不能有重复的公钥',
-    duplicatePks: '联合支付人中不能有重复的名称'    
+    duplicateNames: '联合支付人中不能有重复的名称'    
   },
 
   importSharedWallet: {
