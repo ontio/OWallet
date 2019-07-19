@@ -48,7 +48,9 @@
   import Breadcrumb from './Breadcrumb'
   import LangStorage from './../../core/lang'
   import { TEST_NET_LIST, MAIN_NET_LIST, TEST_NET} from '../../core/consts'
+  import { validateKeystorePath, validateAddress } from '../../core/utils'
   const {dialog} = require('electron').remote;
+
 
   export default {
     name: 'Setting',
@@ -95,7 +97,12 @@
       setSavePath() {
         dialog.showOpenDialog({properties: ['openDirectory','createDirectory']}, (filePath) => {
           if (filePath === undefined) {
-            alert('You did not set the path')
+            // alert('You did not set the path')
+            this.$message.warning(this.$t('setting.notSetPath'))
+            return;
+          }
+          if (!validateKeystorePath(filePath[0])) {
+            this.$message.warning(this.$t('setting.notInstallationPath'))
             return;
           }
           localStorage.setItem('savePath', filePath[0])

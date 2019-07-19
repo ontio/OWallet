@@ -2,7 +2,8 @@ import {
   TEST_NET,
   MAIN_NET,
   MAIN_NET_LIST,
-  DEFAULT_SCRYPT
+  DEFAULT_SCRYPT,
+  TEST_NET_LIST
 } from './consts'
 import axios from 'axios'
 import store from '../renderer/store'
@@ -17,6 +18,9 @@ const opn = require('opn')
 const {
     BrowserWindow
   } = require('electron').remote;
+
+const os = require('os')
+const fs = require('fs')
 
 export function open(url) {
   try {
@@ -54,7 +58,12 @@ export function getNodeUrl() {
     // const net = localStorage.getItem('net');
     // return net === 'TEST_NET' ? TEST_NET + ':20334' : MAIN_NET + ':20334'
     // return 'http://139.219.128.220:20334' //for test 
-    const node = localStorage.getItem('nodeAddress') || MAIN_NET_LIST[0]
+    const net = localStorage.getItem('net')
+    let node = localStorage.getItem('nodeAddress');
+    if(!node) {
+      node = net === 'TEST_NET' ? TEST_NET_LIST[0] : MAIN_NET_LIST[0]
+    }
+    // const node = localStorage.getItem('nodeAddress') || MAIN_NET_LIST[0]
     return node + ':20334';
 }
 
@@ -174,4 +183,19 @@ export function getTokenBalanceUrl(token_type, address) {
   const api = `/v2/addresses/${address}/${token_type}/balances`
   const url = getExplorerUrl() + api;
   return url;
+}
+
+export function validateKeystorePath(path) {
+  const system = os.platform();
+  if(system.indexOf('win') > -1) {
+    const files = fs.readdirSync(path)
+    if(files && files.indexOf('resources') > -1 && files.indexOf('OWallet.exe') > -1) {
+      return false;
+    }
+    const cwd = process.cwd();
+    if(path && (path === cwd || path.indexOf(cwd) > -1)) {
+      return false;
+    }
+  }
+  return true;
 }
