@@ -420,7 +420,9 @@ export default {
     handleRefund() {
         const userAddr = new Crypto.Address(this.stakeWallet.address);
         const peerPubkeys = [this.detail.publickey]
-        const withdrawList = [this.detail.stakequantity]
+        // const withdrawList = [this.detail.stakequantity]
+        // Fix:节点质押部分可能会增加或减少，退款应该用initPos； 
+        const withdrawList = [this.current_peer.initPos]        
         const payer = userAddr
         const tx = GovernanceTxBuilder.makeWithdrawTx(userAddr, peerPubkeys, withdrawList, payer, GAS_PRICE, GAS_LIMIT)
         this.tx = tx;

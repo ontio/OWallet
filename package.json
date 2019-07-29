@@ -22,7 +22,7 @@
     "pack:main": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.main.config.js",
     "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
     "package": "npm run pack && electron-builder -mwl",
-    "packageLocal": "electron-builder",
+    "packageMac": "yarn run pack && electron-builder --mac --x64",
     "packageWin": "yarn run pack && electron-builder --win --x64",
     "packageLin": "yarn run pack && electron-builder --linux --x64",
     "postinstall": "electron-builder install-app-deps && electron-rebuild --force --module_dir . -w node-hid -v 1.8.4",
