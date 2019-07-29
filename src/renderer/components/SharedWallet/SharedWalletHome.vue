@@ -612,7 +612,7 @@ export default {
       var that = this;
       const coPayers = this.sharedWallet.coPayers;
       const localCopayers = [];
-      dbService.find({ type: "CommonWallet" }, function(err, accounts) {
+      dbService.find({ $or: [{ type: "CommonWallet" }, { type: "HardwareWallet" }] }, function(err, accounts) {
         if (err) {
           console.log(err);
           that.$message.error(err);
