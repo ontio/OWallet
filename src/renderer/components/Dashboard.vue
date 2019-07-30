@@ -17,7 +17,7 @@
 
   .left-half {
     flex:1;
-    padding-right: 40px;
+    padding-right: 67px;
   }
 
   .right-half {
@@ -111,7 +111,7 @@
 
   .txList-header {
     padding-bottom: 5px;
-    border-bottom: 1px solid #DFE2E9;
+    border-bottom: 1px solid #F4F4F6;
     position: relative;
     margin-bottom:10px;
   }
@@ -123,7 +123,7 @@
     text-align: center;
   }
 
-  .txList-header :last-child {
+  /* .txList-header :last-child {
     width: 64px;
     height: 64px;
     display: block;
@@ -133,7 +133,7 @@
     top: -20px;
     right: 0;
     position: absolute;
-  }
+  } */
 
   .pending-tx {
     margin-bottom: 50px;
@@ -164,17 +164,7 @@
     margin-left: 30px;
   }
   
-  .copy-icon {
-    width:18px;
-    height:18px;
-    display: inline-block;
-    margin-left: 10px;
-    background: url('../assets/copy.png') center center;
-    background-size: cover;
-    cursor: pointer;
-    position: relative;
-    top: 5px;
-}
+
 .nep5-label :first-child{
   display: block;
   height:16px;
@@ -201,8 +191,8 @@
   <div class="home-container">
     <breadcrumb :current="currentWallet.label" v-on:backEvent="handleBack"></breadcrumb>
     <div class="wallet-info">
-      <p>
-        <span>{{$t('sharedWalletHome.address')}}: {{address}}</span>
+      <p class="font-regular">
+        {{$t('sharedWalletHome.address')}}: <span class="font-gray">{{address}}</span>
         <span class="copy-icon" @click="copy(address)"></span>
       </p>
     </div>
@@ -285,11 +275,11 @@
         <div class="completed-tx">
           <div class="txList-header">
             <span>{{$t('sharedWalletHome.completedTx')}}</span>
-            <span class="transfer-icon"></span>
+            <!-- <span class="transfer-icon"></span> -->
           </div>
-          <div v-for="(tx,index) in completedTx" :key="tx.txHash+index" class="tx-item" v-if="index<10"
+          <div v-for="(tx,index) in completedTx" :key="tx.txHash+index" class="tx-item"
                @click="showTxDetail(tx.txHash)">
-            <span>{{tx.txHash}}</span>
+            <span>{{tx.txHash.substring(0, 40) + '...'}}</span>
             <span>{{tx.amount}} {{tx.asset}}</span>
           </div>
           <div class="check-more" v-if="completedTx.length > 6" @click="checkMoreTx">
