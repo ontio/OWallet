@@ -10,6 +10,11 @@
         border-right: 1px solid #dddddd;
         float: left;
         cursor: pointer;
+        color: #1C76DD;
+        font-size: 18px;
+    }
+    .back-icon-container:hover {
+        color:#619AE5;
     }
     .back-icon {
         display: inline-block;
@@ -49,7 +54,7 @@
 <template>
     <div class="breadcrumb-container">
         <div class="back-icon-container" @click="back">
-            <span class="back-icon"></span>
+            <span class="fa fa-long-arrow-left"></span>
         </div>
         <div class="breadcrumb-routes" v-for="route in routes" :key="route.path">
             <router-link :to="route.path">{{route.name}}</router-link>

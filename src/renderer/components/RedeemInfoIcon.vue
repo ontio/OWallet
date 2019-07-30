@@ -3,12 +3,14 @@
     margin-left: 10px;
   font-size: 16px;
   cursor: pointer;
+  color:#D0D2D9;
 }
 
 </style>
 <template>
     <div>
-        <a-icon type="info-circle-o" class="redeem-info-icon" @click="show"/>
+        <!-- <a-icon type="info-circle-o" class="redeem-info-icon" @click="show"/> -->
+        <i class="fa fa-info-circle redeem-info-icon" @click="show"></i>
         <a-modal
             title="Redeem Info"
             v-model="visible"

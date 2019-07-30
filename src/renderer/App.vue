@@ -70,6 +70,10 @@
     font-size: 0.88rem;
   }
 
+  .font-gray {
+    color: #6F7781;
+  }
+
   .font-medium {
     font-family: 'AvenirNext-Medium';
     color: #5E6369;
@@ -184,7 +188,7 @@
   .refresh-icon {
     display: inline-block;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 16px;
     color:#196BD8;
   }
   .refresh-icon:hover{
@@ -193,14 +197,27 @@
   .add-icon {
     background-image: url('./assets/add.png');
     display:inline-block;
-    width: 18px;
-    height:18px;
+    width: 20px;
+    height:20px;
     background-size: cover;
     cursor: pointer;
   }
   .add-icon:hover {
     background-image: url('./assets/add-hover.png');
   }
+
+  .copy-icon {
+    width:20px;
+    height:20px;
+    display: inline-block;
+    margin-left: 10px;
+    background: url('./assets/copy_new.png') center center;
+    background-size: cover;
+    cursor: pointer;
+    position: relative;
+    top: 5px;
+}
+
   .asset-container {
     height:40vh;
     overflow:auto;
@@ -231,7 +248,7 @@
     justify-content: space-between;
     padding-bottom: 5px;
     padding-right:10px;
-    border-bottom:1px solid #DFE2E9;
+    border-bottom:1px solid #F4F4F6;
   }
 
   .wallet-balance :first-child {
@@ -244,9 +261,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 10px;
+    /* margin-top: 10px; */
     /* padding-right:20px; */
     width:100%;
+    height:40px;
+    border-bottom:1px solid #F4F4F6;
   }
 
   .asset-ong {
@@ -283,8 +302,8 @@
     font-family: AvenirNext-Medium;
     font-size: 14px;
     color: #FFFFFF;
-    margin-right: 40px;
-    margin-bottom: 60px;
+    margin-right: 20px;
+    margin-bottom: 20px;
     border: none;
     width:120px;
     height: 34px;
@@ -295,7 +314,7 @@
     justify-content: space-between;
     align-items: flex-end;
     padding-bottom:10px;
-    border-bottom: 1px solid #dddddd;
+    border-bottom: 1px solid #F4F4F6;
     margin-bottom:20px;
   }
 

@@ -14,12 +14,12 @@
 }
 
 .left-half {
-  flex:1;
+  flex: 1;
 }
 
 .right-half {
-  flex:1;
-  padding-left: 40px;
+  flex: 1;
+  padding-left: 67px;
 }
 
 .asset {
@@ -56,7 +56,7 @@
   padding-top: 12px;
   font-family: AvenirNext-Regular;
   font-size: 0.88rem;
-  height: 4rem;
+  /* height: 4rem; */
 }
 .wallet-info p {
   margin-bottom: 4px;
@@ -98,7 +98,7 @@
   padding-bottom: 5px;
   border-bottom: 1px solid #dfe2e9;
   position: relative;
-  margin-bottom:10px;
+  margin-bottom: 10px;
 }
 .txList-header :first-child {
   font-family: AvenirNext-Bold;
@@ -107,7 +107,7 @@
   text-align: center;
 }
 
-.txList-header :last-child {
+/* .txList-header :last-child {
   width: 64px;
   height: 64px;
   display: block;
@@ -117,7 +117,7 @@
   top: -20px;
   right: 0;
   position: absolute;
-}
+} */
 .pending-tx {
   margin-bottom: 50px;
 }
@@ -143,17 +143,7 @@
   border-radius: 0;
   background: rgba(0, 0, 0, 0.1);
 }
-.copy-icon {
-  width: 18px;
-  height: 18px;
-  display: inline-block;
-  margin-left: 10px;
-  background: url("../../assets/copy.png") center center;
-  background-size: cover;
-  cursor: pointer;
-  position: relative;
-  top: 5px;
-}
+
 
 .commonWallet-btn {
   width: 70px;
@@ -185,26 +175,44 @@
   margin-left: 30px;
 }
 .btn-dropdown {
-    width:120px;
-    height:34px;
-    background:#F4F4F6;
-    font-size:14px;
-    font-family:AvenirNext-Medium;
-    font-weight:500;
-    color:rgba(25,107,216,1);
-    border-radius:0;
-    border:none;
+  width: 120px;
+  height: 34px;
+  background: #f4f4f6;
+  font-size: 14px;
+  font-family: AvenirNext-Medium;
+  font-weight: 500;
+  color: rgba(25, 107, 216, 1);
+  border-radius: 0;
+  border: none;
 }
 .dropdown-item:hover {
-    color:#196BD8;
+  color: #196bd8;
 }
+.left-btn-container {
+  display: flex;
+  justify-content: space-between;
+}
+.left-btn-more {
+    display:flex;
+}
+.vertical-line {
+    width:2px;
+    height:34px;
+    background:#F4F4F6;
+    margin-right:29px;
+}
+.icon-arow {
+    font-size: 10px;
+    margin-left:4px;
+}
+
 </style>
 <template>
   <div class="home-container">
     <breadcrumb :current="sharedWallet.sharedWalletName" v-on:backEvent="handleBack"></breadcrumb>
     <div class="wallet-info">
-      <p>
-        <span>{{$t('sharedWalletHome.walletAddress')}}: {{this.sharedWallet.sharedWalletAddress}}</span>
+      <p class="font-regular">
+        {{$t('sharedWalletHome.walletAddress')}}: <span class="font-gray">{{this.sharedWallet.sharedWalletAddress}}</span>
         <span class="copy-icon" @click="copy()"></span>
       </p>
     </div>
@@ -258,43 +266,48 @@
             </div>
           </div>
 
-          <div v-if="hasLocalCopayer">
-            <a-button class="asset-btn" type="primary" @click="showTransferBox">
-              <i class="fa fa-paper-plane"></i>
-              {{$t('sharedWalletHome.send')}}
-            </a-button>
-            <a-button class="asset-btn" type="primary" @click="showReceive">
-              <i class="fa fa-qrcode"></i>
-              {{$t('sharedWalletHome.receive')}}
-            </a-button>
-            <a-dropdown placement="topCenter">
-              <a-menu slot="overlay">
-                <a-menu-item key="1" v-if="showPax">
-                  <span @click="showPaxMgmt()"
-                        >{{$t('sharedWalletHome.paxMgmt')}}</span>
-                </a-menu-item>
-                <a-menu-item key="2" @click="showTxMgmt()">
-                  <span >{{$t('sharedWalletHome.txMgmt')}}</span>
-                </a-menu-item>
-                <a-menu-item key="3" @click="toCopayerDetail()">
-                  <span >{{$t('sharedWalletHome.copayers')}}</span>
-                </a-menu-item>
-              </a-menu>
-              <a-button class="btn-dropdown">
-                {{$t('common.more')}}
-                <a-icon type="down" />
+          <div v-if="hasLocalCopayer" class="left-btn-container">
+            <div>
+              <a-button class="asset-btn" type="primary" @click="showTransferBox">
+                <i class="fa fa-paper-plane"></i>
+                {{$t('sharedWalletHome.send')}}
               </a-button>
-            </a-dropdown>
+              <a-button class="asset-btn" type="primary" @click="showReceive">
+                <i class="fa fa-qrcode"></i>
+                {{$t('sharedWalletHome.receive')}}
+              </a-button>
+            </div>
+
+            <div class="left-btn-more">
+              <div class="vertical-line"></div>
+              <a-dropdown placement="topCenter">
+                <a-menu slot="overlay">
+                  <a-menu-item key="1" v-if="showPax">
+                    <span @click="showPaxMgmt()">{{$t('sharedWalletHome.paxMgmt')}}</span>
+                  </a-menu-item>
+                  <a-menu-item key="2" @click="showTxMgmt()">
+                    <span>{{$t('sharedWalletHome.txMgmt')}}</span>
+                  </a-menu-item>
+                  <a-menu-item key="3" @click="toCopayerDetail()">
+                    <span>{{$t('sharedWalletHome.copayers')}}</span>
+                  </a-menu-item>
+                </a-menu>
+                <a-button class="btn-dropdown">
+                  {{$t('common.more')}}
+                  <!-- <a-icon type="down" /> -->
+                  <i class="fa fa-chevron-down icon-arrow"></i>
+                </a-button>
+              </a-dropdown>
+            </div>
           </div>
         </div>
-
       </div>
 
       <div class="right-half">
         <div class="pending-tx">
           <div class="txList-header">
             <span>{{$t('sharedWalletHome.pendingTx')}}</span>
-            <span class="transfer-icon"></span>
+            <!-- <span class="transfer-icon"></span> -->
           </div>
           <div class="pending-tx-container">
             <div
@@ -323,14 +336,16 @@
             class="tx-item"
             @click="showTxDetail(tx.txHash)"
           >
-            <span>{{tx.txHash}}</span>
+            <span>{{tx.txHash.substring(0,40)+'...'}}</span>
             <span>{{tx.amount}} {{tx.asset}}</span>
           </div>
           <div
             class="check-more"
             v-if="completedTx.length > 5"
             @click="checkMoreTx"
-          >{{$t('sharedWalletHome.checkMore')}}>></div>
+          >{{$t('sharedWalletHome.checkMore')}}
+            <i class="fa fa-chevron-right icon-arrow"></i>
+          </div>
         </div>
       </div>
     </div>
@@ -503,13 +518,17 @@ export default {
         });
     },
     getOep4Balances() {
-        this.$store.dispatch('fetchTokenBalances', {address: this.sharedWallet.sharedWalletAddress}).then(res => {
-          if(!res) {
-            this.$message.error(this.$t('dashboard.getBalanceErr'))
+      this.$store
+        .dispatch("fetchTokenBalances", {
+          address: this.sharedWallet.sharedWalletAddress
+        })
+        .then(res => {
+          if (!res) {
+            this.$message.error(this.$t("dashboard.getBalanceErr"));
           }
           return res;
-        })
-      },
+        });
+    },
     getExchangeCurrency() {
       const currency = "ont";
       const goaltype = "USD";
@@ -590,18 +609,18 @@ export default {
       this.$router.push({ path: "/commonWalletReceive/sharedWallet" });
     },
     pendingTxDetail(tx) {
-        //判断当前是否在上链中状态
-        const requiredNumber = this.sharedWallet.requiredNumber;
-        let signed = 0
-        for(let c of tx.coPayerSignVOS) {
-            if(c.isSign) {
-                signed++;
-            }
+      //判断当前是否在上链中状态
+      const requiredNumber = this.sharedWallet.requiredNumber;
+      let signed = 0;
+      for (let c of tx.coPayerSignVOS) {
+        if (c.isSign) {
+          signed++;
         }
-        if(requiredNumber <= signed) {
-            this.$message.warning('sharedWalletHome.txSendingTochain')
-            return;
-        }
+      }
+      if (requiredNumber <= signed) {
+        this.$message.warning("sharedWalletHome.txSendingTochain");
+        return;
+      }
       this.$store.commit("UPDATE_PENDINGTX", { pendingTx: tx });
       if (tx.receiveaddress === tx.sendaddress && tx.assetName === "ONG") {
         this.$store.commit("UPDATE_TRANSFER_REDEEM_TYPE", { type: true });
@@ -612,25 +631,28 @@ export default {
       var that = this;
       const coPayers = this.sharedWallet.coPayers;
       const localCopayers = [];
-      dbService.find({ $or: [{ type: "CommonWallet" }, { type: "HardwareWallet" }] }, function(err, accounts) {
-        if (err) {
-          console.log(err);
-          that.$message.error(err);
-          return;
-        }
-        for (let cp of coPayers) {
-          for (let ac of accounts) {
-            if (cp.address === ac.address) {
-              localCopayers.push(ac.wallet);
+      dbService.find(
+        { $or: [{ type: "CommonWallet" }, { type: "HardwareWallet" }] },
+        function(err, accounts) {
+          if (err) {
+            console.log(err);
+            that.$message.error(err);
+            return;
+          }
+          for (let cp of coPayers) {
+            for (let ac of accounts) {
+              if (cp.address === ac.address) {
+                localCopayers.push(ac.wallet);
+              }
             }
           }
+          if (localCopayers.length > 0) {
+            that.hasLocalCopayer = true;
+          } else {
+            that.hasLocalCopayer = false;
+          }
         }
-        if (localCopayers.length > 0) {
-          that.hasLocalCopayer = true;
-        } else {
-          that.hasLocalCopayer = false;
-        }
-      });
+      );
     },
     checkMoreTx() {
       let url = `https://explorer.ont.io/address/${this.sharedWallet.sharedWalletAddress}/10/1`;
@@ -686,7 +708,7 @@ export default {
     },
     closeOep4Selection() {
       this.showOep4Selection = false;
-      this.$store.dispatch('showLoadingModals')
+      this.$store.dispatch("showLoadingModals");
       this.$store.dispatch("fetchTokenBalances", {
         address: this.sharedWallet.sharedWalletAddress
       });
