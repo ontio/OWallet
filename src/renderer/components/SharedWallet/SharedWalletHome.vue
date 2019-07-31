@@ -618,7 +618,7 @@ export default {
         }
       }
       if (requiredNumber <= signed) {
-        this.$message.warning("sharedWalletHome.txSendingTochain");
+        this.$message.warning(this.$t("sharedWalletHome.txSendingTochain"));
         return;
       }
       this.$store.commit("UPDATE_PENDINGTX", { pendingTx: tx });
