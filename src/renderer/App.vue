@@ -187,33 +187,34 @@
 
   .refresh-icon {
     display: inline-block;
-    cursor: pointer;
-    font-size: 16px;
-    color:#196BD8;
-  }
-  .refresh-icon:hover{
-    color: rgba(25, 130, 216, 0.658);
+    background-image: url('./assets/refresh.svg');
+    background-size: cover;
   }
   .add-icon {
-    background-image: url('./assets/add.png');
+    background-image: url('./assets/add.svg');
     display:inline-block;
-    width: 20px;
-    height:20px;
     background-size: cover;
+  }
+  /* .add-icon:hover {
+    background-image: url('./assets/add-hover.png');
+  } */
+
+  .common-icon {
+    width:20px;
+    height:20px;
+    border-radius: 50%;
+    background-color:#F4F4F6;
     cursor: pointer;
   }
-  .add-icon:hover {
-    background-image: url('./assets/add-hover.png');
+  .common-icon:hover {
+    background-color:#E4E6EA;
   }
 
   .copy-icon {
-    width:20px;
-    height:20px;
     display: inline-block;
     margin-left: 10px;
-    background: url('./assets/copy_new.png') center center;
+    background-image: url('./assets/copy_new.svg');
     background-size: cover;
-    cursor: pointer;
     position: relative;
     top: 5px;
 }

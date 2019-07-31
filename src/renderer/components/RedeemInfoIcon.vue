@@ -5,6 +5,9 @@
   cursor: pointer;
   color:#D0D2D9;
 }
+.redeem-info-icon:hover {
+    color:#6F7781;
+}
 
 </style>
 <template>

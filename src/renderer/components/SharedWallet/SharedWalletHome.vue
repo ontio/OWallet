@@ -213,7 +213,7 @@
     <div class="wallet-info">
       <p class="font-regular">
         {{$t('sharedWalletHome.walletAddress')}}: <span class="font-gray">{{this.sharedWallet.sharedWalletAddress}}</span>
-        <span class="copy-icon" @click="copy()"></span>
+        <span class="common-icon copy-icon" @click="copy()"></span>
       </p>
     </div>
     <div class="content-container">
@@ -221,9 +221,9 @@
         <div class="wallet-balance">
           <div>
             <span>{{$t('sharedWalletHome.balance')}}</span>
-            <a-icon class="refresh-icon" type="reload" @click="refresh(true)" />
+            <span class="common-icon  refresh-icon" @click="refresh(true)"></span>
           </div>
-          <span class="add-icon" @click="addOep4"></span>
+          <span class="common-icon add-icon" @click="addOep4"></span>
         </div>
         <div class="asset-container">
           <div class="asset-item">
