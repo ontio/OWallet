@@ -119,6 +119,8 @@ export default {
             this.payerWalletType = e.target.value
             if(e.target.value === 'ledgerWallet') {
                 this.$store.dispatch('getLedgerStatus')
+            } else {
+                this.$store.dispatch('stopGetLedgerStatus')
             }
         },
         handleChangePayer(value) {
