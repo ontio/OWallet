@@ -40,7 +40,7 @@
   import dbService from '../../../../core/dbService'
   import {DEFAULT_SCRYPT, TEST_NET, MAIN_NET} from '../../../../core/consts'
   import $ from 'jquery'
-import { getRestClient } from '../../../../core/utils';
+import { getRestClient, formatScryptParams } from '../../../../core/utils';
 
   export default {
     name: 'BasicInfo',
@@ -97,14 +97,18 @@ import { getRestClient } from '../../../../core/utils';
         }
         let identity = new Identity();
         try {
+          debugger
             const encryptedPrivateKeyObj = new Crypto.PrivateKey(keystore.key);
             const addr = new Crypto.Address(keystore.address);
             const label = keystore.label || 'Identity'
             const salt = keystore.salt
             //must call if use 
             let password = SDK.transformPassword(this.keystorePassword)
-            identity = Identity.importIdentity(label, encryptedPrivateKeyObj, password, addr, salt);
+            let params = keystore.scrypt ? formatScryptParams(keystore.scrypt) : null;
+            identity = Identity.importIdentity(label, encryptedPrivateKeyObj, password, addr, salt, params);
             identity = identity.toJsonObj();
+            //Fix: keystore里需要加上scrypt参数
+            identity.scrypt = keystore.scrypt;
         } catch (err) {
             this.$message.error(this.$t('importIdentity.passError'))
             this.$store.dispatch('hideLoadingModals')

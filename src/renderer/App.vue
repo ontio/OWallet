@@ -248,7 +248,6 @@
     display:flex;
     justify-content: space-between;
     padding-bottom: 5px;
-    padding-right:10px;
     border-bottom:1px solid #F4F4F6;
   }
 
