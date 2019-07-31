@@ -35,11 +35,19 @@
                 <p class="font-medium-black">{{$t('nodeStake.selectStakeWallet')}}</p>
                 <a-radio-group @change="changePayerWallet" v-model="payerWalletType" class="change-payer-radio">
                 <a-radio value="commonWallet" class="payer-radio-item">{{$t('createIdentity.commonWallet')}}</a-radio>
+                <a-radio value="sharedWallet" class="payer-radio-item">{{$t('createIdentity.sharedWallet')}}</a-radio>
                 <a-radio value="ledgerWallet" class="payer-radio-item">{{$t('createIdentity.ledgerWallet')}}</a-radio>
 
                 <div v-if="payerWalletType === 'commonWallet'">
                     <a-select :options="normalWallet" class="select-wallet" v-model="payerWalletValue"
                     :placeholder="$t('createIdentity.selectCommonWallet')"
+                        @change="handleChangePayer">
+                    </a-select>
+                </div>
+
+                <div v-if="payerWalletType === 'sharedWallet'">
+                    <a-select :options="sharedWallet" class="select-wallet" v-model="payerWalletValue"
+                    :placeholder="$t('createIdentity.sharedWallet')"
                         @change="handleChangePayer">
                     </a-select>
                 </div>
@@ -165,6 +173,17 @@ export default {
                 });
             }
         },
+        sharedWallet: {
+            get() {
+                const list = this.$store.state.Wallets.SharedWallet.slice();
+                return list.map(i => {
+                    return Object.assign({}, i, {
+                        label: i.sharedWalletName + " " + i.sharedWalletAddress,
+                        value: i.sharedWalletAddress
+                    });
+                });
+            }
+        },
     },
     methods: {
         handleRouteBack() {
@@ -185,10 +204,21 @@ export default {
         },
         handleChangePayer(value) {
             this.payerWallet = this.normalWallet.find((v)=>{return v.address === value})
-            this.payerWalletValue = this.payerWallet.address
+            if(this.payerWallet){
+                this.payerWalletValue = this.payerWallet.address
+            } else {
+                // SharedWallet
+                this.payerWallet = this.sharedWallet.find((v)=>{return v.sharedWalletAddress === value})
+                this.payerWalletValue = this.payerWallet.sharedWalletAddress
+                this.payerWallet.address = this.payerWallet.sharedWalletAddress
+            }
         },
         handleSearch() {
             if(this.payerWalletType === 'commonWallet' && !this.payerWallet) {
+                this.$message.error(this.$t('nodeStake.selectIndividualWallet'))
+                return;
+            }
+            if(this.payerWalletType === 'sharedWallet' && !this.payerWallet) {
                 this.$message.error(this.$t('nodeStake.selectIndividualWallet'))
                 return;
             }
@@ -197,6 +227,8 @@ export default {
                 return;
             }
             if(this.payerWalletType === 'commonWallet' && this.payerWallet){
+                this.stakeWallet = this.payerWallet
+            } else if (this.payerWalletType === 'sharedWallet' && this.payerWallet){
                 this.stakeWallet = this.payerWallet
             } else {
                 this.stakeWallet = this.ledgerWallet

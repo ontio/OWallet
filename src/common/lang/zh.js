@@ -86,6 +86,7 @@ export default {
     ontid: 'ONT ID',
     selectWallet: '请选择钱包来支付交易费用',
     commonWallet: '普通钱包',
+    sharedWallet: '共享钱包',
     ledgerWallet: 'Ledger钱包',
     payerPassword: '输入所选钱包的密码',
     selectCommonWallet: '选择本地普通钱包',
