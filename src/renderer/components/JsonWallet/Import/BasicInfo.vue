@@ -409,7 +409,7 @@
             return;
           }
           //TODO: validate file content
-          const account = this.validateWalletFile(wallet)
+          let account = this.validateWalletFile(wallet)
           if(!account) {
             this.$store.dispatch('hideLoadingModals')
             this.$message.error(this.$t('importJsonWallet.invalidDatFile'))
@@ -419,9 +419,9 @@
           const enc = new Crypto.PrivateKey(account.key);
           const address = new Crypto.Address(account.address)
           let scrypt = convertScryptParams(wallet.scrypt) 
-          debugger
+          let pri;
           try {
-            enc.decrypt(this.datPassword, address, account.salt, scrypt)
+            pri = enc.decrypt(this.datPassword, address, account.salt, scrypt)
           } catch (err) {
             console.log(err)
             this.$store.dispatch('hideLoadingModals')
@@ -429,6 +429,11 @@
             return;
           }
           account.label = this.datLabel;
+          //Fix: 使导入的wallet的scrypt参数保持一致，都使用 n = 16384
+          if(wallet.scrypt && wallet.scrypt.n !== 16384) {
+            account = Account.create(pri, this.datPassword, this.datLabel, DEFAULT_SCRYPT)
+            account = account.toJsonObj();
+          }
           this.saveToDb(account);
         })
       },

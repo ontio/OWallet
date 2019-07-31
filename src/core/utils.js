@@ -199,3 +199,12 @@ export function validateKeystorePath(path) {
   }
   return true;
 }
+
+export function formatScryptParams(scrypt) {
+  return {
+    cost: scrypt.n || 16384, // 除以2时间减半
+    blockSize: scrypt.r || 8,
+    parallel: scrypt.p || 8,
+    size: scrypt.dkLen || 64
+  }
+}

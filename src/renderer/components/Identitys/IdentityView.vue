@@ -60,7 +60,7 @@
 <script>
   import {Wallet, Account, Crypto, Identity} from 'ontology-ts-sdk';
   import dbService from '../../../core/dbService'
-
+  import { formatScryptParams } from '../../../core/utils'
 	export default {
     name: "IdentityView",
     props: ['identity'],
@@ -107,8 +107,16 @@
         const controlData = this.identity.controls[0];
         const enc = new Crypto.PrivateKey(controlData.key)
         let pri;
+        const scrypt = this.identity.scrypt || 
+        {
+            n : 4096,
+            p : 8,
+            r : 8,
+            dkLen : 64
+        }
+        const params = formatScryptParams(scrypt);
         try {
-          pri = enc.decrypt(this.password, new Crypto.Address(controlData.address), controlData.salt)
+          pri = enc.decrypt(this.password, new Crypto.Address(controlData.address), controlData.salt, params)
         } catch (err) {
           console.log(err);
           this.$store.dispatch('hideLoadingModals')
@@ -124,12 +132,7 @@
             type : 'I',
             label : this.identity.label,
             algorithm : 'ECDSA',
-            scrypt : {
-                n : 4096,
-                p : 8,
-                r : 8,
-                dkLen : 64
-            },
+            scrypt,
             key : this.identity.controls[0].key,
             salt: this.identity.controls[0].salt,
             address: this.identity.controls[0].address,
