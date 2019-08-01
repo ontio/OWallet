@@ -63,21 +63,21 @@
           <div class="change-password-input">
             <div>
               <a-input type="password" class="input change-password"
-               v-validate="{required: true ,min:6}" name="oldPassword" data-vv-as="old password"
+               v-validate="{required: true ,min:6}" name="oldPassword" :data-vv-as="$t('FormField.oldPassword')"
                v-model="oldPassword" :placeholder="$t('wallets.oldPassword')"></a-input>
               <span class="v-validate-span-errors" v-show="errors.has('oldPassword')">{{ errors.first('oldPassword') }}</span>
             </div>
 
             <div>
               <a-input type="password" class="input change-password"
-               v-validate="{required: true ,min:6}" name="newPassword" data-vv-as="new password"
+               v-validate="{required: true ,min:6}" name="newPassword" :data-vv-as="$t('FormField.newPassword')"
                v-model="newPassword" :placeholder="$t('wallets.newPassword')"></a-input>
               <span class="v-validate-span-errors" v-show="errors.has('newPassword')">{{ errors.first('newPassword') }}</span>
             </div>
 
             <div>
               <a-input type="password" class="input change-password"
-                      v-validate="{required: true , min:6, is:newPassword}" data-vv-as="new password confirmation" name="reNewPassword"
+                      v-validate="{required: true , min:6, is:newPassword}" :data-vv-as="$t('newPasswordConfirmation')" name="reNewPassword"
                       v-model="reNewPassword" :placeholder="$t('wallets.reNewPassword')"></a-input>
               <span class="v-validate-span-errors" v-show="errors.has('reNewPassword')">{{ errors.first('reNewPassword') }}</span> 
             </div>

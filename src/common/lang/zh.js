@@ -49,6 +49,17 @@ export default {
     contractHash: '合约哈希：'
   },
 
+  FormField: {
+    label: '名称',
+    password: '密码',
+    passwordConfirmation: '确认密码',
+    mnemonic: '助记词',
+    privateKey: '私钥',
+    oldPassword: '旧密码',
+    newPassword: '新密码',
+    newPasswordConfirmation: '确认新的密码'
+  },
+
   TopNav: {
     new: '新建',
     edit: '编辑'

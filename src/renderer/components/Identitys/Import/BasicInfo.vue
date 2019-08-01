@@ -13,12 +13,12 @@
            aria-labelledby="import-identity-keystore-pills-tab">
 
         <textarea class="import-identity-keystore" id="import-identity-keystore" rows="6"
-                  v-validate="{required: true} " data-vv-as="keystore" name="keystore"
+                  v-validate="{required: true} " name="keystore"
                   :placeholder="$t('importIdentity.keystore')" v-model="keystore"></textarea>
         <span class="v-validate-span-errors" v-show="errors.has('keystore')">{{ errors.first('keystore') }}</span>
 
         <a-input type="password" class="input input-password"
-                 v-validate="{required: true ,min:6}" data-vv-as="password" name="keystorePassword"
+                 v-validate="{required: true ,min:6}" :data-vv-as="$t('FormField.password')" name="keystorePassword"
                  v-model="keystorePassword" :placeholder="$t('importIdentity.ontidPassword')"></a-input>
         <span class="v-validate-span-errors" v-show="errors.has('keystorePassword')">{{ errors.first('keystorePassword') }}</span>
       </div>

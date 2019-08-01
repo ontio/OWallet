@@ -49,6 +49,17 @@ export default {
     contractHash: 'Contract hash: '
   },
 
+  FormField: {
+    label: 'name',
+    password: 'password',
+    passwordConfirmation: 'password confirmation',
+    mnemonic: 'mnemonic',
+    privateKey: 'private key',
+    oldPassword: 'old password',
+    newPassword: 'new password',
+    newPasswordConfirmation: 'new password confirmation'
+  },
+
   TopNav: {
     new: 'New',
     edit: 'Edit'
