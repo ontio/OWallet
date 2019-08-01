@@ -616,7 +616,12 @@ export default {
     profitONG: '这是您已获得的交易费收益。该收益会在每轮共识周期开始时更新。',
     getProfitPart: '产生收益中',
     newStakePart: '新的质押',
-    claimableONT: '可提取ONT'
+    claimableONT: '可提取ONT',
+    redeemInitPos: '提取初始质押',
+    initPosInLock: "锁定中",
+    initPosRedeemable: '可提取',
+    noClaimbleInitPos: '没有可提取的初始质押。',
+    redeemInitPosOk: '确认提取'
   },
   exchange: {
     exchange: 'Exchange',

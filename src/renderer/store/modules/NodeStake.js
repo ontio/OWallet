@@ -3,9 +3,16 @@ import en from '../../../common/lang/en'
 import zh from '../../../common/lang/zh'
 import {ONT_PASS_NODE, ONT_PASS_NODE_PRD, ONT_PASS_URL} from '../../../core/consts'
 const state = {
-    detail: '',
-    stakeWallet: '',
-    stakeIdentity:'',
+    detail: {
+        publickey: ''
+    },
+    stakeWallet: {
+        address: '',
+        key: ''
+    },
+    stakeIdentity: {
+        ontid: ''
+    },
     status1: '',
     status2: '',
     status3: '',
