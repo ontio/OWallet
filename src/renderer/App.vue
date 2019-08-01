@@ -183,6 +183,7 @@
   .v-validate-span-errors {
     color: red;
     font-size: 12px;
+    display: block;
   }
 
   .refresh-icon {

@@ -49,6 +49,17 @@ export default {
     contractHash: 'Contract hash: '
   },
 
+  FormField: {
+    label: 'name',
+    password: 'password',
+    passwordConfirmation: 'password confirmation',
+    mnemonic: 'mnemonic',
+    privateKey: 'private key',
+    oldPassword: 'old password',
+    newPassword: 'new password',
+    newPasswordConfirmation: 'new password confirmation'
+  },
+
   TopNav: {
     new: 'New',
     edit: 'Edit'
@@ -610,7 +621,12 @@ Within their 50% share each consensus node will receive their share according to
     profitONG: 'This is the transaction fee profit you have made. This will update at the beginning of each new consensus round.',
     getProfitPart: 'Already receiving profit portion',
     newStakePart: 'New stake portion',
-    claimableONT: 'Claimable ONT'
+    claimableONT: 'Claimable ONT',
+    redeemInitPos: 'Redeem Init Pos',
+    initPosInLock: "Locked",
+    initPosRedeemable: 'Claimable',
+    noClaimbleInitPos: 'No claimble ONT.',
+    redeemInitPosOk: 'Redeem'
 },
 exchange: {
   exchange: 'Exchange',

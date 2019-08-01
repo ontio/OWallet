@@ -15,10 +15,17 @@ import VueClipboard from 'vue-clipboard2'
 VueClipboard.config.autoSetContainer = true // add this line
 Vue.use(VueClipboard)
 
-import VeeValidate from 'vee-validate'
-Vue.use(VeeValidate)
-
 import i18n from '../common/lang'
+import VeeValidate from 'vee-validate'
+import { VALIDATE_DICTIONARY } from '../core/consts'
+import validationMessages from 'vee-validate/dist/locale/en';
+Vue.use(VeeValidate, {
+  i18n,
+  dictionary: {
+    en: validationMessages,
+    zh: VALIDATE_DICTIONARY.zh
+  }
+})  
 import service from '../core/utils'
 Vue.prototype.httpService = service;
 

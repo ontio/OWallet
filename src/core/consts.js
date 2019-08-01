@@ -80,3 +80,21 @@ export const PAX_SC_HASH = {
   MAIN: '6bbc07bae862db0d7867e4e5b1a13c663e2b4bc8',
   TEST: 'b06f8eaf757030c7a944ce2a072017bde1e72308'
 } 
+
+export const VALIDATE_DICTIONARY = {
+  zh: {
+    messages: {
+      required: (field, val) => `字段 ${field} 是必填项`,
+      min: (field, val) => `字段 ${field} 的长度不能少于${val[0]}`,
+      length: (field, val) => `字段 ${field} 的长度必须是${val[0]}`
+    },
+    attributes: {
+      password: '密码',
+      name: '名称',
+      label: '名称',
+      rePassword: '确认密码',
+      keystore: 'keystore',
+      keystorePassword: ''
+    }
+  }
+}

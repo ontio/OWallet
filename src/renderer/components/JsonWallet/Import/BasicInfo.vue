@@ -155,7 +155,10 @@
     <div class="tab-content" id="pills-tabContent">
       <div class="tab-pane fade show active" id="import-json-wif-pills" role="tabpanel"
            aria-labelledby="import-json-wif-pills-tab">
-        <a-input class="input" :placeholder="$t('importJsonWallet.label')" v-model="wifLabel"></a-input>
+        <a-input class="input" :placeholder="$t('importJsonWallet.label')" 
+                v-validate="{required: true}" name="wifLabel" :data-vv-as="$t('FormField.label')"
+                v-model="wifLabel"></a-input>
+        <span class="v-validate-span-errors" v-show="errors.has('wifLabel')">{{ errors.first('wifLabel') }}</span>
 
         <a-input class="input input-wif"
                  v-validate="{required: true}" name="wif"
@@ -163,11 +166,11 @@
         <span class="v-validate-span-errors" v-show="errors.has('wif')">{{ errors.first('wif') }}</span>
 
         <a-input type="password" class="input input-password"
-                 v-validate="{required: true ,min:6}" data-vv-as="password" name="wifPassword"
+                 v-validate="{required: true ,min:6}" :data-vv-as="$t('FormField.password')" name="wifPassword"
                  v-model="wifPassword" :placeholder="$t('importJsonWallet.setPassword')"></a-input>
         <span class="v-validate-span-errors" v-show="errors.has('wifPassword')">{{ errors.first('wifPassword') }}</span>
         <a-input type="password" class="input input-repassword"
-                 v-validate="{required: true ,min:6, is:wifPassword}" data-vv-as="password confirmation"
+                 v-validate="{required: true ,min:6, is:wifPassword}"  :data-vv-as="$t('FormField.passwordConfirmation')"
                  name="wifRePassword"
                  v-model="wifRePassword" :placeholder="$t('importJsonWallet.rePassword')"></a-input>
         <span class="v-validate-span-errors"
@@ -177,15 +180,15 @@
            aria-labelledby="import-json-private-key-pills-tab">
         <a-input class="input" :placeholder="$t('importJsonWallet.label')" v-model="pkLabel"></a-input>
         <a-input class="input input-wif"
-                 v-validate="{required: true, length:64}" data-vv-as="private key" name="pk"
+                 v-validate="{required: true, length:64}" :data-vv-as="$t('FormField.privateKey')" name="pk"
                  v-model="pk" :placeholder="$t('importJsonWallet.privateKeyTip')"></a-input>
         <span class="v-validate-span-errors" v-show="errors.has('pk')">{{ errors.first('pk') }}</span>
         <a-input type="password" class="input input-password"
-                 v-validate="{required: true, min:6}" data-vv-as="password" name="pkPassword"
+                 v-validate="{required: true, min:6}" :data-vv-as="$t('FormField.password')" name="pkPassword"
                  v-model="pkPassword" :placeholder="$t('importJsonWallet.setPassword')"></a-input>
         <span class="v-validate-span-errors" v-show="errors.has('pkPassword')">{{ errors.first('pkPassword') }}</span>
         <a-input type="password" class="input input-repassword"
-                 v-validate="{required: true, min:6, is:pkPassword}" data-vv-as="password confirmation" name="pkRePassword"
+                 v-validate="{required: true, min:6, is:pkPassword}" :data-vv-as="$t('FormField.passwordConfirmation')" name="pkRePassword"
                  v-model="pkRePassword" :placeholder="$t('createJsonWallet.rePassword')"></a-input>
         <span class="v-validate-span-errors"
               v-show="errors.has('pkRePassword')">{{ errors.first('pkRePassword') }}</span>
@@ -197,7 +200,7 @@
           <a-icon type="info-circle-o" class="redeem-info-icon" />
           <span class="tip">{{$t('importJsonWallet.importFirstDefault')}}</span>
         </p>
-        <a-input class="input" :placeholder="$t('importJsonWallet.label')" v-model="datLabel" name="datLabel"
+        <a-input class="input" :placeholder="$t('importJsonWallet.label')" v-model="datLabel" name="datLabel" :data-vv-as="$t('FormField.label')"
                  v-validate="{required: true}"></a-input>
         <span class="v-validate-span-errors" v-show="errors.has('datLabel')">{{ errors.first('datLabel') }}</span>
         <a class="upload-dat-file">{{ datPath }}
@@ -205,7 +208,7 @@
         </a>
 
         <a-input type="password" class="input"
-                 v-validate="{required: true}" data-vv-as="password" name="datPassword"
+                 v-validate="{required: true}" :data-vv-as="$t('FormField.password')" name="datPassword"
                  v-model="datPassword" :placeholder="$t('importJsonWallet.datImportPassword')"></a-input>
         <span class="v-validate-span-errors" v-show="errors.has('datPassword')">{{ errors.first('datPassword') }}</span>
       </div>
@@ -215,16 +218,16 @@
         <a-input class="input" :placeholder="$t('importJsonWallet.label')" v-model="mnemonicLabel"></a-input>
 
         <textarea class="import-json-mnemonic" id="import-json-mnemonic" rows="6"
-                  v-validate="{required: true} " data-vv-as="mnemonic" name="mnemonic"
+                  v-validate="{required: true} " :data-vv-as="$t('FormField.mnemonic')" name="mnemonic"
                   :placeholder="$t('importJsonWallet.mnemonic')" v-model="mnemonic"></textarea>
         <span class="v-validate-span-errors" v-show="errors.has('mnemonic')">{{ errors.first('mnemonic') }}</span>
 
         <a-input type="password" class="input input-password"
-                 v-validate="{required: true ,min:6}" data-vv-as="password" name="mnemonicPassword"
+                 v-validate="{required: true ,min:6}" :data-vv-as="$t('FormField.password')" name="mnemonicPassword"
                  v-model="mnemonicPassword" :placeholder="$t('importJsonWallet.setPassword')"></a-input>
         <span class="v-validate-span-errors" v-show="errors.has('mnemonicPassword')">{{ errors.first('mnemonicPassword') }}</span>
         <a-input type="password" class="input input-repassword"
-                 v-validate="{required: true ,min:6, is:mnemonicPassword}" data-vv-as="password confirmation"
+                 v-validate="{required: true ,min:6, is:mnemonicPassword}" :data-vv-as="$t('FormField.passwordConfirmation')"
                  name="mnemonicRePassword"
                  v-model="mnemonicRePassword" :placeholder="$t('importJsonWallet.rePassword')"></a-input>
         <span class="v-validate-span-errors" v-show="errors.has('mnemonicRePassword')">{{ errors.first('mnemonicRePassword') }}</span>
@@ -322,6 +325,7 @@
           })
         } else if (this.tabName === 'wif') {
           this.$validator.validateAll({
+            wifLabel: this.wifLabel,
             wif: this.wif,
             wifPassword: this.wifPassword,
             wifRePassword: this.wifRePassword

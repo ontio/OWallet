@@ -102,7 +102,7 @@
                     <span class="label font-medium-black">{{$t('nodeMgmt.inAuthorization')}}: </span>
                     <span class="font-medium">{{authorizationInfo.inAuthorization}} ONT</span>
                     <a-tooltip placement="top" :title="$t('nodeMgmt.refresh')">
-                        <span class="refresh-icon" @click="handleRefresh"><a-icon type="reload" /></span>
+                        <span class="common-icon refresh-icon" @click="handleRefresh"></span>
                     </a-tooltip>
                 </div>
                 <div>

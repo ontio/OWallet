@@ -49,6 +49,17 @@ export default {
     contractHash: '合约哈希：'
   },
 
+  FormField: {
+    label: '名称',
+    password: '密码',
+    passwordConfirmation: '确认密码',
+    mnemonic: '助记词',
+    privateKey: '私钥',
+    oldPassword: '旧密码',
+    newPassword: '新密码',
+    newPasswordConfirmation: '确认新的密码'
+  },
+
   TopNav: {
     new: '新建',
     edit: '编辑'
@@ -605,7 +616,12 @@ export default {
     profitONG: '这是您已获得的交易费收益。该收益会在每轮共识周期开始时更新。',
     getProfitPart: '产生收益中',
     newStakePart: '新的质押',
-    claimableONT: '可提取ONT'
+    claimableONT: '可提取ONT',
+    redeemInitPos: '提取初始质押',
+    initPosInLock: "锁定中",
+    initPosRedeemable: '可提取',
+    noClaimbleInitPos: '没有可提取的初始质押。',
+    redeemInitPosOk: '确认提取'
   },
   exchange: {
     exchange: 'Exchange',

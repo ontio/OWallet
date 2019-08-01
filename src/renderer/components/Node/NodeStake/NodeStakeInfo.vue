@@ -46,7 +46,7 @@
 }
 .initPos-btns {
     margin:10px auto;
-    width:540px;
+    width:640px;
 }
 .initPos-btns button {
     margin-right: 20px;
@@ -119,7 +119,8 @@
                     <a-button class="add-initPos-btn" @click="handleAddInitPos">{{$t('nodeMgmt.addInitPos')}}</a-button>
                     <a-button class="add-initPos-btn" @click="handleReduceInitPos"
                     v-if="current_peer.initPos> detail.commitmentquantity"
-                    >{{$t('nodeMgmt.reduceInitPos')}}</a-button>                    
+                    >{{$t('nodeMgmt.reduceInitPos')}}</a-button>    
+                    <a-button class="add-initPos-btn" @click="()=>{this.redeemPosVisible = true;}">{{$t('nodeMgmt.redeemInitPos')}}</a-button>
             </div>
         </div>
         <div class="footer-btns">
@@ -162,6 +163,18 @@
                     <a-input class="input add-pos-input" :class="validReducePos? '': 'error-input'"
                     v-model="reducePos" @change="validateReducePos"></a-input> ONT
                 </div>
+            </div>
+        </a-modal>
+
+        <a-modal
+          :title="$t('nodeMgmt.redeemInitPos')"
+          :visible="redeemPosVisible"
+          :okText="$t('nodeMgmt.redeemInitPosOk')"
+          @ok="handleRedeemPosOk"
+          @cancel="handleRedeemPosCancel">
+            <div>
+              <p class="font-medium-black">{{$t('nodeMgmt.initPosInLock')}}: {{authorizationInfo.locked}} ONT</p>
+              <p class="font-medium-black">{{$t('nodeMgmt.initPosRedeemable')}}: {{authorizationInfo.claimable}} ONT</p>
             </div>
         </a-modal>
 
@@ -221,7 +234,10 @@ export default {
       reducePosVisible: false,
       reducePos: 0,
       validReducePos: true,
-      isDelegateSendTx:true
+      isDelegateSendTx:true,
+
+      redeemPosVisible: false,
+
     };
   },
   mounted() {
@@ -232,10 +248,16 @@ export default {
     this.$store.dispatch("fetchStakeDetail", this.stakeIdentity.ontid);
     this.$store.dispatch('fetchPeerItem', this.detail.publickey);
     this.$store.dispatch('fetchPosLimit')
+    this.$store.dispatch('fetchAuthorizationInfo', 
+      {pk: this.detail.publickey, address: this.stakeWallet.address}
+      )
     const intervalId = setInterval(() => {
       this.$store.dispatch("fetchStakeDetail", this.stakeIdentity.ontid);
       this.$store.dispatch('fetchPeerItem', this.detail.publickey);
       this.$store.dispatch('fetchPosLimit')
+      this.$store.dispatch('fetchAuthorizationInfo', 
+      {pk: this.detail.publickey, address: this.stakeWallet.address}
+      )
     }, this.interval);
     this.intervalId = intervalId
   },
@@ -259,7 +281,8 @@ export default {
       status3: state => state.NodeStake.status3,
       current: state => state.NodeStake.current,
       statusTip: state => state.NodeStake.statusTip,
-      btnText: state => state.NodeStake.btnText
+      btnText: state => state.NodeStake.btnText,
+      authorizationInfo: state => state.NodeAuthorization.authorizationInfo
     })
   },
   methods: {
@@ -512,6 +535,24 @@ export default {
     },
     handleReducePosCancel() {
       this.reducePosVisible = false;
+    },
+    handleRedeemPosOk() {
+      if(this.authorizationInfo && this.authorizationInfo.claimableVal === 0) {
+        this.$message.warning(this.$t('nodeMgmt.noClaimbleInitPos'))
+        return;
+      }
+      this.redeemPosVisible = false;
+      const userAddr = new Crypto.Address(this.stakeWallet.address);
+      const peerPubkeys = [this.detail.publickey]
+      const withdrawList = [this.authorizationInfo.claimableVal]        
+      const payer = userAddr
+      const tx = GovernanceTxBuilder.makeWithdrawTx(userAddr, peerPubkeys, withdrawList, payer, GAS_PRICE, GAS_LIMIT)
+      this.tx = tx;
+      this.walletPassModal = true;
+      this.isDelegateSendTx = false;
+    },
+    handleRedeemPosCancel() {
+      this.redeemPosVisible = false;
     }
   }
 };

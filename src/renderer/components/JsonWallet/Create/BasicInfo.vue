@@ -12,7 +12,7 @@
       <span class="v-validate-span-errors" v-show="errors.has('password')">{{ errors.first('password') }}</span>
 
       <a-input type="password" class="input input-repassword"
-               v-validate="{required: true , min:6, is:password}" data-vv-as="password confirmation" name="rePassword"
+               v-validate="{required: true , min:6, is:password}" :data-vv-as="$t('FormField.passwordConfirmation')" name="rePassword"
                v-model="rePassword" :placeholder="$t('createJsonWallet.rePassword')"></a-input>
       <span class="v-validate-span-errors" v-show="errors.has('rePassword')">{{ errors.first('rePassword') }}</span>
     </div>
