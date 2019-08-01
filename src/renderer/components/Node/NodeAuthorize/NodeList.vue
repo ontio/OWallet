@@ -53,6 +53,12 @@
     font-size:18px;
     cursor: pointer;
 }
+.node-name {
+    /* color: #227EEC !important; */
+}
+.node-name:hover {
+    color: #227EEC !important;
+}
 </style>
 <template>
     <div>
@@ -82,7 +88,7 @@
                     <a-icon type="info-circle-o" class="proportion-info-icon" @click="showProportionTip"/>
                 </p>
                 </div>
-            <a slot="name" slot-scope="text, record" :class="record.status ===2 ? 'node-consensus' : 'node-candidate' "
+            <a slot="name" slot-scope="text, record" class="node-name" :class="record.status ===2 ? 'node-consensus' : 'node-candidate' "
                 @click="handleNodeDetail(record)">
                 
                 <a-tooltip placement="top" :title="$t('nodeMgmt.consensusNode')">
@@ -159,10 +165,16 @@ export default {
         //loop to fetch data
         // this.$store.dispatch('showLoadingModals');
         this.requesting = true;
-        this.$store.dispatch('fetchAllSortedNodeList').then(res => {
-            this.pagination.total = res.length;
-             this.fetchList()
-        })
+        const net = localStorage.getItem('net')
+        if(net === 'TEST_NET') {
+            this.$store.dispatch('fetchAllSortedNodeList').then(res => {
+                this.pagination.total = res.length;
+                this.fetchList()
+            })
+        } else {
+            this.fetchList()
+        }
+        
         this.$store.dispatch('fetchBlockCountdown')
         this.intervalId = setInterval(()=>{
             // this.$store.dispatch('fetchNodeList')
@@ -199,11 +211,12 @@ export default {
         },
         fetchList() {
             this.requesting = true;
-            this.$store.dispatch('fetchNodeList', {
+            this.$store.dispatch('fetchNodeListNew', {
                 pageSize: this.pagination.pageSize,
                 pageNum: this.pagination.current - 1
             }).then(res => {
                 this.requesting = false;
+                this.pagination.total = res;
             })
         },
         showProportionTip() {
