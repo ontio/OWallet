@@ -114,7 +114,9 @@ export default {
     passError: '密码错误',
     ontidNotExist: '要导入的ONT ID不存在于区块链上',
     keystoreImport: '导入ONT ID Keystore',
-    invalidKeystore: '您输入的keystore不正确。'
+    invalidKeystore: '您输入的keystore不正确。',
+    ontidExist: '要导入的ONT ID本地已存在。',
+    importSuccess: '导入ONT ID成功。'
   },
 
   wallets: {

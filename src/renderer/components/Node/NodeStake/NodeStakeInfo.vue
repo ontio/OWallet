@@ -114,8 +114,8 @@
                 <p class="font-medium-black" for="">{{$t('nodeStake.stakeQuantity')}}</p>
                 <p>{{current_peer.initPos}}</p>
             </div>
-            <!-- NODE_HIDE -->
-            <div class="initPos-btns" v-if="showPosBtn">
+            <!-- 只有成为节点后可以操作初始质押部分 -->
+            <div class="initPos-btns" v-if="detail.status === 8">
                     <a-button class="add-initPos-btn" @click="handleAddInitPos">{{$t('nodeMgmt.addInitPos')}}</a-button>
                     <a-button class="add-initPos-btn" @click="handleReduceInitPos"
                     v-if="current_peer.initPos> detail.commitmentquantity"
@@ -134,7 +134,7 @@
                 :disabled="refundClicked">{{$t('nodeStake.refund')}}</a-button>
                 <a-button @click="handleQuitNode" class="btn-next" v-if="detail.status ===8">{{$t('nodeStake.quitNode')}}</a-button>
                 <a-button @click="handleNewStake" class="btn-next" v-if="detail.status ===6 || detail.status ===1">{{$t('nodeStake.newStake')}}</a-button>
-                
+
             </div>
         </div>
 

@@ -114,7 +114,9 @@ export default {
     passError: 'Password error',
     ontidNotExist: 'The ONT ID to import does not exist on the blockchain',
     keystoreImport: 'ONT ID Keystore Import',
-    invalidKeystore: 'The keysotre you input is invalid.'
+    invalidKeystore: 'The keysotre you input is invalid.',
+    ontidExist: 'The identity already exists in local.',
+    importSuccess: 'Import Identity succeessfully!'
   },
 
   wallets: {

@@ -187,13 +187,13 @@ export function getTokenBalanceUrl(token_type, address) {
 
 export function validateKeystorePath(path) {
   const system = os.platform();
-  if(system.indexOf('win') > -1) {
+  if(system.indexOf('win') > -1 && system !== 'darwin') {
     const files = fs.readdirSync(path)
     if(files && files.indexOf('resources') > -1 && files.indexOf('OWallet.exe') > -1) {
       return false;
     }
     const cwd = process.cwd();
-    if(path && (path === cwd || path.indexOf(cwd) > -1)) {
+    if(path && cwd !== '/' && (path === cwd || path.indexOf(cwd) > -1)) {
       return false;
     }
   }
