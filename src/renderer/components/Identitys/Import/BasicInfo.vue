@@ -139,12 +139,12 @@ import { getRestClient, formatScryptParams } from '../../../../core/utils';
         dbService.insert(wallet, function (err, newDoc) {
           if (err) {
             console.log(err)
-            that.$message.warning('The identity already exists in local.')
+            that.$message.warning(that.$t('importIdentity.ontidExist'))
             that.$store.dispatch('hideLoadingModals')
             return;
           }
 
-          that.$message.success('Import Identity succeessfully!')
+          that.$message.success(that.$t('importIdentity.importSuccess'))
           that.$router.push({name: 'Identitys'})
         })
       },

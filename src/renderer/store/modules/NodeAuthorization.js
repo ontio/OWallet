@@ -375,6 +375,7 @@ const actions = {
                 item.detailUrl = NODE_DETAIL + item.peerPubkey;
                 // matchNodeName(item)
             })
+            console.log(JSON.stringify(list))
             
             commit('UPDATE_NODE_LIST', {list});
             dispatch('hideLoadingModals')

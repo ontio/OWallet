@@ -198,9 +198,10 @@
 
   .normalWallet,
   .div-create-wallet {
-    width: 23.63rem;
+    width: 24.63rem;
     height: 13.19rem;
-    margin-right: 3.75rem;
+    margin-right: 1.75rem;
+    margin-left:1.75rem;
     margin-bottom: 2.75rem;
   }
 

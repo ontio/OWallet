@@ -114,7 +114,9 @@ export default {
     passError: '密码错误',
     ontidNotExist: '要导入的ONT ID不存在于区块链上',
     keystoreImport: '导入ONT ID Keystore',
-    invalidKeystore: '您输入的keystore不正确。'
+    invalidKeystore: '您输入的keystore不正确。',
+    ontidExist: '要导入的ONT ID本地已存在。',
+    importSuccess: '导入ONT ID成功。'
   },
 
   wallets: {
@@ -621,7 +623,9 @@ export default {
     initPosInLock: "锁定中",
     initPosRedeemable: '可提取',
     noClaimbleInitPos: '没有可提取的初始质押。',
-    redeemInitPosOk: '确认提取'
+    redeemInitPosOk: '确认提取',
+    hasClaimableInitPos: '您还有可提取的初始质押。请先提取该部分ONT。',
+    noClaimbleToRefund: '没有可提取的ONT。无法提款。'
   },
   exchange: {
     exchange: 'Exchange',
