@@ -623,7 +623,9 @@ export default {
     initPosInLock: "锁定中",
     initPosRedeemable: '可提取',
     noClaimbleInitPos: '没有可提取的初始质押。',
-    redeemInitPosOk: '确认提取'
+    redeemInitPosOk: '确认提取',
+    hasClaimableInitPos: '您还有可提取的初始质押。请先提取该部分ONT。',
+    noClaimbleToRefund: '没有可提取的ONT。无法提款。'
   },
   exchange: {
     exchange: 'Exchange',

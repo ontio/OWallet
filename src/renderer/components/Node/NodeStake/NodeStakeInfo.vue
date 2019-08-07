@@ -441,17 +441,27 @@ export default {
     },
 
     handleRefund() {
+        if(this.authorizationInfo && this.authorizationInfo.claimableVal === 0) {
+          this.$message.warning(this.$t('nodeMgmt.noClaimbleToRefund'))
+          return;
+        }
         const userAddr = new Crypto.Address(this.stakeWallet.address);
         const peerPubkeys = [this.detail.publickey]
         // const withdrawList = [this.detail.stakequantity]
         // Fix:节点质押部分可能会增加或减少，退款应该用initPos； 
-        const withdrawList = [this.current_peer.initPos]        
+        // Fix2: 退款都可以用可提取部分
+        const withdrawList = [this.authorizationInfo.claimableVal]        
         const payer = userAddr
         const tx = GovernanceTxBuilder.makeWithdrawTx(userAddr, peerPubkeys, withdrawList, payer, GAS_PRICE, GAS_LIMIT)
         this.tx = tx;
         this.walletPassModal = true;
     },
     handleQuitNode() {
+        //Fixme:退出节点前先把可提取初始质押提取出来。
+        if(this.authorizationInfo && this.authorizationInfo.claimableVal > 0) {
+          this.$message.warning(this.$t('nodeMgmt.hasClaimableInitPos'))
+          return;
+        }
         const userAddr = new Crypto.Address(this.stakeWallet.address);
         const peerPubkey = this.detail.publickey;
         const payer = userAddr;   
