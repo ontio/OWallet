@@ -128,7 +128,7 @@
                             </a-tooltip>
                         {{$t('nodeMgmt.profit')}}: 
                     </span>
-                    <span class="font-medium">{{splitFee.amount}} ONG</span>
+                    <span class="font-medium">{{splitFee.amount}} SEED</span>
                 </p>
                 <p class="authorize-tip">
                    <a-icon type="info-circle" />
@@ -157,7 +157,7 @@
                 </div>
                 <div>
                     <span class="label font-medium-black">{{$t('nodeMgmt.amountToCancel')}}: </span>
-                    <span class="font-medium">{{cancelAmount*500}} ONT</span>
+                    <span class="font-medium">{{cancelAmount}} ONT</span>
                 </div>
             </div>
         </a-modal>
