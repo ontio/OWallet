@@ -205,6 +205,7 @@ import {GAS_PRICE, GAS_LIMIT} from '../../../../core/consts'
 import {Crypto, GovernanceTxBuilder, utils} from 'ontology-ts-sdk'
 import numeral from 'numeral'
 import {varifyPositiveInt} from '../../../../core/utils.js'
+import { SESAMESEED_NODE_ADDRESS } from './Sesameseed/SesameseedVars'
 
 export default {
     name:'AuthorizationMgmt',
@@ -228,6 +229,11 @@ export default {
     mounted() {
         //fetch stake info
         // const pk = this.stakeDetail.publicKey
+
+        // Redirect to Sesameseed NewAuthorizacion custom page
+        if (this.current_node.address === SESAMESEED_NODE_ADDRESS) {
+            this.$router.push({name: 'AuthorizationMgmtSesameseed'});
+        }
 
         this.refresh();
         this.intervalId = setInterval(()=>{

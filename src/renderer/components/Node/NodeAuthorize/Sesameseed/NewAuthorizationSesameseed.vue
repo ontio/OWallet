@@ -111,7 +111,7 @@ export default {
   },
   methods: {
     handleRouteBack() {
-      this.$router.go(-1);
+      this.$router.go(-2);
     },
     handleChange() {
       if (!this.units || !varifyPositiveInt(this.units)) {
@@ -179,8 +179,8 @@ export default {
                   ]
                 }
               ],
-              gasLimit: 20000,
-              gasPrice: 500,
+              gasLimit: GAS_LIMIT,
+              gasPrice: GAS_PRICE,
               payer: this.stakeWallet.address
             }
           }

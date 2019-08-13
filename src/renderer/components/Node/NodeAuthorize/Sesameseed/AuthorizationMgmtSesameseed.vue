@@ -115,37 +115,9 @@
                 </div>
                 <div class="authorize-tip">
                     <a-icon type="info-circle" />
-                    <span class="font-regular tip-font">{{$t('nodeMgmt.authorizeTip')}}</span>
+                    <span class="font-regular tip-font">{{$t('sesameseed.authorizeTip')}}</span>
                 </div>
                 <a-button type="default" class="cancel-btn" @click="cancelAuthorization">{{$t('nodeMgmt.cancelAuthorization')}}</a-button>
-                <div class="redeem-ont">
-                    <p class="redeem-item">
-                        <span class="font-medium-black label">
-                            <a-tooltip placement="right" :title="$t('nodeMgmt.lockedONT')">
-                                <a-icon type="info-circle-o" />
-                            </a-tooltip>
-                            {{$t('nodeMgmt.locked')}}: 
-                        </span>
-                        <span class="font-medium">{{authorizationInfo.locked}} ONT</span>
-                    </p>
-                    <p class="redeem-item">
-                        <span class="font-medium-black label">
-                            {{$t('nodeMgmt.claimable')}}: 
-                        </span>
-                        <span class="font-medium">{{authorizationInfo.claimable}} ONT</span>
-                        <a-button type="primary" class="redeem-btn" @click="redeemOnt">{{$t('nodeMgmt.redeem')}}</a-button>
-                    </p>
-                    <p class="redeem-item">
-                        <span class="font-medium-black label">
-                            <a-tooltip placement="right" :title="$t('nodeMgmt.unboundONG')">
-                                <a-icon type="info-circle-o" />
-                            </a-tooltip>
-                            {{$t('nodeMgmt.unboundOng')}}: 
-                        </span>
-                        <span class="font-medium">{{unboundOng}} ONG</span>
-                        <a-button type="primary" class="redeem-btn" @click="redeemOng">{{$t('nodeMgmt.redeem')}}</a-button>
-                    </p>
-                </div>
             </div>
             <div class="right-half">
                 <p class="font-medium-black label">{{$t('nodeMgmt.rewards')}}</p>
@@ -158,11 +130,9 @@
                     </span>
                     <span class="font-medium">{{splitFee.amount}} ONG</span>
                 </p>
-                <a-button type="primary" class="redeem-btn" @click="redeemRewards">{{$t('nodeMgmt.redeem')}}</a-button>
-
                 <p class="authorize-tip">
                    <a-icon type="info-circle" />
-                   <span class="font-regular tip-font">{{$t('nodeMgmt.rewardTip')}}</span>
+                   <span class="font-regular tip-font">{{$t('sesameseed.rewardTip')}}</span>
                 </p>
             </div>
         </div>
@@ -198,13 +168,13 @@
     </div>
 </template>
 <script>
-import Breadcrumb from '../../Breadcrumb'
+import Breadcrumb from '../../../Breadcrumb'
 import {mapState} from 'vuex'
-import SignSendTx from '../../Common/SignSendTx'
-import {GAS_PRICE, GAS_LIMIT} from '../../../../core/consts'
+import SignSendTx from '../../../Common/SignSendTx'
+import {GAS_PRICE, GAS_LIMIT} from '../../../../../core/consts'
 import {Crypto, GovernanceTxBuilder, utils} from 'ontology-ts-sdk'
 import numeral from 'numeral'
-import {varifyPositiveInt} from '../../../../core/utils.js'
+import {varifyPositiveInt} from '../../../../../core/utils.js'
 
 export default {
     name:'AuthorizationMgmtSesameseed',
@@ -264,7 +234,7 @@ export default {
             this.$store.dispatch('fetchPeerUnboundOng', address)
         },
         handleRouteBack() {
-            this.$router.go(-1);
+            this.$router.go(-2);
         },
         newStakeAuthorization() {
             if(this.peer_attrs.maxAuthorize === 0) {
@@ -345,54 +315,9 @@ export default {
         handleCancelAuthorizationCancel() {
             this.cancelVisible = false;
         },
-        redeemRewards() {
-            if(!this.splitFee.amount) {
-                this.$message.warning(this.$t('nodeMgmt.noRewards'))
-                return;
-            }
-            const tx = GovernanceTxBuilder.makeWithdrawFeeTx(
-                new Crypto.Address(this.stakeWallet.address),
-                new Crypto.Address(this.stakeWallet.address),
-                GAS_PRICE,
-                GAS_LIMIT
-            )
-            this.signVisible = true;
-            this.tx = tx;
-        },
         cancelAuthorization() {
             this.cancelVisible = true
             this.tx = '';
-        },
-        redeemOnt() {
-            if(!this.authorizationInfo.withdrawUnfreezePos) {
-                this.$message.warning(this.$t('nodeMgmt.noClaimableOnt'))
-                return;
-            }
-            const claimable = this.authorizationInfo.claimableVal
-            const tx = GovernanceTxBuilder.makeWithdrawTx(
-                new Crypto.Address(this.stakeWallet.address),
-                [this.current_node.pk],
-                [claimable],
-                new Crypto.Address(this.stakeWallet.address),
-                GAS_PRICE,
-                GAS_LIMIT
-            )
-            this.signVisible = true;
-            this.tx = tx;
-        },
-        redeemOng() {
-            if(!this.unboundOng) {
-                this.$message.warning(this.$t('nodeMgmt.noUnboundOng'));
-                return;
-            }
-            const tx = GovernanceTxBuilder.makeWithdrawPeerUnboundOngTx(
-                new Crypto.Address(this.stakeWallet.address),
-                new Crypto.Address(this.stakeWallet.address),
-                GAS_PRICE,
-                GAS_LIMIT
-            )
-            this.signVisible = true;
-            this.tx = tx;
         }
     }
 }

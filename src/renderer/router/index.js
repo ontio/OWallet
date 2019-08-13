@@ -196,6 +196,11 @@ export default new Router({
       component: require('@/components/Node/NodeAuthorize/AuthorizationMgmt').default
     },
     {
+      path: '/node/authorizationMgmtSesameseed',
+      name: 'AuthorizationMgmtSesameseed',
+      component: require('@/components/Node/NodeAuthorize/Sesameseed/AuthorizationMgmtSesameseed').default
+    },
+    {
       path: '/node/newAuthorization',
       name: 'NewAuthorization',
       component: require('@/components/Node/NodeAuthorize/NewAuthorization').default
