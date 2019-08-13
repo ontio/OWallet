@@ -172,7 +172,7 @@ import Breadcrumb from '../../../Breadcrumb'
 import {mapState} from 'vuex'
 import SignSendTx from '../../../Common/SignSendTx'
 import {GAS_PRICE, GAS_LIMIT} from '../../../../../core/consts'
-import {Crypto, GovernanceTxBuilder, utils} from 'ontology-ts-sdk'
+import {Crypto, TransactionBuilder, utils} from 'ontology-ts-sdk'
 import numeral from 'numeral'
 import {varifyPositiveInt} from '../../../../../core/utils.js'
 
@@ -286,7 +286,7 @@ export default {
             }
             const inAuthorization = this.authorizationInfo.consensusPos + this.authorizationInfo.freezePos
                                     + this.authorizationInfo.newPos;
-            if(Number(this.cancelAmount)*500 > inAuthorization) {
+            if(Number(this.cancelAmount) > inAuthorization) {
                 this.validCancelAmount = false;
                 return;
             }
@@ -300,15 +300,35 @@ export default {
             this.cancelVisible = false;
             this.signVisible = true;
             const userAddr = new Crypto.Address(this.stakeWallet.address);
-            const amount = Number(this.cancelAmount) * 500;
-            const tx = GovernanceTxBuilder.makeUnauthorizeForPeerTx(
-                userAddr,
-                [this.current_node.pk],
-                [parseInt(amount)],
-                userAddr,
-                GAS_PRICE,
-                GAS_LIMIT
-            )
+            const amount = Number(this.cancelAmount);
+            const tx = TransactionBuilder.makeTransactionsByJson({
+                action: 'invoke',
+                params: {
+                    login: true,
+                    message: 'Sesameseed Vote',
+                    invokeConfig: {
+                    contractHash: CONTRACT_HASH,
+                    functions: [
+                        {
+                        operation: 'Unvote',
+                        args: [
+                            {
+                            name: 'from_acct',
+                            value: 'Address:' + this.stakeWallet.address
+                            },
+                            {
+                            name: 'amount',
+                            value: this.amount
+                            }
+                        ]
+                        }
+                    ],
+                    gasLimit: GAS_LIMIT,
+                    gasPrice: GAS_PRICE,
+                    payer: this.stakeWallet.address
+                    }
+                }
+            });
             this.tx = tx;
             this.cancelAmount = 0;
         },
