@@ -1,0 +1,1 @@
+export const CONTRACT_HASH = '3298afa0bef16840138c9720a167e8b20b4c526f'

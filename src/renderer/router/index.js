@@ -31,7 +31,7 @@ export default new Router({
       component: require('@/components/Setting').default
     },
     {
-    path: '/Exchange',
+      path: '/Exchange',
       name: 'Exchange',
       component: require('@/components/Exchange').default
     },
@@ -199,6 +199,11 @@ export default new Router({
       path: '/node/newAuthorization',
       name: 'NewAuthorization',
       component: require('@/components/Node/NodeAuthorize/NewAuthorization').default
+    },
+    {
+      path: '/node/newAuthorizationSesameseed',
+      name: 'NewAuthorizationSesameseed',
+      component: require('@/components/Node/NodeAuthorize/Sesameseed/NewAuthorizationSesameseed').default
     },
     {
       path: '/oep4Home',

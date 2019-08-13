@@ -93,6 +93,12 @@ export default {
             tx: ''
         }
     },
+    mounted: function() {
+        // Sesameseed NewAuthorizacion custom page
+        if (this.current_node.address === 'ANRRE8xKwKzuaCeAjP6eZYDnVi7n2x6byE') {
+            this.$router.push({name: 'NewAuthorizationSesameseed'});
+        }
+    },
     computed:{
         ...mapState({
             current_node: state => state.NodeAuthorization.current_node,

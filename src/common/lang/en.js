@@ -637,5 +637,8 @@ exchange: {
   changelly: 'Changelly', 
   cryptonex: 'Cryptonex',
   loading: 'Loading latest pricing information, please wait..'
- }
+ },
+sesameseed: {
+  stakeAmountTip: 'Stake amount for Sesameseed is 1 unit equals 1 ONT'
+}
 }
