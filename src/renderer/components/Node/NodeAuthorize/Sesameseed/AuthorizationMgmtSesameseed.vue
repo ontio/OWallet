@@ -100,24 +100,24 @@
                 <a-button type="primary" class="btn-next new-stake" @click="newStakeAuthorization">{{$t('nodeMgmt.newStakeAuthorization')}}</a-button>
                 <div class="in-authorization">
                     <span class="label font-medium-black">{{$t('nodeMgmt.inAuthorization')}}: </span>
-                    <span class="font-medium">{{authorizationInfo.inAuthorization}} ONT</span>
-                    <a-tooltip placement="top" :title="$t('nodeMgmt.refresh')">
-                        <span class="common-icon refresh-icon" @click="handleRefresh"></span>
-                    </a-tooltip>
-                </div>
-                <div>
-                    <span>{{$t('nodeMgmt.getProfitPart')}}:</span>
-                    <span>{{authorizationInfo.receiveProfitPortion}} ONT</span>
-                </div>
-                <div>
-                    <span>{{$t('nodeMgmt.newStakePart')}}:</span>
-                    <span>{{authorizationInfo.newStakePortion}} ONT</span>
+                    <span class="font-medium">{{ssInfo.votes}} ONT</span>
                 </div>
                 <div class="authorize-tip">
                     <a-icon type="info-circle" />
                     <span class="font-regular tip-font">{{$t('sesameseed.authorizeTip')}}</span>
                 </div>
                 <a-button type="default" class="cancel-btn" @click="cancelAuthorization">{{$t('nodeMgmt.cancelAuthorization')}}</a-button>
+                 <div class="redeem-ont">
+                    <p>
+                        <span class="font-medium-black label">
+                            <a-tooltip placement="right" :title="$t('sesameseed.pendingWithdrawals')">
+                                <a-icon type="info-circle-o" />
+                            </a-tooltip>
+                            {{$t('sesameseed.pendingWithdrawals')}}:
+                        </span>
+                        <span class="font-medium">{{ssInfo.pendingWithdrawals}} ONT</span>
+                    </p>
+                 </div>
             </div>
             <div class="right-half">
                 <p class="font-medium-black label">{{$t('nodeMgmt.rewards')}}</p>
@@ -148,7 +148,7 @@
                 </div>
                 <div class="in-authorization">
                     <span class="label font-medium-black">{{$t('nodeMgmt.inAuthorization')}}: </span>
-                    <span class="font-medium">{{authorizationInfo.inAuthorization}} ONT</span>
+                    <span class="font-medium">{{ssInfo.votes}} ONT</span>
                 </div>
                 <div>
                     <span class="label font-medium-black">{{$t('nodeMgmt.unitToCancel')}}: </span>
@@ -175,6 +175,7 @@ import {GAS_PRICE, GAS_LIMIT} from '../../../../../core/consts'
 import {Crypto, TransactionBuilder, utils} from 'ontology-ts-sdk'
 import numeral from 'numeral'
 import {varifyPositiveInt} from '../../../../../core/utils.js'
+import {CONTRACT_HASH} from './SesameseedVars'
 
 export default {
     name:'AuthorizationMgmtSesameseed',
@@ -198,7 +199,6 @@ export default {
     mounted() {
         //fetch stake info
         // const pk = this.stakeDetail.publicKey
-
         this.refresh();
         this.intervalId = setInterval(()=>{
             this.refresh();            
@@ -215,7 +215,8 @@ export default {
             splitFee: state => state.NodeAuthorization.splitFee,
             authorizationInfo: state => state.NodeAuthorization.authorizationInfo,
             peer_attrs: state => state.NodeAuthorization.peer_attrs,
-            unboundOng: state => state.NodeAuthorization.peerUnboundOng
+            unboundOng: state => state.NodeAuthorization.peerUnboundOng,
+            ssInfo: state => state.NodeAuthorizationSesameseed.sesameseed
         }),
         inAuthorization: {
             get() {
@@ -232,6 +233,7 @@ export default {
             this.$store.dispatch('fetchSplitFee', address)
             this.$store.dispatch('fetchPeerAttributes', pk)
             this.$store.dispatch('fetchPeerUnboundOng', address)
+            this.$store.dispatch('fetchSSPerInfo', address)
         },
         handleRouteBack() {
             this.$router.go(-2);
@@ -256,6 +258,7 @@ export default {
             this.$store.dispatch('fetchAuthorizationInfo', {pk, address})
             this.$store.dispatch('fetchSplitFee', address)
             this.$store.dispatch('fetchPeerAttributes', pk)
+            this.$store.dispatch('fetchSSPerInfo', address)
         },
         handleCancel() {
             this.signVisible = false;
@@ -284,9 +287,7 @@ export default {
                 this.validCancelAmount = false;
                 return;
             }
-            const inAuthorization = this.authorizationInfo.consensusPos + this.authorizationInfo.freezePos
-                                    + this.authorizationInfo.newPos;
-            if(Number(this.cancelAmount) > inAuthorization) {
+            if(Number(this.cancelAmount) > this.ssInfo.votes) {
                 this.validCancelAmount = false;
                 return;
             }
@@ -305,7 +306,7 @@ export default {
                 action: 'invoke',
                 params: {
                     login: true,
-                    message: 'Sesameseed Vote',
+                    message: 'Sesameseed Unvote',
                     invokeConfig: {
                     contractHash: CONTRACT_HASH,
                     functions: [
@@ -329,7 +330,7 @@ export default {
                     }
                 }
             });
-            this.tx = tx;
+            this.tx = tx[0];
             this.cancelAmount = 0;
         },
         handleCancelAuthorizationCancel() {
