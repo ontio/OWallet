@@ -41,7 +41,7 @@ export default {
     changePassSuccess: '修改密码成功',
     changePassSuccessTip: '您已经修改了钱包密码。我们建议您下载并备份钱包的.dat文件。(旧的.dat文件可以被替换或者删除)',
     download: 'Download',
-    balanceInsufficient : '抱歉，您的余额不足',
+    balanceInsufficient: '抱歉，您的余额不足',
     exportIdentity: '导出keystore',
     deleteIdentity: '删除ONT ID',
     savedbFailed: '保存到keystore.db文件失败。请确保已设置keystore.db保存路径后重新尝试。',
@@ -237,7 +237,7 @@ export default {
     pksLte2: '联合支付人数量不能少于2人。',
     invalidPk: '输入的公钥不正确',
     duplicatePks: '联合支付人中不能有重复的公钥',
-    duplicateNames: '联合支付人中不能有重复的名称'    
+    duplicateNames: '联合支付人中不能有重复的名称'
   },
 
   importSharedWallet: {
@@ -326,7 +326,7 @@ export default {
     amount: '数额',
     date: '日期',
     toProcess: '去处理',
-    paxStart: '发起', 
+    paxStart: '发起',
     paxSign: '签名',
     selectCurrentSigner: '选择当前签名钱包: ',
     back: '返回',
@@ -385,7 +385,7 @@ export default {
     swap: '映射',
     walletQrCode: '钱包地址二维码',
     walletAddress: '钱包地址',
-    publicKey :'公钥',
+    publicKey: '公钥',
     redeemCharge: '提取ONG需要支付0.01ONG',
     inputPass: '请输入钱包密码',
     emptyPass: '密码不能为空',
@@ -417,7 +417,7 @@ export default {
   transfer: {
     inputValidAmount: '请输入有效的转账金额。',
     inputValidAddress: '请输入有效的转账地址。',
-    exceedBalance : '转账金额不能超余额',
+    exceedBalance: '转账金额不能超余额',
     ongBalanceNotEnough: '您的ONG余额不足以支付转账和手续费。',
     //Needs translation
     warningTransferAllONG: 'Transferring this amount of ONG means you will not have enough ONG to pay\r\nfor further transaction fees (including claiming unbound ONG). \r\n\r\nContinue?'
@@ -522,7 +522,7 @@ export default {
   },
   redeemInfo: {
     info: '提取ONG',
-    claimableOng:'可提取ONG是您可以提取的ONG的数量，手续费为0.01个ONG。每次钱包中完成一笔交易后，该余额会更新。',
+    claimableOng: '可提取ONG是您可以提取的ONG的数量，手续费为0.01个ONG。每次钱包中完成一笔交易后，该余额会更新。',
     unboundOng: '已解绑的ONG是指尚未添加到您的可提取ONG余额（仅会在您钱包做出一笔ONT交易后更新）中的ONG。当您的地址完成一笔交易后，您可提取的ONG余额将会更新（即将已解绑的ONG数额将添加到您可提取的ONG余额中去。）',
     claimableOngName: '可提取ONG：',
     unboundOngName: '已解绑的ONG：',
@@ -604,7 +604,7 @@ export default {
     activeT1: '下一轮生效',
     activeT2: '下下轮生效',
     changeRewardProportion: '修改节点分配比例',
-    edit:'修改',
+    edit: '修改',
     stakeHistory: '我的质押',
     cancelUnits: '份',
     stakeWalletAddress: '质押钱包地址',
@@ -629,14 +629,18 @@ export default {
   },
   exchange: {
     exchange: 'Exchange',
-    changelly: 'Changelly', 
+    changelly: 'Changelly',
     cryptonex: 'Cryptonex',
     loading: 'Loading latest pricing information, please wait..'
-   },
+  },
+  dapps: {
+    dapps: 'DApps',
+    sesameSeed: '芝麻籽'
+  },
   sesameseed: {
     stakeAmountTip: 'Stake amount for Sesameseed is 1 unit equals 1 ONT',
     authorizeTip: 'If a new stake is canceled, it will add to the “canceled” ONT and be directly deposited in the users account within 24 hours. If authorized ONT from a previous consensus round is canceled it will be added to the “canceled” ONT and be directly deposited in the originating users account within 24 hours of the beginning of the next consensus round if Sesameseed is a candidate node (or one round later if Sesameseed is a consensus node). If a user has both authorized ONT from this consensus round and a previous round and cancels an ONT amount exceeding the amount from this round, they will receive authorized ONT from this consensus round first and the remaining authorized ONT in the next round.',
     rewardTip: 'Sesameseed rewards Ontology Stake Authorizations in SEED for both foundation rewards created as a candidate or consensus node as an OEP-4 token “SEED”. This token is rewarded directly to Staking participants. In addition to node rewards, 100% of ONG unbound while staking is pooled by all stake authorizations and added to the total “Node Reward”, as a result this node reward is also provided in the form of “SEED” Token. Rewards are distributed daily without the need to redeem. Find out more at https://sesameseed.org.',
     pendingWithdrawals: 'Pending canceled stake authorization'
-   }
+  }
 }

@@ -171,7 +171,7 @@ export default {
     mnemonic: 'Mnemonic phrase',
     privateKey: 'Private Key',
     backupWallet: 'Please make a backup of the above information and save the .dat file. If you forget your wallet password, your private key (WIF) will be the only way for you to recover your wallet.',
-    createSuccess:'Create individual wallet successfully.',
+    createSuccess: 'Create individual wallet successfully.',
     createFail: 'Create individual wallet failed. Please try again.',
     download: "Download .dat",
     privateKey64Hex: 'Private key (64 Hex)',
@@ -456,7 +456,7 @@ export default {
     signFailed: 'Sign with ledger failed.'
   },
 
-  ledgerStatus : {
+  ledgerStatus: {
     NOT_FOUND: 'Ledger not open',
     NOT_SUPPORT: 'Ledger not supported',
     NO_DEVICE: 'Please plugin the device and login.',
@@ -475,9 +475,9 @@ export default {
     stake: 'Stake',
     feeTip: 'Stake needs 500 ONG for service fee',
     selectOntid: 'Select ONT ID',
-    selectStakeWallet:'Select stake wallet',  
+    selectStakeWallet: 'Select stake wallet',
     next: 'Next',
-    selectIdentity:'Please select your ONT ID',
+    selectIdentity: 'Please select your ONT ID',
     selectIndividualWallet: 'Please select your individual wallet',
     selectLedgerWallet: 'Please connect your ledger and open ONT app on it.',
     invalidOntid: 'Invalid ONT ID ',
@@ -496,7 +496,7 @@ export default {
     passwordEmpty: 'Password can not be empty',
     search: 'Search'
   },
-  nodeStakeStatus : {
+  nodeStakeStatus: {
     transfering: 'Transfering',
     transfered: 'Transfered',
     transferFailed: 'Transfer Failed',
@@ -631,17 +631,21 @@ Within their 50% share each consensus node will receive their share according to
     redeemInitPosOk: 'Redeem',
     hasClaimableInitPos: 'You have redeemable init pos. Plase redeem this part first.',
     noClaimbleToRefund: 'No redeemable ONT to refund.'
-},
-exchange: {
-  exchange: 'Exchange',
-  changelly: 'Changelly', 
-  cryptonex: 'Cryptonex',
-  loading: 'Loading latest pricing information, please wait..'
- },
-sesameseed: {
-  stakeAmountTip: 'Stake amount for Sesameseed is 1 unit equals 1 ONT',
-  authorizeTip: 'If a new stake is canceled, it will add to the “canceled” ONT and be directly deposited in the users account within 24 hours. If authorized ONT from a previous consensus round is canceled it will be added to the “canceled” ONT and be directly deposited in the originating users account within 24 hours of the beginning of the next consensus round if Sesameseed is a candidate node (or one round later if Sesameseed is a consensus node). If a user has both authorized ONT from this consensus round and a previous round and cancels an ONT amount exceeding the amount from this round, they will receive authorized ONT from this consensus round first and the remaining authorized ONT in the next round.',
-  rewardTip: 'Sesameseed rewards Ontology Stake Authorizations in SEED for both foundation rewards created as a candidate or consensus node as an OEP-4 token “SEED”. This token is rewarded directly to Staking participants. In addition to node rewards, 100% of ONG unbound while staking is pooled by all stake authorizations and added to the total “Node Reward”, as a result this node reward is also provided in the form of “SEED” Token. Rewards are distributed daily without the need to redeem. Find out more at https://sesameseed.org.',
-  pendingWithdrawals: 'Pending canceled stake authorization'
- }
+  },
+  exchange: {
+    exchange: 'Exchange',
+    changelly: 'Changelly',
+    cryptonex: 'Cryptonex',
+    loading: 'Loading latest pricing information, please wait..'
+  },
+  dapps: {
+    dapps: 'DApps',
+    sesameSeed: 'Sesame Seed'
+  },
+  sesameseed: {
+    stakeAmountTip: 'Stake amount for Sesameseed is 1 unit equals 1 ONT',
+    authorizeTip: 'If a new stake is canceled, it will add to the “canceled” ONT and be directly deposited in the users account within 24 hours. If authorized ONT from a previous consensus round is canceled it will be added to the “canceled” ONT and be directly deposited in the originating users account within 24 hours of the beginning of the next consensus round if Sesameseed is a candidate node (or one round later if Sesameseed is a consensus node). If a user has both authorized ONT from this consensus round and a previous round and cancels an ONT amount exceeding the amount from this round, they will receive authorized ONT from this consensus round first and the remaining authorized ONT in the next round.',
+    rewardTip: 'Sesameseed rewards Ontology Stake Authorizations in SEED for both foundation rewards created as a candidate or consensus node as an OEP-4 token “SEED”. This token is rewarded directly to Staking participants. In addition to node rewards, 100% of ONG unbound while staking is pooled by all stake authorizations and added to the total “Node Reward”, as a result this node reward is also provided in the form of “SEED” Token. Rewards are distributed daily without the need to redeem. Find out more at https://sesameseed.org.',
+    pendingWithdrawals: 'Pending canceled stake authorization'
+  }
 }
