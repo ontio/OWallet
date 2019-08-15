@@ -293,7 +293,6 @@ export default {
                 action: 'invoke',
                 params: {
                     login: true,
-                    message: 'Sesameseed Unvote',
                     invokeConfig: {
                     contractHash: CONTRACT_HASH,
                     functions: [
@@ -306,7 +305,7 @@ export default {
                             },
                             {
                             name: 'amount',
-                            value: this.amount
+                            value: amount
                             }
                         ]
                         }
