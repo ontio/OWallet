@@ -171,7 +171,7 @@ export default {
     mnemonic: 'Mnemonic phrase',
     privateKey: 'Private Key',
     backupWallet: 'Please make a backup of the above information and save the .dat file. If you forget your wallet password, your private key (WIF) will be the only way for you to recover your wallet.',
-    createSuccess:'Create individual wallet successfully.',
+    createSuccess: 'Create individual wallet successfully.',
     createFail: 'Create individual wallet failed. Please try again.',
     download: "Download .dat",
     privateKey64Hex: 'Private key (64 Hex)',
@@ -456,7 +456,7 @@ export default {
     signFailed: 'Sign with ledger failed.'
   },
 
-  ledgerStatus : {
+  ledgerStatus: {
     NOT_FOUND: 'Ledger not open',
     NOT_SUPPORT: 'Ledger not supported',
     NO_DEVICE: 'Please plugin the device and login.',
@@ -475,9 +475,9 @@ export default {
     stake: 'Stake',
     feeTip: 'Stake needs 500 ONG for service fee',
     selectOntid: 'Select ONT ID',
-    selectStakeWallet:'Select stake wallet',  
+    selectStakeWallet: 'Select stake wallet',
     next: 'Next',
-    selectIdentity:'Please select your ONT ID',
+    selectIdentity: 'Please select your ONT ID',
     selectIndividualWallet: 'Please select your individual wallet',
     selectLedgerWallet: 'Please connect your ledger and open ONT app on it.',
     invalidOntid: 'Invalid ONT ID ',
@@ -496,7 +496,7 @@ export default {
     passwordEmpty: 'Password can not be empty',
     search: 'Search'
   },
-  nodeStakeStatus : {
+  nodeStakeStatus: {
     transfering: 'Transfering',
     transfered: 'Transfered',
     transferFailed: 'Transfer Failed',
@@ -631,11 +631,15 @@ Within their 50% share each consensus node will receive their share according to
     redeemInitPosOk: 'Redeem',
     hasClaimableInitPos: 'You have redeemable init pos. Plase redeem this part first.',
     noClaimbleToRefund: 'No redeemable ONT to refund.'
-},
-exchange: {
-  exchange: 'Exchange',
-  changelly: 'Changelly', 
-  cryptonex: 'Cryptonex',
-  loading: 'Loading latest pricing information, please wait..'
- }
+  },
+  exchange: {
+    exchange: 'Exchange',
+    changelly: 'Changelly',
+    cryptonex: 'Cryptonex',
+    loading: 'Loading latest pricing information, please wait..'
+  },
+  dapps: {
+      dapps: 'DApps',
+      sesameSeed: 'Sesame Seed'
+  }
 }
