@@ -119,22 +119,9 @@
                     </p>
                  </div>
             </div>
-            <div class="right-half">
-                <p class="font-medium-black label">{{$t('nodeMgmt.rewards')}}</p>
-                <p>
-                    <span class="font-medium-black label">
-                        <a-tooltip placement="right" :title="$t('nodeMgmt.profitONG')">
-                                <a-icon type="info-circle-o" />
-                            </a-tooltip>
-                        {{$t('nodeMgmt.profit')}}: 
-                    </span>
-                    <span class="font-medium">{{splitFee.amount}} SEED</span>
-                </p>
-                <p class="authorize-tip">
-                   <a-icon type="info-circle" />
-                   <span class="font-regular tip-font">{{$t('sesameseed.rewardTip')}}</span>
-                </p>
-            </div>
+            <!-- <div class="right-half">
+            
+            </div> -->
         </div>
         <a-modal 
             :title="$t('nodeMgmt.cancelAuthorization')"
