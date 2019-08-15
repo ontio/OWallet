@@ -31,9 +31,9 @@ export default new Router({
       component: require('@/components/Setting').default
     },
     {
-    path: '/Exchange',
-      name: 'Exchange',
-      component: require('@/components/Exchange').default
+    path: '/dapps',
+      name: 'Dapps',
+      component: require('@/components/Dapps').default
     },
     {
       path: '*',

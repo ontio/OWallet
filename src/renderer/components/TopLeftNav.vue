@@ -29,9 +29,9 @@
           </a-tooltip>
       </router-link>
       
-      <router-link :to="{name:'Exchange'}" active-class="nav-exchange-active">
-          <a-tooltip placement="right" :title="$t('exchange.exchange')">
-              <div class="nav-exchange"></div>
+      <router-link :to="{name:'Dapps'}" active-class="nav-dapps-active">
+          <a-tooltip placement="right" :title="$t('dapps.dapps')">
+              <div class="nav-dapps"></div>
           </a-tooltip>
         </router-link>
 
@@ -205,20 +205,22 @@ export default {
   background: url("../assets/selectwallet.png") center center;
 }
 
-.nav-exchange {
+.nav-dapps {
   width: 24px;
   height: 24px;
   margin: 67px auto;
-  background: url("../assets/jiaoyi-unselect.png") center center;
-  background-size: cover;
+  background: url("../assets/dapps.png") center center;
+  background-size: contain;
   cursor: pointer;
 }
 
-.nav-exchange-active div {
-  background: url("../assets/jiaoyi-select.png") center center;
+.nav-dapps-active div {
+  background: url("../assets/dapps-hover.png") center center;
+  background-size: contain;
 }
 
-.nav-exchange:hover {
-  background: url("../assets/jiaoyi-select.png") center center;
+.nav-dapps:hover {
+  background: url("../assets/dapps-hover.png") center center;
+  background-size: contain;
 }
 </style>
