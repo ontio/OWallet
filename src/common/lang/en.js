@@ -640,7 +640,8 @@ Within their 50% share each consensus node will receive their share according to
   },
   dapps: {
     dapps: 'DApps',
-    sesameSeed: 'Sesame Seed'
+    sesameSeed: 'Sesameseed',
+    sesameseedDesc: 'Sesameseed voting management'
   },
   sesameseed: {
     stakeAmountTip: 'Stake amount for Sesameseed is 1 unit equals 1 ONT',

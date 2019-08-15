@@ -635,7 +635,8 @@ export default {
   },
   dapps: {
     dapps: 'DApps',
-    sesameSeed: '芝麻籽'
+    sesameSeed: '芝麻籽',
+    sesameseedDesc: 'Sesameseed voting management'
   },
   sesameseed: {
     stakeAmountTip: 'Stake amount for Sesameseed is 1 unit equals 1 ONT',

@@ -77,7 +77,6 @@ import SignSendTx from '../../Common/SignSendTx'
 import {mapState} from 'vuex'
 import {GAS_LIMIT, GAS_PRICE} from '../../../../core/consts'
 import {Crypto, GovernanceTxBuilder, utils} from 'ontology-ts-sdk'
-import { SESAMESEED_NODE_ADDRESS } from './Sesameseed/SesameseedVars'
 
 export default {
     name: 'NewAuthorization',
@@ -92,12 +91,6 @@ export default {
             validInput: true,
             signVisible: false,
             tx: ''
-        }
-    },
-    mounted: function() {
-        // Redirect to Sesameseed NewAuthorizacion custom page
-        if (this.current_node.address === SESAMESEED_NODE_ADDRESS) {
-            this.$router.push({name: 'NewAuthorizationSesameseed'});
         }
     },
     computed:{

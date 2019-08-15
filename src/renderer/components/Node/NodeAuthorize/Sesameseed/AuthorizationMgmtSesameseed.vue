@@ -87,7 +87,7 @@
             <div class="left-half">
                 <div>
                     <span class="font-medium-black label">{{$t('nodeMgmt.nodeName')}}: </span>
-                    <span class="font-medium">{{current_node.name}}</span>
+                    <span class="font-medium">Sesameseed</span>
                 </div>
                 <div>
                     <span class="label font-medium-black">{{$t('nodeMgmt.walletAddress')}}: </span>
