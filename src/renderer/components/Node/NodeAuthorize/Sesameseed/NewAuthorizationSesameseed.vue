@@ -85,7 +85,7 @@ import SignSendTx from "../../../Common/SignSendTx";
 import { mapState } from "vuex";
 import { GAS_LIMIT, GAS_PRICE } from "../../../../../core/consts";
 import { Crypto, TransactionBuilder, utils } from "ontology-ts-sdk";
-import { CONTRACT_HASH } from './SesameseedVars'
+import { CONTRACT_HASH } from "./SesameseedVars";
 
 export default {
   name: "NewAuthorizationSesameseed",
@@ -111,7 +111,7 @@ export default {
   },
   methods: {
     handleRouteBack() {
-      this.$router.go(-2);
+      this.$router.go(-1);
     },
     handleChange() {
       if (!this.units || !varifyPositiveInt(this.units)) {
@@ -158,32 +158,32 @@ export default {
       }
       const userAddr = new Crypto.Address(this.stakeWallet.address);
       const tx = TransactionBuilder.makeTransactionsByJson({
-         action: 'invoke',
-          params: {
-            login: true,
-            message: 'Sesameseed Vote',
-            invokeConfig: {
-              contractHash: CONTRACT_HASH,
-              functions: [
-                {
-                  operation: 'Vote',
-                  args: [
-                    {
-                      name: 'from_acct',
-                      value: 'Address:' + this.stakeWallet.address
-                    },
-                    {
-                      name: 'amount',
-                      value: this.amount
-                    }
-                  ]
-                }
-              ],
-              gasLimit: GAS_LIMIT,
-              gasPrice: GAS_PRICE,
-              payer: this.stakeWallet.address
-            }
+        action: "invoke",
+        params: {
+          login: true,
+          message: "Sesameseed Vote",
+          invokeConfig: {
+            contractHash: CONTRACT_HASH,
+            functions: [
+              {
+                operation: "Vote",
+                args: [
+                  {
+                    name: "from_acct",
+                    value: "Address:" + this.stakeWallet.address
+                  },
+                  {
+                    name: "amount",
+                    value: this.amount
+                  }
+                ]
+              }
+            ],
+            gasLimit: GAS_LIMIT,
+            gasPrice: GAS_PRICE,
+            payer: this.stakeWallet.address
           }
+        }
       });
       this.tx = tx[0];
       this.signVisible = true;

@@ -237,7 +237,7 @@ export default {
       this.$store.dispatch("fetchSSPerInfo", address);
     },
     handleRouteBack() {
-      this.$router.go(-2);
+      this.$router.go(-1);
     },
     newStakeAuthorization() {
       this.$router.push({ name: "NewAuthorizationSesameseed" });
