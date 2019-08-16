@@ -635,6 +635,8 @@ export default {
   },
   dapps: {
       dapps: 'DApps',
-      sesameSeed: '芝麻籽'
+      sesameSeed: '芝麻籽',
+      notification: '注意',
+      userPolicy: '您将跳转至第三方dApp页面，在第三方dApp上的使用行为将适用该第三方dApp的《用户协议》和《隐私政策》，由该第三方dApp直接并单独向您承担责任'
   }
 }

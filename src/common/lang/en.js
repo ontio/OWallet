@@ -640,6 +640,8 @@ Within their 50% share each consensus node will receive their share according to
   },
   dapps: {
       dapps: 'DApps',
-      sesameSeed: 'Sesame Seed'
+      sesameSeed: 'Sesame Seed',
+      notification: 'Notification',
+      userPolicy: 'You will be redirected to the third party dApp. Use of the third party dApp will be subject to their User Agreement and Privacy Policy. You will be liable to the third party dApp only.'
   }
 }
