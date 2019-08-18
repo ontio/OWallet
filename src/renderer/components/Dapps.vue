@@ -107,14 +107,14 @@ export default {
         };
     },
     mounted: function() {
-        /* this.$store.dispatch("showLoadingModals");
-    setTimeout(() => {
-      this.$store.dispatch("hideLoadingModals");
-    }, 8000); */
-        let that = this;
-        setInterval(() => {
-            that.getImageData();
-        }, this.interval);
+        this.$confirm({
+            title: this.$t('dapps.notification'),
+            content: this.$t('dapps.userPolicy'),
+            onOk() {},
+            onCancel: () => {
+                this.$router.back();
+            }
+        })
     },
     computed: {},
     beforeDestroy() {
