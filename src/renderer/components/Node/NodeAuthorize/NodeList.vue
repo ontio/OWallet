@@ -216,7 +216,10 @@ export default {
                 pageNum: this.pagination.current - 1
             }).then(res => {
                 this.requesting = false;
-                this.pagination.total = res;
+                const net = localStorage.getItem('net')
+                if(net !== 'TEST_NET') {
+                    this.pagination.total = res;
+                }
             })
         },
         showProportionTip() {
