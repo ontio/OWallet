@@ -18,10 +18,10 @@
           <div class="div-create-wallet" :class="[viewBtn?'div-create-wallet-bg-color':'']"
                v-on:mouseenter="viewAllBtn(true)" v-on:mouseleave="viewAllBtn(false)">
             <div class="div-create" v-show="viewBtn">
-              <router-link class="btn btn-default btn-create" to="CreateIdentity">{{$t('identitys.createIdentity')}}</router-link>
+              <router-link class="btn btn-default btn-create" :to="{name: 'CreateIdentity'}">{{$t('identitys.createIdentity')}}</router-link>
             </div>
             <div class="div-join" v-show="viewBtn">
-              <router-link class="btn btn-default btn-create" to="ImportIdentity">{{$t('identitys.importIdentity')}}</router-link>
+              <router-link class="btn btn-default btn-create" :to="{name: 'ImportIdentity'}">{{$t('identitys.importIdentity')}}</router-link>
             </div>
             <img class="img-wallet-create" v-show="!viewBtn" src="./../assets/create-wallet.png" alt="">
           </div>

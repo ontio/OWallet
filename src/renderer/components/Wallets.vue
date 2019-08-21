@@ -44,10 +44,10 @@
           <div class="div-create-wallet" :class="[viewBtn?'div-create-wallet-bg-color':'']"
                v-on:mouseenter="viewAllBtn(true)" v-on:mouseleave="viewAllBtn(false)">
             <div class="div-create" v-show="viewBtn">
-              <router-link class="btn btn-default btn-create" to="CreateJsonWallet">{{$t('wallets.createCommonWallet')}}</router-link>
+              <router-link class="btn btn-default btn-create" :to="{name: 'CreateJsonWallet'}">{{$t('wallets.createCommonWallet')}}</router-link>
             </div>
             <div class="div-join" v-show="viewBtn">
-              <router-link class="btn btn-default btn-create" to="ImportJsonWallet">{{$t('wallets.importCommonWallet')}}</router-link>
+              <router-link class="btn btn-default btn-create" :to="{name: 'ImportJsonWallet'}">{{$t('wallets.importCommonWallet')}}</router-link>
             </div>
             <img class="img-wallet-create" v-show="!viewBtn" src="./../assets/create-wallet.png" alt="">
           </div>
@@ -63,10 +63,10 @@
           <div class="div-create-wallet" :class="[viewBtn?'div-create-wallet-bg-color':'']"
                v-on:mouseenter="viewAllBtn(true)" v-on:mouseleave="viewAllBtn(false)">
             <div class="div-create" v-show="viewBtn">
-              <router-link class="btn btn-default btn-create" to="CreateSharedWallet">{{$t('wallets.createSharedWallet')}}</router-link>
+              <router-link class="btn btn-default btn-create" :to="{name: 'CreateSharedWallet'}">{{$t('wallets.createSharedWallet')}}</router-link>
             </div>
             <div class="div-join" v-show="viewBtn">
-              <router-link class="btn btn-default btn-create" to="ImportSharedWallet">{{$t('wallets.joinSharedWallet')}}</router-link>
+              <router-link class="btn btn-default btn-create" :to="{name: 'ImportSharedWallet'}">{{$t('wallets.joinSharedWallet')}}</router-link>
             </div>
             <img class="img-wallet-create" v-show="!viewBtn" src="./../assets/create-wallet.png" alt="">
           </div>
@@ -85,7 +85,7 @@
           <div class="div-create-wallet" :class="[viewBtn?'div-create-wallet-bg-color':'']"
                v-on:mouseenter="viewAllBtn(true)" v-on:mouseleave="viewAllBtn(false)">
             <div class="div-join div-ledger-join" v-show="viewBtn">
-              <router-link class="btn btn-default btn-create" to="ImportLedgerWallet">{{$t('wallets.importLedgerWallet')}}</router-link>
+              <router-link class="btn btn-default btn-create" :to="{name: 'ImportLedgerWallet'}">{{$t('wallets.importLedgerWallet')}}</router-link>
             </div>
             <img class="img-wallet-create" v-show="!viewBtn" src="./../assets/create-wallet.png" alt="">
           </div>
