@@ -4,8 +4,7 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 export default new Router({
-  routes: [
-    {
+  routes: [{
       path: '/Dashboard',
       name: 'Dashboard',
       component: require('@/components/Dashboard').default
@@ -36,46 +35,37 @@ export default new Router({
       component: require('@/components/Dapps').default
     },
     {
-      path: '*',
-      redirect: '/'
-    },
-    {
-      path: '/',
-      name: 'Home',
-      component: require('@/components/Home').default
-    },
-    {
-      path: '/createIdentity',
+      path: '/identitys/createIdentity',
       name: 'CreateIdentity',
       component: require('@/components/Identitys/CreateIdentity').default
     },
     {
-      path: '/importIdentity',
+      path: '/identitys/importIdentity',
       name: 'ImportIdentity',
       component: require('@/components/Identitys/ImportIdentity').default
     },
     {
-      path: '/createJsonWallet',
+      path: '/Wallets/createJsonWallet',
       name: 'CreateJsonWallet',
       component: require('@/components/JsonWallet/CreateJsonWallet').default
     },
     {
-      path: '/importJsonWallet',
+      path: '/Wallets/importJsonWallet',
       name: 'ImportJsonWallet',
       component: require('@/components/JsonWallet/ImportJsonWallet').default
     },
     {
-      path: '/importLedgerWallet',
+      path: '/Wallets/importLedgerWallet',
       name: 'ImportLedgerWallet',
       component: require('@/components/LedgerWallet/ImportLedgerWallet').default
     },
     {
-      path: '/createSharedWallet',
+      path: '/Wallets/createSharedWallet',
       name: 'CreateSharedWallet',
       component: require('@/components/SharedWallet/CreateSharedWallet').default
     },
     {
-      path: '/importSharedWallet',
+      path: '/Wallets/importSharedWallet',
       name: 'ImportSharedWallet',
       component: require('@/components/SharedWallet/ImportSharedWallet').default
     },
@@ -83,8 +73,7 @@ export default new Router({
       path: '/sharedWallet',
       name: 'SharedWalletDetail',
       component: require('@/components/SharedWallet/SharedWalletDetail').default,
-      children: [
-        {
+      children: [{
           path: 'home',
           name: 'SHaredWalletHome',
           component: require('@/components/SharedWallet/SharedWalletHome').default,
@@ -191,7 +180,7 @@ export default new Router({
       component: require('@/components/Node/NodeAuthorize/AuthorizeLogin').default
     },
     {
-      path: '/node/authorizeLoginSesameseed',
+      path: '/dapps/authorizeLoginSesameseed',
       name: 'AuthorizeLoginSesameseed',
       component: require('@/components/Node/NodeAuthorize/Sesameseed/AuthorizeLoginSesameseed').default
     },
@@ -201,7 +190,7 @@ export default new Router({
       component: require('@/components/Node/NodeAuthorize/AuthorizationMgmt').default
     },
     {
-      path: '/node/authorizationMgmtSesameseed',
+      path: '/dapps/authorizationMgmtSesameseed',
       name: 'AuthorizationMgmtSesameseed',
       component: require('@/components/Node/NodeAuthorize/Sesameseed/AuthorizationMgmtSesameseed').default
     },
@@ -211,7 +200,7 @@ export default new Router({
       component: require('@/components/Node/NodeAuthorize/NewAuthorization').default
     },
     {
-      path: '/node/newAuthorizationSesameseed',
+      path: '/dapps/newAuthorizationSesameseed',
       name: 'NewAuthorizationSesameseed',
       component: require('@/components/Node/NodeAuthorize/Sesameseed/NewAuthorizationSesameseed').default
     },
@@ -219,6 +208,15 @@ export default new Router({
       path: '/oep4Home',
       name: 'Oep4Home',
       component: require('@/components/Common/Oep4Home').default
+    },
+    {
+      path: '*',
+      redirect: '/'
+    },
+    {
+      path: '/',
+      name: 'Home',
+      component: require('@/components/Home').default
     },
   ]
 })

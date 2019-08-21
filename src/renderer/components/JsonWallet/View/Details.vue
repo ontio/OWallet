@@ -77,7 +77,7 @@
 
             <div>
               <a-input type="password" class="input change-password"
-                      v-validate="{required: true , min:6, is:newPassword}" :data-vv-as="$t('newPasswordConfirmation')" name="reNewPassword"
+                      v-validate="{required: true , min:6, is:newPassword}" :data-vv-as="$t('FormField.newPasswordConfirmation')" name="reNewPassword"
                       v-model="reNewPassword" :placeholder="$t('wallets.reNewPassword')"></a-input>
               <span class="v-validate-span-errors" v-show="errors.has('reNewPassword')">{{ errors.first('reNewPassword') }}</span> 
             </div>
