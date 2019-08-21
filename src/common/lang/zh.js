@@ -634,9 +634,16 @@ export default {
     loading: 'Loading latest pricing information, please wait..'
   },
   dapps: {
-      dapps: 'DApps',
-      sesameSeed: '芝麻籽',
-      notification: '注意',
-      userPolicy: '您将跳转至第三方dApp页面，在第三方dApp上的使用行为将适用该第三方dApp的《用户协议》和《隐私政策》，由该第三方dApp直接并单独向您承担责任'
+    dapps: 'DApps',
+    sesameSeed: '芝麻籽',
+    sesameseedDesc: 'Sesameseed voting management',
+    notification: '注意',
+    userPolicy: '您将跳转至第三方dApp页面，在第三方dApp上的使用行为将适用该第三方dApp的《用户协议》和《隐私政策》，由该第三方dApp直接并单独向您承担责任'
+  },
+  sesameseed: {
+    stakeAmountTip: 'Stake amount for Sesameseed is 1 unit equals 1 ONT',
+    authorizeTip: 'If a new stake is canceled, it will add to the “canceled” ONT and be directly deposited in the users account within 24 hours. If authorized ONT from a previous consensus round is canceled it will be added to the “canceled” ONT and be directly deposited in the originating users account within 24 hours of the beginning of the next consensus round if Sesameseed is a candidate node (or one round later if Sesameseed is a consensus node). If a user has both authorized ONT from this consensus round and a previous round and cancels an ONT amount exceeding the amount from this round, they will receive authorized ONT from this consensus round first and the remaining authorized ONT in the next round.',
+    rewardTip: 'Sesameseed rewards Ontology Stake Authorizations in SEED for both foundation rewards created as a candidate or consensus node as an OEP-4 token “SEED”. This token is rewarded directly to Staking participants. In addition to node rewards, 100% of ONG unbound while staking is pooled by all stake authorizations and added to the total “Node Reward”, as a result this node reward is also provided in the form of “SEED” Token. Rewards are distributed daily without the need to redeem. Find out more at https://sesameseed.org.',
+    pendingWithdrawals: 'Pending canceled stake authorization'
   }
 }

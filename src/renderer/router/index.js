@@ -31,7 +31,7 @@ export default new Router({
       component: require('@/components/Setting').default
     },
     {
-    path: '/dapps',
+      path: '/dapps',
       name: 'Dapps',
       component: require('@/components/Dapps').default
     },
@@ -191,14 +191,29 @@ export default new Router({
       component: require('@/components/Node/NodeAuthorize/AuthorizeLogin').default
     },
     {
+      path: '/node/authorizeLoginSesameseed',
+      name: 'AuthorizeLoginSesameseed',
+      component: require('@/components/Node/NodeAuthorize/Sesameseed/AuthorizeLoginSesameseed').default
+    },
+    {
       path: '/node/authorizationMgmt',
       name: 'AuthorizationMgmt',
       component: require('@/components/Node/NodeAuthorize/AuthorizationMgmt').default
     },
     {
+      path: '/node/authorizationMgmtSesameseed',
+      name: 'AuthorizationMgmtSesameseed',
+      component: require('@/components/Node/NodeAuthorize/Sesameseed/AuthorizationMgmtSesameseed').default
+    },
+    {
       path: '/node/newAuthorization',
       name: 'NewAuthorization',
       component: require('@/components/Node/NodeAuthorize/NewAuthorization').default
+    },
+    {
+      path: '/node/newAuthorizationSesameseed',
+      name: 'NewAuthorizationSesameseed',
+      component: require('@/components/Node/NodeAuthorize/Sesameseed/NewAuthorizationSesameseed').default
     },
     {
       path: '/oep4Home',

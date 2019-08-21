@@ -68,12 +68,15 @@
                 </div>
             </a-col>
             <a-col :md="8" :lg="8" :xl="6">
-                <div  class="dapp-item">
+                <div
+                    class="dapp-item"
+                    @click="handleDappSesameseed"
+                >
                     <div class="dapp-title">
-                        <!-- <img :src="require('../assets/changelly.png')" alt /> -->
+                        <img :src="require('../assets/sesameseed.png')" alt />
                         <span>{{$t('dapps.sesameSeed')}}</span>
                     </div>
-                    <p class="dapp-content">{{$t('dapps.sesameSeed')}}</p>
+                    <p class="dapp-content">{{$t('dapps.sesameseedDesc')}}</p>
                 </div>
             </a-col>
         </a-row>
@@ -134,6 +137,9 @@ export default {
             // this.$router.push({ name: "Cryptonex" });
             const cryptonexURL = "https://wallet.cryptonex.org/member/sign-in";
             open(cryptonexURL);
+        },
+        handleDappSesameseed() {
+            this.$router.push({name: 'AuthorizeLoginSesameseed'});
         },
         formatPrice(value) {
             if (isNumber(value)) {
