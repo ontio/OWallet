@@ -20,13 +20,10 @@ const mutations = {
 const actions = {
     async fetchSSPerInfo({ commit }, address) {
         try {
-            const baseUrl = 'https://dappnode1.ont.io:10334/api/v1/storage/a63c33d2209854feafbf40685a33d4846ee82556/'
+            const baseUrl = 'https://api.sesameseed.org/voting/v1/address/'
 
-            const hexAddress = utils.str2hexstr(address)
-            const pendingHexAddress = utils.str2hexstr('1' + address)
-
-            const pendingWithdrawalsPromise = axios.get(baseUrl + pendingHexAddress)
-            const votesPromise = axios.get(baseUrl + hexAddress)
+            const pendingWithdrawalsPromise = axios.get(baseUrl + 'unstaked/' + address)
+            const votesPromise = axios.get(baseUrl + 'staked/' + address)
 
             const [pendingWithdrawalsResponse, votesResponse] = await Promise.all([pendingWithdrawalsPromise, votesPromise])
 
@@ -35,16 +32,12 @@ const actions = {
 
             if (pendingWithdrawalsResponse.status === 200 && pendingWithdrawalsResponse.data) {
                 const resultPending = pendingWithdrawalsResponse.data
-                const pendingWithdrawalsHex = resultPending.Result ? resultPending.Result : 0
-                const reversedHex = pendingWithdrawalsHex.toString().length > 2 ? utils.reverseHex(pendingWithdrawalsHex) : pendingWithdrawalsHex
-                pendingWithdrawals = parseInt(reversedHex, 16)
+                pendingWithdrawals = resultPending.value ? resultPending.value : 0
             }
 
             if (votesResponse.status === 200 && votesResponse.data) {
                 const resultVotes = votesResponse.data
-                const votesHex = resultVotes.Result ? resultVotes.Result : 0
-                const reversedHex = votesHex.toString().length > 2 ? utils.reverseHex(votesHex) : votesHex
-                votes = parseInt(reversedHex, 16)
+                votes = resultVotes.value ? resultVotes.value : 0
             }
 
             commit('UPDATE_CURRENT_SS_PEER', { votes, pendingWithdrawals })
