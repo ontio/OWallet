@@ -99,7 +99,7 @@
                 </a-tooltip>
                 {{text}}
             </a>
-            <div slot="action" slot-scope="text, record" class="detail-link" v-if="record.maxAuthorize>0">
+            <div slot="action" slot-scope="text, record" class="detail-link" v-if="record.maxAuthorize>0 && record.process !== '100.00%'">
                 <a-icon type="arrow-right" @click="handleAuthorizeLogin(record)" v-if="record.maxAuthorize>0"/>
             </div>
 
