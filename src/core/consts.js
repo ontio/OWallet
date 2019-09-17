@@ -64,6 +64,10 @@ export const SWAP_ADDRESS = 'AFmseVrdL9f9oyCzZefL9tG6UbvhPbdYzM'
 
 export const NODE_DETAIL = 'https://explorer.ont.io/nodes/detail/'
 export const NODE_NAME_LIST = 'https://ont.io/api/v1/candidate/info/All'
+export const OFF_CHAIN_NODES = {
+    TEST_NET: 'https://polarisexplorer.ont.io/v2/nodes/off-chain-infos',
+    MAIN_NET: 'https://explorer.ont.io/v2/nodes/off-chain-infos'
+}
 
 export const PAX_API = {
   Host: 'http://18.138.83.180:20800',

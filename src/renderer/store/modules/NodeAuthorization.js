@@ -1,5 +1,5 @@
 import { getNodeUrl} from '../../../core/utils'
-import {NODE_DETAIL, NODE_NAME_LIST} from '../../../core/consts'
+import {NODE_DETAIL, NODE_NAME_LIST, OFF_CHAIN_NODES} from '../../../core/consts'
 import numeral from 'numeral'
 import { Crypto, RestClient, utils, GovernanceTxBuilder} from 'ontology-ts-sdk'
 import {BigNumber} from 'bignumber.js'
@@ -245,13 +245,14 @@ const actions = {
     async searchStakeHistory({commit, dispatch, state}, {address}) {
         const url = getNodeUrl();
         const list = []
-        if (state.sortedNodeList.length === 0) {
-          await dispatch('fetchAllSortedNodeList')
-        }
+        const net = localStorage.getItem('net')
+        const off_chain_nodes_url = OFF_CHAIN_NODES[net];
         const userAddr = new Crypto.Address(address);
         try {
-            const infoTemp = await Promise.all(state.sortedNodeList.map(item => {
-                return GovernanceTxBuilder.getAuthorizeInfo(item.peerPubkey, userAddr, url)
+            const res = await axios.get(off_chain_nodes_url);
+            const nodes = res.data.result.filter(node => node.public_key.indexOf('00aaaaaaaaa') < 0); //00aaaaaaaaa开头是无效的公钥
+            const infoTemp = await Promise.all(nodes.map(item => {
+                return GovernanceTxBuilder.getAuthorizeInfo(item.public_key, userAddr, url)
             }))
             console.log(infoTemp)
             infoTemp.forEach(item => {
