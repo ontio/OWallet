@@ -23,7 +23,9 @@
       '$route': 'hideLoadingPage'
     },
     created() {
-      
+      if(!localStorage.getItem('net')) { // initialize the network as MAIN_NET
+          localStorage.setItem('net', 'MAIN_NET');
+      }
     },
     methods: {
       hideLoadingPage() {
