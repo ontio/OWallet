@@ -2,7 +2,7 @@
   "name": "owallet",
   "productName": "OWallet",
   "homepage": "http://ont.io",
-  "version": "v0.9.17",
+  "version": "v0.9.18",
   "author": "Ontology Foundation Ltd. <devops@ont.io>",
   "description": "OWallet is a comprehensive Ontology desktop wallet",
   "license": "Apache-2.0",
