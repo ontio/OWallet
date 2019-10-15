@@ -149,7 +149,7 @@ export default {
             } 
             if(this.asset === 'ONT' && Number(this.amount) > Number(this.balance.ont) 
              || this.asset === 'ONG' && Number(this.amount) > Number(this.balance.ong)
-             || Number(this.amount) > Number(this.selectedOep4.balance)) {
+             || this.asset !== 'ONT' && this.asset !== 'ONG' && Number(this.amount) > Number(this.selectedOep4.balance)) {
                  this.validAmount = false;
                  this.$message.error(this.$t('transfer.exceedBalance'))
                  return;
