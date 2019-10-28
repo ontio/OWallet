@@ -403,7 +403,7 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
               }              
               
             }
-            this.completedTx = completed;
+            this.completedTx = completed.slice(0,10);
             return completed; // fetch tx history succeed
         } catch(err) {
           console.log(err);
