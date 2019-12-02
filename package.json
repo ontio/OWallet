@@ -111,7 +111,7 @@
     "vue-router": "^2.5.3",
     "vuedraggable": "^2.16.0",
     "vuex": "^2.3.1",
-    "yarn": "^1.13.0"
+    "yarn": "^1.17.3"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
