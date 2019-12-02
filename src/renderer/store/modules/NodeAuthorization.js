@@ -50,6 +50,18 @@ async function matchNodeName(list) {
     } 
 }
 
+async function fetchRoundBlocks() {
+    const net = localStorage.getItem('net');
+    let url = net === 'TEST_NET' ? 'http://52.221.214.196:8090/v2/nodes/max-staking-change-count'
+        : 'http://18.136.216.3:8090/v2/nodes/max-staking-change-count'
+    const res = await axios.get(url);
+    if (res.data && res.data.result) {
+        return Number(res.data.result);
+    } else {
+        throw new Error('Network error when fetch block counts.')
+    }
+}
+
 function delay(s) {
     return new Promise((resolve, reject) => {
         setTimeout(resolve, s);
@@ -433,7 +445,11 @@ const actions = {
             const view = await GovernanceTxBuilder.getGovernanceView(url);
             const blockRes = await rest.getBlockHeight();
             const blockHeight = blockRes.Result;
-            const countdown = 120000 - (blockHeight - view.height);
+            const blockCounts = await fetchRoundBlocks()
+            const countdown = blockCounts - (blockHeight - view.height);
+            if (countdown < 0) {
+                throw new Error('Network error for fetch block countdown.')
+            }
             commit('UPDATE_COUNTDOWN_BLOCK', {countdown})
             return countdown;
         }catch(err) {
