@@ -18,12 +18,14 @@ Vue.use(VueClipboard)
 import i18n from '../common/lang'
 import VeeValidate from 'vee-validate'
 import { VALIDATE_DICTIONARY } from '../core/consts'
-import validationMessages from 'vee-validate/dist/locale/en';
+import validationMessages_en from 'vee-validate/dist/locale/en';
+import validationMessages_zh from 'vee-validate/dist/locale/zh_CN';
+
 Vue.use(VeeValidate, {
   i18n,
   dictionary: {
-    en: validationMessages,
-    zh: VALIDATE_DICTIONARY.zh
+      en: Object.assign({},validationMessages_en, VALIDATE_DICTIONARY.en),
+      zh: Object.assign({},validationMessages_zh, VALIDATE_DICTIONARY.zh)
   }
 })  
 import service from '../core/utils'
