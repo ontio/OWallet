@@ -447,6 +447,9 @@ const actions = {
             const blockHeight = blockRes.Result;
             const blockCounts = await fetchRoundBlocks()
             const countdown = blockCounts - (blockHeight - view.height);
+            if (countdown < 0) {
+                throw new Error('Network error for fetch block countdown.')
+            }
             commit('UPDATE_COUNTDOWN_BLOCK', {countdown})
             return countdown;
         }catch(err) {
