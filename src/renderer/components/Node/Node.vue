@@ -2,43 +2,78 @@
 .node-container {
     position: relative;
     width:100%;
-    height:100vh;
+    padding:22px 20px;
 }
 .center-content {
-    width: 540px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-left:auto;
-    margin-right: auto;
-    transform: translate(-50%, -50%);
+    display: flex;
 }
 .btn-item {
-    text-align: center;
+    width:300px;
+    height:160px;
+    background: #F4F4F6;
+    text-align: left;
     margin-bottom:80px;
+    margin-right: 32px;
+    padding:16px 24px;
+    position:relative;
+    cursor: pointer;
 }
-.btn-item p {
-    text-align: center;
-    font-size: 16px;
-    margin-bottom: 5px;
+.btn-item:hover > i {
+    color: #196BD8;
+}
+.btn-item p:first-child {
+    margin-bottom: 12px;
+}
+.btn-item p:nth-child(2) {
+    font-size:14px;
+    font-family:AvenirNext-Regular,AvenirNext;
+    font-weight:400;
+    color:rgba(0,0,0,1);
+    opacity: 0.4;
 }
 .btn-item button {
     font-size:18px !important;
     height: 80px !important;
     width:300px !important;
 }
+.page-title {
+    font-size:18px;
+    font-family:AvenirNext-Medium,AvenirNext;
+    font-weight:500;
+    color:rgba(0,0,0,1);
+    margin-bottom:24px;
+}
+.icon-bottom {
+    position: absolute;
+    bottom: 10px;
+    right: 24px;
+    width:14px;
+    height:16px;
+    font-weight:400;
+    color:rgba(0,0,0,1);
+    font-size:16px;
+}
+
 </style>
 
 <template>
     <div class="node-container">
+        <h1 class="page-title">{{$t('nodeMgmt.node')}}</h1>
         <div class="center-content">
-            <div class="btn-item">
-                <p class="font-medium">{{$t('nodeMgmt.nodeUser')}}</p>
-                <a-button class="btn-next" @click="handleNodeStake">{{$t('nodeMgmt.nodeStakeMgmt')}}</a-button>
+            <div class="btn-item" @click="handleNodeStake">
+                <p class="font-title">{{$t('nodeMgmt.nodeStakeMgmt')}}</p>
+                <p >{{$t('nodeMgmt.nodeUser')}}</p>
+                <i class="fa fa-arrow-right fa-s icon-bottom"></i>
             </div>
-            <div class="btn-item">
+            <div class="btn-item" @click="handleAuthorization">
+                <p class="font-title">{{$t('nodeMgmt.stakeAuthorizaton')}}</p>
                 <p class="font-medium">{{$t('nodeMgmt.normalUser')}}</p>
-                <a-button class="btn-next" @click="handleAuthorization">{{$t('nodeMgmt.stakeAuthorizaton')}}</a-button>
+                <i class="fa fa-arrow-right fa-s icon-bottom"></i>
+            </div>
+            <div class="btn-item" @click="handleVote">
+                <p class="font-title">{{$t('nodeMgmt.vote')}}</p>
+                <p class="font-medium">{{$t('nodeMgmt.voteTip')}}</p>
+                <i class="fa fa-arrow-right fa-s icon-bottom"></i>
             </div>
         </div>
     </div>
@@ -69,6 +104,14 @@ export default {
                 return;
             }
             this.$router.push({name: 'NodeList'})
+        },
+        handleVote() {
+            const net = localStorage.getItem('net');
+            if(net === 'TEST_NET' && this.onlyTestNet) {
+                this.$message.warning(this.$t('nodeMgmt.switchMainnet'));
+                return;
+            }
+            this.$router.push('/vote/login')
         }
     }
 }

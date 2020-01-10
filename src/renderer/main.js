@@ -31,6 +31,16 @@ Vue.use(VeeValidate, {
 import service from '../core/utils'
 Vue.prototype.httpService = service;
 
+import { VOTE_ROLE } from '../core/consts'
+const mixin = {
+    data () {
+        return {
+            VOTE_ROLE: VOTE_ROLE
+        }
+    }
+}
+Vue.mixin(mixin)
+
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios

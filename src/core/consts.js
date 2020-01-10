@@ -69,6 +69,11 @@ export const OFF_CHAIN_NODES = {
     MAIN_NET: 'https://explorer.ont.io/v2/nodes/off-chain-infos'
 }
 
+export const NODE_CURRENT_STAKES = {
+    TEST_NET: 'https://polarisexplorer.ont.io/v2/nodes/current-stakes',
+    MAIN_NET: 'https://explorer.ont.io/v2/nodes/current-stakes'
+}
+
 export const PAX_API = {
     Host: 'http://18.138.83.180:20800',
     // TestHost: 'http://172.168.3.61:20800',
@@ -83,6 +88,12 @@ export const PAX_API = {
 export const PAX_SC_HASH = {
     MAIN: '6bbc07bae862db0d7867e4e5b1a13c663e2b4bc8',
     TEST: 'b06f8eaf757030c7a944ce2a072017bde1e72308'
+}
+
+export const VOTE_ROLE = {
+    ADMIN: 'ADMIN',
+    VOTER: 'VOTER',
+    VISITOR: 'VISITOR'
 }
 
 export const VALIDATE_DICTIONARY = {

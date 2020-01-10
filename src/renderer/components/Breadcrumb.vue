@@ -46,7 +46,7 @@
         font-family: AvenirNext-Bold;
     }
     .left-icon {
-        font-size: 20px;
+        font-size: 16px;
         color: #A5A7A9;
         margin-left: 10px;
     }
@@ -58,7 +58,7 @@
         </div>
         <div class="breadcrumb-routes" v-for="route in routes" :key="route.path">
             <router-link :to="route.path">{{route.name}}</router-link>
-            <a-icon type="left" class="left-icon" />
+            <a-icon type="right" class="left-icon" />
         </div>
         <div class="breadcrumb-current">
             {{current}}

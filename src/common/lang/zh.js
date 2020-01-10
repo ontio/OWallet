@@ -626,7 +626,15 @@ export default {
     redeemInitPosOk: '确认提取',
     hasClaimableInitPos: '您还有可提取的初始质押。请先提取该部分ONT。',
     noClaimbleToRefund: '没有可提取的ONT。无法提款。'
-  },
+    },
+    vote: {
+        node: 'Node',
+        vote: '治理投票',
+        voteTip: "如果您是已授权的用户，从这里可以参与Ontology的治理投票",
+        login: '登录',
+        notSeeWallet: '没有看到您的钱包？导入一个。',
+        importHere: '由此导入'
+    },
   exchange: {
     exchange: 'Exchange',
     changelly: 'Changelly',

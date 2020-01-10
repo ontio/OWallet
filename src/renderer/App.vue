@@ -67,7 +67,7 @@
   }
 
   .font-regular {
-    font-family: 'AvenirNext-Regular';
+    font-family: AvenirNext-Regular;
     color: #000000;
     font-size: 0.88rem;
   }
@@ -77,21 +77,28 @@
   }
 
   .font-medium {
-    font-family: 'AvenirNext-Medium';
+    font-family: AvenirNext-Medium;
     color: #5E6369;
     font-size: 0.88rem;
   }
 
   .font-medium-black {
-    font-family: 'AvenirNext-Medium';
+    font-family: AvenirNext-Medium;
     color: #000000;
     font-size: 0.88rem;
   }
 
   .font-bold {
-    font-family: 'AvenirNext-Bold';
+    font-family: AvenirNext-Bold;
     color: #5E6369;
     font-size: 14px;
+  }
+
+  .font-title {
+    font-size:18px;
+    font-family: AvenirNext-Regular,AvenirNext;
+    font-weight:400;
+    color:rgba(0,0,0,1);
   }
 
 

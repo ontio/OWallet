@@ -9,10 +9,10 @@ if(!net) {
     localStorage.setItem('net', net)
 }
 
-let node = localStorage.getItem('node')
+let node = localStorage.getItem('nodeAddress')
 if(!node) {
     node = MAIN_NET_LIST[0]
-    localStorage.setItem('node', node)
+    localStorage.setItem('nodeAddress', node)
 }
 
 const WS_PORT = '20335'

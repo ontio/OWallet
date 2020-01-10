@@ -631,7 +631,15 @@ Within their 50% share each consensus node will receive their share according to
     redeemInitPosOk: 'Redeem',
     hasClaimableInitPos: 'You have redeemable init pos. Plase redeem this part first.',
     noClaimbleToRefund: 'No redeemable ONT to refund.'
-  },
+    },
+    vote: {
+        node: 'Node',
+        vote: 'Vote',
+        voteTip: "If you are authorized user, You can participate Ontology's governance here.",
+        login: 'Login',
+        notSeeWallet: 'Do not see your wallet? Import one ',
+        importHere: 'here'
+    },
   exchange: {
     exchange: 'Exchange',
     changelly: 'Changelly',

@@ -41,7 +41,11 @@ let rendererConfig = {
             formatter: require('eslint-friendly-formatter')
           }
         }
-      },
+          },
+          {
+              test: /\.scss$/,
+              loaders: ['style', 'css', 'sass']
+          },
       {
         test: /\.css$/,
         use: ExtractTextPlugin.extract({
