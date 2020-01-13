@@ -57,7 +57,7 @@
 </style>
 
 <template>
-    <div class="node-container">
+    <div class="negative-margin-top node-container">
         <h1 class="page-title">{{$t('nodeMgmt.node')}}</h1>
         <div class="center-content">
             <div class="btn-item" @click="handleNodeStake">

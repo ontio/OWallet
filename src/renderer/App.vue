@@ -55,6 +55,10 @@
     src: url('../../static/fonts/avenirnextregular.otf');
   }
 
+  p {
+      margin:0;
+  }
+
   .loading {
     text-align: center;
     background: rgba(0, 0, 0, 0.05);
@@ -64,6 +68,7 @@
 
   .container-fluid {
     padding-left: 5.13rem !important;
+    padding-top: 4rem;
   }
 
   .font-regular {
@@ -318,6 +323,9 @@
     width:120px;
     height: 34px;
   }
+  .asset-btn > i {
+      margin-right:4px;
+  }
 
   .claim-ong-container {
     display:flex;
@@ -397,5 +405,8 @@
 
 .left-footer {
   margin-top:20px;
+}
+.negative-margin-top {
+    margin-top:-4rem;
 }
 </style>

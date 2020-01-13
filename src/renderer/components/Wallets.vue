@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="negative-margin-top">
     <ul class="nav nav-pills wallets-nav-pills" id="pills-tab" role="tablist">
       <li class="nav-item" @click="setActiveTab(1)">
         <a class="nav-link" id="pills-common-tab" data-toggle="pill" href="#pills-common" role="tab"

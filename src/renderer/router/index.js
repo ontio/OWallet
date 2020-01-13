@@ -129,6 +129,16 @@ export default new Router({
                 name: 'VoteList',
                 component: require('@/components/Node/Vote/List').default
             },
+            {
+                path: 'create',
+                name: 'VoteCreate',
+                component: require('@/components/Node/Vote/Create').default
+            },
+            {
+                path: 'detail',
+                name: 'VoteDetail',
+                component: require('@/components/Node/Vote/Detail').default
+            },
         ]
     },
     {

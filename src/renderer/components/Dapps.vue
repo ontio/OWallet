@@ -40,7 +40,7 @@
 </style>
 
 <template>
-    <div class="dapps-container">
+    <div class="negative-margin-top dapps-container">
         <a-row>
             <a-col :md="8" :lg="8" :xl="6">
                 <div @click="handleExchangeChangelly" class="dapp-item">
