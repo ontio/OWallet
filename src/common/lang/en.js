@@ -672,7 +672,13 @@ Within their 50% share each consensus node will receive their share according to
         approval: 'Approval',
         opposition: 'Opposition',
         allVotes: 'All votes',
-        created: 'Created'
+        created: 'Created',
+        duration: 'Duration',
+        notAllowVote: 'You can not vote now. The voting is : ',
+        notAllowStop: 'You can not stop the voting now. The voting is : ',
+        name: 'Name',
+        address: 'Address',
+        votes: 'Votes'
     },
   exchange: {
     exchange: 'Exchange',

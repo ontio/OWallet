@@ -1,6 +1,6 @@
 import { NODE_CURRENT_STAKES, VOTE_ROLE, DEFAULT_SCRYPT } from '../../../core/consts'
 import httpService, { getRestClient } from '../../../core/utils'
-import { TransactionBuilder, Crypto, utils, Parameter, ParameterType, TxSignature } from 'ontology-ts-sdk'
+import { TransactionBuilder, Crypto, utils, Parameter, ParameterType, TxSignature, WebsocketClient } from 'ontology-ts-sdk'
 import {
     message
 } from 'ant-design-vue'
@@ -10,7 +10,7 @@ const gasPrice = '500'
 const gasLimit = '20000'
 const contract_hash = {
     MAIN_NET: '',
-    TEST_NET: '4458ee95e27235c0d3aad90060b4fad44db7f4e4'
+    TEST_NET: 'b40a41f2c9912774fced2158b873ff7effba21b9'
 }
 const state = {
     voteWallet: '',
@@ -21,7 +21,9 @@ const state = {
     all_votes_hash: [],
     admin_votes_hash: [],
     currentVote: {},
-    my_weight: 0
+    my_weight: 0,
+    all_voters: [], // 当前是所有节点用户
+    current_vote_records: [] // 当前vote的投票情况
 }
 
 export const VOTE_STATUS_TEXT = {
@@ -31,11 +33,20 @@ export const VOTE_STATUS_TEXT = {
     CANCELED: 'CANCELED'
 }
 
+export const MY_VOTED = {
+    'APPROVED': 'APPROVED',
+    'REJECTED': 'REJECTED',
+    'NOT_VOTED': 'NOT_VOTED'
+}
+
 const formatNumber = function (val) {
     return parseInt(utils.reverseHex(val), 16)
 }
 
 const formatVoteInfo = function (infos) {
+    if (!infos) {
+        return [];
+    }
     const votes = []
     for (const info of infos) {
         let item = info;
@@ -52,8 +63,8 @@ const formatVoteInfo = function (infos) {
                     weight: parseInt(utils.reverseHex(i[1]), 16)
                 }
             }) : [],
-            startTime: formatNumber(item[4]) * 1000,
-            endTime: formatNumber(item[5]) * 1000,
+            startTime: String(formatNumber(item[4])).length <= 10 ?  formatNumber(item[4]) * 1000 : formatNumber(item[4]),
+            endTime: String(formatNumber(item[5])).length <= 10 ?  formatNumber(item[5]) * 1000 : formatNumber(item[5]),
             approves: formatNumber(item[6]),
             rejects: formatNumber(item[7]),
             status: formatNumber(item[8]),
@@ -130,6 +141,12 @@ const mutations = {
     },
     UPDATE_MY_WEIGHT(state, { weight }) {
         state.my_weight = weight
+    },
+    UPDATE_ALL_VOTERS(state, { all_voters }) {
+        state.all_voters = all_voters
+    },
+    UPDATE_CURRENT_VOTE_RECORDS(state, { records }) {
+        state.current_vote_records = records
     }
 }
 
@@ -152,10 +169,12 @@ const actions = {
             // console.log(res2)
             let is_voter = false
             let weight = 0
+            const all_voters = res1.result.map(item => ({ name: item.name, address: item.address, weight: item.current_stake }))
+            commit('UPDATE_ALL_VOTERS', { all_voters })
             for (let node of res1.result) {
                 if (node.address === address) {
                     is_voter = true;
-                    weight = node.stake
+                    weight = node.current_stake
                     break;
                 }
             }
@@ -179,15 +198,18 @@ const actions = {
             message.error(i18n.t('common.networkErr'))
         }
     },
-    async getAllVotes({ commit, dispatch }) {
-        dispatch('showLoadingModals')
+    async getAllVotes({ commit, dispatch }, {showLoading}) {
+        showLoading && dispatch('showLoadingModals')
         const net = localStorage.getItem('net');
         const client = getRestClient()
         const contract = new Crypto.Address(utils.reverseHex(contract_hash[net]))
         const tx = TransactionBuilder.makeInvokeTransaction('listTopics', [], contract, gasPrice, gasLimit)
         try {
             const res2 = await client.sendRawTransaction(tx.serialize(), true);
-            const hashes = res2.Result.Result
+            if (res2.Error !== 0) {
+                throw res2;
+            }
+            const hashes = res2.Result.Result || []
             console.log(hashes)
             const txes = hashes.map(hash => {
                 return TransactionBuilder.makeInvokeTransaction('getTopicInfo', [new Parameter('', ParameterType.ByteArray, hash)], contract, gasPrice, gasLimit)
@@ -207,7 +229,7 @@ const actions = {
         
     },
     async getAdminVotes({ commit, dispatch, state }) {
-        dispatch('showLoadingModals')
+        // dispatch('showLoadingModals')
         const address = state.voteWallet.address;
         const net = localStorage.getItem('net');
         const client = getRestClient()
@@ -216,6 +238,9 @@ const actions = {
         const tx = TransactionBuilder.makeInvokeTransaction('getTopicInfoListByAdmin', [param], contract, gasPrice, gasLimit)
         try {
             const res = await client.sendRawTransaction(tx.serialize(), true);
+            if (res.Error !== 0) {
+                throw res;
+            }
             const votes = formatVoteInfo(res.Result.Result)
             console.log(votes)
             commit('UPDATE_ADMIN_VOTES', { votes })
@@ -228,7 +253,6 @@ const actions = {
     },
     submitVote({ commit, state }, { type, hash }) {
         const net = localStorage.getItem('net');
-        const client = getRestClient()
         const contract = new Crypto.Address(utils.reverseHex(contract_hash[net]))
         const address = state.voteWallet.address
         const addr = new Crypto.Address(address)
@@ -240,7 +264,7 @@ const actions = {
         let tx = TransactionBuilder.makeInvokeTransaction('voteTopic', params, contract, gasPrice, gasLimit, addr)
         return tx;
     },
-    stopVote({ commit, dispatch, state }) {
+    stopVote({ commit, dispatch, state }, { hash }) {
         const net = localStorage.getItem('net');
         const client = getRestClient()
         const contract = new Crypto.Address(utils.reverseHex(contract_hash[net]))
@@ -257,12 +281,19 @@ const actions = {
         const contract = new Crypto.Address(utils.reverseHex(contract_hash[net]))
         const address = state.voteWallet.address
         const addr = new Crypto.Address(address)
+        const voters = state.all_voters;
         const params = [
             new Parameter('', ParameterType.ByteArray, addr.serialize()),
             new Parameter('', ParameterType.String, vote.title),
             new Parameter('', ParameterType.String, vote.content),
             new Parameter('', ParameterType.Integer, vote.startTime),
             new Parameter('', ParameterType.Integer, vote.endTime),
+            new Parameter('', ParameterType.Array, voters.map(voter =>
+                new Parameter('', ParameterType.Array, [
+                    new Parameter('', ParameterType.Address, new Crypto.Address(voter.address)),
+                    new Parameter('', ParameterType.Integer, voter.weight)
+                ]
+            )))
         ]
         let tx = TransactionBuilder.makeInvokeTransaction('createTopic', params, contract, gasPrice, gasLimit, addr)
         return tx;
@@ -298,15 +329,87 @@ const actions = {
         const param = new Parameter('', ParameterType.ByteArray, hash)
         const tx = TransactionBuilder.makeInvokeTransaction('getVoters', [param], contract, gasPrice, gasLimit)
         const res = await client.sendRawTransaction(tx.serialize(), true);
-        const voters = res.Result.Result.map(i => {
-            return {
-                address: new Crypto.Address(i[0]).toBase58(),
-                weight: parseInt(utils.reverseHex(i[1]), 16)
-            }
-        })
-        console.log(voters)
-        return voters;
+        if (res.Error === 0) {
+            const voters = res.Result.Result.map(i => {
+                return {
+                    address: new Crypto.Address(i[0]).toBase58(),
+                    weight: parseInt(utils.reverseHex(i[1]), 16)
+                }
+            })
+            console.log(voters)
+            return voters;
+        } else {
+            console.log(res)
+            return []
+        }
     },
+
+    async isVoter({ commit, dispatch, state }, { hash }) {
+        const voters = await dispatch('getVoters', {hash})
+        const address = state.voteWallet.address;
+        if (voters.find(item => item.address === address)) {
+            return true;
+        } else {
+            return false;
+        }
+    },
+
+    async getVotedInfo({ commit }, { hash, address }) {
+        const net = localStorage.getItem('net');
+        const client = getRestClient()
+        const contract = new Crypto.Address(utils.reverseHex(contract_hash[net]))
+        const params = [
+            new Parameter('', ParameterType.ByteArray, hash),
+            new Parameter('', ParameterType.Address, new Crypto.Address(address))
+        ]
+        const tx = TransactionBuilder.makeInvokeTransaction('getVotedInfo', params, contract, gasPrice, gasLimit)
+        const res = await client.sendRawTransaction(tx.serialize(), true);
+        console.log(res)
+        if (res.Error === 0) {
+            // return res.Result.Result // 1 赞成；2反对；其他：未投票
+            const result = formatNumber(res.Result.Result);
+            if (result == 1) {
+                return MY_VOTED.APPROVED
+            } else if (result == 2) {
+                return MY_VOTED.REJECTED
+            } else {
+                return MY_VOTED.NOT_VOTED
+            }
+        }
+        return;
+    },
+
+    async getVotedRecords({ commit, state }, { hash }) {
+        const net = localStorage.getItem('net');
+        const client = getRestClient()
+        const contract = new Crypto.Address(utils.reverseHex(contract_hash[net]))
+        const params = [
+            new Parameter('', ParameterType.ByteArray, hash)
+        ]
+        const tx = TransactionBuilder.makeInvokeTransaction('getVotedAddress', params, contract, gasPrice, gasLimit)
+        const res = await client.sendRawTransaction(tx.serialize(), true);
+        console.log(res)
+        if (res.Error === 0) {
+            const result = res.Result.Result || []
+            const records = result.map(i => {
+                return {
+                    address: new Crypto.Address(i[0]).toBase58(),
+                    isApproval: formatNumber(i[1]) === 1 ? true : false
+                }
+            })
+            for (let item of records) {
+                for (let voter of state.all_voters) {
+                    if (voter.address === item.address) {
+                        item.name = voter.name
+                        item.weight = voter.weight
+                    }
+                }
+            }
+            commit('UPDATE_CURRENT_VOTE_RECORDS', {records})
+        }
+        return;
+    },
+    
     setCurrentVote({ commit }, { vote }) {
         commit('UPDATE_CURRENT_VOTE', {vote})
     }

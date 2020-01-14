@@ -114,7 +114,6 @@ export default {
             }
             this.$store.commit('UPDATE_VOTE_WALLET', {voteWallet: wallet})    
             this.$store.commit('UPDATE_VOTE_WALLET_TYPE', {type: this.voteWalletType})         
-            this.$store.dispatch('getVoteRole', {address: wallet.address})
             this.$router.push({name: 'VoteList'})
         }
     }

@@ -90,7 +90,7 @@ export default {
     },
     computed: {
         ...mapState({
-            vote_wallet: state => state.Vote.voteWallet
+            vote_wallet: state => state.Vote.voteWallet,
         })
     },
 	methods: {
@@ -122,19 +122,21 @@ export default {
                 this.$message.warning(this.$t('vote.fillBlanks'))
                 return
             }
-            const start_time_str = dateFormat(this.startDate, 'isoDate') + ' ' +  dateFormat(this.startTime, 'isoTime')
-            const end_time_str = dateFormat(this.endDate, 'isoDate') + ' ' +dateFormat(this.endTime, 'isoTime')
-            const startTime = new Date(start_time_str).getTime()
-            const endTime = new Date(end_time_str).getTime()
-            if(Date.now() >= endTime) {
+            const start_time_str = dateFormat(this.startDate, 'isoDate') + ' ' + dateFormat(this.startTime, 'isoTime')
+            const end_time_str = dateFormat(this.endDate, 'isoDate') + ' ' + dateFormat(this.endTime, 'isoTime')
+            const startTime = Math.floor((new Date(start_time_str).getTime()) / 1000)
+            const endTime = Math.floor((new Date(end_time_str).getTime()) / 1000)
+            if(Date.now() >= new Date(end_time_str).getTime()) {
                 this.$message.warning(this.$t('vote.endTimeError'))
                 return 
             }
+            const voters = []
             const vote = {
                 title: this.title,
                 content: this.content,
-                startTime,
-                endTime
+                startTime ,
+                endTime,
+                voters
             }
             this.$store.dispatch('createVote', {vote}).then(tx => {
                 this.tx = tx;
