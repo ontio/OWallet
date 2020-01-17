@@ -7,10 +7,10 @@ import {
 import i18n from '../../../common/lang';
 
 const gasPrice = '500'
-const gasLimit = '20000'
+const gasLimit = '200000'
 const contract_hash = {
     MAIN_NET: '',
-    TEST_NET: 'b40a41f2c9912774fced2158b873ff7effba21b9'
+    TEST_NET: 'a088ae3b508794e666ab649d890213e66e0c3a2e'
 }
 const state = {
     voteWallet: '',
@@ -412,6 +412,22 @@ const actions = {
     
     setCurrentVote({ commit }, { vote }) {
         commit('UPDATE_CURRENT_VOTE', {vote})
+    },
+    async updateCurrentVote({ commit }, { hash }) {
+        const net = localStorage.getItem('net');
+        const client = getRestClient()
+        const contract = new Crypto.Address(utils.reverseHex(contract_hash[net]))
+        const params = [
+            new Parameter('', ParameterType.ByteArray, hash)
+        ]
+        const tx = TransactionBuilder.makeInvokeTransaction('getTopicInfo', params, contract, gasPrice, gasLimit)
+        const res = await client.sendRawTransaction(tx.serialize(), true);
+        console.log(res)
+        if (res.Error === 0) {
+            const votes = formatVoteInfo([res.Result.Result])
+            console.log(votes)
+            commit('UPDATE_CURRENT_VOTE', { vote: votes[0]})
+        }
     }
 
 }

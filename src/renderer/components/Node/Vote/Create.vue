@@ -117,7 +117,22 @@ export default {
                 this.content = this.content.substring(0, value.length-1)
             }
         },
+        validateInput(str) {
+            str = str.trim();
+            if(!str) {
+                this.$message.warning(this.$t('vote.fillBlanks'))
+                return false;
+            }
+            if(/[\u4E00-\u9FA5]/g.test(str)) {
+                this.$message.warning(this.$t('vote.onlySupportEnglish'))
+                return false
+            }
+            return true;
+        },
         submit() {
+            if(!this.validateInput(this.title) || !this.validateInput(this.content)) {
+                return;
+            }
             if(!this.title || !this.content || !this.startDate || !this.startTime || !this.endDate || !this.endTime) {
                 this.$message.warning(this.$t('vote.fillBlanks'))
                 return
@@ -126,6 +141,10 @@ export default {
             const end_time_str = dateFormat(this.endDate, 'isoDate') + ' ' + dateFormat(this.endTime, 'isoTime')
             const startTime = Math.floor((new Date(start_time_str).getTime()) / 1000)
             const endTime = Math.floor((new Date(end_time_str).getTime()) / 1000)
+            if(startTime >= endTime) {
+                this.$message.warning(this.$t('vote.startTimeError'))
+                return
+            }
             if(Date.now() >= new Date(end_time_str).getTime()) {
                 this.$message.warning(this.$t('vote.endTimeError'))
                 return 

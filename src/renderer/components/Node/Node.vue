@@ -58,7 +58,7 @@
 
 <template>
     <div class="negative-margin-top node-container">
-        <h1 class="page-title">{{$t('nodeMgmt.node')}}</h1>
+        <h1 class="page-title">{{$t('vote.node')}}</h1>
         <div class="center-content">
             <div class="btn-item" @click="handleNodeStake">
                 <p class="font-title">{{$t('nodeMgmt.nodeStakeMgmt')}}</p>
@@ -71,8 +71,8 @@
                 <i class="fa fa-arrow-right fa-s icon-bottom"></i>
             </div>
             <div class="btn-item" @click="handleVote">
-                <p class="font-title">{{$t('nodeMgmt.vote')}}</p>
-                <p class="font-medium">{{$t('nodeMgmt.voteTip')}}</p>
+                <p class="font-title">{{$t('vote.vote')}}</p>
+                <p class="font-medium">{{$t('vote.voteTip')}}</p>
                 <i class="fa fa-arrow-right fa-s icon-bottom"></i>
             </div>
         </div>

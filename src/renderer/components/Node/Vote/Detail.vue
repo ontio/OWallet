@@ -39,13 +39,13 @@
 					<div class="voted-reject" v-if="isVoter" @click="onReject">
 						<p>
 							<a-icon type="caret-down"
-								class="icon-reject" /> <span class="total-voted">{{vote.approves}}</span> <span class="text-smal">votes</span>
+								class="icon-reject" /> <span class="total-voted">{{vote.rejects}}</span> <span class="text-smal">votes</span>
 						</p>
 						<p class="my-voted"
 							v-if="myVoted === MY_VOTED.REJECTED ">
                             <span>Voted</span> <span class="added-votes"> +{{my_weight}}</span> 
                         </p>
-						<p class="vote-option" v-if="myVoted === MY_VOTED.NOT_VOTED ">Vote Down</p>
+						<p class="vote-option" v-if="myVoted !== MY_VOTED.REJECTED ">Vote Down</p>
 					</div>
 				</div>
 				<div class="stop-btn" @click="onStop"
@@ -214,6 +214,7 @@ export default {
                 this.isVoter = res;
             })
             this.$store.dispatch('getVotedRecords', {hash})
+            this.$store.dispatch('updateCurrentVote', {hash})
         },
         handleCancel() {
             this.signVisible = false;
@@ -357,7 +358,10 @@ export default {
 		padding-top: 16px;
 		padding: 16px;
 		cursor: pointer;
-		.total-voted {
+		
+		
+	}
+    .total-voted {
 			font-size: 18px;
 			font-family: AvenirNext-Regular, AvenirNext;
 			font-weight: 400;
@@ -367,8 +371,6 @@ export default {
 		.text-smal {
 			opacity: 0.4;
 		}
-		
-	}
     .vote-option {
 			font-size: 14px;
 			font-family: AvenirNext-Regular, AvenirNext;

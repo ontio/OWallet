@@ -46,7 +46,8 @@ export default {
     deleteIdentity: 'Delete ONT ID',
     savedbFailed: 'Save to db file failed.Please make sure you have set the path to save the keystore.db file and try again.',
     selectOep4: 'Select OEP-4 token',
-    contractHash: 'Contract hash: '
+        contractHash: 'Contract hash: ',
+        txFailed: 'The transaction failed on blockchain. '
   },
 
   FormField: {
@@ -656,7 +657,7 @@ Within their 50% share each consensus node will receive their share according to
         stopVoteFail: 'Stop vote failed!',
         createVoteSuccess: 'Create vote succeed!',
         createVoteFail: 'Create vote failed!',
-        onlySupportEnglish: 'Vote only supports English now.',
+        onlySupportEnglish: 'Currently only supports English input',
         fillBlanks: 'Please fill in the blanks.',
         endTimeError: "The voting ends must be the future time.",
         votingTopics: 'Voting Topics',
@@ -678,7 +679,9 @@ Within their 50% share each consensus node will receive their share according to
         notAllowStop: 'You can not stop the voting now. The voting is : ',
         name: 'Name',
         address: 'Address',
-        votes: 'Votes'
+        votes: 'Votes',
+        selectWallet: 'Select Wallet',
+        startTimeError: 'The voting starts can not be later than the ends'
     },
   exchange: {
     exchange: 'Exchange',

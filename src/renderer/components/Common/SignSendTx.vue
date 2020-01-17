@@ -127,7 +127,8 @@ export default {
                     } else if(res.Result.indexOf('cover gas cost') > -1){
                         this.$message.error(this.$t('common.ongNoEnough'))
                     } else {
-                        this.$message.error(res.Result)
+                        // this.$message.error(res.Result)
+                        this.$message.error('common.txFailed. ' + res.Result)
                     }
                     return;
                 } else {
