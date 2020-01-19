@@ -676,7 +676,8 @@ export default {
         address: '地址',
         votes: '投票数',
         selectWallet: '请选择钱包',
-        startTimeError: '投票开始时间不能晚于结束时间'
+        startTimeError: '投票开始时间不能晚于结束时间',
+        new: '新建'
     },
   exchange: {
     exchange: 'Exchange',

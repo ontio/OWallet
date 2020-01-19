@@ -35,7 +35,9 @@
   }
 </script>
 
-<style>
+
+
+<style lang="scss">
   /* CSS */
   @font-face {
     font-family: SourceSansPro;
@@ -55,9 +57,13 @@
     src: url('../../static/fonts/avenirnextregular.otf');
   }
 
-  p {
-      margin:0;
+  body {
+      p {
+        margin:0;
+    }
   }
+
+  
 
   .loading {
     text-align: center;
@@ -128,12 +134,18 @@
     color: #5E6369 !important;
     border: none !important;
   }
+  .btn-cancel:hover {
+      background: #E4E6EA !important;
+  }
 
   .btn-next {
     background: #196BD8 !important;
     color: #ffffff !important;
     border-radius: 0 !important;
     border: none !important;
+  }
+  .btn-next:hover {
+      background: #619AE5 !important;
   }
 
   .btn-add {
@@ -408,5 +420,9 @@
 }
 .negative-margin-top {
     margin-top:-4rem;
+}
+
+.ant-tabs-tab-active {
+    color: #000000;
 }
 </style>

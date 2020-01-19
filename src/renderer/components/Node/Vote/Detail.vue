@@ -10,45 +10,64 @@
 				</div>
 				<div class="voted-container">
 
-                    <div class="visiter-approve" v-if="!isVoter">
-                        <a-icon type="caret-up"
-								class="icon-approve" />
-                        <span class="total-voted">{{vote.approves}}</span>
-                        <span class="text-smal">votes</span>
-                    </div>
-                    <div class="short-line" v-if="!isVoter"></div>
-                    <div class="visiter-reject" v-if="!isVoter">
-                       <a-icon type="caret-down"
-								class="icon-reject" /> 
-                        <span class="total-voted">{{vote.approves}}</span>
-                        <span class="text-smal">votes</span>
-                    </div>
+					<div class="visiter-approve"
+						v-if="!isVoter">
+						<a-icon type="caret-up"
+							class="icon-approve" />
+						<span class="total-voted">{{vote.approves}}</span>
+						<span class="text-smal">votes</span>
+					</div>
+					<div class="short-line"
+						v-if="!isVoter"></div>
+					<div class="visiter-reject"
+						v-if="!isVoter">
+						<a-icon type="caret-down"
+							class="icon-reject" />
+						<span class="total-voted">{{vote.approves}}</span>
+						<span class="text-smal">votes</span>
+					</div>
 
-					<div class="voted-approve" v-if="isVoter" @click="onApprove">
+					<div class="not-voted"
+						v-if="isVoter"
+						@click="onApprove"
+						:class="{'voted-approve': myVoted === MY_VOTED.APPROVED}">
 						<p>
 							<a-icon type="caret-up"
 								class="icon-approve" />
-							<span class="total-voted">{{vote.approves}}</span> <span class="text-smal">votes</span>
+							<span :class="{'my-voted-text': myVoted === MY_VOTED.APPROVED}"
+								class="total-voted">{{vote.approves}}</span>
+							<span :class="{'my-voted-text': myVoted === MY_VOTED.APPROVED}"
+								class="text-smal">votes</span>
 						</p>
-                        <p class="vote-option" v-if="myVoted !== MY_VOTED.APPROVED ">Vote Up</p>
-						<p class="my-voted"
+						<p class="vote-option"
+							v-if="myVoted !== MY_VOTED.APPROVED ">Vote Up</p>
+						<p class="my-voted my-voted-approve"
 							v-if="myVoted === MY_VOTED.APPROVED ">
-                            <span>Voted</span> <span class="added-votes"> +{{my_weight}}</span> 
-                        </p>
+							<span>Voted</span> <span class="added-votes"> +{{my_weight}}</span>
+						</p>
 					</div>
-					<div class="voted-reject" v-if="isVoter" @click="onReject">
+					<div class="not-voted"
+						v-if="isVoter"
+						@click="onReject"
+						:class="{'voted-reject': myVoted === MY_VOTED.REJECTED}">
 						<p>
 							<a-icon type="caret-down"
-								class="icon-reject" /> <span class="total-voted">{{vote.rejects}}</span> <span class="text-smal">votes</span>
+								class="icon-reject" />
+							<span :class="{'my-voted-text': myVoted === MY_VOTED.REJECTED}"
+								class="total-voted">{{vote.rejects}}</span>
+							<span :class="{'my-voted-text': myVoted === MY_VOTED.REJECTED}"
+								class="text-smal">votes</span>
 						</p>
-						<p class="my-voted"
+						<p class="my-voted my-voted-reject"
 							v-if="myVoted === MY_VOTED.REJECTED ">
-                            <span>Voted</span> <span class="added-votes"> +{{my_weight}}</span> 
-                        </p>
-						<p class="vote-option" v-if="myVoted !== MY_VOTED.REJECTED ">Vote Down</p>
+							<span>Voted</span> <span class="added-votes"> +{{my_weight}}</span>
+						</p>
+						<p class="vote-option"
+							v-if="myVoted !== MY_VOTED.REJECTED ">Vote Down</p>
 					</div>
 				</div>
-				<div class="stop-btn" @click="onStop"
+				<div class="stop-btn"
+					@click="onStop"
 					v-if="vote.admin === voteWallet.address">
 					{{$t('vote.stopVote')}}
 				</div>
@@ -90,16 +109,18 @@
 							key="1">
 							<a-table :columns="columns"
 								:dataSource="approve_data"
-                                :pagination="false"
-                                size="small">
+								:pagination="false"
+                                :bordered="false"
+								size="small">
 							</a-table>
 						</a-tab-pane>
 						<a-tab-pane :tab="$t('vote.opposition')"
 							key="2">
 							<a-table :columns="columns"
 								:dataSource="reject_data"
-                                :pagination="false"
-                                size="small">
+								:pagination="false"
+                                :bordered="false"
+								size="small">
 							</a-table>
 						</a-tab-pane>
 					</a-tabs>
@@ -107,10 +128,11 @@
 			</div>
 		</div>
 
-        <sign-send-tx :visible="signVisible" :tx="tx" :wallet="voteWallet"
-        v-on:signClose="handleCancel"
-        v-on:txSent="handleTxSent"
-        ></sign-send-tx>
+		<sign-send-tx :visible="signVisible"
+			:tx="tx"
+			:wallet="voteWallet"
+			v-on:signClose="handleCancel"
+			v-on:txSent="handleTxSent"></sign-send-tx>
 	</div>
 </template>
 
@@ -142,8 +164,8 @@ export default {
 			{
 				dataIndex: "address",
 				key: "address",
-                title: this.$t("vote.address"),
-                width: '100px'
+				title: this.$t("vote.address"),
+				width: "100px"
 			},
 			{
 				dataIndex: "weight",
@@ -157,10 +179,10 @@ export default {
 			approve_data: [],
 			reject_data: [],
 			myVoted: "",
-            MY_VOTED,
-            isVoter: false,
-            signVisible: false,
-            tx: ''
+			MY_VOTED,
+			isVoter: false,
+			signVisible: false,
+			tx: ""
 		};
 	},
 	computed: {
@@ -168,26 +190,26 @@ export default {
 			vote: state => state.Vote.currentVote,
 			role: state => state.Vote.role,
 			my_weight: state => state.Vote.my_weight,
-            voteWallet: state => state.Vote.voteWallet,
-            votedRecords: state => state.Vote.current_vote_records
+			voteWallet: state => state.Vote.voteWallet,
+			votedRecords: state => state.Vote.current_vote_records
 		})
-    },
+	},
 	mounted() {
-        window.scroll(0,0)
-        this.refresh()
-        this.intervalId = setInterval(() => {
-            this.refresh()
-        }, 10*1000)
-    },
-    beforeDestroy() {
-        clearInterval(this.intervalId)
-    },
-    watch: {
-        votedRecords: function(newVal, oldVal) {
-            this.approve_data = newVal.filter(item => item.isApproval)
-            this.reject_data = newVal.filter(item => !item.isApproval)
-        }
-    },
+		window.scroll(0, 0);
+		this.refresh();
+		this.intervalId = setInterval(() => {
+			this.refresh();
+		}, 10 * 1000);
+	},
+	beforeDestroy() {
+		clearInterval(this.intervalId);
+	},
+	watch: {
+		votedRecords: function(newVal, oldVal) {
+			this.approve_data = newVal.filter(item => item.isApproval);
+			this.reject_data = newVal.filter(item => !item.isApproval);
+		}
+	},
 	methods: {
 		back() {
 			this.$router.back();
@@ -204,72 +226,91 @@ export default {
 				[VOTE_STATUS_TEXT.CANCELED]: this.$t("vote.canceled")
 			};
 			return statusMap[vote.statusText];
-        },
-        refresh() {
-            const hash = this.vote.hash;
-            const address = this.voteWallet.address;
-            this.$store.dispatch("getVotedInfo", { hash, address }).then(res => {
-                this.myVoted = res;
-            });
-            this.$store.dispatch('isVoter', {hash}).then(res => {
-                this.isVoter = res;
-            })
-            this.$store.dispatch('getVotedRecords', {hash})
-            this.$store.dispatch('updateCurrentVote', {hash})
-        },
-        handleCancel() {
-            this.signVisible = false;
-            this.tx = ''
-        },
-        handleTxSent() {
-            this.signVisible = false;
-            // 更新页面数据
-            setTimeout(() => {
-                this.refresh()
-            }, 3000)
-        },
-        onApprove() {
-            if(this.myVoted ===this.MY_VOTED.APPROVED) {
-                return;
-            }
-            if(this.vote.statusText !== VOTE_STATUS_TEXT.IN_PROGRESS) {
-                this.$message.warning(this.$t('vote.notAllowVote') + this.formatStatus(this.vote))
-                return;
-            }
-            this.$store.dispatch('submitVote', {
-                type: true,
-                hash: this.vote.hash}).then(tx => {
-                    this.tx = tx;
-                    this.signVisible = true;
-                })
-        },
-        onReject() {
-            if(this.myVoted ===this.MY_VOTED.REJECTED) {
-                return;
-            }
-            if(this.vote.statusText !== VOTE_STATUS_TEXT.IN_PROGRESS) {
-                this.$message.warning(this.$t('vote.notAllowVote') + this.formatStatus(this.vote))
-                return;
-            }
-            this.$store.dispatch('submitVote', {
-                type: false,
-                hash: this.vote.hash}).then(tx => {
-                    this.tx = tx;
-                    this.signVisible = true;
-                })
-        },
-        onStop() {
-            if(this.vote.statusText === VOTE_STATUS_TEXT.CANCELED 
-                || this.vote.statusText === VOTE_STATUS_TEXT.FINISHED) {
-                this.$message.warning(this.$t('vote.notAllowStop') + this.formatStatus(this.vote))
-                return;
-            }
-            this.$store.dispatch('stopVote', {
-                hash: this.vote.hash}).then(tx => {
-                    this.tx = tx;
-                    this.signVisible = true;
-                })
-        }
+		},
+		refresh() {
+			const hash = this.vote.hash;
+			const address = this.voteWallet.address;
+			this.$store
+				.dispatch("getVotedInfo", { hash, address })
+				.then(res => {
+					this.myVoted = res;
+				});
+			this.$store.dispatch("isVoter", { hash }).then(res => {
+				this.isVoter = res;
+			});
+			this.$store.dispatch("getVotedRecords", { hash });
+			this.$store.dispatch("updateCurrentVote", { hash });
+		},
+		handleCancel() {
+			this.signVisible = false;
+			this.tx = "";
+		},
+		handleTxSent() {
+			this.signVisible = false;
+			// 更新页面数据
+			setTimeout(() => {
+				this.refresh();
+			}, 3000);
+		},
+		onApprove() {
+			if (this.myVoted === this.MY_VOTED.APPROVED) {
+				return;
+			}
+			if (this.vote.statusText !== VOTE_STATUS_TEXT.IN_PROGRESS) {
+				this.$message.warning(
+					this.$t("vote.notAllowVote") + this.formatStatus(this.vote)
+				);
+				return;
+			}
+			this.$store
+				.dispatch("submitVote", {
+					type: true,
+					hash: this.vote.hash
+				})
+				.then(tx => {
+					this.tx = tx;
+					this.signVisible = true;
+				});
+		},
+		onReject() {
+			if (this.myVoted === this.MY_VOTED.REJECTED) {
+				return;
+			}
+			if (this.vote.statusText !== VOTE_STATUS_TEXT.IN_PROGRESS) {
+				this.$message.warning(
+					this.$t("vote.notAllowVote") + this.formatStatus(this.vote)
+				);
+				return;
+			}
+			this.$store
+				.dispatch("submitVote", {
+					type: false,
+					hash: this.vote.hash
+				})
+				.then(tx => {
+					this.tx = tx;
+					this.signVisible = true;
+				});
+		},
+		onStop() {
+			if (
+				this.vote.statusText === VOTE_STATUS_TEXT.CANCELED ||
+				this.vote.statusText === VOTE_STATUS_TEXT.FINISHED
+			) {
+				this.$message.warning(
+					this.$t("vote.notAllowStop") + this.formatStatus(this.vote)
+				);
+				return;
+			}
+			this.$store
+				.dispatch("stopVote", {
+					hash: this.vote.hash
+				})
+				.then(tx => {
+					this.tx = tx;
+					this.signVisible = true;
+				});
+		}
 	}
 };
 </script>
@@ -303,22 +344,22 @@ export default {
 			margin-bottom: 24px;
 		}
 	}
-    .right-part {
-        width: 50%;
-    }
+	.right-part {
+		width: 50%;
+	}
 }
 .visiter-approve {
-    min-width: 120px;
-    margin-right: 24px;
+	min-width: 120px;
+	margin-right: 24px;
 }
 .visiter-reject {
-    min-width: 120px;
-    margin-left: 24px;
+	min-width: 120px;
+	margin-left: 24px;
 }
 .short-line {
-    width:1px;
-    height:22px;
-    background:rgba(244,244,246,1);
+	width: 1px;
+	height: 22px;
+	background: rgba(244, 244, 246, 1);
 }
 .voted-container {
 	display: flex;
@@ -335,23 +376,30 @@ export default {
 		padding: 16px;
 		border-bottom: 3px solid #4eb926;
 		cursor: pointer;
-		.my-voted {
-			margin-top: 5px;
-			span {
-				font-size: 14px;
-				font-family: AvenirNext-Regular, AvenirNext;
-				font-weight: 400;
-			}
-			span:first-child {
-				color: rgba(78, 185, 38, 1);
-			}
-			span:last-child {
-				color: rgba(0, 0, 0, 1);
-				opacity: 0.4;
-			}
+	}
+	.my-voted {
+		margin-top: 5px;
+		span {
+			font-size: 14px;
+			font-family: AvenirNext-Regular, AvenirNext;
+			font-weight: 400;
+		}
+		span:last-child {
+			color: rgba(0, 0, 0, 1);
+			opacity: 0.4;
 		}
 	}
-	.voted-reject {
+	.my-voted-approve {
+		span:first-child {
+			color: rgba(78, 185, 38, 1);
+		}
+    }
+	.my-voted-reject {
+		span:first-child {
+			color: rgba(234, 69, 69, 1);
+		}
+	}
+	.not-voted {
 		width: 200px;
 		height: 86px;
 		border-radius: 6px;
@@ -359,27 +407,45 @@ export default {
 		padding-top: 16px;
 		padding: 16px;
 		cursor: pointer;
-		
-		
+		margin-right: 32px;
 	}
-    .total-voted {
-			font-size: 18px;
-			font-family: AvenirNext-Regular, AvenirNext;
-			font-weight: 400;
-			color: rgba(0, 0, 0, 1);
-			opacity: 0.4;
-		}
-		.text-smal {
-			opacity: 0.4;
-		}
-    .vote-option {
-			font-size: 14px;
-			font-family: AvenirNext-Regular, AvenirNext;
-			font-weight: 400;
-			color: rgba(0, 0, 0, 1);
-			opacity: 0.4;
-			margin-top: 5px;
-		}
+	.not-voted:hover {
+		background: #e4e6ea;
+	}
+	.voted-reject {
+		background: rgba(234, 69, 69, 0.1);
+		border-bottom: 3px solid #ea4545;
+		cursor: default;
+	}
+	.voted-approve {
+		background: rgba(78, 185, 38, 0.1);
+		border-bottom: 3px solid #4eb926;
+		cursor: default;
+    }
+    .voted-reject:hover {
+        background: rgba(234, 69, 69, 0.1);
+    }
+    .voted-approve:hover {
+        background: rgba(78, 185, 38, 0.1);
+    }
+	.total-voted {
+		font-size: 18px;
+		font-family: AvenirNext-Regular, AvenirNext;
+		font-weight: 400;
+		color: rgba(0, 0, 0, 1);
+		opacity: 0.4;
+	}
+	.text-smal {
+		opacity: 0.4;
+	}
+	.vote-option {
+		font-size: 14px;
+		font-family: AvenirNext-Regular, AvenirNext;
+		font-weight: 400;
+		color: rgba(0, 0, 0, 1);
+		opacity: 0.4;
+		margin-top: 5px;
+	}
 }
 .stop-btn {
 	width: 432px;
@@ -394,6 +460,10 @@ export default {
 	line-height: 32px;
 	cursor: pointer;
 	margin-bottom: 16px;
+}
+
+.stop-btn:hover {
+    background: #e4e6ea;
 }
 
 .content {
@@ -436,5 +506,8 @@ export default {
 			color: rgba(0, 0, 0, 1);
 		}
 	}
+}
+.my-voted-text {
+	opacity: 1 !important;
 }
 </style>

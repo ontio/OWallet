@@ -1,11 +1,12 @@
 <template>
 	<div>
         <breadcrumb :routes="routes" :current="$t('vote.votingTopics')" v-on:backEvent="back"></breadcrumb>
-        <div class="top-menu-container">
+        <div class="top-menu-container" v-if="role.indexOf(VOTE_ROLE.ADMIN) > -1">
             <a-menu v-model="current" mode="horizontal" @click="handleSelectMenu">
                 <a-menu-item v-for="menu in menus" :key="menu.key">{{menu.name}}</a-menu-item>
             </a-menu>
             <div class="btn-new" @click="handleAddVote" v-if="role.indexOf(VOTE_ROLE.ADMIN) > -1"></div>
+            
         </div>
         <div class="list-container" v-show="current[0] === 'all' ">
             <div class="no-data" v-if="all_votes.length === 0"><p>No data</p> </div>
@@ -208,6 +209,9 @@ export default {
         cursor: pointer;
         margin-left: 50px;   
     }
+    .btn-new:hover {
+        opacity: .8;
+    }
     .ant-menu-horizontal {
         line-height: 36px;
     }
@@ -277,8 +281,9 @@ export default {
             }
             
             p:last-child {
-                margin-top:9px;
+                margin-top:4px;
                 font-size: 14px;
+                opacity: 0.6;
             }
         }
         .status {
@@ -287,7 +292,7 @@ export default {
             font-weight:400;
             color:rgba(0,0,0,1);
             .status-detail {
-                margin-top:9px;
+                margin-top:4px;
                 display: flex;
                 flex-direction: row;
                 align-items:center;
@@ -302,7 +307,7 @@ export default {
                     span {
                         margin-left:4px;
                         font-size: 14px;
-                        opacity: 0.4;
+                        opacity: 0.6;
                     }
                 }
 

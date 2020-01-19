@@ -681,7 +681,8 @@ Within their 50% share each consensus node will receive their share according to
         address: 'Address',
         votes: 'Votes',
         selectWallet: 'Select Wallet',
-        startTimeError: 'The voting starts can not be later than the ends'
+        startTimeError: 'The voting starts can not be later than the ends',
+        new: 'New'
     },
   exchange: {
     exchange: 'Exchange',
