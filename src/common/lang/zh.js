@@ -46,7 +46,8 @@ export default {
     deleteIdentity: '删除ONT ID',
     savedbFailed: '保存到keystore.db文件失败。请确保已设置keystore.db保存路径后重新尝试。',
     selectOep4: '选择OEP-4 Token',
-    contractHash: '合约哈希：'
+    contractHash: '合约哈希：',
+    txFailed: '该交易在区块链上失败。'
   },
 
   FormField: {

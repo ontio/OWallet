@@ -128,7 +128,8 @@ export default {
                         this.$message.error(this.$t('common.ongNoEnough'))
                     } else {
                         // this.$message.error(res.Result)
-                        this.$message.error('common.txFailed. ' + res.Result)
+                        console.log(res.Result)
+                        this.$message.error('common.txFailed. ')
                     }
                     return;
                 } else {

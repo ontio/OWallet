@@ -173,6 +173,7 @@ export default {
 		})
     },
 	mounted() {
+        window.scroll(0,0)
         this.refresh()
         this.intervalId = setInterval(() => {
             this.refresh()
