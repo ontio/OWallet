@@ -379,7 +379,7 @@ const actions = {
         return;
     },
 
-    async getVotedRecords({ commit, state }, { hash }) {
+    async getVotedRecords({ commit, dispatch, state }, { hash }) {
         const net = localStorage.getItem('net');
         const client = getRestClient()
         const contract = new Crypto.Address(utils.reverseHex(contract_hash[net]))
@@ -397,10 +397,12 @@ const actions = {
                     isApproval: formatNumber(i[1]) === 1 ? true : false
                 }
             })
+            const voters = await dispatch('getVoters', {hash})
             for (let item of records) {
-                for (let voter of state.all_voters) {
+                for (let voter of voters) {
                     if (voter.address === item.address) {
-                        item.name = voter.name
+                        const voter_with_name = state.all_voters.find(item => item.address === voter.address)
+                        item.name = voter_with_name ? voter_with_name.name : ''
                         item.weight = voter.weight
                     }
                 }

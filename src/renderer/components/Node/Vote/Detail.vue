@@ -23,7 +23,7 @@
 						v-if="!isVoter">
 						<a-icon type="caret-down"
 							class="icon-reject" />
-						<span class="total-voted">{{vote.approves}}</span>
+						<span class="total-voted">{{vote.rejects}}</span>
 						<span class="text-smal">votes</span>
 					</div>
 
