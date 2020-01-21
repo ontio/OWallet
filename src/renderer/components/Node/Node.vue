@@ -2,43 +2,97 @@
 .node-container {
     position: relative;
     width:100%;
-    height:100vh;
+    padding:22px 20px;
 }
 .center-content {
-    width: 540px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-left:auto;
-    margin-right: auto;
-    transform: translate(-50%, -50%);
+    display: flex;
 }
 .btn-item {
-    text-align: center;
+    width:300px;
+    height:160px;
+    background: #F4F4F6;
+    text-align: left;
     margin-bottom:80px;
+    margin-right: 32px;
+    padding:16px 24px;
+    position:relative;
 }
-.btn-item p {
-    text-align: center;
-    font-size: 16px;
-    margin-bottom: 5px;
+
+.btn-item p:first-child {
+    margin-bottom: 12px;
+}
+.btn-item p:nth-child(2) {
+    font-size:14px;
+    font-family:AvenirNext-Regular,AvenirNext;
+    font-weight:400;
+    color:rgba(0,0,0,1);
+    opacity: 0.4;
 }
 .btn-item button {
     font-size:18px !important;
     height: 80px !important;
     width:300px !important;
 }
+.page-title {
+    font-size:18px;
+    font-family:AvenirNext-Medium,AvenirNext;
+    font-weight:500;
+    color:rgba(0,0,0,1);
+    margin-bottom:24px;
+}
+.icon-bottom {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    text-align: right;
+    padding-right: 24px;
+    padding-bottom:10px;
+    width:100%;
+    font-weight:400;
+    color:rgba(0,0,0,1);
+    font-size:16px;
+    cursor: pointer;
+}
+.icon-bottom:hover, .icon-policy:hover > i {
+    color: #196BD8;
+}
+
+.icon-policy {
+    position: absolute;
+    top: 10px;
+    right:24px;
+    cursor: pointer;
+}
+
 </style>
 
 <template>
-    <div class="node-container">
+    <div class="negative-margin-top node-container">
+        <h1 class="page-title">{{$t('vote.node')}}</h1>
         <div class="center-content">
-            <div class="btn-item">
-                <p class="font-medium">{{$t('nodeMgmt.nodeUser')}}</p>
-                <a-button class="btn-next" @click="handleNodeStake">{{$t('nodeMgmt.nodeStakeMgmt')}}</a-button>
+            <div class="btn-item" >
+                <p class="font-title">{{$t('nodeMgmt.nodeStakeMgmt')}}</p>
+                <p >{{$t('nodeMgmt.nodeUser')}}</p>
+                <div class="icon-bottom" @click="handleNodeStake">
+                    <i class="fa fa-arrow-right fa-s icon-bottom"></i>
+                </div>
             </div>
-            <div class="btn-item">
+            <div class="btn-item" >
+                <p class="font-title">{{$t('nodeMgmt.stakeAuthorizaton')}}</p>
                 <p class="font-medium">{{$t('nodeMgmt.normalUser')}}</p>
-                <a-button class="btn-next" @click="handleAuthorization">{{$t('nodeMgmt.stakeAuthorizaton')}}</a-button>
+                <div class="icon-bottom" @click="handleAuthorization">
+                    <i class="fa fa-arrow-right fa-s icon-bottom"></i>
+                </div>
+            </div>
+            <div class="btn-item" >
+                <p class="font-title">{{$t('vote.vote')}}</p>
+                <p class="font-medium">{{$t('vote.voteTip')}}</p>
+                <div class="icon-policy" @click="openPolicyPage">
+                    <i class="fa fa-question-circle-o fa-lg" aria-hidden="true"></i>
+                </div>
+                <div class="icon-bottom" @click="handleVote">
+                    <i class="fa fa-arrow-right fa-s"></i>
+                </div>
             </div>
         </div>
     </div>
@@ -46,6 +100,7 @@
 </template>
 
 <script>
+import {open} from '../../../core/utils'
 export default {
     name: 'NodeManagement',
     data(){
@@ -69,6 +124,19 @@ export default {
                 return;
             }
             this.$router.push({name: 'NodeList'})
+        },
+        handleVote() {
+            const net = localStorage.getItem('net');
+            if(net === 'TEST_NET' && this.onlyTestNet) {
+                this.$message.warning(this.$t('nodeMgmt.switchMainnet'));
+                return;
+            }
+            this.$router.push('/vote/login')
+        },
+        openPolicyPage() {
+            const lang = localStorage.getItem('user_lang') || 'en'
+            const url = 'https://node.ont.io/voting-policy/' + lang
+            open(url)
         }
     }
 }

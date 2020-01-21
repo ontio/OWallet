@@ -2,6 +2,13 @@
     .breadcrumb-container {
         height:4rem;
         padding:1.1rem 0 1.1rem 15px;
+        padding-left:5.13rem;
+        width:100%;
+        position: fixed;
+        top:0;
+        left:0;
+        background:rgba(255,255,255,1);
+        z-index: 100;
     }
     .back-icon-container {
         height: 1.7rem;
@@ -46,7 +53,7 @@
         font-family: AvenirNext-Bold;
     }
     .left-icon {
-        font-size: 20px;
+        font-size: 16px;
         color: #A5A7A9;
         margin-left: 10px;
     }
@@ -58,7 +65,7 @@
         </div>
         <div class="breadcrumb-routes" v-for="route in routes" :key="route.path">
             <router-link :to="route.path">{{route.name}}</router-link>
-            <a-icon type="left" class="left-icon" />
+            <a-icon type="right" class="left-icon" />
         </div>
         <div class="breadcrumb-current">
             {{current}}

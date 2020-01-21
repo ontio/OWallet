@@ -35,7 +35,9 @@
   }
 </script>
 
-<style>
+
+
+<style lang="scss">
   /* CSS */
   @font-face {
     font-family: SourceSansPro;
@@ -55,6 +57,14 @@
     src: url('../../static/fonts/avenirnextregular.otf');
   }
 
+  body {
+      p {
+        margin:0;
+    }
+  }
+
+  
+
   .loading {
     text-align: center;
     background: rgba(0, 0, 0, 0.05);
@@ -64,10 +74,11 @@
 
   .container-fluid {
     padding-left: 5.13rem !important;
+    padding-top: 4rem;
   }
 
   .font-regular {
-    font-family: 'AvenirNext-Regular';
+    font-family: AvenirNext-Regular;
     color: #000000;
     font-size: 0.88rem;
   }
@@ -77,21 +88,28 @@
   }
 
   .font-medium {
-    font-family: 'AvenirNext-Medium';
+    font-family: AvenirNext-Medium;
     color: #5E6369;
     font-size: 0.88rem;
   }
 
   .font-medium-black {
-    font-family: 'AvenirNext-Medium';
+    font-family: AvenirNext-Medium;
     color: #000000;
     font-size: 0.88rem;
   }
 
   .font-bold {
-    font-family: 'AvenirNext-Bold';
+    font-family: AvenirNext-Bold;
     color: #5E6369;
     font-size: 14px;
+  }
+
+  .font-title {
+    font-size:18px;
+    font-family: AvenirNext-Regular,AvenirNext;
+    font-weight:400;
+    color:rgba(0,0,0,1);
   }
 
 
@@ -116,12 +134,18 @@
     color: #5E6369 !important;
     border: none !important;
   }
+  .btn-cancel:hover {
+      background: #E4E6EA !important;
+  }
 
   .btn-next {
     background: #196BD8 !important;
     color: #ffffff !important;
     border-radius: 0 !important;
     border: none !important;
+  }
+  .btn-next:hover {
+      background: #619AE5 !important;
   }
 
   .btn-add {
@@ -311,6 +335,9 @@
     width:120px;
     height: 34px;
   }
+  .asset-btn > i {
+      margin-right:4px;
+  }
 
   .claim-ong-container {
     display:flex;
@@ -390,5 +417,12 @@
 
 .left-footer {
   margin-top:20px;
+}
+.negative-margin-top {
+    margin-top:-4rem;
+}
+
+.ant-tabs-tab-active {
+    color: #000000;
 }
 </style>

@@ -25,7 +25,7 @@ import {mapState} from 'vuex'
 import {DEFAULT_SCRYPT} from '../../../core/consts'
 import { getRestClient } from '../../../core/utils'
 import {legacySignWithLedger} from '../../../core/ontLedger'
-import {Crypto, TransactionBuilder, TxSignature, utils, RestClient} from 'ontology-ts-sdk'
+import {Crypto, TransactionBuilder, TxSignature, utils, RestClient, WebsocketClient} from 'ontology-ts-sdk'
 export default {
     name: 'SignSendTx',
     props:['tx', 'wallet', 'visible'],
@@ -113,8 +113,10 @@ export default {
             },
             sendTx(tx){
                 this.walletPassword = '';
-                const restClient = getRestClient();
-                restClient.sendRawTransaction(tx.serialize()).then(res => {
+                const client = getRestClient();
+                // const client = new WebsocketClient();
+                // client.sendRawTransaction(tx.serialize(), false, true).then(res => {
+                client.sendRawTransaction(tx.serialize()).then(res => {
                 console.log(res)
                 this.$store.dispatch("hideLoadingModals");
                 if (res.Error === 0) {
@@ -125,7 +127,9 @@ export default {
                     } else if(res.Result.indexOf('cover gas cost') > -1){
                         this.$message.error(this.$t('common.ongNoEnough'))
                     } else {
-                        this.$message.error(res.Result)
+                        // this.$message.error(res.Result)
+                        console.log(res.Result)
+                        this.$message.error('common.txFailed. ')
                     }
                     return;
                 } else {

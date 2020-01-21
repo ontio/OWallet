@@ -69,6 +69,11 @@ export const OFF_CHAIN_NODES = {
     MAIN_NET: 'https://explorer.ont.io/v2/nodes/off-chain-infos'
 }
 
+export const NODE_CURRENT_STAKES = {
+    TEST_NET: 'https://polarisexplorer.ont.io/v2/nodes/current-stakes',
+    MAIN_NET: 'https://explorer.ont.io/v2/nodes/current-stakes'
+}
+
 export const PAX_API = {
     Host: 'http://18.138.83.180:20800',
     // TestHost: 'http://172.168.3.61:20800',
@@ -85,13 +90,19 @@ export const PAX_SC_HASH = {
     TEST: 'b06f8eaf757030c7a944ce2a072017bde1e72308'
 }
 
+export const VOTE_ROLE = {
+    ADMIN: 'ADMIN',
+    VOTER: 'VOTER',
+    VISITOR: 'VISITOR'
+}
+
 export const VALIDATE_DICTIONARY = {
     zh: {
         messages: {
             required: (field, val) => `字段 ${field} 是必填项`,
             min: (field, val) => `字段 ${field} 的长度不能少于${val[0]}`,
             length: (field, val) => `字段 ${field} 的长度必须是${val[0]}`,
-            confirmed: (field, val) => `密码两次输入不匹配`
+            confirmed: (field, val) => `${field}的输入匹配错误`
         },
         attributes: {
             password: '密码',
@@ -107,7 +118,7 @@ export const VALIDATE_DICTIONARY = {
             required: (field, val) => `${field} is required`,
             min: (field, val) => `The length of ${field} must be larger than ${val[0]}`,
             length: (field, val) => `The length of ${field} must be ${val[0]}`,
-            confirmed: (field, val) => `The passwords didn't match.`
+            confirmed: (field, val) => `Those two inputs didn't match.`
         },
         attributes: {
             password: 'Password',

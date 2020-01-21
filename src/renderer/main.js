@@ -8,8 +8,8 @@ import store from './store'
 
 
 import 'font-awesome/css/font-awesome.css'
-import {Button, message, Steps, Input ,Form, Icon, Select, Spin, Alert, Modal, Slider,Radio, Pagination,Switch,
-  Row, Col, InputNumber, Layout, Menu, Breadcrumb, Checkbox, Tooltip, Table, Dropdown, Card} from 'ant-design-vue'
+import {Button, message, Steps, Input ,Form, Icon, Select, Spin, Alert, Modal, Slider,Radio, Pagination,Switch, DatePicker, TimePicker,
+  Row, Col, InputNumber, Layout, Menu, Breadcrumb, Checkbox, Tooltip, Table, Dropdown, Card, Tabs} from 'ant-design-vue'
 
 import VueClipboard from 'vue-clipboard2'
 VueClipboard.config.autoSetContainer = true // add this line
@@ -30,6 +30,16 @@ Vue.use(VeeValidate, {
 })  
 import service from '../core/utils'
 Vue.prototype.httpService = service;
+
+import { VOTE_ROLE } from '../core/consts'
+const mixin = {
+    data () {
+        return {
+            VOTE_ROLE: VOTE_ROLE
+        }
+    }
+}
+Vue.mixin(mixin)
 
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
@@ -78,7 +88,9 @@ Vue.component(Dropdown.name, Dropdown)
 Vue.component(Pagination.name, Pagination)
 Vue.component(Switch.name, Switch)
 Vue.component(Card.name, Card)
-
+Vue.component(DatePicker.name, DatePicker)
+Vue.component(TimePicker.name, TimePicker)
+Vue.use(Tabs)
 
 Vue.prototype.$message = message
 Vue.prototype.$confirm = Modal.confirm

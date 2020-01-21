@@ -1,5 +1,5 @@
 import { getNodeUrl} from '../../../core/utils'
-import {NODE_DETAIL, NODE_NAME_LIST, OFF_CHAIN_NODES} from '../../../core/consts'
+import {NODE_DETAIL, NODE_NAME_LIST, OFF_CHAIN_NODES, NODE_CURRENT_STAKES} from '../../../core/consts'
 import numeral from 'numeral'
 import { Crypto, RestClient, utils, GovernanceTxBuilder} from 'ontology-ts-sdk'
 import {BigNumber} from 'bignumber.js'
@@ -402,41 +402,38 @@ const actions = {
 
     async fetchNodeListNew({commit, dispatch}, {pageSize, pageNum}) {
         const net = localStorage.getItem('net')
-        if(net === 'TEST_NET') {
-            return dispatch('fetchNodeList', {pageSize, pageNum})
-        } else {
-            try {
-                const url = 'https://explorer.ont.io/v2/nodes/current-stakes'
-                const res = await axios.get(url)
-                console.log(res)
-                if(res.data.code === 0 && res.data.result) {
-                    const result = res.data.result;
-                    const total = result.length;
-                    const list = result.slice(pageNum * pageSize, (pageNum + 1) * pageSize).map(item => {
-                        item.rank = item.node_rank;
-                        item.nodeProportion = item.node_proportion;
-                        item.currentStake = numeral(item.current_stake).format('0,0');
-                        item.process = item.progress;
-                        item.maxAuthorize = item.max_authorize;
-                        item.maxAuthorizeStr = numeral(item.max_authorize).format('0,0')
-                        item.totalPos = item.total_pos;
-                        item.initPos = item.init_pos;
-                        item.pk = item.public_key;
-                        item.detailUrl = item.detail_url;
-                        item.totalPosStr = numeral(item.totalPos).format('0,0')
-                        return item;
-                    })
-                    commit('UPDATE_NODE_LIST', {list})
-                    return total;
-                } else {
-                    return 0;
-                }
-            }catch(err) {
-                console.log(err)
-                dispatch('hideLoadingModals')
+        const url = NODE_CURRENT_STAKES[net];
+        try {
+            const res = await axios.get(url)
+            console.log(res)
+            if(res.data.code === 0 && res.data.result) {
+                const result = res.data.result;
+                const total = result.length;
+                const list = result.slice(pageNum * pageSize, (pageNum + 1) * pageSize).map(item => {
+                    item.rank = item.node_rank;
+                    item.nodeProportion = item.node_proportion;
+                    item.currentStake = numeral(item.current_stake).format('0,0');
+                    item.process = item.progress;
+                    item.maxAuthorize = item.max_authorize;
+                    item.maxAuthorizeStr = numeral(item.max_authorize).format('0,0')
+                    item.totalPos = item.total_pos;
+                    item.initPos = item.init_pos;
+                    item.pk = item.public_key;
+                    item.detailUrl = item.detail_url;
+                    item.totalPosStr = numeral(item.totalPos).format('0,0')
+                    return item;
+                })
+                commit('UPDATE_NODE_LIST', {list})
+                return total;
+            } else {
                 return 0;
             }
+        }catch(err) {
+            console.log(err)
+            dispatch('hideLoadingModals')
+            return 0;
         }
+        
     },
     async fetchBlockCountdown({commit}) {
         const url = getNodeUrl();
