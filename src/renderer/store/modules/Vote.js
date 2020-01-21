@@ -9,7 +9,7 @@ import i18n from '../../../common/lang';
 const gasPrice = '500'
 const gasLimit = '200000'
 const contract_hash = {
-    MAIN_NET: '',
+    MAIN_NET: 'c0df752ca786a99755b2e8950060ade9fa3d4e1b',
     TEST_NET: 'a088ae3b508794e666ab649d890213e66e0c3a2e'
 }
 const state = {

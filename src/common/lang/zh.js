@@ -639,7 +639,7 @@ export default {
         inProgress: '进行中',
         finished: '已结束',
         canceled: '已取消',
-        nodeCanVoteOnly: '当前仅节点用户可以参与投票',
+        nodeCanVoteOnly: '当前仅北斗共识节点用户可以参与投票',
         title: '标题',
         detail: '内容',
         votingStarts: '投票开始时间',
