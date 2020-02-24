@@ -52,11 +52,12 @@ async function matchNodeName(list) {
 
 async function fetchRoundBlocks() {
     const net = localStorage.getItem('net');
-    let url = net === 'TEST_NET' ? 'http://52.221.214.196:8090/v2/nodes/max-staking-change-count'
-        : 'http://18.136.216.3:8090/v2/nodes/max-staking-change-count'
+    let url = net === 'TEST_NET' ? 'https://polarisexplorer.ont.io/v2/nodes/block-count-to-next-round'
+        : 'https://explorer.ont.io/v2/nodes/block-count-to-next-round'
     const res = await axios.get(url);
     if (res.data && res.data.result) {
-        return Number(res.data.result);
+        const {max_staking_change_count, count_to_next_round} = res.data.result
+        return Number(count_to_next_round);
     } else {
         throw new Error('Network error when fetch block counts.')
     }
@@ -439,14 +440,15 @@ const actions = {
         const url = getNodeUrl();
         const rest = new RestClient(url);
         try {
-            const view = await GovernanceTxBuilder.getGovernanceView(url);
-            const blockRes = await rest.getBlockHeight();
-            const blockHeight = blockRes.Result;
-            const blockCounts = await fetchRoundBlocks()
-            const countdown = blockCounts - (blockHeight - view.height);
-            if (countdown < 0) {
-                throw new Error('Network error for fetch block countdown.')
-            }
+            // const view = await GovernanceTxBuilder.getGovernanceView(url);
+            // const blockRes = await rest.getBlockHeight();
+            // const blockHeight = blockRes.Result;
+            // const blockCounts = await fetchRoundBlocks()
+            // const countdown = blockCounts - (blockHeight - view.height);
+            // if (countdown < 0) {
+            //     throw new Error('Network error for fetch block countdown.')
+            // }
+            const countdown = await fetchRoundBlocks()
             commit('UPDATE_COUNTDOWN_BLOCK', {countdown})
             return countdown;
         }catch(err) {
