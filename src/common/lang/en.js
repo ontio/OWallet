@@ -46,8 +46,11 @@ export default {
     deleteIdentity: 'Delete ONT ID',
     savedbFailed: 'Save to db file failed.Please make sure you have set the path to save the keystore.db file and try again.',
     selectOep4: 'Select OEP-4 token',
-        contractHash: 'Contract hash: ',
-        txFailed: 'The transaction failed on blockchain. '
+    contractHash: 'Contract hash: ',
+    txFailed: 'The transaction failed on blockchain. ',
+    availableNewVersion: 'A new version is available. In order to get a better user experience, please upgrade OWallet.',
+    toUpdate: 'Upgrade now',
+    cancel: 'Cancel'
   },
 
   FormField: {

@@ -47,7 +47,10 @@ export default {
     savedbFailed: '保存到keystore.db文件失败。请确保已设置keystore.db保存路径后重新尝试。',
     selectOep4: '选择OEP-4 Token',
     contractHash: '合约哈希：',
-    txFailed: '该交易在区块链上失败。'
+    txFailed: '该交易在区块链上失败。',
+    availableNewVersion: '有新版本可用。为了获得更好的使用体验，请升级OWallet。',
+    toUpdate: '立即升级',
+    cancel: '取消'
   },
 
   FormField: {
