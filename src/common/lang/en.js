@@ -39,7 +39,7 @@ export default {
     versionUpdate: 'You can upgrade your OWallet.',
     getLatestVersion: 'Get the latest version here.',
     changePassSuccess: 'Change password successfully',
-    changePassSuccessTip: 'You have already changed the password of the wallet. We recommand you to download and backup the .dat file.(Please replace or delete the old .dat file of this wallet.)',
+    changePassSuccessTip: 'You have already changed the password of the wallet. We recommend you to download and backup the .dat file.(Please replace or delete the old .dat file of this wallet.)',
     download: 'Download .dat',
     balanceInsufficient: 'Sorry, your balance is insufficient.',
     exportIdentity: 'Export keystore',
@@ -117,7 +117,7 @@ export default {
     keystoreImport: 'ONT ID Keystore Import',
     invalidKeystore: 'The keystore you input is invalid.',
     ontidExist: 'The identity already exists in local.',
-    importSuccess: 'Import Identity succeessfully!'
+    importSuccess: 'Import Identity succeed!'
   },
 
   wallets: {
@@ -142,15 +142,15 @@ export default {
     newPassword: 'New password',
     reNewPassword: 'Repeat new password',
     changePassSuccess: 'Change password successfully!',
-    exportOntid: 'You are about to export the keystore of identiy with ONT ID:',
+    exportOntid: 'You are about to export the keystore of identity with ONT ID:',
     deleteIdentityFailed: 'Delete ONT ID failed',
     deleteIdentitySuccess: 'Delete ONT ID successfully',
     exportedWIF: 'Your private key (WIF) is:'
   },
 
   dashboard: {
-    getTransErr: 'Fetch transaction history failed. Network error. Plese try later.',
-    getBalanceErr: 'Fetch balance failed. Network error. Plese try later.'
+    getTransErr: 'Fetch transaction history failed. Network error. Please try later.',
+    getBalanceErr: 'Fetch balance failed. Network error. Please try later.'
   },
 
   createJsonWallet: {
@@ -215,10 +215,10 @@ export default {
 
   createSharedWallet: {
     basicInfo: 'Basic info',
-    copayers: 'Copayers',
+    copayers: 'Co-payers',
     processing: 'Processing',
     label: 'Name of shared wallet',
-    copayers2_12: 'Copayers(2-12)',
+    copayers2_12: 'Co-payers(2-12)',
     address: 'Address',
     inputPks: 'Input 2 - 12 public keys\' info',
     name: 'Name',
@@ -250,9 +250,9 @@ export default {
     inputAddress: 'Address of shared wallet',
     search: 'Search',
     name: 'Shared wallet name',
-    totalCopayerNumber: 'Total number of copayers',
-    requiredCopayerNumber: 'Required number of copayers',
-    allCopayers: 'Address of all Copayers',
+    totalCopayerNumber: 'Total number of co-payers',
+    requiredCopayerNumber: 'Required number of co-payers',
+    allCopayers: 'Address of all Co-payers',
     noResult: 'No result',
     address: 'Address',
     chooseLocalWallet: 'Select local wallet to join',
@@ -265,7 +265,7 @@ export default {
     join: 'Join',
     inputPassword: 'Enter password to join',
     joinBefore: 'You have joined this wallet before.',
-    success: 'Joind shared wallet succeefully!',
+    success: 'Join shared wallet succeed!',
     passwordError: 'Password error.',
     sorry: 'Sorry!',
     notFound: 'The shared wallet you are looking for is not found.'
@@ -283,7 +283,7 @@ export default {
     receive: 'Receive',
     claim: 'Claim',
     rule: 'Rule',
-    copayers: 'Copayers',
+    copayers: 'Co-payers',
     pendingTx: 'Pending transactions',
     completedTx: 'Completed transactions',
     owners: 'Owners',
@@ -338,8 +338,8 @@ export default {
     queryEthScan: 'Query Total Eth amount',
     currentSign: 'Current signer sign',
     txToSend: 'Number of transactions to send: ',
-    txSent: 'Number of transactoins sent succeed: ',
-    sendingTx: 'Sending transactoins',
+    txSent: 'Number of transactions sent succeed: ',
+    sendingTx: 'Sending transactions',
     selectedNum: 'Number of selected orders: ',
     totalAmount: 'Total amount of selected orders: ',
     ethTotal: 'Total amount of received ETH: ',
@@ -350,10 +350,10 @@ export default {
     toEthScan: 'To Eth Scan',
     txCompleted: 'Transaction completed',
     txDetail: 'Detail',
-    toVarify: 'Varify',
-    varifySuccess: 'Varify succeed!',
-    varifyFailed: 'Varify failed!',
-    varifyResult: 'Varified result',
+    toVarify: 'Verify',
+    varifySuccess: 'Verify succeed!',
+    varifyFailed: 'Verify failed!',
+    varifyResult: 'Verified result',
     failedTxhashes: 'Failed transaction hash:'
   },
 
@@ -498,8 +498,8 @@ export default {
     search: 'Search'
   },
   nodeStakeStatus: {
-    transfering: 'Transfering',
-    transfered: 'Transfered',
+    transfering: 'Transferring',
+    transfered: 'Transferred',
     transferFailed: 'Transfer Failed',
     audit: 'Audit',
     auditing: 'Auditing',
@@ -628,9 +628,9 @@ Within their 50% share each consensus node will receive their share according to
     redeemInitPos: 'Redeem Init Pos',
     initPosInLock: "Locked",
     initPosRedeemable: 'Claimable',
-    noClaimbleInitPos: 'No claimble ONT.',
+    noClaimbleInitPos: 'No claimable ONT.',
     redeemInitPosOk: 'Redeem',
-    hasClaimableInitPos: 'You have redeemable init pos. Plase redeem this part first.',
+    hasClaimableInitPos: 'You have redeemable init pos. Please redeem this part first.',
     noClaimbleToRefund: 'No redeemable ONT to refund.'
     },
     vote: {
@@ -644,7 +644,7 @@ Within their 50% share each consensus node will receive their share according to
         inProgress: 'In Progress',
         finished: 'Finished',
         canceled: 'Canceled',
-        nodeCanVoteOnly: '*Only users from Triones consensus nodes are allowed to vote.',
+        nodeCanVoteOnly: '*Only users from consensus nodes are allowed to vote.',
         title: 'Title',
         detail: 'Detail',
         votingStarts: 'Vote start time',
