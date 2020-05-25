@@ -12,7 +12,7 @@ import i18n from '../../../common/lang';
 var dateFormat = require('dateformat');
 // import nodes from '../../../core/nodes.json'
 
-//TODO: fetch api to match node names
+//@Deprecated
 async function matchNodeName(list) {
     let nodes = []
     const net = localStorage.getItem('net');
@@ -275,44 +275,19 @@ const actions = {
                 let claimableVal = item.withdrawUnfreezePos;
                 if (inAuthorization > 0 || locked > 0 || claimableVal > 0) {
                   const record = formatAuthorizationInfo(item)
-                  // const node = {
-                  //     pk:k,
-                  //     address: item.address
-                  // }
-                  // await matchNodeName([node])
-                  // commit('UPDATE_CURRENT_NODE', {current_node : node})
                   record.name = '';
-                //   record.address = item.address // this is user's stake wallet address
                   record.pk = item.peerPubkey;
                   record.stakeWallet = address;
                   list.push(record)
                 }
             })
-            // for (let item of state.sortedNodeList) {
-            //     const userAddr = new Crypto.Address(address);
-            //     const authorizationInfo = await GovernanceTxBuilder.getAuthorizeInfo(item.peerPubkey, userAddr, url)
-            //     if (authorizationInfo){
-            //         let inAuthorization = authorizationInfo.consensusPos + authorizationInfo.freezePos
-            //             + authorizationInfo.newPos;
-            //         let locked = authorizationInfo.withdrawPos + authorizationInfo.withdrawFreezePos;
-            //         let claimableVal = authorizationInfo.withdrawUnfreezePos;
-            //         if(inAuthorization > 0 || locked > 0 || claimableVal > 0) {
-            //             const record = formatAuthorizationInfo(authorizationInfo)
-            //             // const node = {
-            //             //     pk:k,
-            //             //     address: item.address
-            //             // }
-            //             // await matchNodeName([node])
-            //             // commit('UPDATE_CURRENT_NODE', {current_node : node})
-            //             record.name = '';
-            //             record.address = item.address
-            //             record.pk = item.peerPubkey;
-            //             record.stakeWallet = address;
-            //             list.push(record)
-            //         }
-            //     }
-            // }
-            await matchNodeName(list);
+            list.forEach(item => {
+                for (let i = 0; i < nodes.length; i++) {
+                    if (item.pk === nodes[i].public_key) {
+                        item.name = nodes[i].name ? nodes[i].name : 'Node_' + nodes[i].public_key.substr(0, 6)
+                    }
+                }
+            })
             commit('UPDATE_STAKE_HISTORY', {history: list})
             dispatch('hideLoadingModals')                        
             return list;
@@ -323,6 +298,7 @@ const actions = {
             return [];
         }
     },
+    //@Deprecated
     async fetchAllSortedNodeList({commit, dispatch}) {
         const url = getNodeUrl();
         try {
@@ -357,6 +333,7 @@ const actions = {
             return [];
         }
     },
+    //Deprecated
     async fetchNodeList({commit, dispatch, state}, {pageSize, pageNum}) {
         const url = getNodeUrl();
         if(state.sortedNodeList.length === 0) {
@@ -387,7 +364,6 @@ const actions = {
                 }
                 item.process = process + '%'
                 item.detailUrl = NODE_DETAIL + item.peerPubkey;
-                // matchNodeName(item)
             })
             console.log(JSON.stringify(list))
             
@@ -422,6 +398,9 @@ const actions = {
                     item.pk = item.public_key;
                     item.detailUrl = item.detail_url;
                     item.totalPosStr = numeral(item.totalPos).format('0,0')
+                    if (!item.name) {
+                        item.name = 'Node_' + item.public_key.substr(0, 6)
+                    }
                     return item;
                 })
                 commit('UPDATE_NODE_LIST', {list})
@@ -480,40 +459,6 @@ const actions = {
             console.log(err);
         }
     },
-
-    //This method is deprecated
-   /*  async recordStakeHistory({commit, dispatch}, {txHash, record}) {
-        const url = getNodeUrl();
-        const rest = new RestClient(url)
-        
-        await delay(6000);
-        let event = await rest.getSmartCodeEvent(txHash)
-        if (event.Result && parseInt(event.Result.State) === 1) {
-            //do nothing
-        } else {
-            await delay(3000);
-            event = await rest.getSmartCodeEvent(txHash)
-        }
-        if (!event.Result || parseInt(event.Result.State) !== 1) {
-            return;
-        }
-        // update stake history Db
-        const pk = record.nodePk;
-        const address = record.stakeWalletAddress
-        const authorizationInfo = await dispatch('fetchAuthorizationInfo', { pk, address })
-        if (authorizationInfo) {
-            const inAuthorization = authorizationInfo.consensusPos + authorizationInfo.freezePos
-                + authorizationInfo.newPos;
-            record.amount = inAuthorization;
-        }
-        try {
-            const upsert = await dbUpsert(db2, 'indexKey', record);
-            return upsert;
-        } catch (err) {
-            console.log(err)
-            return;
-        }
-    } */
 }
 
 export default {

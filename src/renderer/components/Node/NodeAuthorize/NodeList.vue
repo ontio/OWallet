@@ -162,18 +162,17 @@ export default {
         }
     },
     mounted(){
-        //loop to fetch data
-        // this.$store.dispatch('showLoadingModals');
         this.requesting = true;
         const net = localStorage.getItem('net')
-        if(net === 'TEST_NET') {
-            this.$store.dispatch('fetchAllSortedNodeList').then(res => {
-                this.pagination.total = res.length;
-                this.fetchList()
-            })
-        } else {
-            this.fetchList()
-        }
+        this.fetchList()
+        // if(net === 'TEST_NET') {
+        //     this.$store.dispatch('fetchAllSortedNodeList').then(res => {
+        //         this.pagination.total = res.length;
+        //         this.fetchList()
+        //     })
+        // } else {
+        //     this.fetchList()
+        // }
         
         this.$store.dispatch('fetchBlockCountdown')
         this.intervalId = setInterval(()=>{
@@ -216,10 +215,7 @@ export default {
                 pageNum: this.pagination.current - 1
             }).then(res => {
                 this.requesting = false;
-                const net = localStorage.getItem('net')
-                if(net !== 'TEST_NET') {
-                    this.pagination.total = res;
-                }
+                this.pagination.total = res;
             })
         },
         showProportionTip() {
