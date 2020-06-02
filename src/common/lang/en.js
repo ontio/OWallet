@@ -98,6 +98,7 @@ export default {
     ontid: 'ONT ID',
     selectWallet: 'Select Wallet to pay for the transaction fee',
     commonWallet: 'Individual Wallet',
+    sharedWallet: 'Shared Wallet',
     ledgerWallet: 'Ledger Wallet',
     payerPassword: 'Input the password of your selected wallet',
     selectCommonWallet: 'Select local individual wallet',
