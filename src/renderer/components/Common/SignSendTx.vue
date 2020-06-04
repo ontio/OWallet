@@ -26,9 +26,28 @@ import {DEFAULT_SCRYPT} from '../../../core/consts'
 import { getRestClient } from '../../../core/utils'
 import {legacySignWithLedger} from '../../../core/ontLedger'
 import {Crypto, TransactionBuilder, TxSignature, utils, RestClient, WebsocketClient} from 'ontology-ts-sdk'
+// common component to sign tx or messages with wallet or ledger.
 export default {
     name: 'SignSendTx',
-    props:['tx', 'wallet', 'visible'],
+    // props:['tx', 'wallet', 'visible',],
+    props: {
+        tx: {
+            required: true
+        },
+        wallet: {
+            required: true
+        },
+        visible: {
+            required: true,
+            type: Boolean
+        },
+        sendAfterSign: {
+            required: false,
+            type: Boolean,
+            default: true
+        }
+
+    },
     mounted(){
         if(!this.wallet.key) {//common wallet
             this.$store.dispatch('getLedgerStatus')
@@ -79,8 +98,14 @@ export default {
                     this.$message.error(this.$t("common.pwdErr"));
                     return;
                 }
-                TransactionBuilder.signTransaction(tx, pri);
-                this.sendTx(tx);
+                if(typeof tx === 'string') {
+                    const signature =  pri.sign(tx) 
+                    this.$emit('afterSign', signature) // 返回签名message结果
+                } else {
+                    TransactionBuilder.signTransaction(tx, pri);
+                    this.sendTx(tx);
+                }
+                
             } else {
                 //ledger sign
                 if (this.ledgerWallet.address) {
@@ -112,6 +137,10 @@ export default {
             }
             },
             sendTx(tx){
+                if(!this.sendAfterSign) {
+                    this.$emit('afterSign', tx)
+                    return;
+                }
                 this.walletPassword = '';
                 const client = getRestClient();
                 // const client = new WebsocketClient();

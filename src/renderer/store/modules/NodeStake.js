@@ -1,11 +1,13 @@
 import axios from 'axios'
 import en from '../../../common/lang/en'
 import zh from '../../../common/lang/zh'
-import {ONT_PASS_NODE, ONT_PASS_NODE_PRD, ONT_PASS_URL} from '../../../core/consts'
+import { ONT_PASS_NODE, ONT_PASS_NODE_PRD, ONT_PASS_URL } from '../../../core/consts'
+
 const state = {
     detail: {
         publickey: ''
     },
+    nodePublicKey: '',
     stakeWallet: {
         address: '',
         key: ''
@@ -13,6 +15,7 @@ const state = {
     stakeIdentity: {
         ontid: ''
     },
+    status: '',
     status1: '',
     status2: '',
     status3: '',
@@ -27,6 +30,12 @@ const mutations = {
     },
     UPDATE_STAKE_WALLET(state, payload) {
         state.stakeWallet = payload.stakeWallet
+    },
+    UPDATE_NODE_PUBLICKEY(state, payload) { 
+        state.nodePublicKey = payload.nodePublicKey
+    },
+    UPDATE_NODE_STATUS(state, payload) { 
+        state.status = payload.status
     },
     UPDATE_STAKE_STATUS(state, payload) {
         state.status1 = payload.status1
@@ -53,42 +62,42 @@ function getStatus(status) {
         statusTip = '',
         btnText = ''
     switch (status) {
-        case 0:
+        case 0: // 没了
              status1 = formatStatusText('transfering')
              status2 = formatStatusText('audit')
              status3 = formatStatusText('stake')
              current = 0
              statusTip = formatStatusText('transferNeedTime')
             break;
-        case 1:
+        case 1: // 没了
              status1 = formatStatusText('transferFailed')
              status2 = formatStatusText('audit')
              status3 = formatStatusText('stake')
              statusTip = ''
              current = 0
             break;
-        case 2:
+        case 2: // 没了
              status1 = formatStatusText('transfered')
              status2 = formatStatusText('auditing')
              status3 = formatStatusText('stake')
              statusTip = formatStatusText('auditNeedTime')
              current = 1            
             break;
-        case 3:
+        case 3: // 没了
              status1 = formatStatusText('transfered')
              status2 = formatStatusText('auditFailed')
              status3 = formatStatusText('stake')
              statusTip = ''
              current = 1
             break;
-        case 4:
+        case 4: // 没了
              status1 = formatStatusText('nodeExited')
              status2 = formatStatusText('refund')
              status3 = formatStatusText('quitStake')
              statusTip = formatStatusText('unfrozenToRefund')
              current = 0
             break;
-        case 5:
+        case 5: 
              status1 = formatStatusText('nodeExited')
              status2 = formatStatusText('refunding')
              status3 = formatStatusText('quitStake')
@@ -156,6 +165,24 @@ const actions = {
         })
         // const status = getStatus(2);
         // commit('UPDATE_STAKE_STATUS', status)
+    },
+    async fetchNodeInfo({ }, public_key) {
+        const net = localStorage.getItem("net");
+        const url = net === 'TEST_NET' ? 'https://polarisexplorer.ont.io/v2/nodes/off-chain-info'
+            : 'https://explorer.ont.io/v2/nodes/off-chain-info'
+        const res = await axios.get(url, {
+            params: {
+                public_key
+            }
+        })
+        return res.data.result
+    },
+    async updateNodeInfo({ }, info) {
+        const net = localStorage.getItem("net");
+        const url = net === 'TEST_NET' ? 'https://polarisexplorer.ont.io/v2/nodes/off-chain-info'
+            : 'https://explorer.ont.io/v2/nodes/off-chain-info'
+        const res = await axios.post(url, info)
+        return res.data.result
     }
 }
 

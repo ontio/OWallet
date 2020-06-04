@@ -140,7 +140,22 @@ export default new Router({
                 component: require('@/components/Node/Vote/Detail').default
             },
         ]
-    },
+        },
+        {
+            path: '/node/apply',
+            name: 'NodeApply',
+            component: require('@/components/Node/NodeApply/Register').default
+        },
+        {
+            path: '/node/applysuccess',
+            name: 'NodeApplySuccess',
+            component: require('@/components/Node/NodeApply/RegisterSuccess').default
+        },
+        {
+            path: '/node/mynode',
+            name: 'MyNode',
+            component: require('@/components/Node/NodeManagement/MyNode').default
+        },
     {
         path: '/commonWalletSend',
         name: 'CommonSendHome',

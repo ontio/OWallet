@@ -18,14 +18,16 @@
         <a-menu v-model="current" mode="horizontal" @click="handleSelect">
             <a-menu-item key="Node_Stake">{{$t('nodeMgmt.nodeStake')}}</a-menu-item>
             <a-menu-item key="Node_Authorization">{{$t('nodeMgmt.userStakeAuthorization')}}</a-menu-item>
+            <a-menu-item key="Node_Info">{{$t('nodeInfo.nodeInfo')}}</a-menu-item>
         </a-menu>
         <div>
-            <div v-if="current[0] === 'Node_Stake'" class="node-stake-info">
+            <div v-show="current[0] === 'Node_Stake'" class="node-stake-info">
                 <node-stake-info :showPosBtn="true" :breadcrumb="true"></node-stake-info>
                 
             </div>
             <!-- NODE_HIDE -->
-            <node-stake-authorization v-if="current[0] === 'Node_Authorization'"></node-stake-authorization>
+            <node-stake-authorization v-show="current[0] === 'Node_Authorization'"></node-stake-authorization>
+            <node-info v-show="current[0] === 'Node_Info'"></node-info>
         </div>
     </div>
 </template>
@@ -34,12 +36,14 @@
 import Breadcrumb from '../../Breadcrumb'
 import NodeStakeInfo from '../NodeStake/NodeStakeInfo'
 import NodeStakeAuthorization from './NodeStakeAuthorization'
+import NodeInfo from '../NodeStake/NodeInfo'
 export default {
     name: 'NodeStakeManagement',
     components: {
         Breadcrumb,
         NodeStakeInfo,
-        NodeStakeAuthorization
+        NodeStakeAuthorization,
+        NodeInfo
     },
     data(){
         return {
