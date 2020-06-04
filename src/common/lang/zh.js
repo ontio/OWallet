@@ -574,7 +574,7 @@ export default {
     newStakeAuthorization: '提交新的授权质押',
     cancelAuthorization: '取消授权质押',
     units: '授权质押份数',
-    stakeAmountTip: '质押数额 = 份数 * 500 ONT/每份.',
+    stakeAmountTip: '质押数额 = 份数 * 1 ONT/每份.',
     stakeAmount: '质押数额',
     submit: '提交',
     allowedStakeUnits: '允许授权质押份数',
@@ -681,6 +681,9 @@ export default {
         selectWallet: '请选择钱包',
         startTimeError: '投票开始时间不能晚于结束时间',
         new: '新建'
+    },
+    nodeApply: {
+        operationWallet: ''
     },
   exchange: {
     exchange: 'Exchange',

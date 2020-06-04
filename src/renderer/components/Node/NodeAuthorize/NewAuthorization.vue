@@ -87,7 +87,7 @@ export default {
     data(){
         return {
             units:1,
-            amount:500,
+            amount:1,
             validInput: true,
             signVisible: false,
             tx: ''
@@ -109,7 +109,7 @@ export default {
                 this.validInput = false;
                 return;
             }
-            this.amount = parseInt(this.units) * 500;
+            this.amount = parseInt(this.units) * 1;
             if(this.units && this.amount > (this.current_node.maxAuthorize - this.current_node.totalPos)) {
                 this.validInput = false;
                 return;

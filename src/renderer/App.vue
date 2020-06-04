@@ -425,4 +425,10 @@
 .ant-tabs-tab-active {
     color: #000000;
 }
+
+.app-container {
+    width: 550px;
+	margin: 0 auto;
+	margin-top: 20px;
+}
 </style>

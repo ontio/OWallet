@@ -130,3 +130,13 @@ export const VALIDATE_DICTIONARY = {
         }
     }
 }
+//申请注册 候选 共识 共识退出 候选退出 拉黑 已退出
+export const GovernanceStatus = {
+    REGISTER: 0,
+    CANDIDATE: 1,
+    CONSENSUS: 2,
+    QUIT_CANDIDATE: 3,
+    QUIT_CONSENSUS: 4,
+    BLACKLIST: 5,
+    EXIXTED: 6
+}

@@ -109,12 +109,17 @@
   }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .json-confirm-container {
     width: 36rem;
     padding: 15px;
     border:1px solid #dddddd;
+    p {
+        margin-bottom: 10px;
+        word-break: break-all;
+    }
   }
+
 
   .confirm-btns {
     position: fixed;
@@ -137,6 +142,9 @@
   }
   .backup-text {
     text-align: center;
+    p {
+        text-align: left;
+    }
     /* padding: 20px; */
     /* border: 1px solid #dddddd; */
     font-size: 16px;

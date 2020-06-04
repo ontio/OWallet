@@ -59,9 +59,6 @@
                 </div>
 
                 </a-radio-group>
-
-
-                
             </div>
         </div>
         <div class="footer-btns">
