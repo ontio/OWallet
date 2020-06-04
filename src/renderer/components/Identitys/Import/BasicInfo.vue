@@ -40,7 +40,7 @@
   import dbService from '../../../../core/dbService'
   import {DEFAULT_SCRYPT, TEST_NET, MAIN_NET} from '../../../../core/consts'
   import $ from 'jquery'
-import { getRestClient, formatScryptParams } from '../../../../core/utils';
+import { getNodeUrl, getRestClient, formatScryptParams } from '../../../../core/utils';
 
   export default {
     name: 'BasicInfo',
@@ -78,8 +78,7 @@ import { getRestClient, formatScryptParams } from '../../../../core/utils';
           return true;
         }
       },
-      importIdentityForKeystore() {
-        // TODO 需要填充的逻辑部分
+      async importIdentityForKeystore() {
         console.log('keystore:[' + this.keystore + ']; keystorePassword:[' + this.keystorePassword + ']')
         //import identity
         let keystore;
@@ -97,7 +96,6 @@ import { getRestClient, formatScryptParams } from '../../../../core/utils';
         }
         let identity = new Identity();
         try {
-          debugger
             const encryptedPrivateKeyObj = new Crypto.PrivateKey(keystore.key);
             const addr = new Crypto.Address(keystore.address);
             const label = keystore.label || 'Identity'
@@ -116,18 +114,22 @@ import { getRestClient, formatScryptParams } from '../../../../core/utils';
         }
         const tx = OntidContract.buildGetDDOTx(identity.ontid)
         const restClient = getRestClient()
-        restClient.sendRawTransaction(tx.serialize(), true).then(res => {
-          if(res.Result) {
+        const res = await restClient.sendRawTransaction(tx.serialize(), true)
+          if(res.Error === 0 && res.Result) {
             this.saveToDb(identity)
           } else {
-            this.$message.error(this.$t('importIdentity.ontidNotExist'))
-            this.$store.dispatch('hideLoadingModals')            
-            return;
+            const restUrl = getNodeUrl()
+            const doc = await OntidContract.getDocumentJson(identity.ontid, restUrl)
+            const id = doc.publicKey.find(item => item.id.split('#')[0] === identity.ontid)
+            debugger
+            if(id) {
+                this.saveToDb(identity)
+            } else {
+                this.$message.error(this.$t('importIdentity.ontidNotExist'))
+                this.$store.dispatch('hideLoadingModals')            
+                return;
+            }
           }
-        }).catch(err => {
-                    console.log(err)
-                    this.$message.error(this.$t('common.networkError'))
-                })
       },
       saveToDb(identity) {
         const that = this;
