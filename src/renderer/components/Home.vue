@@ -128,7 +128,7 @@
   import pkg from '../../../package.json'
   const {BrowserWindow} = require('electron').remote;
   import { open } from '../../core/utils'
-
+import {Modal} from 'ant-design-vue'
   export default {
     name: 'Home',
     data() {
@@ -146,6 +146,15 @@
         if (res.data && res.data.tag_name !== version){
           console.log('not latest')
           this.latest_url = res.data.html_url
+          Modal.confirm({
+                centered: true,
+                okText: this.$t('common.toUpdate'),
+                cancelText: this.$t('common.cancel'),
+                title: this.$t('dapps.notification'),
+                content: this.$t('common.availableNewVersion'),
+                onOk() {open(res.data.html_url)},
+                onCancel(){}
+            })
         }
       }).catch(err => {
         console.log(err);
