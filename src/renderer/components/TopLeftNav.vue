@@ -11,11 +11,11 @@
           </a-tooltip>
         </router-link>
 
-      <router-link :to="{name:'Identitys'}" active-class="nav-accounts-active">
+      <!-- <router-link :to="{name:'Identitys'}" active-class="nav-accounts-active">
         <a-tooltip placement="right" :title="$t('setting.ontid')">
               <div class="nav-accounts"></div>
           </a-tooltip>
-      </router-link>
+      </router-link> -->
 
       <router-link :to="{name:'Setting'}" active-class="nav-setting-active">
         <a-tooltip placement="right" :title="$t('setting.settings')">

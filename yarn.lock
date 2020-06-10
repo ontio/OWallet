@@ -6202,10 +6202,10 @@ onetime@^2.0.0:
   dependencies:
     mimic-fn "^1.0.0"
 
-ontology-ts-sdk@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/ontology-ts-sdk/-/ontology-ts-sdk-1.1.0.tgz#7156220ec723c8ad23f3ae2f5c92374b2a9da55c"
-  integrity sha512-DaJBG2Ugi83TbWfaWY75ijoKuBQ6+7QAveVMfuY0UxrrzxWw9hXqK7UayvGugIfkRWivWr0dyvpHAkL605e6HQ==
+ontology-ts-sdk@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/ontology-ts-sdk/-/ontology-ts-sdk-1.1.2.tgz#de95243212f733b0b5d4350fb1849ebb0987163d"
+  integrity sha512-LkA+qyzNXIiJ4r+32McyXCKilVnCBiZr/vY4tkSJ+iE7ySRdxPPhO8t+y12z6g9EY3b66UebmbwcEH46nbhV/w==
   dependencies:
     "@ont-community/hdkey-secp256r1" "^1.0.1"
     "@ont-community/html5-websocket" "^2.0.2"

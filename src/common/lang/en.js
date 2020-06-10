@@ -698,7 +698,8 @@ Within their 50% share each consensus node will receive their share according to
     sesameSeed: 'Sesameseed',
     sesameseedDesc: 'Sesameseed voting management',
     notification: 'Notification',
-    userPolicy: 'You will be redirected to the third party dApp. Use of the third party dApp will be subject to their User Agreement and Privacy Policy. You will be liable to the third party dApp only.'
+    userPolicy: 'You will be redirected to the third party dApp. Use of the third party dApp will be subject to their User Agreement and Privacy Policy. You will be liable to the third party dApp only.',
+    ontidMgmt: 'ONT ID management. This feature will be removed in the future. Please backup ONT ID related data'
   },
   sesameseed: {
     stakeAmountTip: 'Stake amount for Sesameseed is 1 unit equals 1 ONT',
