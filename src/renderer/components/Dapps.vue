@@ -79,6 +79,18 @@
                     <p class="dapp-content">{{$t('dapps.sesameseedDesc')}}</p>
                 </div>
             </a-col>
+            <a-col :md="8" :lg="8" :xl="6">
+                <div
+                    class="dapp-item"
+                    @click="handleOntidMgmt"
+                >
+                    <div class="dapp-title">
+                        <img :src="require('../assets/ontid.svg')" alt />
+                        <span>ONT ID</span>
+                    </div>
+                    <p class="dapp-content">{{$t('dapps.ontidMgmt')}}</p>
+                </div>
+            </a-col>
         </a-row>
     </div>
 </template>
@@ -140,6 +152,9 @@ export default {
         },
         handleDappSesameseed() {
             this.$router.push({name: 'AuthorizeLoginSesameseed'});
+        },
+        handleOntidMgmt() {
+            this.$router.push({name:'Identitys'})
         },
         formatPrice(value) {
             if (isNumber(value)) {
