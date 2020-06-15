@@ -132,7 +132,7 @@ export default {
                 this.$message.error(this.$t('nodeStake.selectIndividualWallet'))
                 return;
             }
-            if(this.payerWalletType === 'ledgerWallet' && !this.ledgerWallet.address) {
+            if(this.payerWalletType === 'ledgerWallet' && !this.ledgerPk) {
                 this.$message.error(this.$t('nodeStake.selectLedgerWallet'))
                 return;
             }
