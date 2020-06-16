@@ -10,16 +10,21 @@ function formatLedgerStatus(status) {
 }
 
 function getDevice(commit, state) {
-    if(state.publicKey) {
-        return;
-    }
+    // if(state.publicKey) {
+    //     return;
+    // }
      getDeviceInfo().then(res => {
         console.log('device: ' + res)
         getLedgerPublicKey(commit, state)
          commit('UPDATE_LEDGER_DEVICE_INFO', {deviceInfo: res});
     }).catch(err => {
         console.log(err)
-        commit('UPDATE_LEDGER_PUBLICKEY', {publicKey: ''})
+        commit('UPDATE_LEDGER_PUBLICKEY', { publicKey: '' })
+        const ledgerWallet = {
+            address: '',
+            publicKey: ''
+        }
+        commit('UPDATE_LEDGER_CONNECTOR_WALLET', {ledgerWallet})
         if (err === 'NOT_FOUND') {
             commit('UPDATE_LEDGER_STATUS', { ledgerStatus: formatLedgerStatus('NOT_FOUND')})
         } else if (err === 'NOT_SUPPORT') {

@@ -149,6 +149,7 @@
       },
       onChangeNeo() {
         this.neo = !this.neo;
+        this.getPublicKey()
       }
     }
   }
