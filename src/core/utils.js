@@ -64,6 +64,7 @@ export function getNodeUrl() {
       node = net === 'TEST_NET' ? TEST_NET_LIST[0] : MAIN_NET_LIST[0]
     }
     // const node = localStorage.getItem('nodeAddress') || MAIN_NET_LIST[0]
+    node = 'http://172.168.3.151'
     return node + ':20334';
 }
 
