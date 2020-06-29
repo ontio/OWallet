@@ -1,5 +1,6 @@
 <template>
-	<div>
+<div>
+	<div v-if="!registerSucceed">
 		<breadcrumb :current="$t('nodeApply.newNodeApply')"
 			v-on:backEvent="back"></breadcrumb>
 		<div class="app-container">
@@ -10,7 +11,7 @@
 			</a-steps>
 			<div class="steps-content">
 				<div class="register-form"
-					v-if="current === 0">
+					v-show="current === 0">
 					<form>
 						<div class="form-item">
 							<label for="stakeWallet">{{$t('nodeApply.stakeWallet')}}</label>
@@ -19,12 +20,24 @@
 
 						<div class="form-item">
 							<label for="stakeWallet">{{$t('nodeApply.operationWallet')}}</label>
-							<a-select :options="normalWallet"
-								class="select-ontid"
-                                v-model="operationWallet"
-								@change="onSelectOperationWallet"
-								:placeholder="$t('nodeApply.selectOperationWallet')">
-							</a-select>
+							<a-tabs default-active-key="1" type="card" >
+								<a-tab-pane key="1" :tab="$t('nodeApply.selectOperationWallet')">
+									<a-select :options="normalWallet"
+										class="select-ontid"
+										v-model="operationWallet"
+										@change="onSelectOperationWallet"
+										:placeholder="$t('nodeApply.selectOperationWallet')">
+									</a-select>
+								</a-tab-pane>
+								<a-tab-pane key="2" :tab="$t('nodeApply.enterOperationPk')" >
+									<a-input v-model="operationPk" 
+									@blur="onSelectOperationWallet"
+									:placeholder="$t('nodeApply.enterOperationPk')"></a-input>
+								</a-tab-pane>
+								
+							</a-tabs>
+							
+							
 						</div>
 
 						<div class="form-item">
@@ -43,7 +56,7 @@
 					</form>
 				</div>
 				<div class="register-confirm"
-					v-if="current === 1">
+					v-show="current === 1">
 
 					<div class="form-item">
 						<label for="">{{$t('nodeApply.stakeWallet')}}</label>
@@ -51,7 +64,7 @@
 					</div>
 					<div class="form-item">
 						<label for="">{{$t('nodeApply.operationWalletPublickey')}}</label>
-						<p>{{operationWallet}}</p>
+						<p>{{operationWallet || operationPk}}</p>
 					</div>
 					<div class="form-item">
 						<label for="">{{$t('nodeApply.stakeAmount')}}</label>
@@ -77,7 +90,13 @@
         v-on:txSent="handleTxSent"
         ></sign-send-tx>
 	</div>
-
+	<div class="success-container" v-if="registerSucceed">
+        <img :src="require('../../../assets/success.svg')" alt="">
+        <p class="success-tip">{{$t('nodeApply.registerSuccess')}}</p>
+        <a-button class="btn-next" @click="onComplete">{{$t('nodeApply.completeNodeInfo')}}</a-button>
+        <p class="later-tip" @click="onLater">{{$t('nodeApply.later')}}</p>
+    </div>
+</div>
 </template>
 <script>
 import Breadcrumb from "../../Breadcrumb";
@@ -98,10 +117,12 @@ export default {
 			walletType: "",
 			stakeWallet: {},
 			operationWallet: undefined,
+			operationPk: '',
 			stakeAmount: "",
             minStakeAmount: 10000,
             signVisible: false,
-            tx: null
+			tx: null,
+			registerSucceed: false
 		};
 	},
 	created() {
@@ -134,7 +155,7 @@ export default {
 				this.$message.error(this.$t("nodeApply.stakeWalletRequired"));
 				return;
 			}
-			if (!this.operationWallet) {
+			if (!this.operationWallet && !this.operationPk) {
 				this.$message.error(
 					this.$t("nodeApply.operationWalletRequired")
 				);
@@ -155,10 +176,20 @@ export default {
 		},
 		onSelectOperationWallet() {
             //TODO 同一个公钥智能注册一次节点
-			if (this.stakeWallet && this.operationWallet) {
-				const address = Crypto.Address.fromPubKey(
-					new Crypto.PublicKey(this.operationWallet)
+			if (this.stakeWallet && (this.operationWallet || this.operationPk )) {
+				let address;
+				try {
+					address = Crypto.Address.fromPubKey(
+					this.operationWallet ? new Crypto.PublicKey(this.operationWallet)
+						: new Crypto.PublicKey(this.operationPk)
 				).toBase58();
+				} catch(err) {
+					console.log(err)
+					this.$message.warning(this.$t('nodeApply.invalidOperationPk'))
+					this.operationPk = ''
+					return;
+				}
+				 
 				if (this.stakeWallet.address === address) {
 					this.$message.warning(
 						this.$t("nodeApply.sameWalletNotAllowed")
@@ -170,7 +201,7 @@ export default {
         },
         confirm() {
             const ontid = 'did:ont' + this.stakeWallet.address
-            const publicKey = this.operationWallet
+            const publicKey = this.operationWallet ? this.operationWallet : this.operationPk
             const userAddr = new Crypto.Address(this.stakeWallet.address)
             const initPos = Number(this.stakeAmount)
             const tx = GovernanceTxBuilder.makeRegisterCandidateTx(ontid, publicKey, 1, userAddr, initPos, userAddr, '500', '200000')
@@ -183,7 +214,18 @@ export default {
         },
         async handleTxSent() {
             // 注册成功后，更新off chain 表。后台同步到off chain表。同步可能有时差。
-            this.$router.push({name: 'NodeApplySuccess'})
+			// this.$router.push({name: 'NodeApplySuccess'})
+			this.registerSucceed = true
+		},
+		
+		onComplete() { // 进入节点管理页面且打开信息填写的tab
+            this.$store.commit('UPDATE_STAKE_WALLET', {stakeWallet: this.stakeWallet})
+            this.$store.commit('UPDATE_NODE_PUBLICKEY', {nodePublicKey: this.operationWallet ? this.operationWallet : this.operationPk})
+			this.$store.commit('UPDATE_MENU_TAB_INDEX', 3)
+			this.$router.push({name: 'NodeStakeManagement'})
+        },
+        onLater() {
+            this.$router.push({name: 'MyNode'})
         }
 	}
 };
@@ -209,5 +251,36 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+.success-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin-top: -4rem;
+    img {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 20px;
+    }
+    .success-tip {
+        font-size:24px;
+        font-family:PingFangSC-Medium,PingFang SC;
+        font-weight:500;
+        color:rgba(0,0,0,1);
+        margin-bottom: 40px;
+    }
+    button {
+        margin-bottom: 23px;
+    }
+    .later-tip {
+        font-size:14px;
+        font-family:PingFangSC-Semibold,PingFang SC;
+        font-weight:600;
+        color:rgba(0,0,0,.6);
+        cursor: pointer;
+        text-decoration: underline;
+    }
 }
 </style>

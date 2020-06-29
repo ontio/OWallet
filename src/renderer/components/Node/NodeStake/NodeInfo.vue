@@ -8,7 +8,7 @@
             </div>
             <div class="form-item">
                 <label for="">{{$t('nodeInfo.logo')}}</label>
-                <a-input v-model="info.logo_url" :placeholder="$t('nodeInfo.enterLogoUrl')"></a-input>
+                <a-input v-model="info.logo_url" :placeholder="$t('nodeInfo.enterLogo')"></a-input>
             </div>
             <div class="form-item">
                 <label for="">{{$t('nodeInfo.location')}}</label>
@@ -71,6 +71,7 @@
 <script>
 import {mapState} from 'vuex'
 import SignSendTx from '../../../components/Common/SignSendTx'
+import { utils, Crypto } from 'ontology-ts-sdk'
 export default {
     name: 'NodeInfo',
     data() {
@@ -87,7 +88,7 @@ export default {
         SignSendTx
     },
     mounted() {
-        this.fetchNodeInfo()
+        this.fetchNodeInfo(this.nodePublicKey)
     },
     computed: {
         ...mapState({
@@ -98,16 +99,16 @@ export default {
     
     methods: {
         async fetchNodeInfo() {
-            const info = await this.$store.dispatch('fetchNodeInfo')
-            this.info = Object.assign(this.info, info);
+            const info = await this.$store.dispatch('fetchNodeInfo', this.nodePublicKey)
+            this.info = Object.assign({},this.info, info);
         },
         async onSubmit() {
             const data = Object.assign({}, this.info)
             data.public_key = this.nodePublicKey
             data.address = this.stakeWallet.address
             const node_info = JSON.stringify(data)
-            this.node_info = node_info
-            this.tx = node_info
+            this.node_info = utils.str2hexstr(node_info)
+            this.tx = this.node_info
             this.signVisible = true;
         },
         handleTxCancel() {
@@ -117,14 +118,19 @@ export default {
         handleAfterSign(signed) {
             const data =  {
                 node_info: this.node_info,
-                public_key: this.nodePublicKey,
+                public_key: this.stakeWallet.publicKey,
                 address: this.stakeWallet.address,
                 signature: signed.serializeHex()
             }
             this.$store.dispatch('updateNodeInfo', data).then(res => {
-                 this.signVisible = false;
+                this.signVisible = false;
                 this.tx = null;
-                this.$message.success(this.$t('nodeInfo.updateSuccess'))
+                if(res.code === 0){
+                    this.$message.success(this.$t('nodeInfo.updateSuccess'))
+                } else {
+                    this.$message.error(this.$t('nodeInfo.updateFailed'))
+                }
+                
             })
         }
 
