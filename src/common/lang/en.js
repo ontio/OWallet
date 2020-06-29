@@ -694,6 +694,9 @@ Within their 50% share each consensus node will receive their share according to
         stakeWallet: 'Stake wallet',
         operationWallet: 'Node operation wallet',
         selectOperationWallet: 'Select operation wallet',
+        operationPk: 'Operation wallet public key',
+        enterOperationPk: 'Enter operation wallet public key',
+        invalidOperationPk: 'Invalid operation wallet',
         stakeAmount: 'Stake amount',
         inputStakeAmount: 'Enter stake amount',
         next: 'Next',
@@ -702,7 +705,8 @@ Within their 50% share each consensus node will receive their share according to
         operationWalletPublickey: 'Node operation wallet publickey',
         registerSuccess: 'Congratulations on the successful node registration',
         completeNodeInfo: 'Complete node info now',
-        later: 'Later'
+        later: 'Later',
+        sameWalletNotAllowed: 'The operation wallet and staking wallet can not be the same'
     },
     myNode: {
         myNode: 'My nodes',
@@ -736,7 +740,9 @@ Within their 50% share each consensus node will receive their share according to
         openEmail: 'Open email',
         enterOpenEmail: 'Open email',
         ifOpenInfo: 'Switch to open info',
-        submit: 'Submit'
+        submit: 'Submit',
+        updateSuccess: 'Update node info succeed',
+        updateFailed: 'Update node info failed'
     },
   exchange: {
     exchange: 'Exchange',

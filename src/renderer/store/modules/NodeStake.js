@@ -1,7 +1,7 @@
 import axios from 'axios'
 import en from '../../../common/lang/en'
 import zh from '../../../common/lang/zh'
-import { ONT_PASS_NODE, ONT_PASS_NODE_PRD, ONT_PASS_URL } from '../../../core/consts'
+import { ONT_PASS_NODE, ONT_PASS_NODE_PRD, ONT_PASS_URL, NODE_INFO_API } from '../../../core/consts'
 
 const state = {
     detail: {
@@ -21,7 +21,8 @@ const state = {
     status3: '',
     current: 0,
     statusTip: '',
-    btnText: ''
+    btnText: '',
+    menuTabIndex: 1
 }
 
 const mutations = {
@@ -46,6 +47,9 @@ const mutations = {
     },
     UPDATE_STAKE_DETAIL(state, payload) {
         state.detail = payload.detail
+    },
+    UPDATE_MENU_TAB_INDEX(state, index) {
+        state.menuTabIndex = index
     }
 }
 
@@ -149,13 +153,13 @@ function getStatus(status) {
 }
 
 const actions = {
-    fetchStakeDetail({commit}, ontid){
+    fetchStakeDetail({commit}, address){
         const net = localStorage.getItem("net");
         const ontPassNode =
             net === "TEST_NET" ? ONT_PASS_NODE : ONT_PASS_NODE_PRD;
         axios.get(ontPassNode + ONT_PASS_URL.GetStakeInfo, {
             params: {
-                ontid: ontid
+               address
             }
         }).then(res => {
             commit('UPDATE_STAKE_DETAIL', { detail:res.data})
@@ -168,8 +172,7 @@ const actions = {
     },
     async fetchNodeInfo({ }, public_key) {
         const net = localStorage.getItem("net");
-        const url = net === 'TEST_NET' ? 'https://polarisexplorer.ont.io/v2/nodes/off-chain-info'
-            : 'https://explorer.ont.io/v2/nodes/off-chain-info'
+        const url = NODE_INFO_API[net]
         const res = await axios.get(url, {
             params: {
                 public_key
@@ -179,10 +182,9 @@ const actions = {
     },
     async updateNodeInfo({ }, info) {
         const net = localStorage.getItem("net");
-        const url = net === 'TEST_NET' ? 'https://polarisexplorer.ont.io/v2/nodes/off-chain-info'
-            : 'https://explorer.ont.io/v2/nodes/off-chain-info'
+        const url = NODE_INFO_API[net]
         const res = await axios.post(url, info)
-        return res.data.result
+        return res.data
     }
 }
 

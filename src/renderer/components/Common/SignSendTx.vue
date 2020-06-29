@@ -100,6 +100,7 @@ export default {
                 }
                 if(typeof tx === 'string') {
                     const signature =  pri.sign(tx) 
+                    this.$store.dispatch("hideLoadingModals");
                     this.$emit('afterSign', signature) // 返回签名message结果
                 } else {
                     TransactionBuilder.signTransaction(tx, pri);

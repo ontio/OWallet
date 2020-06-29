@@ -689,6 +689,9 @@ export default {
         stakeWallet: '节点质押钱包',
         operationWallet: '节点运营钱包',
         selectOperationWallet: '选择运营钱包',
+        operationPk: '运营钱包公钥',
+        enterOperationPk: '输入运营钱包公钥',
+        invalidOperationPk: '错误的运营钱包',
         stakeAmount: '质押金额',
         inputStakeAmount: '输入质押金额',
         next: '下一步',
@@ -697,7 +700,8 @@ export default {
         operationWalletPublickey: '运营钱包公钥',
         registerSuccess: '恭喜注册节点成功',
         completeNodeInfo: '立刻完善节点信息',
-        later: '稍后再说'
+        later: '稍后再说',
+        sameWalletNotAllowed: '运营钱包和质押钱包不能是同一个钱包'
     },
     myNode: {
         myNode: '我的节点',
@@ -731,7 +735,9 @@ export default {
         openEmail: '公开的邮箱',
         enterOpenEmail: '公开的邮箱',
         ifOpenInfo: '是否公开节点信息',
-        submit: '提交'
+        submit: '提交',
+        updateSuccess: '更新成功',
+        updateFailed: '更新失败'
     },
   exchange: {
     exchange: 'Exchange',
