@@ -159,8 +159,9 @@ export default {
                     } else {
                         // this.$message.error(res.Result)
                         console.log(res.Result)
-                        this.$message.error('common.txFailed. ')
-                    }
+                        const msg = typeof res.Result === 'string' ? res.Result : JSON.stringify(res.Result)
+                        this.$message.error(this.$t('common.txFailed') + ' '+ msg)
+                    } 
                     return;
                 } else {
                     this.$message.error(res.Result)
