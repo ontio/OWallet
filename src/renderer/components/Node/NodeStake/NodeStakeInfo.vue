@@ -90,10 +90,10 @@
                 </div>
             </div>
 
-            <div class="detail-item">
+            <!-- <div class="detail-item">
                 <p class="font-medium-black" for="">{{$t('nodeStake.ontid')}}</p>
                 <p>{{detail.ontid}}</p>
-            </div>
+            </div> -->
             <div class="detail-item">
                 <p class="font-medium-black" for="">{{$t('nodeStake.stakeWalletAddress')}}</p>
                 <p>{{detail.stakewalletaddress}}</p>
@@ -245,14 +245,14 @@ export default {
     if(!this.stakeWallet.key) {//common wallet
       this.$store.dispatch('getLedgerStatus')
     }
-    this.$store.dispatch("fetchStakeDetail", this.stakeIdentity.ontid);
+    this.$store.dispatch("fetchStakeDetail", this.stakeWallet.address);
     this.$store.dispatch('fetchPeerItem', this.detail.publickey);
     this.$store.dispatch('fetchPosLimit')
     this.$store.dispatch('fetchAuthorizationInfo', 
       {pk: this.detail.publickey, address: this.stakeWallet.address}
       )
     const intervalId = setInterval(() => {
-      this.$store.dispatch("fetchStakeDetail", this.stakeIdentity.ontid);
+      this.$store.dispatch("fetchStakeDetail", this.stakeWallet.address);
       this.$store.dispatch('fetchPeerItem', this.detail.publickey);
       this.$store.dispatch('fetchPosLimit')
       this.$store.dispatch('fetchAuthorizationInfo', 
@@ -379,7 +379,7 @@ export default {
         this.walletPassword = ''
         this.tx = ''
         this.$store.dispatch("hideLoadingModals");
-        this.$store.dispatch("fetchStakeDetail", this.stakeIdentity.ontid);
+        this.$store.dispatch("fetchStakeDetail", this.stakeWallet.address);
       }).catch(err=>{
         this.$store.dispatch("hideLoadingModals");
         this.$message.error(this.$t('common.networkErr'))

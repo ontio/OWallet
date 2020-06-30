@@ -14,19 +14,32 @@
 <template>
     <div>
         <breadcrumb :current="$t('nodeMgmt.nodeStakeMgmt')" v-on:backEvent="handleRouteBack"></breadcrumb>
-        <!-- NODE_HIDE -->
-        <a-menu v-model="current" mode="horizontal" @click="handleSelect">
-            <a-menu-item key="Node_Stake">{{$t('nodeMgmt.nodeStake')}}</a-menu-item>
-            <a-menu-item key="Node_Authorization">{{$t('nodeMgmt.userStakeAuthorization')}}</a-menu-item>
+
+        <a-tabs :default-active-key="currentIndex" :animated="false">
+            <a-tab-pane :key="1" :tab="$t('nodeMgmt.nodeStake')">
+                <node-stake-info :showPosBtn="true" :breadcrumb="true"></node-stake-info>
+            </a-tab-pane>
+            <a-tab-pane :key="2" :tab="$t('nodeMgmt.userStakeAuthorization')">
+                <node-stake-authorization ></node-stake-authorization>
+            </a-tab-pane>
+            <a-tab-pane :key="3" :tab="$t('nodeInfo.nodeInfo')">
+                <node-info></node-info>
+            </a-tab-pane>
+        </a-tabs>
+
+
+        <!-- <a-menu  mode="horizontal" @click="handleSelect">
+            <a-menu-item key="1">{{$t('nodeMgmt.nodeStake')}}</a-menu-item>
+            <a-menu-item key="2">{{$t('nodeMgmt.userStakeAuthorization')}}</a-menu-item>
+            <a-menu-item key="3">{{$t('nodeInfo.nodeInfo')}}</a-menu-item>
         </a-menu>
         <div>
-            <div v-if="current[0] === 'Node_Stake'" class="node-stake-info">
+            <div v-show="currentIndex === 1 " class="node-stake-info">
                 <node-stake-info :showPosBtn="true" :breadcrumb="true"></node-stake-info>
-                
             </div>
-            <!-- NODE_HIDE -->
-            <node-stake-authorization v-if="current[0] === 'Node_Authorization'"></node-stake-authorization>
-        </div>
+            <node-stake-authorization v-show="currentIndex === 2"></node-stake-authorization>
+            <node-info v-show="currentIndex === 3"></node-info>
+        </div> -->
     </div>
 </template>
 
@@ -34,17 +47,25 @@
 import Breadcrumb from '../../Breadcrumb'
 import NodeStakeInfo from '../NodeStake/NodeStakeInfo'
 import NodeStakeAuthorization from './NodeStakeAuthorization'
+import NodeInfo from '../NodeStake/NodeInfo'
+import {mapState} from  'vuex'
 export default {
     name: 'NodeStakeManagement',
     components: {
         Breadcrumb,
         NodeStakeInfo,
-        NodeStakeAuthorization
+        NodeStakeAuthorization,
+        NodeInfo
     },
     data(){
         return {
-            current: ['Node_Stake']
+            current: [1]
         }
+    },
+    computed: {
+        ...mapState({
+            currentIndex: state => state.NodeStake.menuTabIndex
+        })
     },
     methods: {
         handleRouteBack(){

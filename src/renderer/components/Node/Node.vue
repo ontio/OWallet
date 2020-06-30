@@ -6,13 +6,14 @@
 }
 .center-content {
     display: flex;
+    flex-wrap: wrap;
 }
 .btn-item {
-    width:300px;
+    width:280px;
     height:160px;
     background: #F4F4F6;
     text-align: left;
-    margin-bottom:80px;
+    margin-bottom:32px;
     margin-right: 32px;
     padding:16px 24px;
     position:relative;
@@ -94,6 +95,13 @@
                     <i class="fa fa-arrow-right fa-s"></i>
                 </div>
             </div>
+            <div class="btn-item" >
+                <p class="font-title">{{$t('nodeMgmt.newNodeApply')}}</p>
+                <p class="font-medium">{{$t('nodeMgmt.nodeApplyTip')}}</p>
+                <div class="icon-bottom" @click="handleNodeApply">
+                    <i class="fa fa-arrow-right fa-s"></i>
+                </div>
+            </div>
         </div>
     </div>
     
@@ -110,12 +118,13 @@ export default {
     },
     methods: {
         handleNodeStake() {
-            const net = localStorage.getItem('net');
-            if(net === 'TEST_NET' && this.onlyTestNet) {
-                this.$message.warning(this.$t('nodeMgmt.switchMainnet'));
-                return;
-            }
-            this.$router.push({name: 'NodeStakeIntro'})
+            // const net = localStorage.getItem('net');
+            // if(net === 'TEST_NET' && this.onlyTestNet) {
+            //     this.$message.warning(this.$t('nodeMgmt.switchMainnet'));
+            //     return;
+            // }
+            // this.$router.push({name: 'NodeStakeIntro'})
+            this.$router.push({name: 'MyNode'})
         },
         handleAuthorization() {
             const net = localStorage.getItem('net');
@@ -132,6 +141,9 @@ export default {
                 return;
             }
             this.$router.push('/vote/login')
+        },
+        handleNodeApply() {
+            this.$router.push({name: 'NodeApply'})
         },
         openPolicyPage() {
             const lang = localStorage.getItem('user_lang') || 'en'

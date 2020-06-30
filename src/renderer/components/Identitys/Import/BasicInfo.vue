@@ -40,7 +40,7 @@
   import dbService from '../../../../core/dbService'
   import {DEFAULT_SCRYPT, TEST_NET, MAIN_NET} from '../../../../core/consts'
   import $ from 'jquery'
-import { getRestClient, formatScryptParams, getNodeUrl } from '../../../../core/utils';
+import { getNodeUrl, getRestClient, formatScryptParams } from '../../../../core/utils';
 
   export default {
     name: 'BasicInfo',
@@ -79,7 +79,6 @@ import { getRestClient, formatScryptParams, getNodeUrl } from '../../../../core/
         }
       },
       async importIdentityForKeystore() {
-        // TODO 需要填充的逻辑部分
         console.log('keystore:[' + this.keystore + ']; keystorePassword:[' + this.keystorePassword + ']')
         //import identity
         let keystore;
@@ -97,7 +96,6 @@ import { getRestClient, formatScryptParams, getNodeUrl } from '../../../../core/
         }
         let identity = new Identity();
         try {
-
             const encryptedPrivateKeyObj = new Crypto.PrivateKey(keystore.key);
             const addr = new Crypto.Address(keystore.address);
             const label = keystore.label || 'Identity'
@@ -114,35 +112,24 @@ import { getRestClient, formatScryptParams, getNodeUrl } from '../../../../core/
             this.$store.dispatch('hideLoadingModals')
             return;
         }
-        let document 
-        const restUrl = getNodeUrl();
-        try {
-            document = await OntidContract.getDocumentJson(identity.ontid, restUrl);
-        } catch (err) {
-            // tslint:disable-next-line:no-console
-            console.log(err);
-        }
-
-        let idOnchain;
-        if (document && document.publicKey) {
-            idOnchain = document.publicKey.find(item => item.id.split('#')[0] === identity.ontid)
-        }
-        if (idOnchain) {
+        const tx = OntidContract.buildGetDDOTx(identity.ontid)
+        const restClient = getRestClient()
+        const res = await restClient.sendRawTransaction(tx.serialize(), true)
+          if(res.Error === 0 && res.Result) {
             this.saveToDb(identity)
-        } else {
-            const tx = OntidContract.buildGetDDOTx(identity.ontid)
-
-            const restClient = getRestClient()
-            const res = await restClient.sendRawTransaction(tx.serialize(), true)
-
-            if(res.Result.Result) {
+          } else {
+            const restUrl = getNodeUrl()
+            const doc = await OntidContract.getDocumentJson(identity.ontid, restUrl)
+            const id = doc.publicKey.find(item => item.id.split('#')[0] === identity.ontid)
+            debugger
+            if(id) {
                 this.saveToDb(identity)
             } else {
                 this.$message.error(this.$t('importIdentity.ontidNotExist'))
                 this.$store.dispatch('hideLoadingModals')            
                 return;
             }
-        }
+          }
       },
       saveToDb(identity) {
         const that = this;

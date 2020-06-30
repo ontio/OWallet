@@ -143,7 +143,7 @@
                             {{$t('nodeMgmt.unboundOng')}}: 
                         </span>
                         <span class="font-medium">{{unboundOng}} ONG</span>
-                        <a-button type="primary" class="redeem-btn" @click="redeemOng">{{$t('nodeMgmt.redeem')}}</a-button>
+                        <!-- <a-button type="primary" class="redeem-btn" @click="redeemOng">{{$t('nodeMgmt.redeem')}}</a-button> -->
                     </p>
                 </div>
             </div>
