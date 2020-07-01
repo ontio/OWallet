@@ -10,7 +10,7 @@ const gasPrice = '500'
 const gasLimit = '200000'
 const contract_hash = {
     MAIN_NET: 'c0df752ca786a99755b2e8950060ade9fa3d4e1b',
-    TEST_NET: 'fde442dfe7dc4d41b1bad87e69f7973565620a1a'
+    TEST_NET: '5e4f0d4181ca03d13806e53df10cb61f86ee3582'
 }
 const state = {
     voteWallet: '',
