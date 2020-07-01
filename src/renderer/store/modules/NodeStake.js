@@ -153,13 +153,14 @@ function getStatus(status) {
 }
 
 const actions = {
-    fetchStakeDetail({commit}, address){
+    fetchStakeDetail({commit}, {address, public_key}){
         const net = localStorage.getItem("net");
         const ontPassNode =
             net === "TEST_NET" ? ONT_PASS_NODE : ONT_PASS_NODE_PRD;
         axios.get(ontPassNode + ONT_PASS_URL.GetStakeInfo, {
             params: {
-               address
+               address,
+               public_key
             }
         }).then(res => {
             commit('UPDATE_STAKE_DETAIL', { detail:res.data})

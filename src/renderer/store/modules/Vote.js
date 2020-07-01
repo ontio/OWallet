@@ -10,7 +10,7 @@ const gasPrice = '500'
 const gasLimit = '200000'
 const contract_hash = {
     MAIN_NET: 'c0df752ca786a99755b2e8950060ade9fa3d4e1b',
-    TEST_NET: '741803a402b0065e1f651d1a84577ec5f7489270'
+    TEST_NET: 'fde442dfe7dc4d41b1bad87e69f7973565620a1a'
 }
 const state = {
     voteWallet: '',
@@ -269,9 +269,15 @@ const actions = {
                 return TransactionBuilder.makeWasmVmInvokeTransaction('getTopicInfo', [new Parameter('', ParameterType.H256, hash)], contract, gasPrice, gasLimit)
             })
             let infos = await Promise.all(txes.map(tx => { return client.sendRawTransaction(tx.serialize(), true) }))
-            infos = infos.map(item => item.Result.Result)
+            // infos = infos.map(item => item.Result.Result)
+            let infoList = []
+            for(const info of infos) {
+                if(info && info.Result && info.Result.Result) {
+                    infoList.push(info.Result.Result)
+                }
+            }
             console.log(infos)
-            const votes = formatVoteInfo(infos)
+            const votes = formatVoteInfo(infoList)
             console.log(votes)
             commit('UPDATE_ALL_VOTES', { votes })
             dispatch('hideLoadingModals')

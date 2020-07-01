@@ -100,7 +100,7 @@
             </div>
             <div class="detail-item">
                 <p class="font-medium-black" for="">{{$t('nodeStake.nodePk')}}</p>
-                <p>{{detail.publickey}}</p>
+                <p>{{nodePublicKey}}</p>
             </div>
             <div class="detail-item">
                 <p class="font-medium-black" for="">{{$t('nodeStake.contract')}}</p>
@@ -245,18 +245,22 @@ export default {
     if(!this.stakeWallet.key) {//common wallet
       this.$store.dispatch('getLedgerStatus')
     }
-    this.$store.dispatch("fetchStakeDetail", this.stakeWallet.address);
-    this.$store.dispatch('fetchPeerItem', this.detail.publickey);
+    const data = {
+      address: this.stakeWallet.address,
+      public_key: this.nodePublicKey
+    }
+    this.$store.dispatch("fetchStakeDetail", data);
+    this.$store.dispatch('fetchPeerItem', this.nodePublicKey);
     this.$store.dispatch('fetchPosLimit')
     this.$store.dispatch('fetchAuthorizationInfo', 
-      {pk: this.detail.publickey, address: this.stakeWallet.address}
+      {pk: this.nodePublicKey, address: this.stakeWallet.address}
       )
     const intervalId = setInterval(() => {
-      this.$store.dispatch("fetchStakeDetail", this.stakeWallet.address);
-      this.$store.dispatch('fetchPeerItem', this.detail.publickey);
+      this.$store.dispatch("fetchStakeDetail", data);
+      this.$store.dispatch('fetchPeerItem', this.nodePublicKey);
       this.$store.dispatch('fetchPosLimit')
       this.$store.dispatch('fetchAuthorizationInfo', 
-      {pk: this.detail.publickey, address: this.stakeWallet.address}
+      {pk: this.nodePublicKey, address: this.stakeWallet.address}
       )
     }, this.interval);
     this.intervalId = intervalId
@@ -269,6 +273,7 @@ export default {
     ...mapState({
       stakeIdentity: state => state.NodeStake.stakeIdentity,
       stakeWallet: state => state.NodeStake.stakeWallet,
+      nodePublicKey: state => state.NodeStake.nodePublicKey,
       ledgerStatus: state => state.LedgerConnector.ledgerStatus,
       ledgerPk : state => state.LedgerConnector.publicKey,
       ledgerWallet: state => state.LedgerConnector.ledgerWallet,
@@ -379,7 +384,11 @@ export default {
         this.walletPassword = ''
         this.tx = ''
         this.$store.dispatch("hideLoadingModals");
-        this.$store.dispatch("fetchStakeDetail", this.stakeWallet.address);
+        this.$store.dispatch("fetchStakeDetail", 
+        { 
+          address: this.stakeWallet.address, 
+          public_key: this.nodePublicKey
+        });
       }).catch(err=>{
         this.$store.dispatch("hideLoadingModals");
         this.$message.error(this.$t('common.networkErr'))
@@ -427,7 +436,7 @@ export default {
     },
     handleRecall() {
       const userAddr = new Crypto.Address(this.stakeWallet.address);
-      const peerPubkey = this.detail.publickey;
+      const peerPubkey = this.nodePublicKey;
       const payer = userAddr;
       const tx = GovernanceTxBuilder.makeUnregisterCandidateTx(
         userAddr,
@@ -446,7 +455,7 @@ export default {
           return;
         }
         const userAddr = new Crypto.Address(this.stakeWallet.address);
-        const peerPubkeys = [this.detail.publickey]
+        const peerPubkeys = [this.nodePublicKey]
         // const withdrawList = [this.detail.stakequantity]
         // Fix:节点质押部分可能会增加或减少，退款应该用initPos； 
         // Fix2: 退款都可以用可提取部分
@@ -463,7 +472,7 @@ export default {
           return;
         }
         const userAddr = new Crypto.Address(this.stakeWallet.address);
-        const peerPubkey = this.detail.publickey;
+        const peerPubkey = this.nodePublicKey;
         const payer = userAddr;   
         const tx = GovernanceTxBuilder.makeQuitNodeTx(userAddr, peerPubkey, payer, GAS_PRICE, GAS_LIMIT)
         this.tx = tx;
@@ -510,7 +519,7 @@ export default {
       this.addPosVisible = false;
       const userAddr = new Crypto.Address(this.stakeWallet.address);      
       const tx = GovernanceTxBuilder.makeAddInitPosTx(
-        this.detail.publickey,
+        this.nodePublicKey,
         userAddr,
         parseInt(this.addPos),
         userAddr,
@@ -532,7 +541,7 @@ export default {
       this.reducePosVisible = false;
       const userAddr = new Crypto.Address(this.stakeWallet.address);      
       const tx = GovernanceTxBuilder.makeReduceInitPosTx(
-        this.detail.publickey,
+        this.nodePublicKey,
         userAddr,
         parseInt(this.reducePos),
         userAddr,
@@ -553,7 +562,7 @@ export default {
       }
       this.redeemPosVisible = false;
       const userAddr = new Crypto.Address(this.stakeWallet.address);
-      const peerPubkeys = [this.detail.publickey]
+      const peerPubkeys = [this.nodePublicKey]
       const withdrawList = [this.authorizationInfo.claimableVal]        
       const payer = userAddr
       const tx = GovernanceTxBuilder.makeWithdrawTx(userAddr, peerPubkeys, withdrawList, payer, GAS_PRICE, GAS_LIMIT)

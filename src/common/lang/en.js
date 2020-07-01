@@ -706,7 +706,11 @@ Within their 50% share each consensus node will receive their share according to
         registerSuccess: 'Congratulations on the successful node registration',
         completeNodeInfo: 'Complete node info now',
         later: 'Later',
-        sameWalletNotAllowed: 'The operation wallet and staking wallet can not be the same'
+        sameWalletNotAllowed: 'The operation wallet and staking wallet can not be the same',
+        operationWalletRequired: 'Operation wallet is required',
+        stakeWalletRequired: 'Stake wallet is required',
+        stakeAmountRequired: 'Stake amount is required',
+        minStateAmount: 'The stake amount is at least 10,000 ONT'
     },
     myNode: {
         myNode: 'My nodes',

@@ -701,7 +701,11 @@ export default {
         registerSuccess: '恭喜注册节点成功',
         completeNodeInfo: '立刻完善节点信息',
         later: '稍后再说',
-        sameWalletNotAllowed: '运营钱包和质押钱包不能是同一个钱包'
+        sameWalletNotAllowed: '运营钱包和质押钱包不能是同一个钱包',
+        operationWalletRequired: '运营钱包是必需的',
+        stakeWalletRequired: '质押钱包是必需的',
+        stakeAmountRequired: '质押金额是必需的',
+        minStateAmount: '质押金额至少是10,000 ONT'
     },
     myNode: {
         myNode: '我的节点',

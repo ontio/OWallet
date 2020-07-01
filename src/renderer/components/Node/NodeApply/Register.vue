@@ -147,7 +147,7 @@ export default {
 		},
 		onWalletSelected({ walletType, wallet }) {
 			this.walletType = walletType;
-			this.stakeWallet = wallet;
+			this.stakeWallet = wallet ? wallet : {};
 			this.onSelectOperationWallet();
 		},
 		next() {
