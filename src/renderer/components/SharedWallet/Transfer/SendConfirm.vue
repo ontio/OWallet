@@ -111,7 +111,7 @@
                 <span class="font-medium-black">{{redeem.claimableOng}} ONG</span>
            
             </div>
-            <div class="fee font-medium-black">{{$t('sharedWalletHome.fee')}}: 0.01 ONG</div>
+            <div class="fee font-medium-black">{{$t('sharedWalletHome.fee')}}: 0.05 ONG</div>
         </div>
         
         <p class="label" v-if="!transfer.isRedeem">{{$t('sharedWalletHome.send')}}</p>

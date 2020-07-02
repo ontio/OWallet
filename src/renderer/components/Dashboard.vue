@@ -386,7 +386,7 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
             for(const t of txlist) {
               for(const tx of t.transfers) {
                 const asset = tx.asset_name.toUpperCase() 
-                if(tx.to_address === ONG_GOVERNANCE_CONTRACT && asset === 'ONG' && Number(tx.amount) == 0.01) {
+                if(tx.to_address === ONG_GOVERNANCE_CONTRACT && asset === 'ONG') {
                   continue;
                 }
                 let amount = asset === 'ONT' ? parseInt(tx.amount) : tx.amount;
@@ -522,7 +522,7 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
         // this.getNep5Balance();
       },
       sendAsset() {
-        if(Number(this.balance.ong) < 0.01) {
+        if(Number(this.balance.ong) < 0.05) {
           this.$message.warning(this.$t('common.ongNoEnough'))
           return;
         }

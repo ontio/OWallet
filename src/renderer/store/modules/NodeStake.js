@@ -160,7 +160,7 @@ const actions = {
         axios.get(ontPassNode + ONT_PASS_URL.GetStakeInfo, {
             params: {
                address,
-               public_key
+               publickey: public_key
             }
         }).then(res => {
             commit('UPDATE_STAKE_DETAIL', { detail:res.data})

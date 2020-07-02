@@ -1,5 +1,5 @@
 // export const GAS_PRICE = '0';for test
-export const GAS_PRICE = '500';
+export const GAS_PRICE = '2500';
 export const GAS_LIMIT = '20000';
 
 export const ONT_CONTRACT = '0000000000000000000000000000000000000001';

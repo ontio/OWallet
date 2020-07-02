@@ -6,11 +6,15 @@ import {
 } from 'ant-design-vue'
 import i18n from '../../../common/lang';
 
-const gasPrice = '500'
+const gasPrice = '2500'
 const gasLimit = '200000'
 const contract_hash = {
     MAIN_NET: 'c0df752ca786a99755b2e8950060ade9fa3d4e1b',
     TEST_NET: '5e4f0d4181ca03d13806e53df10cb61f86ee3582'
+}
+const contract_hash_old = {
+    MAIN_NET: 'c0df752ca786a99755b2e8950060ade9fa3d4e1b',
+    TEST_NET: '6c977ca7036c991fa430ba3b34643e146501218c'
 }
 const state = {
     voteWallet: '',
@@ -42,6 +46,53 @@ export const MY_VOTED = {
 const formatNumber = function (val) {
     return parseInt(utils.reverseHex(val), 16)
 }
+
+const formatOldVoteInfo = function (infos) {
+    if (!infos) {
+        return [];
+    }
+    const votes = []
+    for (const info of infos) {
+        let item = info;
+        if (info && info.Result && info.Result.Result) {
+            item = info.Result.Result
+        }
+        const vote = {
+            admin: new Crypto.Address(item[0]).toBase58(),
+            title: utils.hexstr2str(item[1]),
+            content: utils.hexstr2str(item[2]),
+            voters: item[3] ? item[3].map(i => {
+                return {
+                    address: new Crypto.Address(i[0]).toBase58(),
+                    weight: parseInt(utils.reverseHex(i[1]), 16)
+                }
+            }) : [],
+            startTime: String(formatNumber(item[4])).length <= 10 ?  formatNumber(item[4]) * 1000 : formatNumber(item[4]),
+            endTime: String(formatNumber(item[5])).length <= 10 ?  formatNumber(item[5]) * 1000 : formatNumber(item[5]),
+            approves: formatNumber(item[6]),
+            rejects: formatNumber(item[7]),
+            status: formatNumber(item[8]),
+            hash: item[9]
+        }
+        if (vote.status === 0) {
+            vote.statusText = VOTE_STATUS_TEXT.CANCELED
+        } else {
+            const now = Date.now()
+            if (vote.startTime > now) {
+                vote.statusText = VOTE_STATUS_TEXT.NOT_START
+            } else if (vote.startTime <= now && vote.endTime >= now) {
+                vote.statusText = VOTE_STATUS_TEXT.IN_PROGRESS
+            } else if (vote.endTime < now) {
+                vote.statusText = VOTE_STATUS_TEXT.FINISHED
+            }
+        }
+
+        votes.push(vote)
+    }
+    return votes;
+}
+
+
 function formatVoteInfo(infos) {
     if (!infos) {
         return []
@@ -184,6 +235,7 @@ const actions = {
             const res2 = await client.sendRawTransaction(tx.serialize(), true);
             console.log(res2)
             let is_voter = false
+            let is_admin = false
             let weight = 0
             const all_voters = []
             const sr1 = new utils.StringReader(res2.Result.Result)
@@ -211,21 +263,22 @@ const actions = {
             for (let node of res1.result) {
                 if (node.address === address) {
                     is_voter = true;
+                    is_admin = true;
                     weight = node.current_stake
                     break;
                 }
             }
-            let is_admin = false
-            const result = res2.Result.Result
-            const sr = new utils.StringReader(result);
-            const addr_length = sr.readVarUint();
-            for (let i = 0; i < addr_length; i++) {
-                if (new Crypto.Address(sr.read(20)).toBase58() === address) {
-                    is_admin = true;
-                    break;
-                }
-            }
-            // for (let addr of res2.Result.Result) {
+            // let is_admin = false
+            // const result = res2.Result.Result
+            // const sr = new utils.StringReader(result);
+            // const addr_length = sr.readVarUint();
+            // for (let i = 0; i < addr_length; i++) {
+            //     if (new Crypto.Address(sr.read(20)).toBase58() === address) {
+            //         is_admin = true;
+            //         break;
+            //     }
+            // }
+            // for (let voter of all_voters) {
             //     if (new Crypto.Address(addr).toBase58() === address) {
             //         is_admin = true;
             //         break;
@@ -296,12 +349,19 @@ const actions = {
         const contract = new Crypto.Address(utils.reverseHex(contract_hash[net]))
         const param = new Parameter('admin', ParameterType.Address, new Crypto.Address(address))
         const tx = TransactionBuilder.makeWasmVmInvokeTransaction('getTopicInfoListByAddr', [param], contract, gasPrice, gasLimit)
+        let res;
         try {
-            const res = await client.sendRawTransaction(tx.serialize(), true);
-            if (res.Error !== 0) {
-                throw res;
+            res = await client.sendRawTransaction(tx.serialize(), true);
+            // if (res.Error !== 0) { // 调用wasm合约出错，再调用旧的neo合约。老的合约没了。
+            //     const neoContract = new Crypto.Address(utils.reverseHex(contract_hash_old[net]))
+            //     const tx2 = TransactionBuilder.makeInvokeTransaction('getTopicInfoListByAddr',[param], neoContract, gasPrice, gasLimit)
+            //     res = await client.sendRawTransaction(tx2.serialize(), true);
+            // }
+            if(res.Error !== 0 && res.Result === "[Call]ExecCode error!parameter buf is too long") {
+                return; 
             }
             const votes = formatVoteInfo([res.Result.Result])
+            
             console.log(votes)
             commit('UPDATE_ADMIN_VOTES', { votes })
             dispatch('hideLoadingModals')
