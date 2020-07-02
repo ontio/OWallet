@@ -500,7 +500,7 @@ export default {
         this.validReducePos = false;
         return;
       }
-      if(this.current_peer.totalPos === 0 && (this.current_peer.initPos - this.reducePos) <  detail.commitmentquantity) {
+      if(this.current_peer.totalPos === 0 && (this.current_peer.initPos - this.reducePos) <  this.detail.commitmentquantity) {
         this.validReducePos = false;
         this.$message.error(this.$t('nodeMgmt.notThanCommitment'))
         return;

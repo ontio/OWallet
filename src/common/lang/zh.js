@@ -486,7 +486,7 @@ export default {
     stakeQuantityEmpty: '请输入质押数量',
     password: '输入密码',
     signWithOntid: '使用ONT ID签名',
-    signWithWallet: '使用质押钱包签名',
+    signWithWallet: '使用钱包签名',
     enterOntidPass: '请输入ONT ID的密码',
     enterWalletPass: '请输入质押钱包的密码',
     back: '返回',
@@ -680,7 +680,7 @@ export default {
         name: '名称',
         address: '地址',
         votes: '投票数',
-        selectWallet: '请选择钱包',
+        selectWallet: '请选择节点运营钱包',
         startTimeError: '投票开始时间不能晚于结束时间',
         new: '新建'
     },

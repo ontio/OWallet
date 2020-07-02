@@ -489,7 +489,7 @@ export default {
     stakeQuantityEmpty: 'Please enter valid stake quantity',
     password: 'Enter Password',
     signWithOntid: 'Sign with ONT ID',
-    signWithWallet: 'Sign with stake wallet',
+    signWithWallet: 'Sign with selected wallet',
     enterOntidPass: 'Please enter the password of your ONT ID',
     enterWalletPass: 'Please enter the password of your stake wallet',
     back: 'Back',
@@ -685,7 +685,7 @@ Within their 50% share each consensus node will receive their share according to
         name: 'Name',
         address: 'Address',
         votes: 'Number of votes',
-        selectWallet: 'Select wallet',
+        selectWallet: 'Select node operation wallet',
         startTimeError: 'Start time cannot be later than end time.',
         new: 'New'
     },
