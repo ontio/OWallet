@@ -218,9 +218,15 @@ export default {
 			this.registerSucceed = true
 		},
 		
-		onComplete() { // 进入节点管理页面且打开信息填写的tab
+		async onComplete() { // 进入节点管理页面且打开信息填写的tab
+			const nodePk = this.operationWallet ? this.operationWallet : this.operationPk
+			await this.$store.dispatch('newStakeInfo', {
+				name: 'Node_' + nodePk.substr(0, 6),
+				address: this.stakeWallet.address,
+				public_key: nodePk
+			})
             this.$store.commit('UPDATE_STAKE_WALLET', {stakeWallet: this.stakeWallet})
-            this.$store.commit('UPDATE_NODE_PUBLICKEY', {nodePublicKey: this.operationWallet ? this.operationWallet : this.operationPk})
+            this.$store.commit('UPDATE_NODE_PUBLICKEY', {nodePublicKey: nodePk})
 			this.$store.commit('UPDATE_MENU_TAB_INDEX', 3)
 			this.$router.push({name: 'NodeStakeManagement'})
         },

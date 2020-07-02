@@ -491,7 +491,7 @@ export default {
     signWithOntid: 'Sign with ONT ID',
     signWithWallet: 'Sign with selected wallet',
     enterOntidPass: 'Please enter the password of your ONT ID',
-    enterWalletPass: 'Please enter the password of your stake wallet',
+    enterWalletPass: 'Please enter the password of the selected wallet',
     back: 'Back',
     recall: 'Recall',
     refund: 'Refund',

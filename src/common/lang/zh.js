@@ -488,7 +488,7 @@ export default {
     signWithOntid: '使用ONT ID签名',
     signWithWallet: '使用钱包签名',
     enterOntidPass: '请输入ONT ID的密码',
-    enterWalletPass: '请输入质押钱包的密码',
+    enterWalletPass: '请输入钱包的密码',
     back: '返回',
     recall: '撤销',
     refund: '退款',

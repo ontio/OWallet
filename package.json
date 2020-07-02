@@ -25,7 +25,6 @@
     "packageMac": "yarn run pack && electron-builder --mac --x64",
     "packageWin": "yarn run pack && electron-builder --win --x64",
     "packageLin": "yarn run pack && electron-builder --linux --x64",
-
     "electron-rebuild": "electron-rebuild --force --module_dir . -w node-hid"
   },
   "build": {

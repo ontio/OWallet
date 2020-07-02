@@ -10,7 +10,7 @@ const gasPrice = '2500'
 const gasLimit = '200000'
 const contract_hash = {
     MAIN_NET: 'c0df752ca786a99755b2e8950060ade9fa3d4e1b',
-    TEST_NET: '5e4f0d4181ca03d13806e53df10cb61f86ee3582'
+    TEST_NET: 'd4a5cc64b92923f91d502594b45e19189b11a94e'
 }
 const contract_hash_old = {
     MAIN_NET: 'c0df752ca786a99755b2e8950060ade9fa3d4e1b',
@@ -249,7 +249,7 @@ const actions = {
             }
             for(const admin_from_chain of all_voters) {
                 for(const admin_from_api of res1.result) {
-                    const addr = Crypto.Address.fromPubKey(admin_from_api.public_key).toBase58()
+                    const addr = Crypto.Address.fromPubKey(new Crypto.PublicKey(admin_from_api.public_key)).toBase58()
                     if(addr === admin_from_chain.address) {
                         admin_from_chain.name = admin_from_api.name
                         admin_from_chain.weight = admin_from_api.current_stake
@@ -345,39 +345,17 @@ const actions = {
     async getAdminVotes({ commit, dispatch, state }) {
         // dispatch('showLoadingModals')
         const address = state.voteWallet.address;
-        const net = localStorage.getItem('net');
-        const client = getRestClient()
-        const contract = new Crypto.Address(utils.reverseHex(contract_hash[net]))
-        const param = new Parameter('admin', ParameterType.Address, new Crypto.Address(address))
-        const tx = TransactionBuilder.makeWasmVmInvokeTransaction('getTopicInfoListByAddr', [param], contract, gasPrice, gasLimit)
-        let res;
-        try {
-            let votes;
-            res = await client.sendRawTransaction(tx.serialize(), true);
-            if (res.Error !== 0) { // 如果调用wasm合约出错，再调用旧的neo合约。
-                const neoContract = new Crypto.Address(utils.reverseHex(contract_hash_old[net]))
-                const tx2 = TransactionBuilder.makeInvokeTransaction('getTopicInfoListByAddr',[param], neoContract, gasPrice, gasLimit)
-                res = await client.sendRawTransaction(tx2.serialize(), true);
-                if(res.Result && res.Result.Result) {
-                    votes = formatOldVoteInfo([res.Result.Result])
-                }
+        const all_votes = state.all_votes
+
+        let admin_votes = []
+        for(let item of all_votes) {
+            if(item.admin === address) {
+                admin_votes.push(item)
             }
-            // if(res.Error !== 0 && res.Result === "[Call]ExecCode error!parameter buf is too long") {
-            //     return; 
-            // }
-            else {
-                votes = formatVoteInfo([res.Result.Result])
-            }
-           
-            
-            console.log(votes)
-            commit('UPDATE_ADMIN_VOTES', { votes })
-            dispatch('hideLoadingModals')
-        } catch (err) {
-            console.log(err)
-            dispatch('hideLoadingModals')
-            message.error(i18n.t('common.networkErr'))
         }
+        debugger
+        console.log(admin_votes)
+        commit('UPDATE_ADMIN_VOTES', { votes: admin_votes })
     },
     submitVote({ commit, state }, { type, hash }) {
         const net = localStorage.getItem('net');
