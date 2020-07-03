@@ -46,7 +46,7 @@
                 <a-button type="default" class="btn-cancel" @click="back">{{ $t('vote.back') }}</a-button>
                 <a-button type="primary" class="btn-next" @click="submit">{{ $t('vote.submit') }}</a-button>
             </div>
-            <p class="create-tip">{{$t('vote.nodeCanVoteOnly')}}</p>
+            <!-- <p class="create-tip">{{$t('vote.nodeCanVoteOnly')}}</p> -->
 
 		</div>
         <sign-send-tx :visible="signVisible" :tx="tx" :wallet="vote_wallet"

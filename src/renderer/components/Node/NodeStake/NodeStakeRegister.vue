@@ -262,6 +262,7 @@ export default {
     delegateSendTx(tx){
       const body = {
         ontid: this.stakeIdentity.ontid,
+        publickey: this.detail.publickey,
         stakewalletaddress: this.stakeWallet.address,
         transactionhash: utils.reverseHex(tx.getHash()),
         transactionbodyhash: tx.serialize()

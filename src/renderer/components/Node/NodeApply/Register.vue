@@ -9,9 +9,14 @@
 				<a-step v-for="item in steps"
 					:key="item.title" />
 			</a-steps>
+
 			<div class="steps-content">
 				<div class="register-form"
 					v-show="current === 0">
+					<div class="proxy-tip">
+						<span>{{$t('nodeApply.proxyServiceTip')}}</span>
+						<span @click="onProxyLink" class="proxy-link">{{$t('nodeApply.proxyServiceLink')}}</span>
+					</div>
 					<form>
 						<div class="form-item">
 							<label for="stakeWallet">{{$t('nodeApply.stakeWallet')}}</label>
@@ -43,7 +48,9 @@
 						<div class="form-item">
 							<label for="">{{$t('nodeApply.stakeAmount')}}</label>
 							<a-input v-model="stakeAmount"
-								type="number"
+								type="number" 
+								:class="validAmount ? '' : 'error-input' "
+								@change="validateAmount"
 								:placeholder="$t('nodeApply.inputStakeAmount')"></a-input>
 						</div>
 						<div class="footer-btns">
@@ -103,6 +110,8 @@ import Breadcrumb from "../../Breadcrumb";
 import SelectWallet from "../../Common/SelectWallet";
 import { Crypto, GovernanceTxBuilder } from "ontology-ts-sdk";
 import SignSendTx from '../../Common/SignSendTx'
+import { open, varifyPositiveInt } from '../../../../core/utils'
+
 export default {
 	name: "NodeApply",
 	components: {
@@ -122,7 +131,8 @@ export default {
             minStakeAmount: 10000,
             signVisible: false,
 			tx: null,
-			registerSucceed: false
+			registerSucceed: false,
+			validAmount: true
 		};
 	},
 	created() {
@@ -147,11 +157,11 @@ export default {
 		},
 		onWalletSelected({ walletType, wallet }) {
 			this.walletType = walletType;
-			this.stakeWallet = wallet;
+			this.stakeWallet = wallet ? wallet : {};
 			this.onSelectOperationWallet();
 		},
 		next() {
-			if (!this.stakeWallet) {
+			if (!this.stakeWallet.address) {
 				this.$message.error(this.$t("nodeApply.stakeWalletRequired"));
 				return;
 			}
@@ -167,6 +177,9 @@ export default {
 			}
 			if (Number(this.stakeAmount) < this.minStakeAmount) {
 				this.$message.error(this.$t("nodeApply.minStateAmount"));
+				return;
+			}
+			if(!this.validAmount) {
 				return;
 			}
 			this.current += 1;
@@ -204,7 +217,7 @@ export default {
             const publicKey = this.operationWallet ? this.operationWallet : this.operationPk
             const userAddr = new Crypto.Address(this.stakeWallet.address)
             const initPos = Number(this.stakeAmount)
-            const tx = GovernanceTxBuilder.makeRegisterCandidateTx(ontid, publicKey, 1, userAddr, initPos, userAddr, '500', '200000')
+            const tx = GovernanceTxBuilder.makeRegisterCandidateTx(ontid, publicKey, 1, userAddr, initPos, userAddr, '2500', '200000')
             this.tx = tx;
             this.signVisible = true;
         },
@@ -218,15 +231,33 @@ export default {
 			this.registerSucceed = true
 		},
 		
-		onComplete() { // 进入节点管理页面且打开信息填写的tab
+		async onComplete() { // 进入节点管理页面且打开信息填写的tab
+			const nodePk = this.operationWallet ? this.operationWallet : this.operationPk
+			await this.$store.dispatch('newStakeInfo', {
+				name: 'Node_' + nodePk.substr(0, 6),
+				address: this.stakeWallet.address,
+				public_key: nodePk
+			})
             this.$store.commit('UPDATE_STAKE_WALLET', {stakeWallet: this.stakeWallet})
-            this.$store.commit('UPDATE_NODE_PUBLICKEY', {nodePublicKey: this.operationWallet ? this.operationWallet : this.operationPk})
+            this.$store.commit('UPDATE_NODE_PUBLICKEY', {nodePublicKey: nodePk})
 			this.$store.commit('UPDATE_MENU_TAB_INDEX', 3)
 			this.$router.push({name: 'NodeStakeManagement'})
         },
         onLater() {
             this.$router.push({name: 'MyNode'})
-        }
+		},
+		onProxyLink() {
+			const url = 'http://triones-node.store.ont.io/'
+			open(url)
+		},
+		validateAmount() {
+
+			if(this.stakeAmount && !varifyPositiveInt(this.stakeAmount)) {
+                this.validAmount = false;
+                return;
+			}
+			this.validAmount = true
+		}
 	}
 };
 </script>
@@ -282,5 +313,23 @@ export default {
         cursor: pointer;
         text-decoration: underline;
     }
+}
+.proxy-tip {
+	text-align: left;
+    font-size: 12px;
+    font-family: AvenirNext-Regular,AvenirNext;
+    font-weight: 400;
+    margin-top: 4px;
+	span:first-child {
+		color: #000;
+    	opacity: 0.6;
+	}
+	span:last-child {
+		opacity: 1 !important;
+		font-weight: 400;
+		color: #196bd8;
+		text-decoration: underline;
+		cursor: pointer;
+	}
 }
 </style>

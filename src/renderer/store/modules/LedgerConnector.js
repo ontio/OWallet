@@ -90,7 +90,7 @@ const mutations = {
 
 const actions = {
     getLedgerStatus({dispatch,commit,state}, interval) {
-        let time = interval || 1000;
+        let time = interval || 3000;
         getDevice(commit, state)
         const intervalId = setInterval(() => {
             getDevice(commit, state)

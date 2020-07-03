@@ -30,7 +30,7 @@ const state = {
         to: '',
         amount:0,
         asset:'ONT',
-        gas:0.01,
+        gas:0.05,
         coPayers : [],
         sponsorPayer:'',
         isRedeem: false
@@ -80,7 +80,7 @@ const mutations = {
             to: '',
             amount: 0,
             asset: 'ONT',
-            gas: 0.01,
+            gas: 0.05,
             coPayers: [],
             sponsorPayer: ''
         }

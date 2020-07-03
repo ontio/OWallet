@@ -87,6 +87,7 @@
 <script>
 import CommonSignShared from '../../Common/CommonSignShared'
 import {utils, TransactionBuilder, Crypto, Parameter, ParameterType} from 'ontology-ts-sdk'
+import {GAS_LIMIT, GAS_PRICE} from '../../../../core/consts'
 export default {
     name: 'StartSharedTx',
     props: ['sharedWallet','localSigners'],
@@ -161,7 +162,7 @@ export default {
                     return;
                 }
                 const payer = new Crypto.Address(this.sharedWallet.sharedWalletAddress)
-                const tx = TransactionBuilder.makeInvokeTransaction(this.method, params, contractAddr, '500', '200000', payer);
+                const tx = TransactionBuilder.makeInvokeTransaction(this.method, params, contractAddr, GAS_PRICE, GAS_LIMIT, payer);
                 this.tx = tx.serialize();
                 this.$refs.commonSign.signSharedTx(isFirstSign, this.tx);
             } else {

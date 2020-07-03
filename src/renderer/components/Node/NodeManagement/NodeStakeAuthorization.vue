@@ -138,7 +138,7 @@
             @change="validateUnit"
             ></a-input>
             <span class="font-medium">{{$t('nodeMgmt.allowedStakeAmount')}}: </span>
-            <span>{{unit*500}} ONT</span>
+            <span>{{unit*unitVal}} ONT</span>
             <span class="font-medium" style="margin-left:20px;">({{$t('nodeMgmt.current')}} {{peer_attrs.maxAuthorizeStr}} ONT)</span>
             <p class="authorize-tip">
                 <a-icon type="info-circle" /> 
@@ -248,7 +248,8 @@ export default {
             intervalId:0,
             signVisible: false,
             tx: '',
-            showEditProportion: false 
+            showEditProportion: false,
+            unitVal: 1
         }
     },
     mounted() {
@@ -294,11 +295,11 @@ export default {
                 this.$message.error(this.$t('nodeMgmt.invalidInput'))
                 return;
             }
-            if(parseInt(this.unit)*500 != this.peer_attrs.maxAuthorize) {
+            if(parseInt(this.unit)*this.unitVal != this.peer_attrs.maxAuthorize) {
                 const tx = GovernanceTxBuilder.makeChangeAuthorizationTx(
                     this.stakeDetail.publickey,
                     new Crypto.Address(this.stakeWallet.address),
-                    parseInt(this.unit)*500,
+                    parseInt(this.unit)*this.unitVal,
                     new Crypto.Address(this.stakeWallet.address),
                     GAS_PRICE,
                     GAS_LIMIT
@@ -328,7 +329,7 @@ export default {
                 this.validUnit = false;
                 return;
             }
-            if(this.unit && parseInt(this.unit)*500 > this.current_peer.initPos * this.posLimit) {
+            if(this.unit && parseInt(this.unit)*this.unitVal > this.current_peer.initPos * this.posLimit) {
                 this.validUnit = false;
                 this.$message.error(this.$t('nodeMgmt.notThanMax'))
                 return;

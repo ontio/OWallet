@@ -391,7 +391,7 @@ export default {
     walletQrCode: 'Wallet QR code',
     walletAddress: 'Wallet address',
     publicKey: 'Public key',
-    redeemCharge: 'Each redeem charges 0.01 ONG',
+    redeemCharge: 'Each redeem charges 0.05 ONG',
     inputPass: 'Please input your wallet password',
     emptyPass: 'Password can not be empty',
     cancel: 'Cancel',
@@ -489,9 +489,9 @@ export default {
     stakeQuantityEmpty: 'Please enter valid stake quantity',
     password: 'Enter Password',
     signWithOntid: 'Sign with ONT ID',
-    signWithWallet: 'Sign with stake wallet',
+    signWithWallet: 'Sign with selected wallet',
     enterOntidPass: 'Please enter the password of your ONT ID',
-    enterWalletPass: 'Please enter the password of your stake wallet',
+    enterWalletPass: 'Please enter the password of the selected wallet',
     back: 'Back',
     recall: 'Recall',
     refund: 'Refund',
@@ -527,7 +527,7 @@ export default {
   },
   redeemInfo: {
     info: 'Redeem Info',
-    claimableOng: `Claimable ONG is the amount of ONG you can claim for a 0.01 ONG fee. This balance will update each time a transaction is made in your wallet address.`,
+    claimableOng: `Claimable ONG is the amount of ONG you can claim for a 0.05 ONG fee. This balance will update each time a transaction is made in your wallet address.`,
     unboundOng: `Unbound ONG is an amount of ONG which has not been added to your claimable ONG balance yet (since it only updates each you make a transaction in your wallet address). When a transaction is made in your address, the claimable ONG balance will update (adding your unbound ONG amount to your claimable ONG amount).`,
     claimableOngName: 'Claimable ONG: ',
     unboundOngName: 'Unbound ONG: ',
@@ -685,7 +685,7 @@ Within their 50% share each consensus node will receive their share according to
         name: 'Name',
         address: 'Address',
         votes: 'Number of votes',
-        selectWallet: 'Select wallet',
+        selectWallet: 'Select node operation wallet',
         startTimeError: 'Start time cannot be later than end time.',
         new: 'New'
     },
@@ -706,7 +706,13 @@ Within their 50% share each consensus node will receive their share according to
         registerSuccess: 'Congratulations on the successful node registration',
         completeNodeInfo: 'Complete node info now',
         later: 'Later',
-        sameWalletNotAllowed: 'The operation wallet and staking wallet can not be the same'
+        sameWalletNotAllowed: 'The operation wallet and staking wallet can not be the same',
+        operationWalletRequired: 'Operation wallet is required',
+        stakeWalletRequired: 'Stake wallet is required',
+        stakeAmountRequired: 'Stake amount is required',
+        minStateAmount: 'The stake amount is at least 10,000 ONT',
+        proxyServiceTip: 'The Ontology community now provides node operation by proxy service.',
+        proxyServiceLink: 'Click here to find out more.'
     },
     myNode: {
         myNode: 'My nodes',
@@ -742,7 +748,8 @@ Within their 50% share each consensus node will receive their share according to
         ifOpenInfo: 'Switch to open info',
         submit: 'Submit',
         updateSuccess: 'Update node info succeed',
-        updateFailed: 'Update node info failed'
+        updateFailed: 'Update node info failed',
+        ledgerWalletNotSupportForNow: 'Nodes registered with ledger currently do not support updating node-related information '
     },
   exchange: {
     exchange: 'Exchange',

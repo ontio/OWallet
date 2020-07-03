@@ -390,7 +390,7 @@ export default {
     walletQrCode: '钱包地址二维码',
     walletAddress: '钱包地址',
     publicKey: '公钥',
-    redeemCharge: '提取ONG需要支付0.01ONG',
+    redeemCharge: '提取ONG需要支付0.05ONG',
     inputPass: '请输入钱包密码',
     emptyPass: '密码不能为空',
     cancel: '取消',
@@ -486,9 +486,9 @@ export default {
     stakeQuantityEmpty: '请输入质押数量',
     password: '输入密码',
     signWithOntid: '使用ONT ID签名',
-    signWithWallet: '使用质押钱包签名',
+    signWithWallet: '使用钱包签名',
     enterOntidPass: '请输入ONT ID的密码',
-    enterWalletPass: '请输入质押钱包的密码',
+    enterWalletPass: '请输入钱包的密码',
     back: '返回',
     recall: '撤销',
     refund: '退款',
@@ -526,7 +526,7 @@ export default {
   },
   redeemInfo: {
     info: '提取ONG',
-    claimableOng: '可提取ONG是您可以提取的ONG的数量，手续费为0.01个ONG。每次钱包中完成一笔交易后，该余额会更新。',
+    claimableOng: '可提取ONG是您可以提取的ONG的数量，手续费为0.05个ONG。每次钱包中完成一笔交易后，该余额会更新。',
     unboundOng: '已解绑的ONG是指尚未添加到您的可提取ONG余额（仅会在您钱包做出一笔ONT交易后更新）中的ONG。当您的地址完成一笔交易后，您可提取的ONG余额将会更新（即将已解绑的ONG数额将添加到您可提取的ONG余额中去。）',
     claimableOngName: '可提取ONG：',
     unboundOngName: '已解绑的ONG：',
@@ -680,7 +680,7 @@ export default {
         name: '名称',
         address: '地址',
         votes: '投票数',
-        selectWallet: '请选择钱包',
+        selectWallet: '请选择节点运营钱包',
         startTimeError: '投票开始时间不能晚于结束时间',
         new: '新建'
     },
@@ -701,7 +701,13 @@ export default {
         registerSuccess: '恭喜注册节点成功',
         completeNodeInfo: '立刻完善节点信息',
         later: '稍后再说',
-        sameWalletNotAllowed: '运营钱包和质押钱包不能是同一个钱包'
+        sameWalletNotAllowed: '运营钱包和质押钱包不能是同一个钱包',
+        operationWalletRequired: '运营钱包是必需的',
+        stakeWalletRequired: '质押钱包是必需的',
+        stakeAmountRequired: '质押金额是必需的',
+        minStateAmount: '质押金额至少是10,000 ONT',
+        proxyServiceTip: '本体社区提供了节点代运营服务。',
+        proxyServiceLink: '点击这里查看详情。'
     },
     myNode: {
         myNode: '我的节点',
@@ -737,7 +743,8 @@ export default {
         ifOpenInfo: '是否公开节点信息',
         submit: '提交',
         updateSuccess: '更新成功',
-        updateFailed: '更新失败'
+        updateFailed: '更新失败',
+        ledgerWalletNotSupportForNow: '使用Ledger注册的节点，暂时不支持更新节点相关信息'
     },
   exchange: {
     exchange: 'Exchange',

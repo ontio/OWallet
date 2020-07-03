@@ -1,5 +1,5 @@
 // export const GAS_PRICE = '0';for test
-export const GAS_PRICE = '500';
+export const GAS_PRICE = '2500';
 export const GAS_LIMIT = '20000';
 
 export const ONT_CONTRACT = '0000000000000000000000000000000000000001';
@@ -42,9 +42,9 @@ export const ONT_PASS_URL = {
     // /NodePledgeApi/v1/Nodepledge/getQuailifiedState?ontid={ontid}&address={address}'
     DelegateSendTx: '/S4/NodePledgeApi/v1/Nodepledge/delegateSendTransaction',
     SetStakeInfo: '/S4/NodePledgeApi/v1/Nodepledge/setInfo',
-    GetStakeInfo: '/S4/NodePledgeApi/v1/Nodepledge/info'
+    GetStakeInfo: '/S4/NodePledgeApi/v1/Nodepledge/info',
     // /NodePledgeApi/v1/Nodepledge/info?ontid={ontid}
-
+    GetVoteContract: '/S4/NodePledgeApi/v1/Nodepledge/vote-contract-address' // /{net_type}
 }
 
 export const WALLET_TYPE = {

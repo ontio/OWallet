@@ -187,7 +187,7 @@
                 </div>
                 <div>
                     <span class="label font-medium-black">{{$t('nodeMgmt.amountToCancel')}}: </span>
-                    <span class="font-medium">{{cancelAmount*500}} ONT</span>
+                    <span class="font-medium">{{cancelAmount}} ONT</span>
                 </div>
             </div>
         </a-modal>
@@ -316,7 +316,7 @@ export default {
             }
             const inAuthorization = this.authorizationInfo.consensusPos + this.authorizationInfo.freezePos
                                     + this.authorizationInfo.newPos;
-            if(Number(this.cancelAmount)*500 > inAuthorization) {
+            if(Number(this.cancelAmount) > inAuthorization) {
                 this.validCancelAmount = false;
                 return;
             }
@@ -330,7 +330,7 @@ export default {
             this.cancelVisible = false;
             this.signVisible = true;
             const userAddr = new Crypto.Address(this.stakeWallet.address);
-            const amount = Number(this.cancelAmount) * 500;
+            const amount = Number(this.cancelAmount);
             const tx = GovernanceTxBuilder.makeUnauthorizeForPeerTx(
                 userAddr,
                 [this.current_node.pk],

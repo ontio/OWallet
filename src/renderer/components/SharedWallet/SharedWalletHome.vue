@@ -426,7 +426,7 @@ export default {
       method,
       [],
       contractAddr,
-      "500",
+      "2500",
       "20000"
     );
     const restClient = getRestClient();
@@ -479,8 +479,7 @@ export default {
             const asset = tx.asset_name.toUpperCase();
             if (
               tx.to_address === ONG_GOVERNANCE_CONTRACT &&
-              asset === "ONG" &&
-              Number(tx.amount) == 0.01
+              asset === "ONG"
             ) {
               continue;
             }
@@ -596,7 +595,7 @@ export default {
       this.$router.push({ name: "Dashboard" });
     },
     showTransferBox() {
-      if (Number(this.balance.ong) < 0.01) {
+      if (Number(this.balance.ong) < 0.05) {
         this.$message.warning(this.$t("common.ongNoEnough"));
         return;
       }
@@ -677,7 +676,7 @@ export default {
         this.redeemInfoVisible = true;
         return;
       }
-      if (Number(this.balance.ong) < 0.01) {
+      if (Number(this.balance.ong) < 0.05) {
         this.$message.warning(this.$t("common.ongNoEnough"));
         return;
       }
