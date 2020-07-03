@@ -116,6 +116,9 @@ export default {
             onlyTestNet: false
         }
     },
+    mounted() {
+        this.$store.dispatch('fetchVoteContract')
+    },
     methods: {
         handleNodeStake() {
             // const net = localStorage.getItem('net');

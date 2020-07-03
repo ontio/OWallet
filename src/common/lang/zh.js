@@ -705,7 +705,9 @@ export default {
         operationWalletRequired: '运营钱包是必需的',
         stakeWalletRequired: '质押钱包是必需的',
         stakeAmountRequired: '质押金额是必需的',
-        minStateAmount: '质押金额至少是10,000 ONT'
+        minStateAmount: '质押金额至少是10,000 ONT',
+        proxyServiceTip: '本体社区提供了节点代运营服务。',
+        proxyServiceLink: '点击这里查看详情。'
     },
     myNode: {
         myNode: '我的节点',

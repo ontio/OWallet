@@ -386,9 +386,9 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
             for(const t of txlist) {
               for(const tx of t.transfers) {
                 const asset = tx.asset_name.toUpperCase() 
-                if(tx.to_address === ONG_GOVERNANCE_CONTRACT && asset === 'ONG') {
-                  continue;
-                }
+                // if(tx.to_address === ONG_GOVERNANCE_CONTRACT && asset === 'ONG') {
+                //   continue;
+                // }
                 let amount = asset === 'ONT' ? parseInt(tx.amount) : tx.amount;
                 if (tx.from_address === this.address) {
                     amount = '-' + amount;

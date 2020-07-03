@@ -1,10 +1,12 @@
-import { NODE_CURRENT_STAKES, VOTE_ROLE, DEFAULT_SCRYPT } from '../../../core/consts'
+import { NODE_CURRENT_STAKES, VOTE_ROLE, DEFAULT_SCRYPT, ONT_PASS_NODE, ONT_PASS_NODE_PRD,
+    ONT_PASS_URL } from '../../../core/consts'
 import httpService, { getRestClient } from '../../../core/utils'
 import { TransactionBuilder, Crypto, utils, Parameter, ParameterType, TxSignature, WebsocketClient } from 'ontology-ts-sdk'
 import {
     message
 } from 'ant-design-vue'
 import i18n from '../../../common/lang';
+import axios from 'axios';
 
 const gasPrice = '2500'
 const gasLimit = '200000'
@@ -17,6 +19,7 @@ const contract_hash_old = {
     TEST_NET: 'a088ae3b508794e666ab649d890213e66e0c3a2e'
 }
 const state = {
+    contract_hash: '',
     voteWallet: '',
     voteWalletType: '', // commonWallet or ledgerWallet
     role: [],  // 可能同时是admin和voter
@@ -213,12 +216,24 @@ const mutations = {
     },
     UPDATE_CURRENT_VOTE_RECORDS(state, { records }) {
         state.current_vote_records = records
+    },
+    UPDATE_VOTE_CONTRACT(state, contract_hash) {
+        state.contract_hash = contract_hash
     }
 }
 
 const actions = {
+    async fetchVoteContract({commit}) {
+        const net = localStorage.getItem('net')
+        const ontPassNode = net === 'TEST_NET' ? ONT_PASS_NODE : ONT_PASS_NODE_PRD
+        const url = ontPassNode + ONT_PASS_URL.GetVoteContract + '/' + net;
+        const res = await axios.get(url)
+        if(res && res.data && res.data.vote_contract_address) {
+            commit('UPDATE_VOTE_CONTRACT', res.data.vote_contract_address)
+        }
+    },
     //从接口获取节点钱包地址，和从合约获取amdin地址，判断role
-    async getVoteRole({ commit, dispatch }, { address }) {
+    async getVoteRole({ commit, dispatch, state }, { address }) {
         dispatch('showLoadingModals')
         const net = localStorage.getItem('net');
         const url = NODE_CURRENT_STAKES[net]
@@ -230,7 +245,7 @@ const actions = {
             })
             // console.log(res1)
             const client = getRestClient()
-            const contract = new Crypto.Address(utils.reverseHex(contract_hash[net]))
+            const contract = new Crypto.Address(utils.reverseHex(state.contract_hash))
             const tx = TransactionBuilder.makeWasmVmInvokeTransaction('listGovNodes', [], contract, gasPrice, gasLimit) // 从链上查询admin信息
             const res2 = await client.sendRawTransaction(tx.serialize(), true);
             console.log(res2)
@@ -298,11 +313,11 @@ const actions = {
             message.error(i18n.t('common.networkErr'))
         }
     },
-    async getAllVotes({ commit, dispatch }, {showLoading}) {
+    async getAllVotes({ commit, dispatch, state }, {showLoading}) {
         showLoading && dispatch('showLoadingModals')
         const net = localStorage.getItem('net');
         const client = getRestClient()
-        const contract = new Crypto.Address(utils.reverseHex(contract_hash[net]))
+        const contract = new Crypto.Address(utils.reverseHex(state.contract_hash))
         const tx = TransactionBuilder.makeWasmVmInvokeTransaction('listTopics', [], contract, gasPrice, gasLimit)
         try {
             const res2 = await client.sendRawTransaction(tx.serialize(), true);
@@ -358,7 +373,7 @@ const actions = {
     },
     submitVote({ commit, state }, { type, hash }) {
         const net = localStorage.getItem('net');
-        const contract = new Crypto.Address(utils.reverseHex(contract_hash[net]))
+        const contract = new Crypto.Address(utils.reverseHex(state.contract_hash))
         const address = state.voteWallet.address
         const addr = new Crypto.Address(address)
         const params = [
@@ -372,7 +387,7 @@ const actions = {
     stopVote({ commit, dispatch, state }, { hash }) {
         const net = localStorage.getItem('net');
         const client = getRestClient()
-        const contract = new Crypto.Address(utils.reverseHex(contract_hash[net]))
+        const contract = new Crypto.Address(utils.reverseHex(state.contract_hash))
         const address = state.voteWallet.address
         const addr = new Crypto.Address(address)
         const params = [
@@ -383,7 +398,7 @@ const actions = {
     },
     createVote({ commit, dispatch, state }, { vote }) {
         const net = localStorage.getItem('net');
-        const contract = new Crypto.Address(utils.reverseHex(contract_hash[net]))
+        const contract = new Crypto.Address(utils.reverseHex(state.contract_hash))
         const address = state.voteWallet.address
         const addr = new Crypto.Address(address)
         const voters = state.all_voters;
@@ -402,7 +417,7 @@ const actions = {
         dispatch('showLoadingModals')
         const net = localStorage.getItem('net');
         const client = getRestClient()
-        const contract = new Crypto.Address(utils.reverseHex(contract_hash[net]))
+        const contract = new Crypto.Address(utils.reverseHex(state.contract_hash))
         const address = state.voteWallet.address
         const addr = new Crypto.Address(address)
         const params = [
@@ -421,10 +436,10 @@ const actions = {
     },
 
     // 查询
-    async getVoters({ commit }, { hash }) {
+    async getVoters({ commit, state }, { hash }) {
         const net = localStorage.getItem('net');
         const client = getRestClient()
-        const contract = new Crypto.Address(utils.reverseHex(contract_hash[net]))
+        const contract = new Crypto.Address(utils.reverseHex(state.contract_hash))
         const param = new Parameter('', ParameterType.H256, hash)
         const tx = TransactionBuilder.makeWasmVmInvokeTransaction('getVoters', [param], contract, gasPrice, gasLimit)
         const res = await client.sendRawTransaction(tx.serialize(), true);
@@ -454,10 +469,10 @@ const actions = {
         }
     },
 
-    async getVotedInfo({ commit }, { hash, address }) {
+    async getVotedInfo({ commit, state }, { hash, address }) {
         const net = localStorage.getItem('net');
         const client = getRestClient()
-        const contract = new Crypto.Address(utils.reverseHex(contract_hash[net]))
+        const contract = new Crypto.Address(utils.reverseHex(state.contract_hash))
         const params = [
             new Parameter('', ParameterType.H256, hash),
             new Parameter('', ParameterType.Address, new Crypto.Address(address))
@@ -483,7 +498,7 @@ const actions = {
     async getVotedRecords({ commit, dispatch, state }, { hash }) {
         const net = localStorage.getItem('net');
         const client = getRestClient()
-        const contract = new Crypto.Address(utils.reverseHex(contract_hash[net]))
+        const contract = new Crypto.Address(utils.reverseHex(state.contract_hash))
         const params = [
             new Parameter('', ParameterType.H256, hash)
         ]
@@ -520,10 +535,10 @@ const actions = {
     setCurrentVote({ commit }, { vote }) {
         commit('UPDATE_CURRENT_VOTE', {vote})
     },
-    async updateCurrentVote({ commit }, { hash }) {
+    async updateCurrentVote({ commit, state }, { hash }) {
         const net = localStorage.getItem('net');
         const client = getRestClient()
-        const contract = new Crypto.Address(utils.reverseHex(contract_hash[net]))
+        const contract = new Crypto.Address(utils.reverseHex(state.contract_hash))
         const params = [
             new Parameter('', ParameterType.H256, hash)
         ]

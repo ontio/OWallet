@@ -710,7 +710,9 @@ Within their 50% share each consensus node will receive their share according to
         operationWalletRequired: 'Operation wallet is required',
         stakeWalletRequired: 'Stake wallet is required',
         stakeAmountRequired: 'Stake amount is required',
-        minStateAmount: 'The stake amount is at least 10,000 ONT'
+        minStateAmount: 'The stake amount is at least 10,000 ONT',
+        proxyServiceTip: 'The Ontology community now provides node operation by proxy service.',
+        proxyServiceLink: 'Click here to find out more.'
     },
     myNode: {
         myNode: 'My nodes',
