@@ -156,11 +156,11 @@ export default {
 			{ name: this.$t("vote.votingTopics"), path: "/vote/votes" }
 		];
 		const columns = [
-			{
-				dataIndex: "name",
-				key: "name",
-				title: this.$t("vote.name")
-			},
+			// {
+			// 	dataIndex: "name",
+			// 	key: "name",
+			// 	title: this.$t("vote.name")
+			// },
 			{
 				dataIndex: "address",
 				key: "address",
