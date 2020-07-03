@@ -480,7 +480,8 @@ export default {
         this.walletPassModal = true;
     },
     handleNewStake() {
-      this.$router.push({ name: "NodeStakeRegister" });
+      // this.$router.push({ name: "NodeStakeRegister" });
+      this.$router.push({name: 'NodeApply'})
     },
     handleAddInitPos() {
       this.addPosVisible = true;

@@ -741,7 +741,8 @@ export default {
         ifOpenInfo: '是否公开节点信息',
         submit: '提交',
         updateSuccess: '更新成功',
-        updateFailed: '更新失败'
+        updateFailed: '更新失败',
+        ledgerWalletNotSupportForNow: '使用Ledger注册的节点，暂时不支持更新节点相关信息'
     },
   exchange: {
     exchange: 'Exchange',

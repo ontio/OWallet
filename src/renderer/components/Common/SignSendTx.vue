@@ -111,26 +111,46 @@ export default {
                 //ledger sign
                 if (this.ledgerWallet.address) {
                     this.$store.dispatch("showLoadingModals");
-                    const pk = new Crypto.PublicKey(this.ledgerWallet.publicKey);
-                    const txSig = new TxSignature();
-                    txSig.M = 1;
-                    txSig.pubKeys = [pk];
-                    tx.payer = new Crypto.Address(this.ledgerWallet.address);;
-                    const txData = tx.serializeUnsignedData();
-                    legacySignWithLedger(txData).then(res => {
-                        // console.log('txSigned: ' + res);
-                        const sign = "01" + res; //ECDSAwithSHA256
-                        txSig.sigData = [sign];
-                        tx.sigs = [txSig];
-                        this.sendTx(tx);
-                        },
-                        err => {
-                            this.sending = false;
-                            this.ledgerStatus = "";
+                    let txData
+                    if(typeof tx === 'string') {
+                        txData =  tx
+                        legacySignWithLedger(txData).then(res => {
+                            // console.log('txSigned: ' + res);
+                            const sign = "01" + res; //ECDSAwithSHA256
                             this.$store.dispatch("hideLoadingModals");
-                            this.$message.error(this.$t('ledgerWallet.signFailed'))
-                        }
-                    );
+                            this.$emit('afterSign', sign) // 返回签名message结果
+                            },
+                            err => {
+                                this.sending = false;
+                                this.ledgerStatus = "";
+                                this.$store.dispatch("hideLoadingModals");
+                                this.$message.error(this.$t('ledgerWallet.signFailed'))
+                            }
+                        );
+                    } else {
+                        const pk = new Crypto.PublicKey(this.ledgerWallet.publicKey);
+                        const txSig = new TxSignature();
+                        txSig.M = 1;
+                        txSig.pubKeys = [pk];
+                        tx.payer = new Crypto.Address(this.ledgerWallet.address);;
+                        txData = tx.serializeUnsignedData();
+                        legacySignWithLedger(txData).then(res => {
+                            // console.log('txSigned: ' + res);
+                            const sign = "01" + res; //ECDSAwithSHA256
+                            txSig.sigData = [sign];
+                            tx.sigs = [txSig];
+                            this.sendTx(tx);
+                            },
+                            err => {
+                                this.sending = false;
+                                this.ledgerStatus = "";
+                                this.$store.dispatch("hideLoadingModals");
+                                this.$message.error(this.$t('ledgerWallet.signFailed'))
+                            }
+                        );
+                    }
+                    
+                    
                 } else {
                     this.$store.dispatch("hideLoadingModals");
                     this.$message.warning(this.$t("ledgerWallet.connectApp"));

@@ -1,5 +1,9 @@
 <template>
-    <div class="container">
+<div>
+    <div v-if="!stakeWallet.key" class="ledger-not-support">
+        {{$t('nodeInfo.ledgerWalletNotSupportForNow')}}
+    </div>
+    <div class="container" v-if="stakeWallet.key">
         <div class="info-container">
         <div class="left-half">
             <div class="form-item">
@@ -59,7 +63,7 @@
         </div>
         <div class="footer-btns">
             <div class="btn-container">
-            <a-button class="btn-next" @click="onSubmit">{{$t('nodeInfo.submit')}}</a-button>
+            <a-button class="btn-next" @click="onSubmit" >{{$t('nodeInfo.submit')}}</a-button>
             </div>
         </div>
         <sign-send-tx :visible="signVisible" :tx="tx" :wallet="stakeWallet"
@@ -67,6 +71,7 @@
         v-on:afterSign="handleAfterSign"
         ></sign-send-tx>
     </div>
+</div>
 </template>
 <script>
 import {mapState} from 'vuex'
@@ -120,7 +125,7 @@ export default {
                 node_info: this.node_info,
                 public_key: this.stakeWallet.publicKey,
                 address: this.stakeWallet.address,
-                signature: signed.serializeHex()
+                signature: typeof signed === 'string' ? signed : signed.serializeHex()
             }
             this.$store.dispatch('updateNodeInfo', data).then(res => {
                 this.signVisible = false;

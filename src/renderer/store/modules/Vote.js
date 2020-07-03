@@ -10,7 +10,7 @@ const gasPrice = '2500'
 const gasLimit = '200000'
 const contract_hash = {
     MAIN_NET: 'c0df752ca786a99755b2e8950060ade9fa3d4e1b',
-    TEST_NET: 'd4a5cc64b92923f91d502594b45e19189b11a94e'
+    TEST_NET: '32a7403e17eb9a2bbeeb7bc3eaa6dee7b0ae3829'
 }
 const contract_hash_old = {
     MAIN_NET: 'c0df752ca786a99755b2e8950060ade9fa3d4e1b',
@@ -353,7 +353,6 @@ const actions = {
                 admin_votes.push(item)
             }
         }
-        debugger
         console.log(admin_votes)
         commit('UPDATE_ADMIN_VOTES', { votes: admin_votes })
     },
@@ -533,7 +532,7 @@ const actions = {
         console.log(res)
         if (res.Error === 0) {
             const votes = formatVoteInfo([res.Result.Result])
-            console.log(votes)
+            console.log('updateCurrentVote',JSON.stringify(votes))
             commit('UPDATE_CURRENT_VOTE', { vote: votes[0]})
         }
     }
