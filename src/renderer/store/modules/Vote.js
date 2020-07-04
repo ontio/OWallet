@@ -1,4 +1,4 @@
-import { NODE_CURRENT_STAKES, VOTE_ROLE, DEFAULT_SCRYPT, ONT_PASS_NODE, ONT_PASS_NODE_PRD,
+import { NODE_CURRENT_STAKES,OFF_CHAIN_NODES,  VOTE_ROLE, DEFAULT_SCRYPT, ONT_PASS_NODE, ONT_PASS_NODE_PRD,
     ONT_PASS_URL } from '../../../core/consts'
 import httpService, { getRestClient } from '../../../core/utils'
 import { TransactionBuilder, Crypto, utils, Parameter, ParameterType, TxSignature, WebsocketClient } from 'ontology-ts-sdk'
@@ -264,16 +264,16 @@ const actions = {
             }
             for(const admin_from_chain of all_voters) {
                 for(const admin_from_api of res1.result) {
-                    const addr = Crypto.Address.fromPubKey(new Crypto.PublicKey(admin_from_api.public_key)).toBase58()
-                    if(addr === admin_from_chain.address) {
+                    const pk_address = Crypto.Address.fromPubKey(new Crypto.PublicKey(admin_from_api.public_key)).toBase58()
+                    if(pk_address === admin_from_chain.address) {
                         admin_from_chain.name = admin_from_api.name
                         admin_from_chain.weight = admin_from_api.current_stake
+                        break;
                     } else {
                         admin_from_chain.name = admin_from_chain.address.substr(0,8)
                     }
                 }
             }
-            
             // const all_voters = res1.result.map(item => ({ name: item.name, address: item.address, weight: item.current_stake }))
             commit('UPDATE_ALL_VOTERS', { all_voters })
             for (let node of all_voters) {
