@@ -611,7 +611,7 @@ export default {
       //判断当前是否在上链中状态
       const requiredNumber = this.sharedWallet.requiredNumber;
       let signed = 0;
-      for (let c of tx.coPayerSignVOS) {
+      for (let c of tx.coPayerSignDtos) {
         if (c.isSign) {
           signed++;
         }

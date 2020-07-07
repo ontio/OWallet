@@ -131,14 +131,14 @@
                 <span class="label">[{{sharedWallet.requiredNumber}} - OF - {{sharedWallet.totalNumber}} ]</span>
             </div>
             <div class="sponsor-item">
-                <span class="circle font-medium-black" :class="pendingTx.coPayerSignVOS[0] && pendingTx.coPayerSignVOS[0].isSign? 'circle-signed': 'circle-unsigned'">1</span>
-                <span class="font-medium-black">{{pendingTx.coPayerSignVOS[0] && pendingTx.coPayerSignVOS[0].name}}</span>
-                <span class="font-medium">{{pendingTx.coPayerSignVOS[0] && pendingTx.coPayerSignVOS[0].address}}</span>
+                <span class="circle font-medium-black" :class="pendingTx.coPayerSignDtos[0] && pendingTx.coPayerSignDtos[0].isSign? 'circle-signed': 'circle-unsigned'">1</span>
+                <span class="font-medium-black">{{pendingTx.coPayerSignDtos[0] && pendingTx.coPayerSignDtos[0].name}}</span>
+                <span class="font-medium">{{pendingTx.coPayerSignDtos[0] && pendingTx.coPayerSignDtos[0].address}}</span>
             </div>
 
             <p class="label">{{$t('sharedWalletHome.signSequence')}}
             </p>
-            <div class="drag-item" v-for="(payer,index) in pendingTx.coPayerSignVOS" :key="payer.address">
+            <div class="drag-item" v-for="(payer,index) in pendingTx.coPayerSignDtos" :key="payer.address">
                 <div class="payer-item" v-if="index!==0">
                     <span class="circle font-medium-black" :class="payer.isSign? 'circle-signed': 'circle-unsigned'">{{index+1}}</span>
                     <span class="font-medium-black">{{payer.name}}</span>
@@ -194,7 +194,7 @@ export default {
     methods: {
         updateShowSign() {
             var that = this;
-                const nextSigner = this.pendingTx.coPayerSignVOS.find((e)=> e.isSign=== false)
+                const nextSigner = this.pendingTx.coPayerSignDtos.find((e)=> e.isSign=== false)
                 if(!nextSigner) {
                     return;
                 }
