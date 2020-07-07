@@ -49,8 +49,15 @@ export default {
 
     },
     mounted(){
-        if(!this.wallet.key) {//common wallet
-            this.$store.dispatch('getLedgerStatus')
+        
+    },
+    watch: {
+        visible(newV, oldV) {
+            if(newV) {
+                if(!this.wallet.key) {//common wallet
+                    this.$store.dispatch('getLedgerStatus')
+                }
+            }
         }
     },
     beforeDestroy() {
@@ -102,9 +109,11 @@ export default {
                     const signature =  pri.sign(tx) 
                     this.$store.dispatch("hideLoadingModals");
                     this.$emit('afterSign', signature) // 返回签名message结果
+                    this.walletPassword = ''
                 } else {
                     TransactionBuilder.signTransaction(tx, pri);
                     this.sendTx(tx);
+                    this.walletPassword = ''
                 }
                 
             } else {

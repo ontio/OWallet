@@ -36,7 +36,6 @@ function getDevice(commit, state) {
 }
 
 function getLedgerPublicKey(commit, state) {
-    // 这里如果去掉，再SelectWallet组件里，切换类型后不再重新获取ledger地址，会产生bug。
     // if (state.publicKey) {
     //     return;
     // }
@@ -89,17 +88,22 @@ const mutations = {
     }
 }
 
+const LEDGER_CONNECTOR_INTERVAL = 'ledger_connector_intervalId'
+
 const actions = {
     getLedgerStatus({dispatch,commit,state}, interval) {
-        let time = interval || 3000;
+        let time = interval || 5000;
         getDevice(commit, state)
         const intervalId = setInterval(() => {
             getDevice(commit, state)
         }, time)
-        commit('UPDATE_LEDGER_CONNECTOR_INTERVALID', {intervalId: intervalId})
+        localStorage.setItem(LEDGER_CONNECTOR_INTERVAL, intervalId)
     },
     stopGetLedgerStatus({commit, state}) {
-        clearInterval(state.intervalId)
+        const intervalId = localStorage.getItem(LEDGER_CONNECTOR_INTERVAL) || ''
+        clearInterval(intervalId)
+        localStorage.removeItem(LEDGER_CONNECTOR_INTERVAL)
+        commit('UPDATE_LEDGER_PUBLICKEY', {publicKey: ''})
     }
 }
 

@@ -45,7 +45,7 @@ const BIP44 = (acct = 0, neo = false) => {
         acctNumber
     )
 }
-
+var ledger
 export default class OntLedger {
     path: string;
     device: any;
@@ -59,13 +59,16 @@ export default class OntLedger {
      * @return {Promise<OntLedger>}
      */
     static async init() {
+        if(ledger) {
+            return ledger.open()
+        }
         const supported = await LedgerNode.isSupported()
         // if (!supported) { throw new Error(`Your computer does not support the ledger!`) }
         if (!supported) { throw 'NOT_SUPPORT' }
         const paths = await OntLedger.list()
         // if (paths.length === 0) throw new Error('USB Error: No device found.')
         if (paths.length === 0) throw 'NOT_FOUND'
-        const ledger = new OntLedger(paths[0])
+        ledger = new OntLedger(paths[0])
         return ledger.open()
     }
 
