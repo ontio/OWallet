@@ -36,9 +36,10 @@ function getDevice(commit, state) {
 }
 
 function getLedgerPublicKey(commit, state) {
-    if (state.publicKey) {
-        return;
-    }
+    // 这里如果去掉，再SelectWallet组件里，切换类型后不再重新获取ledger地址，会产生bug。
+    // if (state.publicKey) {
+    //     return;
+    // }
     getPublicKey().then(res => {
         console.log('pk info: ' + res);
         commit('UPDATE_LEDGER_PUBLICKEY', { publicKey: res })        
