@@ -26,14 +26,14 @@ export const ONT_PASS_NODE = 'https://service-test.onto.app'
 export const ONT_PASS_NODE_PRD = 'https://service.onto.app'
 
 export const ONT_PASS_URL = {
-    CreateSharedWallet: '/S1/api/v1/ontpass/SharedWallet/create',
-    QuerySharedWallet: '/S1/api/v1/ontpass/SharedWallet/getBySharedWalletAddress', //get
-    CreateSharedTransfer: '/S1/api/v1/ontpass/SharedTransfer/create',
-    SignSharedTransfer: '/S1/api/v1/ontpass/SharedTransfer/sign',
-    SendSharedTransfer: '/S1/api/v1/ontpass/SharedTransfer/isSendToChain', //get
-    QueryPendingTransfer: '/S1/api/v1/ontpass/SharedTransfer/listSigningBeforeTime',
+    CreateSharedWallet: '/S5/api/v1/ontpass/SharedWallet/create',
+    QuerySharedWallet: '/S5/api/v1/ontpass/SharedWallet/getBySharedWalletAddress', //get
+    CreateSharedTransfer: '/S5/api/v1/ontpass/SharedTransfer/create',
+    SignSharedTransfer: '/S5/api/v1/ontpass/SharedTransfer/sign',
+    SendSharedTransfer: '/S5/api/v1/ontpass/SharedTransfer/isSendToChain', //get
+    QueryPendingTransfer: '/S5/api/v1/ontpass/SharedTransfer/listSigningBeforeTime',
     // sharedAddress={sharedAddress}&assetName={assetName}&beforeTimeStamp={beforeTimeStamp},
-    ExchangeCurrency: '/S1/api/v1/ontpass/api/v1/onto/exchangerate/reckon/'
+    ExchangeCurrency: '/S5/api/v1/ontpass/api/v1/onto/exchangerate/reckon/'
     ///api/v1/onto/exchangerate/reckon/{currency}/{goaltype}/{amount}
 
     //for node stake
