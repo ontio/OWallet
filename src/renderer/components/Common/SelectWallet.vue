@@ -81,7 +81,9 @@ export default {
 			this.walletType = e.target.value;
 			if (e.target.value === "ledgerWallet") {
 				this.$store.dispatch("getLedgerStatus");
-            }
+            } else {
+				this.$store.dispatch('stopGetLedgerStatus')
+			}
             this.$emit("walletSelected", {
 				walletType: this.walletType,
 				wallet: null
