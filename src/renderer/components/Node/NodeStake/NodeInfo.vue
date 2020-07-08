@@ -1,7 +1,10 @@
 <template>
 <div>
     <div v-if="!stakeWallet.key" class="ledger-not-support">
-        {{$t('nodeInfo.ledgerWalletNotSupportForNow')}}
+        <p>{{$t('nodeInfo.ledgerWalletNotSupportForNow')}}
+             <a href=mailto:contact@ont.io>contact@ont.io</a>
+        </p>
+       
     </div>
     <div class="container" v-if="stakeWallet.key">
         <div class="info-container">
