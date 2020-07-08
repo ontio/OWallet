@@ -132,6 +132,7 @@ export default {
                             },
                             err => {
                                 this.sending = false;
+                                console.log(err)
                                 this.$store.dispatch("hideLoadingModals");
                                 this.$message.error(this.$t('ledgerWallet.signFailed'))
                             }
@@ -151,6 +152,7 @@ export default {
                             this.sendTx(tx);
                             },
                             err => {
+                                console.log(err)
                                 this.sending = false;
                                 this.$store.dispatch("hideLoadingModals");
                                 this.$message.error(this.$t('ledgerWallet.signFailed'))

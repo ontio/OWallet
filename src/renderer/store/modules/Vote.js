@@ -337,6 +337,7 @@ const actions = {
             const txes = hashes.map(hash => {
                 return TransactionBuilder.makeWasmVmInvokeTransaction('getTopicInfo', [new Parameter('', ParameterType.H256, hash)], contract, gasPrice, gasLimit)
             })
+            
             let infos = await Promise.all(txes.map(tx => { return client.sendRawTransaction(tx.serialize(), true) }))
             // infos = infos.map(item => item.Result.Result)
             let infoList = []
@@ -346,8 +347,40 @@ const actions = {
                 }
             }
             console.log(infos)
-            const votes = formatVoteInfo(infoList)
-            console.log(votes)
+            let votes = formatVoteInfo(infoList)
+            // 根据hash过滤出查询失败的topic，从老的neo合约中继续查找
+            const oldHashes = []
+            for(const hash of hashes) {
+                let used = false;
+                for(const vote of votes) {
+                    if(hash === vote.hash) {
+                        used = true;
+                        break;
+                    }
+                }
+                if(!used){
+                    oldHashes.push(hash)
+                }
+            }
+            if(oldHashes.length > 0) {
+                const contractOld = new Crypto.Address(utils.reverseHex(contract_hash_old[net]))
+                const old_txes = oldHashes.map(hash => {
+                    return TransactionBuilder.makeInvokeTransaction('getTopicInfo', [new Parameter('', ParameterType.ByteArray, hash)], contractOld, gasPrice, gasLimit)
+                })
+                
+                let infosOld = await Promise.all(old_txes.map(tx => { return client.sendRawTransaction(tx.serialize(), true) }))
+                // infos = infos.map(item => item.Result.Result)
+                let infoListOld = []
+                for(const info_old of infosOld) {
+                    if(info_old && info_old.Result && info_old.Result.Result) {
+                        infoListOld.push(info_old)
+                    }
+                }
+                const votesOld = formatOldVoteInfo(infoListOld)
+                votes = votes.concat(votesOld)
+            }
+
+            // console.log(votes)
             commit('UPDATE_ALL_VOTES', { votes })
             dispatch('hideLoadingModals')
         } catch (err) {
@@ -523,7 +556,7 @@ const actions = {
                 }
                 for (let item of records) {
                     const voter_with_name = state.all_voters.find(voter => item.address === voter.address)
-                    item.name = voter_with_name.name
+                    item.name = voter_with_name ? voter_with_name.name : ''
                 }
             }
             
