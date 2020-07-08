@@ -57,11 +57,12 @@ export default {
                 if(!this.wallet.key) {//common wallet
                     this.$store.dispatch('getLedgerStatus')
                 }
+            } else {
+                this.$store.dispatch('stopGetLedgerStatus')
             }
         }
     },
     beforeDestroy() {
-        clearInterval(this.intervalId);
         this.$store.dispatch('stopGetLedgerStatus')
     },
     data(){
@@ -131,7 +132,6 @@ export default {
                             },
                             err => {
                                 this.sending = false;
-                                this.ledgerStatus = "";
                                 this.$store.dispatch("hideLoadingModals");
                                 this.$message.error(this.$t('ledgerWallet.signFailed'))
                             }
@@ -152,7 +152,6 @@ export default {
                             },
                             err => {
                                 this.sending = false;
-                                this.ledgerStatus = "";
                                 this.$store.dispatch("hideLoadingModals");
                                 this.$message.error(this.$t('ledgerWallet.signFailed'))
                             }
