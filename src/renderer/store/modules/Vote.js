@@ -280,7 +280,7 @@ const actions = {
                 if (node.address === address) {
                     is_voter = true;
                     is_admin = true;
-                    weight = node.current_stake
+                    weight = node.weight
                     break;
                 }
             }
@@ -582,6 +582,18 @@ const actions = {
             const votes = formatVoteInfo([res.Result.Result])
             console.log('updateCurrentVote',JSON.stringify(votes))
             commit('UPDATE_CURRENT_VOTE', { vote: votes[0]})
+        } else { // 从老的合约查询
+            const contractOld = new Crypto.Address(utils.reverseHex(contract_hash_old[net]))
+            const paramsOld = [
+                new Parameter('', ParameterType.ByteArray, hash)
+            ]
+            const txOld = TransactionBuilder.makeInvokeTransaction('getTopicInfo', paramsOld, contractOld, gasPrice, gasLimit)
+            const resOld = await client.sendRawTransaction(txOld.serialize(), true);
+            if(resOld.Error === 0) {
+                const votesOld = formatOldVoteInfo([resOld])
+                console.log('updateCurrentVote',JSON.stringify(votesOld))
+                commit('UPDATE_CURRENT_VOTE', { vote: votesOld[0]})
+            }
         }
     }
 
