@@ -744,7 +744,7 @@ export default {
         submit: '提交',
         updateSuccess: '更新成功',
         updateFailed: '更新失败',
-        ledgerWalletNotSupportForNow: '使用Ledger注册的节点，暂时不支持更新节点相关信息'
+        ledgerWalletNotSupportForNow: '使用Ledger注册的节点，暂时不支持更新节点相关信息.请发送邮件至：'
     },
   exchange: {
     exchange: 'Exchange',

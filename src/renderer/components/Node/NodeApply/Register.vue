@@ -183,6 +183,7 @@ export default {
 				return;
 			}
 			this.current += 1;
+			this.$store.dispatch('stopGetLedgerStatus') // 防止过多ledger请求
 		},
 		cancel() {
 			this.current -= 1;

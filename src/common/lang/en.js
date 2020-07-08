@@ -749,7 +749,7 @@ Within their 50% share each consensus node will receive their share according to
         submit: 'Submit',
         updateSuccess: 'Update node info succeed',
         updateFailed: 'Update node info failed',
-        ledgerWalletNotSupportForNow: 'Nodes registered with ledger currently do not support updating node-related information '
+        ledgerWalletNotSupportForNow: 'Nodes registered with ledger currently do not support updating node-related information. Please email to: '
     },
   exchange: {
     exchange: 'Exchange',
