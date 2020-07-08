@@ -280,7 +280,7 @@ const actions = {
                 if (node.address === address) {
                     is_voter = true;
                     is_admin = true;
-                    weight = node.current_stake
+                    weight = node.weight
                     break;
                 }
             }
