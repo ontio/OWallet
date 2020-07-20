@@ -25,7 +25,7 @@ import {mapState} from 'vuex'
 import {DEFAULT_SCRYPT} from '../../../core/consts'
 import { getRestClient } from '../../../core/utils'
 import {legacySignWithLedger} from '../../../core/ontLedger'
-import {Crypto, TransactionBuilder, TxSignature, utils, RestClient, WebsocketClient} from 'ontology-ts-sdk'
+import {Crypto, TransactionBuilder, TxSignature, utils, RestClient, WebsocketClient, Transaction, OntAssetTxBuilder} from 'ontology-ts-sdk'
 // common component to sign tx or messages with wallet or ledger.
 export default {
     name: 'SignSendTx',
@@ -124,11 +124,22 @@ export default {
                     let txData
                     if(typeof tx === 'string') {
                         txData =  tx
+                        // ledger 签名message特殊处理，放到tx的payload里. 先构造个占位的tx
+                        const addr = new Crypto.Address(this.ledgerWallet.address)
+                        const txTemp = OntAssetTxBuilder.makeTransferTx('ONT', addr, addr, '1', '2500', '20000', addr)
+                        txTemp.payload.code = tx;
+                        const pk = new Crypto.PublicKey(this.ledgerWallet.publicKey);
+                        const txSig = new TxSignature();
+                        txSig.M = 1;
+                        txSig.pubKeys = [pk];
+                        txData = txTemp.serializeUnsignedData();
                         legacySignWithLedger(txData).then(res => {
                             // console.log('txSigned: ' + res);
                             const sign = "01" + res; //ECDSAwithSHA256
+                            txSig.sigData = [sign];
+                            txTemp.sigs = [txSig];
                             this.$store.dispatch("hideLoadingModals");
-                            this.$emit('afterSign', sign) // 返回签名message结果
+                            this.$emit('afterSign', txTemp.serialize()) // 返回签名message结果
                             },
                             err => {
                                 this.sending = false;

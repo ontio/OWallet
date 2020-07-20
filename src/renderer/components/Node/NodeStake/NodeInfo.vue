@@ -1,12 +1,12 @@
 <template>
 <div>
-    <div v-if="!stakeWallet.key" class="ledger-not-support">
+    <!-- <div v-if="!stakeWallet.key" class="ledger-not-support">
         <p>{{$t('nodeInfo.ledgerWalletNotSupportForNow')}}
              <a href=mailto:contact@ont.io>contact@ont.io</a>
         </p>
        
-    </div>
-    <div class="container" v-if="stakeWallet.key">
+    </div> -->
+    <div class="container"  >
         <div class="info-container">
         <div class="left-half">
             <div class="form-item">
@@ -124,22 +124,40 @@ export default {
             this.tx = null;
         },
         handleAfterSign(signed) {
-            const data =  {
-                node_info: this.node_info,
-                public_key: this.stakeWallet.publicKey,
-                address: this.stakeWallet.address,
-                signature: typeof signed === 'string' ? signed : signed.serializeHex()
-            }
-            this.$store.dispatch('updateNodeInfo', data).then(res => {
-                this.signVisible = false;
-                this.tx = null;
-                if(res.code === 0){
-                    this.$message.success(this.$t('nodeInfo.updateSuccess'))
-                } else {
-                    this.$message.error(this.$t('nodeInfo.updateFailed'))
+            if(this.stakeWallet.key) { // 普通钱包
+                    const data =  {
+                    node_info: this.node_info,
+                    public_key: this.stakeWallet.publicKey,
+                    address: this.stakeWallet.address,
+                    signature: typeof signed === 'string' ? signed : signed.serializeHex()
                 }
-                
-            })
+                this.$store.dispatch('updateNodeInfo', data).then(res => {
+                    this.signVisible = false;
+                    this.tx = null;
+                    if(res.code === 0){
+                        this.$message.success(this.$t('nodeInfo.updateSuccess'))
+                    } else {
+                        this.$message.error(this.$t('nodeInfo.updateFailed'))
+                    }
+                    
+                })
+            } else { // ledger 钱包
+                const data = {
+                    node_info: signed,
+                    publicKey: this.stakeWallet.publicKey
+                }
+                this.$store.dispatch('updateLedgerNodeInfo', data).then(res => {
+                    this.signVisible = false;
+                    this.tx = null;
+                    if(res.code === 0){
+                        this.$message.success(this.$t('nodeInfo.updateSuccess'))
+                    } else {
+                        this.$message.error(this.$t('nodeInfo.updateFailed'))
+                    }
+                    
+                })
+            }
+           
         }
 
     }
