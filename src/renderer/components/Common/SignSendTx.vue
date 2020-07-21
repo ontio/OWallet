@@ -3,7 +3,7 @@
 </style>
 <template>
     <div>
-    <a-modal 
+    <a-modal
         :title="$t('nodeStake.signWithWallet')"
         :visible="visible"
         @ok="handleWalletSignOK"
@@ -27,6 +27,13 @@ import { getRestClient } from '../../../core/utils'
 import {legacySignWithLedger} from '../../../core/ontLedger'
 import {Crypto, TransactionBuilder, TxSignature, utils, RestClient, WebsocketClient, Transaction, OntAssetTxBuilder} from 'ontology-ts-sdk'
 // common component to sign tx or messages with wallet or ledger.
+
+function delay(s) {
+    return new Promise((resolve, reject) => {
+        setTimeout(resolve, s);
+    })
+}
+
 export default {
     name: 'SignSendTx',
     // props:['tx', 'wallet', 'visible',],
@@ -49,7 +56,7 @@ export default {
 
     },
     mounted(){
-        
+
     },
     watch: {
         visible(newV, oldV) {
@@ -82,7 +89,7 @@ export default {
             this.walletPassword = '';
             this.$emit('signClose')
         },
-        handleWalletSignOK() {
+        async handleWalletSignOK() {
             const tx = this.tx;
             if (this.wallet.key && !this.walletPassword) {
                 //common wallet
@@ -107,7 +114,7 @@ export default {
                     return;
                 }
                 if(typeof tx === 'string') {
-                    const signature =  pri.sign(tx) 
+                    const signature =  pri.sign(tx)
                     this.$store.dispatch("hideLoadingModals");
                     this.$emit('afterSign', signature) // 返回签名message结果
                     this.walletPassword = ''
@@ -116,9 +123,11 @@ export default {
                     this.sendTx(tx);
                     this.walletPassword = ''
                 }
-                
+
             } else {
                 //ledger sign
+                this.$store.dispatch('stopGetLedgerStatus')
+                await delay(1000);
                 if (this.ledgerWallet.address) {
                     this.$store.dispatch("showLoadingModals");
                     let txData
@@ -147,7 +156,9 @@ export default {
                                 this.$store.dispatch("hideLoadingModals");
                                 this.$message.error(this.$t('ledgerWallet.signFailed'))
                             }
-                        );
+                        ).finally(() => {
+                          this.$store.dispatch('getLedgerStatus')
+                        });
                     } else {
                         const pk = new Crypto.PublicKey(this.ledgerWallet.publicKey);
                         const txSig = new TxSignature();
@@ -168,10 +179,12 @@ export default {
                                 this.$store.dispatch("hideLoadingModals");
                                 this.$message.error(this.$t('ledgerWallet.signFailed'))
                             }
-                        );
+                        ).finally(() => {
+                          this.$store.dispatch('getLedgerStatus')
+                        });
                     }
-                    
-                    
+
+
                 } else {
                     this.$store.dispatch("hideLoadingModals");
                     this.$message.warning(this.$t("ledgerWallet.connectApp"));
@@ -202,7 +215,7 @@ export default {
                         console.log(res.Result)
                         const msg = typeof res.Result === 'string' ? res.Result : JSON.stringify(res.Result)
                         this.$message.error(this.$t('common.txFailed') + ' '+ msg)
-                    } 
+                    }
                     return;
                 } else {
                     this.$message.error(res.Result)
