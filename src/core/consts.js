@@ -81,6 +81,12 @@ export const UPDATE_NODE_INFO_API = {
     MAIN_NET: 'https://explorer.ont.io/v2/offchain/off-chain-info'
 }
 
+export const UPDATE_LEDGER_NODE_INFO_API = {
+    TEST_NET: 'https://polarisexplorer.ont.io/v2/offchain/off-chain-info/ledger',
+    // TEST_NET: 'http://18.136.65.213:8585/v2/nodes/off-chain-info',
+    MAIN_NET: 'https://explorer.ont.io/v2/offchain/off-chain-info/ledger'
+}
+
 export const NODE_CURRENT_STAKES = {
     TEST_NET: 'https://polarisexplorer.ont.io/v2/nodes/current-stakes',
     MAIN_NET: 'https://explorer.ont.io/v2/nodes/current-stakes'

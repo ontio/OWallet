@@ -1,7 +1,8 @@
 import axios from 'axios'
 import en from '../../../common/lang/en'
 import zh from '../../../common/lang/zh'
-import { ONT_PASS_NODE, ONT_PASS_NODE_PRD, ONT_PASS_URL, QUERY_NODE_INFO_API, UPDATE_NODE_INFO_API } from '../../../core/consts'
+import { ONT_PASS_NODE, ONT_PASS_NODE_PRD, ONT_PASS_URL, QUERY_NODE_INFO_API, 
+    UPDATE_NODE_INFO_API, UPDATE_LEDGER_NODE_INFO_API } from '../../../core/consts'
 
 const state = {
     detail: {
@@ -184,6 +185,12 @@ const actions = {
     async updateNodeInfo({ }, info) {
         const net = localStorage.getItem("net");
         const url = UPDATE_NODE_INFO_API[net]
+        const res = await axios.post(url, info)
+        return res.data
+    },
+    async updateLedgerNodeInfo({ }, info) {
+        const net = localStorage.getItem("net");
+        const url = UPDATE_LEDGER_NODE_INFO_API[net]
         const res = await axios.post(url, info)
         return res.data
     },
