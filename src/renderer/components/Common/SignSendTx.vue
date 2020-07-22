@@ -22,17 +22,12 @@
 </template>
 <script>
 import {mapState} from 'vuex'
+import delay from 'delay'
 import {DEFAULT_SCRYPT} from '../../../core/consts'
 import { getRestClient } from '../../../core/utils'
 import {legacySignWithLedger} from '../../../core/ontLedger'
 import {Crypto, TransactionBuilder, TxSignature, utils, RestClient, WebsocketClient, Transaction, OntAssetTxBuilder} from 'ontology-ts-sdk'
 // common component to sign tx or messages with wallet or ledger.
-
-function delay(s) {
-    return new Promise((resolve, reject) => {
-        setTimeout(resolve, s);
-    })
-}
 
 export default {
     name: 'SignSendTx',
@@ -126,10 +121,10 @@ export default {
 
             } else {
                 //ledger sign
-                this.$store.dispatch('stopGetLedgerStatus')
-                await delay(1000);
                 if (this.ledgerWallet.address) {
                     this.$store.dispatch("showLoadingModals");
+                    this.$store.dispatch('stopGetLedgerStatus')
+                    await delay(1000);
                     let txData
                     if(typeof tx === 'string') {
                         txData =  tx
@@ -183,8 +178,6 @@ export default {
                           this.$store.dispatch('getLedgerStatus')
                         });
                     }
-
-
                 } else {
                     this.$store.dispatch("hideLoadingModals");
                     this.$message.warning(this.$t("ledgerWallet.connectApp"));
