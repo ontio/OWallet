@@ -40,12 +40,12 @@ const mutations = {
                       delete oep4s[k];
                   }
                 break;
-              } 
+              }
             }
         } else {
             oep4s[oep4.contract_hash] = oep4;
         }
-        
+
         state.oep4Tokens[net] = oep4s;
         localStorage.setItem('oep4Tokens', JSON.stringify(state.oep4Tokens))
     },
@@ -78,7 +78,7 @@ const actions = {
         // commit('UPDATE_OEP4_SELECTIONS', {list, total})
         return {list, total}
     },
-    
+
     async fetchTokenBalances({commit,state}, {address}) {
         const url = getTokenBalanceUrl('oep4',address)
         const net = localStorage.getItem('net')
@@ -103,7 +103,7 @@ const actions = {
           balances
         })
         return balances
-    }   
+    }
 }
 
 export default {

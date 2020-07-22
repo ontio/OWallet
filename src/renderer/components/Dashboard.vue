@@ -141,13 +141,13 @@
     overflow: scroll;
   }
 
-  
+
 
   .wallet-pk {
     word-break: break-all;
   }
 
-  
+
 
   .commonWallet-btn {
     width: 70px;
@@ -163,7 +163,7 @@
   .btn-swap {
     margin-left: 30px;
   }
-  
+
 
 .nep5-label :first-child{
   display: block;
@@ -197,7 +197,7 @@
       </p>
     </div>
     <div class="content-container">
-      
+
       <div class="left-half">
         <div class="wallet-balance">
           <div>
@@ -231,7 +231,7 @@
               <span>(NEP-5)</span>
             </div>
             <span class="asset-amount">{{nep5Ont}}</span>
-            <a-button type="default" class="commonWallet-btn btn-swap" 
+            <a-button type="default" class="commonWallet-btn btn-swap"
           @click="toSwap">{{$t('commonWalletHome.swap')}}</a-button>
           </div> -->
 
@@ -298,7 +298,7 @@
         >
           <p class="font-regular"><span class="font-medium"></span> {{$t('redeemInfo.noClaimableOng')}}</p>
       </a-modal>
-    
+
     <oep4-selection :visible="showOep4Selection" @closeOep4Selection="closeOep4Selection" ></oep4-selection>
 
   </div>
@@ -347,7 +347,7 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
     },
     created() {
       this.$store.commit('CLEAR_NATIVE_BALANCE')
-      this.$store.commit('CLEAR_OEP4S_BALANCE')
+      this.$store.commit('CLEAR_OEP4S_BALANCES')
     },
     mounted: function () {
       //UPDATE_CURRENT_WALLET
@@ -385,7 +385,7 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
             const completed = []
             for(const t of txlist) {
               for(const tx of t.transfers) {
-                const asset = tx.asset_name.toUpperCase() 
+                const asset = tx.asset_name.toUpperCase()
                 // if(tx.to_address === ONG_GOVERNANCE_CONTRACT && asset === 'ONG') {
                 //   continue;
                 // }
@@ -400,8 +400,8 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
                   asset,
                   amount: amount
                 })
-              }              
-              
+              }
+
             }
             this.completedTx = completed.slice(0,10);
             return completed; // fetch tx history succeed
@@ -419,7 +419,7 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
               //   continue;
               // }
               for(const tx of t.TransferList) {
-                const asset = tx.AssetName.toUpperCase() 
+                const asset = tx.AssetName.toUpperCase()
                 if(tx.ToAddress === ONG_GOVERNANCE_CONTRACT && asset === 'ONG' && Number(tx.Amount) == 0.01) {
                   continue;
                 }
@@ -434,8 +434,8 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
                   asset,
                   amount: amount
                 })
-              }              
-              
+              }
+
             }
             this.completedTx = completed;
             return true; // fetch tx history succeed
@@ -480,7 +480,7 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
           let nep5Ont = 0;
           if(res.result) {
             nep5Ont = res.result / NEO_TRAN
-          } 
+          }
           this.$store.commit('UPDATE_NEP5_ONT', {nep5Ont})
         })
       },
@@ -504,7 +504,7 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
         // }, 500)
         if(showLoading) {
           this.$store.dispatch('showLoadingModals')
-        } 
+        }
         if(this.requestStart) {
           return;
         }
@@ -518,7 +518,7 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
           this.requestStart = false;
           this.$store.dispatch('hideLoadingModals')
         })
-        
+
         // this.getNep5Balance();
       },
       sendAsset() {
@@ -527,7 +527,7 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
           return;
         }
         this.$store.commit('CLEAR_CURRENT_TRANSFER');
-        
+
         this.$router.push({name: 'CommonSendHome'})
       },
       commonReceive() {
@@ -546,7 +546,7 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
         if(this.currentWallet.key) {
             this.$router.push({path:'/commonWalletRedeem/commonWallet'})
         } else {
-            this.$router.push({path: '/commonWalletRedeem/hardwareWallet'})            
+            this.$router.push({path: '/commonWalletRedeem/hardwareWallet'})
         }
       },
       goBack() {
