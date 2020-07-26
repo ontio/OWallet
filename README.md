@@ -3,7 +3,7 @@
 
 
 <h1 align="center">OWallet - a comprehensive Ontology desktop wallet</h1>
-<h4 align="center">Version 0.9.24</h4>
+<h4 align="center">Version 0.9.25</h4>
 
 ## Introduction
 
@@ -13,7 +13,7 @@ Support Windows/MacOS/Linux,get it [Here](https://github.com/ontio/OWallet/relea
 
 Core features of OWallet are as follows:
 
-* Create wallet/import wallet using keystore,mnemonic phrase,WIF private key,HEX private key 
+* Create wallet/import wallet using keystore,mnemonic phrase,WIF private key,HEX private key
 * Support shared wallet based on multi-signature technology
 * Ledger support
 * View balance and record
@@ -21,7 +21,7 @@ Core features of OWallet are as follows:
 * Withdraw (redeem) ONG
 * Node stake and stake authorization management
 * ONT ID support
-* Integrate gateway provided by changelly and cryptonex 
+* Integrate gateway provided by changelly and cryptonex
 
 ![](images/OWallet.jpg)
 
@@ -37,22 +37,20 @@ git clone https://github.com/ontio/OWallet.git
 2. Install packages
 **yarn** is recommended.
 ```
-yarn install
+yarn
 ```
 
 3. Run in Development
 
 ```
-yarn run dev
+yarn serve
 ```
 
 4. Build
 
 ```
-yarn run package
+yarn build
 ```
-
-> Do not use "npm run package" here, or the app will have problem in windows.
 
 ## Install released app
 

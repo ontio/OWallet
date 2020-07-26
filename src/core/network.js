@@ -1,5 +1,5 @@
 import {WebsocketClient} from 'ontology-ts-sdk';
-import store from '../renderer/store'
+import store from '../store'
 import { MAIN_NET_LIST, TEST_NET_LIST } from './consts'
 let client;
 

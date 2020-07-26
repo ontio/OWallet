@@ -47,10 +47,10 @@ const BIP44 = (acct = 0, neo = false) => {
 }
 
 export default class OntLedger {
-    path: string;
-    device: any;
+    path;
+    device;
 
-    constructor(path: string) {
+    constructor(path) {
         this.path = path
     }
 
@@ -69,7 +69,7 @@ export default class OntLedger {
         return ledger.open()
     }
 
-    static async list(): Promise<string[]> {
+    static async list() {
         return LedgerNode.list()
     }
 
@@ -77,7 +77,7 @@ export default class OntLedger {
      * Opens an connection with the selected ledger.
      * @return {Promise<OntLedger>}this
      */
-    async open(): Promise<OntLedger> {
+    async open() {
         try {
             this.device = await LedgerNode.open(this.path)
             return this
@@ -90,7 +90,7 @@ export default class OntLedger {
      * Closes the connection between the Ledger and the wallet.
      * @return {Promise<void>}}
      */
-    close(): Promise<void> {
+    close() {
         if (this.device) return this.device.close()
         return Promise.resolve()
     }
@@ -100,7 +100,7 @@ export default class OntLedger {
      * @param {number} [acct] - Account that you want to retrieve the public key from.
      * @return {string} Public Key (Unencoded)
      */
-    async getPublicKey(acct: number = 0, neo: boolean): Promise<string> {
+    async getPublicKey(acct = 0, neo) {
         const res = await this.send('80040000', BIP44(acct, neo), [VALID_STATUS])
         const uncompressed = res.toString('hex').substring(0, 130)
         const ec = new elliptic.ec(Crypto.CurveLabel.SECP256R1.preset);
@@ -124,11 +124,7 @@ export default class OntLedger {
      * @param {number[]} statusList - Statuses to return
      * @return {Promise<Buffer>} return value decoded to ASCII string
      */
-    async send(
-        params: string,
-        msg: string,
-        statusList: number[]
-    ): Promise<Buffer> {
+    async send(params, msg, statusList) {
         if (params.length !== 8) throw new Error(`params requires 4 bytes`)
         // $FlowFixMe
         const [cla, ins, p1, p2] = params
@@ -154,7 +150,7 @@ export default class OntLedger {
      * @param {number} [acct]
      * @return {Promise<string>}
      */
-    async getSignature(data: string, acct: number = 0, neo: boolean = false): Promise<string> {
+    async getSignature(data, acct = 0, neo = false) {
         data += BIP44(acct, neo)
         let response = null
         const chunks = data.match(/.{1,510}/g) || [];
@@ -182,7 +178,7 @@ export default class OntLedger {
  * The signature is returned from the ledger in a DER format
  * @param {string} response - Signature in DER format
  */
-const assembleSignature = (response: string): string => {
+const assembleSignature = (response) => {
     let ss = new utils.StringReader(response)
     // The first byte is format. It is usually 0x30 (SEQ) or 0x31 (SET)
     // The second byte represents the total length of the DER module.
@@ -208,7 +204,7 @@ const assembleSignature = (response: string): string => {
     return integers.join('')
 }
 
-export const getPublicKey = async (acct: number = 0, neo: boolean = false): Promise<string> => {
+export const getPublicKey = async (acct = 0, neo = false) => {
     const ledger = await OntLedger.init()
     try {
         return await ledger.getPublicKey(acct, neo)
@@ -227,11 +223,7 @@ export const getDeviceInfo = async () => {
 }
 
 
-export const legacySignWithLedger = async (
-    unsignedTx: string,
-    neo: boolean = false,
-    acct: number = 0
-): Promise<string> => {
+export const legacySignWithLedger = async (unsignedTx, neo = false, acct = 0) => {
     const ledger = await OntLedger.init()
     try {
         const signData = await ledger.getSignature(unsignedTx, acct, neo)

@@ -3,7 +3,7 @@
 
 
 <h1 align="center">OWallet - 本体综合性桌面版钱包 </h1>
-<h4 align="center">Version 0.9.23</h4>
+<h4 align="center">Version 0.9.25</h4>
 
 ## 总体介绍
 
@@ -13,7 +13,7 @@ OWallet是本体综合性桌面版钱包，支持标准的钱包管理、基于�
 
 OWallet核心功能如下:
 
-* 创建钱包/导入钱包（支持使用Keystore，助记词，WIF私钥，明文私钥） 
+* 创建钱包/导入钱包（支持使用Keystore，助记词，WIF私钥，明文私钥）
 * 支持共享钱包（基于多重签名技术）
 * 支持硬件钱包Ledger
 * 查看余额和交易明细
@@ -21,7 +21,7 @@ OWallet核心功能如下:
 * 提取ONG
 * 节点质押和质押授权管理
 * 支持ONT ID功能
-* 集成changelly和cryptonex网关 
+* 集成changelly和cryptonex网关
 
 ![](images/OWallet.jpg)
 
@@ -38,22 +38,20 @@ git clone https://github.com/ontio/OWallet.git
 推荐使用**yarn**
 
 ```
-yarn install
+yarn
 ```
 
 3. 开发模式运行
 
 ```
-yarn run dev
+yarn serve
 ```
 
 4. 打包
 
 ```
-yarn run package
+yarn build
 ```
-
-> 不要使用“npm run package”，否则windows下app会有问题。
 
 ## 安装发布的客户端
 

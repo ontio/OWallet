@@ -6,9 +6,9 @@ import {
   TEST_NET_LIST
 } from './consts'
 import axios from 'axios'
-import store from '../renderer/store'
+import store from '../store'
 import {message} from 'ant-design-vue'
-import i18n from '../common/lang'
+import i18n from './lang'
 import {
   BigNumber
 } from 'bignumber.js'
@@ -57,14 +57,14 @@ export function isHexString(str) {
 export function getNodeUrl() {
     // const net = localStorage.getItem('net');
     // return net === 'TEST_NET' ? TEST_NET + ':20334' : MAIN_NET + ':20334'
-    // return 'http://139.219.128.220:20334' //for test 
+    // return 'http://139.219.128.220:20334' //for test
     const net = localStorage.getItem('net')
     let node = localStorage.getItem('nodeAddress');
     if(!node) {
       node = net === 'TEST_NET' ? TEST_NET_LIST[0] : MAIN_NET_LIST[0]
     }
     // const node = localStorage.getItem('nodeAddress') || MAIN_NET_LIST[0]
-    // node = 'http://172.168.3.151' 
+    // node = 'http://172.168.3.151'
     return node + ':20334';
 }
 
@@ -83,7 +83,7 @@ export function convertNumber2Str(num, decimal = 0, division) {
 }
 
 export function convertStr2Number(str, decimal = 0) {
-    const val = new BigNumber(num).times(Math.pow(10, decimal))
+    const val = new BigNumber(str).times(Math.pow(10, decimal))
     return val.toNumber();
 }
 
