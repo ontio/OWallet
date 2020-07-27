@@ -92,6 +92,7 @@ const LEDGER_CONNECTOR_INTERVAL = 'ledger_connector_intervalId'
 
 const actions = {
     getLedgerStatus({dispatch,commit,state}, interval) {
+        dispatch('stopGetLedgerStatus');
         let time = interval || 5000;
         getDevice(commit, state)
         const intervalId = setInterval(() => {
