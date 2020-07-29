@@ -264,11 +264,17 @@ const actions = {
         try {
             const res = await axios.get(off_chain_nodes_url);
             const nodes = res.data.result.filter(node => node.public_key.indexOf('00aaaaaaaaa') < 0); //00aaaaaaaaa开头是无效的公钥
-            const infoTemp = await Promise.all(nodes.map(item => {
-                return GovernanceTxBuilder.getAuthorizeInfo(item.public_key, userAddr, url)
+            const infoTemp = await Promise.all(nodes.map(async item => {
+                const authorizeInfo = await GovernanceTxBuilder.getAuthorizeInfo(item.public_key, userAddr, url)
+                return {
+                  ...authorizeInfo,
+                  nodeAddress: item.address
+                }
             }))
-            console.log(infoTemp)
             infoTemp.forEach(item => {
+                if (item.nodeAddress === address) {
+                  return;
+                }
                 let inAuthorization = item.consensusPos + item.freezePos +
                   item.newPos;
                 let locked = item.withdrawPos + item.withdrawFreezePos;
