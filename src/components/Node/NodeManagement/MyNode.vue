@@ -173,8 +173,9 @@ export default {
 	align-items: center;
 }
 .btn-create {
-	color: white;
-	border: white solid 1px;
-	border-radius: 0;
+  width: unset;
+  color: white;
+  border: white solid 1px;
+  border-radius: 0;
 }
 </style>

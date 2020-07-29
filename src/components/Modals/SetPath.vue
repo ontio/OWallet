@@ -97,7 +97,7 @@
   }
 
   .modal-footer button {
-    width: 6.25rem;
+    width: 6.4rem;
     height: 2.13rem;
     border-radius: 0;
     border: 0;
