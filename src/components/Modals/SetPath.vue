@@ -31,11 +31,7 @@
     methods: {
       setSavePath() {
         dialog.showOpenDialog({properties: ['openDirectory', 'createDirectory']}).then(({filePaths}) => {
-          if (filePaths === undefined) {
-            alert('You did not set the path')
-            return;
-          }
-          if (filePaths === undefined) {
+          if (filePaths[0] === undefined) {
             // alert('You did not set the path')
             this.$message.warning(this.$t('setting.notSetPath'))
             return;
@@ -44,7 +40,7 @@
             this.$message.warning(this.$t('setting.notInstallationPath'))
             return;
           }
-          localStorage.setItem('savePath', filePaths)
+          localStorage.setItem('savePath', filePaths[0])
           localStorage.setItem('isSavePath', 'true')
           window.location.reload();//reset dbService
           $("#setPathModal").modal("hide")

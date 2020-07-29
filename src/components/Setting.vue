@@ -96,7 +96,7 @@
       },
       setSavePath() {
         dialog.showOpenDialog({properties: ['openDirectory','createDirectory']}).then(({filePaths}) => {
-          if (filePaths === undefined) {
+          if (filePaths[0] === undefined) {
             // alert('You did not set the path')
             this.$message.warning(this.$t('setting.notSetPath'))
             return;
