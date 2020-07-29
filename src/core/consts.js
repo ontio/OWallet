@@ -22,7 +22,7 @@ export const MAIN_NET_LIST = [
 ]
 //test environment
 export const ONT_PASS_NODE = 'https://service-test.onto.app'
-//prod 
+//prod
 export const ONT_PASS_NODE_PRD = 'https://service.onto.app'
 
 export const ONT_PASS_URL = {
@@ -120,7 +120,8 @@ export const VALIDATE_DICTIONARY = {
             required: (field, val) => `字段 ${field} 是必填项`,
             min: (field, val) => `字段 ${field} 的长度不能少于${val[0]}`,
             length: (field, val) => `字段 ${field} 的长度必须是${val[0]}`,
-            confirmed: (field, val) => `${field}的输入匹配错误`
+            confirmed: (field, val) => `${field}的输入匹配错误`,
+            is: (field, val) => `${field}的输入匹配错误`
         },
         attributes: {
             password: '密码',
@@ -136,7 +137,8 @@ export const VALIDATE_DICTIONARY = {
             required: (field, val) => `${field} is required`,
             min: (field, val) => `The length of ${field} must be larger than ${val[0]}`,
             length: (field, val) => `The length of ${field} must be ${val[0]}`,
-            confirmed: (field, val) => `Those two inputs didn't match.`
+            confirmed: (field, val) => `Those two inputs didn't match.`,
+            is: (field, val) => `Those two inputs didn't match.`
         },
         attributes: {
             password: 'Password',
