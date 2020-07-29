@@ -983,21 +983,21 @@
   dependencies:
     mkdirp "^1.0.4"
 
-"@ont-community/hdkey-secp256r1@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@ont-community/hdkey-secp256r1/-/hdkey-secp256r1-1.0.1.tgz#81840bd0ae3442baed490eac204646bb845e9f89"
-  integrity sha512-DMWQkLqvmuTXHqxdihP7BBZR1LGbFzVbkZK/iDT3aGrxOnY8AsvXZSGw/3WsJMjpSvKbfhPm3Jpf2JiyuY2SwQ==
-  dependencies:
-    coinstring "^2.0.0"
-    elliptic "^6.4.0"
-    safe-buffer "^5.1.1"
-
 "@ont-community/html5-websocket@^2.0.2":
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/@ont-community/html5-websocket/-/html5-websocket-2.0.3.tgz#702419116217ec749c6eea18b234bd3d600b0c5c"
   integrity sha1-cCQZEWIX7HScbuoYsjS9PWALDFw=
   dependencies:
     ws "^3.1.0"
+
+"@ont-dev/hdkey-secp256r1@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@ont-dev/hdkey-secp256r1/-/hdkey-secp256r1-1.1.2.tgz#d2edb93799c7d1b0e309778aef9bd736e212ca6a"
+  integrity sha512-bmCTtNvV3d61KX+IZoFnY6hOR54f6s98cPzzctXGH4JimGjApP9QdlwhApA4JIXrDNRYCQ/Xa8baQWtC9+w8uw==
+  dependencies:
+    bn.js "^4.11.8"
+    bs58check "^2.1.2"
+    elliptic "^6.4.1"
 
 "@ont-dev/sm.js@^0.1.7":
   version "0.1.7"
@@ -2162,7 +2162,7 @@ bluebird@^3.1.1, bluebird@^3.5.5:
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.7.2.tgz#9f229c15be272454ffa973ace0dbee79a1b0c36f"
   integrity sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg==
 
-bn.js@^4.0.0, bn.js@^4.1.0, bn.js@^4.11.6, bn.js@^4.4.0:
+bn.js@^4.0.0, bn.js@^4.1.0, bn.js@^4.11.6, bn.js@^4.11.8, bn.js@^4.4.0:
   version "4.11.9"
   resolved "https://registry.yarnpkg.com/bn.js/-/bn.js-4.11.9.tgz#26d556829458f9d1e81fc48952493d0ba3507828"
   integrity sha512-E6QoYqCKZfgatHTdHzs1RRKP7ip4vvm+EyRUeE2RF0NblwVvb0p6jSVeNTOFxPn26QXN2o6SMfNxKp6kU8zQaw==
@@ -2336,11 +2336,6 @@ browserslist@^4.0.0, browserslist@^4.12.0, browserslist@^4.8.5:
     escalade "^3.0.1"
     node-releases "^1.1.58"
 
-bs58@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/bs58/-/bs58-2.0.1.tgz#55908d58f1982aba2008fa1bed8f91998a29bf8d"
-  integrity sha1-VZCNWPGYKrogCPob7Y+RmYopv40=
-
 bs58@^4.0.0:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/bs58/-/bs58-4.0.1.tgz#be161e76c354f6f788ae4071f63f34e8c4f0a42a"
@@ -2348,7 +2343,7 @@ bs58@^4.0.0:
   dependencies:
     base-x "^3.0.2"
 
-bs58check@<3.0.0:
+bs58check@<3.0.0, bs58check@^2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/bs58check/-/bs58check-2.1.2.tgz#53b018291228d82a5aa08e7d796fdafda54aebfc"
   integrity sha512-0TS1jicxdU09dwJMNZtVAfzPi6Q6QeN0pM1Fkzrjn+XYHvzMKPU3pHVpva+769iNVSfIYWf7LJ6WR+BuuMf8cA==
@@ -2894,14 +2889,6 @@ code-point-at@^1.0.0:
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
   integrity sha1-DQcLTQQ6W+ozovGkDi7bPZpMz3c=
 
-coinstring@^2.0.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/coinstring/-/coinstring-2.3.0.tgz#cdb63363a961502404a25afb82c2e26d5ff627a4"
-  integrity sha1-zbYzY6lhUCQEolr7gsLibV/2J6Q=
-  dependencies:
-    bs58 "^2.0.1"
-    create-hash "^1.1.1"
-
 collection-visit@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/collection-visit/-/collection-visit-1.0.0.tgz#4bc0373c164bc3291b4d368c829cf1a80a59dca0"
@@ -3186,7 +3173,7 @@ create-ecdh@^4.0.0:
     bn.js "^4.1.0"
     elliptic "^6.0.0"
 
-create-hash@^1.1.0, create-hash@^1.1.1, create-hash@^1.1.2, create-hash@^1.2.0:
+create-hash@^1.1.0, create-hash@^1.1.2, create-hash@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/create-hash/-/create-hash-1.2.0.tgz#889078af11a63756bcfb59bd221996be3a9ef196"
   integrity sha512-z00bCGNHDG8mHAkP7CtT1qVu+bFQUPjYq/4Iv3C3kWjTFV10zIjfSoeqXo9Asws8gwSHDGj/hl2u4OGIjapeCg==
@@ -7198,13 +7185,13 @@ onetime@^5.1.0:
   dependencies:
     mimic-fn "^2.1.0"
 
-ontology-ts-sdk@^1.1.8:
-  version "1.1.8"
-  resolved "https://registry.yarnpkg.com/ontology-ts-sdk/-/ontology-ts-sdk-1.1.8.tgz#a5dee9c22ce07de786542b79a089cbf4d1993399"
-  integrity sha512-PDQKZsWfhi1dBaVpdgL7aGBuP5Q9NKtD+pvrxB7X9kzkkbfyKu+gBtQlrh7hoZqbaIP8KKYRZavxSXji7+0B9g==
+ontology-ts-sdk@^1.1.9:
+  version "1.1.9"
+  resolved "https://registry.yarnpkg.com/ontology-ts-sdk/-/ontology-ts-sdk-1.1.9.tgz#c15302effa0bc561f792068a8ebd38532ef0b9e5"
+  integrity sha512-BgDJ99S8pMRx5yKNvyINGQXfSOOjSIvEwPdpF9ECYkEYQlWy3Z0z22Ios9ufX1uSTar8sNg2feleeR5GXe2fSQ==
   dependencies:
-    "@ont-community/hdkey-secp256r1" "^1.0.1"
     "@ont-community/html5-websocket" "^2.0.2"
+    "@ont-dev/hdkey-secp256r1" "^1.1.2"
     "@ont-dev/sm.js" "^0.1.7"
     axios "^0.19.0"
     babel-polyfill "^6.26.0"
