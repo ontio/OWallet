@@ -61,7 +61,17 @@ export default {
   },
   methods: {
     toHelp() {
-      open("https://medium.com/ontologynetwork/owallet-faq-7f4f96784253")
+      const lang = localStorage.getItem("user_lang");
+      let url = "";
+      if (lang === "zh") {
+        url = "https://medium.com/ontology-cn/owallet常见问题-d1b397c11662";
+        // url = 'https://medium.com/ontologynetwork/owallet-faq-7f4f96784253'
+      } else {
+        // url = 'https://ontfans.io/?/article/39'
+        url = "https://medium.com/ontologynetwork/owallet-faq-7f4f96784253";
+      }
+
+      open(url)
     }
   }
 };
