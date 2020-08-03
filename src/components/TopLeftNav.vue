@@ -64,7 +64,7 @@ export default {
       const lang = localStorage.getItem("user_lang");
       let url = "";
       if (lang === "zh") {
-        url = "http://ontfans.io/article/41.html";
+        url = "https://medium.com/ontology-cn/owallet常见问题-d1b397c11662";
         // url = 'https://medium.com/ontologynetwork/owallet-faq-7f4f96784253'
       } else {
         // url = 'https://ontfans.io/?/article/39'

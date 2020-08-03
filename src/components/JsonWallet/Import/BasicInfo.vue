@@ -318,6 +318,10 @@
             datPassword: this.datPassword,
             datLabel: this.datLabel
           }).then(result => {
+            if (!this.dat) {
+              this.$message.error(this.$t('importJsonWallet.invalidDatFile'))
+              return;
+            }
             if (result) {
               this.$store.dispatch('showLoadingModals')
               this.importAccountForDat()

@@ -114,6 +114,10 @@
                 <p class="font-medium-black" for="">{{$t('nodeStake.stakeQuantity')}}</p>
                 <p>{{current_peer.initPos}}</p>
             </div>
+            <div class="detail-item">
+                <p class="font-medium-black" for="">{{$t('nodeStake.claimableQuantity')}}</p>
+                <p>{{authorizationInfo.claimable}}</p>
+            </div>
             <!-- 只有成为节点后可以操作初始质押部分 -->
             <div class="initPos-btns" v-if="detail.status === 8">
                     <a-button class="add-initPos-btn" @click="handleAddInitPos">{{$t('nodeMgmt.addInitPos')}}</a-button>
