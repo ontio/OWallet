@@ -7185,10 +7185,10 @@ onetime@^5.1.0:
   dependencies:
     mimic-fn "^2.1.0"
 
-ontology-ts-sdk@^1.1.10-alpha.1:
-  version "1.1.10-alpha.1"
-  resolved "https://registry.yarnpkg.com/ontology-ts-sdk/-/ontology-ts-sdk-1.1.10-alpha.1.tgz#3b3b6e7df515f8305ba428ec5654b7c06d8191e3"
-  integrity sha512-e/m3OTeEwLoQ7iAAx3NPHF4UxjoGlaQQ0vlaMzeJeAZdG8pX+iEZuz+jtM+1JcqMD0jzdOnpFJoAAqIolbsIsw==
+ontology-ts-sdk@^1.1.12:
+  version "1.1.12"
+  resolved "https://registry.yarnpkg.com/ontology-ts-sdk/-/ontology-ts-sdk-1.1.12.tgz#42cc6d790daacf615db175c26fc2bb5b819766b6"
+  integrity sha512-qhaUXGnD90q/58i4+xGJp9B73T0+23JQcPrVfoPNF3tH4snQSCtGc3CvJkOIv/4APFJSSQSlLvgMVY3UI2fypQ==
   dependencies:
     "@ont-community/html5-websocket" "^2.0.2"
     "@ont-dev/hdkey-secp256r1" "^1.1.2"
