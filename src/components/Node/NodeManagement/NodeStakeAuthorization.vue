@@ -237,7 +237,11 @@
             </div>
             <div style="margin-top:5px;">
                 <a-icon type="exclamation-circle-o" />
-                <span>{{$t('nodeMgmt.rewardsProportionTip')}}</span>
+                <span>{{$t('nodeMgmt.rewardsProportionTip1')}}</span>
+            </div>
+            <div style="margin-top:5px;">
+                <a-icon type="exclamation-circle-o" />
+                <span>{{$t('nodeMgmt.rewardsProportionTip2')}}</span>
             </div>
             <div style="margin-top:5px;">
                 <a-icon type="exclamation-circle-o" />
