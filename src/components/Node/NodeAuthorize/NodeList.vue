@@ -88,6 +88,7 @@
                     <a-icon type="info-circle-o" class="proportion-info-icon" @click="showProportionTip"/>
                 </p>
                 </div>
+            <span slot="nodeProportion" slot-scope="text, record">{{record.nodeProportion}} / {{record.userProportion}}</span>
             <a slot="name" slot-scope="text, record" class="node-name" :class="record.status ===2 ? 'node-consensus' : 'node-candidate' "
                 @click="handleNodeDetail(record)">
 
@@ -129,10 +130,10 @@ export default {
                 scopedSlots: {customRender: 'name'}
             },
             {
-                // title: this.$t('nodeMgmt.nodeProportion'),
                 dataIndex: 'nodeProportion',
                 key: 'nodeProportion',
-                slots: {title: 'nodeProportionTitle'}
+                slots: {title: 'nodeProportionTitle'},
+                scopedSlots: {customRender: 'nodeProportion'}
             },
             {
                 title: this.$t('nodeMgmt.currentStake'),
@@ -228,7 +229,8 @@ export default {
                 content: h('div',{}, [
                 h('p', {
                     style: {
-                        margin:0
+                        margin:0,
+                        whiteSpace: 'pre-line'
                     }
                 },content),
                 h('a', {

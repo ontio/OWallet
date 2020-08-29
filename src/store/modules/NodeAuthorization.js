@@ -401,6 +401,7 @@ const actions = {
                 const list = result.slice(pageNum * pageSize, (pageNum + 1) * pageSize).map(item => {
                     item.rank = item.node_rank;
                     item.nodeProportion = item.node_proportion;
+                    item.userProportion = item.user_proportion;
                     item.currentStake = numeral(item.current_stake).format('0,0');
                     item.process = item.progress;
                     item.maxAuthorize = item.max_authorize;

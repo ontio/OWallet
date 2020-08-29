@@ -176,13 +176,13 @@
         <div class="clearfix">
             <div class="font-medium-black rewardProportionTip">{{$t('nodeMgmt.rewardProportion')}}</div>
             <div class="node-reward-proportion">
-                <p class="font-medium">{{$t('nodeMgmt.nodeStake')}}</p>
+                <p class="font-medium">{{$t('nodeMgmt.nodeRewardProportion')}}</p>
                 <p class="font-medium">{{peer_attrs.tPeerCost}}%  ({{$t('nodeMgmt.activeT')}})</p>
                 <p class="font-medium">{{peer_attrs.t1PeerCost}}%  ({{$t('nodeMgmt.activeT1')}})</p>
                 <p class="font-medium">{{peer_attrs.t2PeerCost}}%  ({{$t('nodeMgmt.activeT2')}})</p>
             </div>
             <div class="node-reward-proportion">
-                <p class="font-medium">{{$t('nodeMgmt.userStake')}}</p>
+                <p class="font-medium">{{$t('nodeMgmt.userRewardProportion')}}</p>
                 <p class="font-medium">{{peer_attrs.tStakeCost}}%  ({{$t('nodeMgmt.activeT')}})</p>
                 <p class="font-medium">{{peer_attrs.t1StakeCost}}%  ({{$t('nodeMgmt.activeT1')}})</p>
                 <p class="font-medium">{{peer_attrs.t2StakeCost}}%  ({{$t('nodeMgmt.activeT2')}})</p>
@@ -217,7 +217,7 @@
             @cancel="handleCancelChangeCost"
             >
             <div class="clearfix">
-              {{$t('nodeMgmt.nodeStake')}}:
+              {{$t('nodeMgmt.nodeRewardProportion')}}:
               <a-input-number
                   :min="0"
                   :max="100"
@@ -226,7 +226,7 @@
                   style="width:60px;"
               /> %
               <span class="h-spacer" />
-              {{$t('nodeMgmt.userStake')}}:
+              {{$t('nodeMgmt.userRewardProportion')}}:
               <a-input-number
                   :min="0"
                   :max="100"
@@ -237,11 +237,11 @@
             </div>
             <div style="margin-top:5px;">
                 <a-icon type="exclamation-circle-o" />
-                <span>{{$t('nodeMgmt.rewardsProportionTip1')}}</span>
+                <span>{{$t('nodeMgmt.nodeRewardProportionTip')}}</span>
             </div>
             <div style="margin-top:5px;">
                 <a-icon type="exclamation-circle-o" />
-                <span>{{$t('nodeMgmt.rewardsProportionTip2')}}</span>
+                <span>{{$t('nodeMgmt.userRewardProportionTip')}}</span>
             </div>
             <div style="margin-top:5px;">
                 <a-icon type="exclamation-circle-o" />
