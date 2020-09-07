@@ -119,6 +119,7 @@
 }
 .node-reward-proportion {
     margin-top:10px;
+    margin-right: 10px;
     float:left;
 }
 .node-reward-proportion p {
@@ -126,7 +127,10 @@
 }
 .edit-proportion-btn {
     margin-top: 10px;
-    margin-left: 20px;
+}
+.h-spacer {
+  display: inline-block;
+  width: 10px;
 }
 </style>
 <template>
@@ -159,7 +163,7 @@
             </div>
             <div class="content-row">
                 <div class="content-column">
-                    <span>{{$t('nodeMgmt.userStake')}}</span>
+                    <span>{{$t('nodeMgmt.userStakeAmount')}}</span>
                     <span>{{current_peer.totalPosStr}} ONT</span>
                 </div>
             </div>
@@ -172,9 +176,16 @@
         <div class="clearfix">
             <div class="font-medium-black rewardProportionTip">{{$t('nodeMgmt.rewardProportion')}}</div>
             <div class="node-reward-proportion">
+                <p class="font-medium">{{$t('nodeMgmt.nodeRewardProportion')}}</p>
                 <p class="font-medium">{{peer_attrs.tPeerCost}}%  ({{$t('nodeMgmt.activeT')}})</p>
                 <p class="font-medium">{{peer_attrs.t1PeerCost}}%  ({{$t('nodeMgmt.activeT1')}})</p>
                 <p class="font-medium">{{peer_attrs.t2PeerCost}}%  ({{$t('nodeMgmt.activeT2')}})</p>
+            </div>
+            <div class="node-reward-proportion">
+                <p class="font-medium">{{$t('nodeMgmt.userRewardProportion')}}</p>
+                <p class="font-medium">{{peer_attrs.tStakeCost}}%  ({{$t('nodeMgmt.activeT')}})</p>
+                <p class="font-medium">{{peer_attrs.t1StakeCost}}%  ({{$t('nodeMgmt.activeT1')}})</p>
+                <p class="font-medium">{{peer_attrs.t2StakeCost}}%  ({{$t('nodeMgmt.activeT2')}})</p>
             </div>
             <a-button type="primary" class="btn-next edit-proportion-btn" @click="editProportion">{{$t('nodeMgmt.edit')}}</a-button>
         </div>
@@ -205,22 +216,34 @@
             @ok="confirmChangeCost"
             @cancel="handleCancelChangeCost"
             >
-            <div class="clearfix" style="margin-top:10px;">
-                <span class="rewardProportionTip font-medium">{{$t('nodeMgmt.changeRewardProportion')}}</span>
-                <!-- <a-slider :min="0" :max="100" v-model="peerCost" :step="1" class="reward-slider"/> -->
-                <a-input-number
-                    :min="0"
-                    :max="100"
-                    class="reward-input"
-                    v-model="peerCost"
-                    style="width:60px;"
-                /> %
+            <div class="clearfix">
+              {{$t('nodeMgmt.nodeRewardProportion')}}:
+              <a-input-number
+                  :min="0"
+                  :max="100"
+                  class="reward-input"
+                  v-model="peerCost"
+                  style="width:60px;"
+              /> %
+              <span class="h-spacer" />
+              {{$t('nodeMgmt.userRewardProportion')}}:
+              <a-input-number
+                  :min="0"
+                  :max="100"
+                  class="reward-input"
+                  v-model="stakeCost"
+                  style="width:60px;"
+              /> %
             </div>
-            <div>
+            <div style="margin-top:5px;">
                 <a-icon type="exclamation-circle-o" />
-                <span>{{$t('nodeMgmt.rewardsProportionTip')}}</span>
+                <span>{{$t('nodeMgmt.nodeRewardProportionTip')}}</span>
             </div>
-            <div style="margin-bottom:5px;">
+            <div style="margin-top:5px;">
+                <a-icon type="exclamation-circle-o" />
+                <span>{{$t('nodeMgmt.userRewardProportionTip')}}</span>
+            </div>
+            <div style="margin-top:5px;">
                 <a-icon type="exclamation-circle-o" />
                 <span>{{$t('nodeMgmt.changesTakeEffect')}}</span>
             </div>
@@ -242,7 +265,8 @@ export default {
     },
     data(){
         return {
-            peerCost:0,
+            peerCost: 0,
+            stakeCost: 0,
             validUnit:true,
             unit:0,
             intervalId:0,
@@ -311,10 +335,11 @@ export default {
             }
         },
         confirmChangeCost() {
-            const tx = GovernanceTxBuilder.makeSetPeerCostTx(
+            const tx = GovernanceTxBuilder.makeSetFeePercentageTx(
                     this.stakeDetail.publickey,
                     new Crypto.Address(this.stakeWallet.address),
                     parseInt(this.peerCost),
+                    parseInt(this.stakeCost),
                     new Crypto.Address(this.stakeWallet.address),
                     GAS_PRICE,
                     GAS_LIMIT

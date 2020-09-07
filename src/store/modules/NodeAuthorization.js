@@ -107,7 +107,10 @@ const state = {
         maxAuthorizeStr: '0',
         t2PeerCost: 0,
         t1PeerCost: 0,
-        tPeerCost: 0
+        tPeerCost: 0,
+        t2StakeCost: 0,
+        t1StakeCost: 0,
+        tStakeCost: 0,
     },
     current_node: '',
     authorizationInfo:'',
@@ -144,7 +147,10 @@ const mutations = {
             maxAuthorizeStr: numeral(payload.peerAttrs.maxAuthorize).format('0,0'),
             t2PeerCost: payload.peerAttrs.t2PeerCost,
             t1PeerCost: payload.peerAttrs.t1PeerCost,
-            tPeerCost: payload.peerAttrs.tPeerCost
+            tPeerCost: payload.peerAttrs.tPeerCost,
+            t2StakeCost: payload.peerAttrs.t2StakeCost,
+            t1StakeCost: payload.peerAttrs.t1StakeCost,
+            tStakeCost: payload.peerAttrs.tStakeCost
         }
     },
     UPDATE_CURRENT_NODE(state, payload) {
@@ -395,6 +401,7 @@ const actions = {
                 const list = result.slice(pageNum * pageSize, (pageNum + 1) * pageSize).map(item => {
                     item.rank = item.node_rank;
                     item.nodeProportion = item.node_proportion;
+                    item.userProportion = item.user_proportion;
                     item.currentStake = numeral(item.current_stake).format('0,0');
                     item.process = item.progress;
                     item.maxAuthorize = item.max_authorize;
