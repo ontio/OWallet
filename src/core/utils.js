@@ -43,10 +43,17 @@ export function varifyPositiveInt(value) {
 }
 
 export function varifyOngValue(value) {
-    if (!/^[0-9]+([.]{1}[0-9]{1,9})?$/.test(value)) {
+    if (!/^[0-9]+(\.[0-9]{1,9})?$/.test(value)) {
         return false;
     }
     return true;
+}
+
+export function varifyOpe4Value(value, decimal) {
+  if (!new RegExp(`^[0-9]+(\\.[0-9]{1,${decimal}})?$`).test(value)) {
+      return false;
+  }
+  return true;
 }
 
 export function isHexString(str) {
