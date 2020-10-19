@@ -142,11 +142,10 @@ export default {
             if(this.asset === 'ONT' && !varifyPositiveInt(this.amount)) {
                 this.validAmount = false;
                 return;
-            }
-            else if(this.asset === 'ONG' && !varifyOngValue(this.amount)) {
+            } else if(this.asset === 'ONG' && !varifyOngValue(this.amount)) {
                 this.validAmount = false;
                 return;
-            } else if (!varifyOpe4Value(this.amount, this.decimal)) {
+            } else if (this.asset !== 'ONT' && this.asset !== 'ONG' && !varifyOpe4Value(this.amount, this.decimal)) {
                 this.validAmount = false;
                 return;
             }
