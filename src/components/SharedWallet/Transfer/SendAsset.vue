@@ -187,7 +187,6 @@ export default {
                 this.amount = this.balance.ont;
             } else if(this.asset === 'ONG'){
                 this.amount = (new BigNumber(this.balance.ong).minus(this.gas)).toString();
-                this.validateAmount()
             } else {
                 for(let i=0; i<this.oep4s.length; i++){
                     if(this.oep4s[i].symbol === this.asset) {
@@ -196,6 +195,7 @@ export default {
                     }
                 }
             }
+            this.validateAmount();
         },
         cancel() {
             this.$store.commit('CLEAR_CURRENT_TRANSFER')
