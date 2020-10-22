@@ -50,8 +50,12 @@ export function varifyOngValue(value) {
 }
 
 export function varifyOpe4Value(value, decimal) {
-  if (!new RegExp(`^[0-9]+(\\.[0-9]{1,${decimal}})?$`).test(value)) {
-      return false;
+  if (decimal > 0) {
+    if (!new RegExp(`^[0-9]+(\\.[0-9]{1,${decimal}})?$`).test(value)) {
+        return false;
+    }
+  } else {
+    return varifyPositiveInt(value);
   }
   return true;
 }
