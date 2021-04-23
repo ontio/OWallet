@@ -142,11 +142,10 @@ export default {
             if(this.asset === 'ONT' && !varifyPositiveInt(this.amount)) {
                 this.validAmount = false;
                 return;
-            }
-            else if(this.asset === 'ONG' && !varifyOngValue(this.amount)) {
+            } else if(this.asset === 'ONG' && !varifyOngValue(this.amount)) {
                 this.validAmount = false;
                 return;
-            } else if (!varifyOpe4Value(this.amount, this.decimal)) {
+            } else if (this.asset !== 'ONT' && this.asset !== 'ONG' && !varifyOpe4Value(this.amount, this.decimal)) {
                 this.validAmount = false;
                 return;
             }
@@ -188,7 +187,6 @@ export default {
                 this.amount = this.balance.ont;
             } else if(this.asset === 'ONG'){
                 this.amount = (new BigNumber(this.balance.ong).minus(this.gas)).toString();
-                this.validateAmount()
             } else {
                 for(let i=0; i<this.oep4s.length; i++){
                     if(this.oep4s[i].symbol === this.asset) {
@@ -197,6 +195,7 @@ export default {
                     }
                 }
             }
+            this.validateAmount();
         },
         cancel() {
             this.$store.commit('CLEAR_CURRENT_TRANSFER')
