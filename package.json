@@ -66,6 +66,8 @@
     "vue-template-compiler": "^2.6.11"
   },
   "resolutions": {
-    "usb": "1.7.1"
+    "usb": "1.7.1",
+    "node-hid": "2.1.1",
+    "app-builder-bin": "3.5.13"
   }
 }

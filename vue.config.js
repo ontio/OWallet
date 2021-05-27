@@ -2,7 +2,7 @@ module.exports = {
   pluginOptions: {
     electronBuilder: {
       nodeIntegration: true,
-      externals: ['nedb'],
+      externals: ['node-hid', 'usb', 'nedb'],
       builderOptions: {
         productName: process.env.VUE_APP_TITLE,
         appId: 'org.ont.wallet',
