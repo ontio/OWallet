@@ -140,22 +140,22 @@ export default new Router({
                 component: require('@/components/Node/Vote/Detail').default
             },
         ]
-        },
-        {
-            path: '/node/apply',
-            name: 'NodeApply',
-            component: require('@/components/Node/NodeApply/Register').default
-        },
-        {
-            path: '/node/applysuccess',
-            name: 'NodeApplySuccess',
-            component: require('@/components/Node/NodeApply/RegisterSuccess').default
-        },
-        {
-            path: '/node/mynode',
-            name: 'MyNode',
-            component: require('@/components/Node/NodeManagement/MyNode').default
-        },
+    },
+    {
+        path: '/node/apply',
+        name: 'NodeApply',
+        component: require('@/components/Node/NodeApply/Register').default
+    },
+    {
+        path: '/node/applysuccess',
+        name: 'NodeApplySuccess',
+        component: require('@/components/Node/NodeApply/RegisterSuccess').default
+    },
+    {
+        path: '/node/mynode',
+        name: 'MyNode',
+        component: require('@/components/Node/NodeManagement/MyNode').default
+    },
     {
         path: '/commonWalletSend',
         name: 'CommonSendHome',
@@ -222,29 +222,14 @@ export default new Router({
         component: require('@/components/Node/NodeAuthorize/AuthorizeLogin').default
     },
     {
-        path: '/dapps/authorizeLoginSesameseed',
-        name: 'AuthorizeLoginSesameseed',
-        component: require('@/components/Node/NodeAuthorize/Sesameseed/AuthorizeLoginSesameseed').default
-    },
-    {
         path: '/node/authorizationMgmt',
         name: 'AuthorizationMgmt',
         component: require('@/components/Node/NodeAuthorize/AuthorizationMgmt').default
     },
     {
-        path: '/dapps/authorizationMgmtSesameseed',
-        name: 'AuthorizationMgmtSesameseed',
-        component: require('@/components/Node/NodeAuthorize/Sesameseed/AuthorizationMgmtSesameseed').default
-    },
-    {
         path: '/node/newAuthorization',
         name: 'NewAuthorization',
         component: require('@/components/Node/NodeAuthorize/NewAuthorization').default
-    },
-    {
-        path: '/dapps/newAuthorizationSesameseed',
-        name: 'NewAuthorizationSesameseed',
-        component: require('@/components/Node/NodeAuthorize/Sesameseed/NewAuthorizationSesameseed').default
     },
     {
         path: '/oep4Home',

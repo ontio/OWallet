@@ -70,18 +70,6 @@
             <a-col :md="8" :lg="8" :xl="6">
                 <div
                     class="dapp-item"
-                    @click="handleDappSesameseed"
-                >
-                    <div class="dapp-title">
-                        <img :src="require('../assets/sesameseed.png')" alt />
-                        <span>{{$t('dapps.sesameSeed')}}</span>
-                    </div>
-                    <p class="dapp-content">{{$t('dapps.sesameseedDesc')}}</p>
-                </div>
-            </a-col>
-            <a-col :md="8" :lg="8" :xl="6">
-                <div
-                    class="dapp-item"
                     @click="handleOntidMgmt"
                 >
                     <div class="dapp-title">
