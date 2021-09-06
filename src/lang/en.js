@@ -492,6 +492,7 @@ export default {
     signWithWallet: 'Sign with selected wallet',
     enterOntidPass: 'Please enter the password of your ONT ID',
     enterWalletPass: 'Please enter the password of the selected wallet',
+    quitWarmMsg: 'If you choose to quit the node, all the initial staked amount will be returned. The candidate node can get the staked amount returned after one cycle, and the consensus node can get it returned after two cycles. After quitting the node, if you want to run a node again, you have to sign up again.',
     back: 'Back',
     recall: 'Recall',
     refund: 'Refund',
