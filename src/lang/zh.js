@@ -489,6 +489,7 @@ export default {
     signWithWallet: '使用钱包签名',
     enterOntidPass: '请输入ONT ID的密码',
     enterWalletPass: '请输入钱包的密码',
+    quitWarmMsg: '选择退出节点，则可退回所有初始质押。候选节点退出后一周期可以退回质押，共识节点需要两周期。退出节点后，如果想要再次运行节点，需要重新注册。',
     back: '返回',
     recall: '撤销',
     refund: '退款',

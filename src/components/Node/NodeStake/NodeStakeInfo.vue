@@ -5,7 +5,7 @@
   padding-top:20px;
 }
 .detail-item {
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 .detail-item p {
   margin-bottom: 5px;
@@ -188,6 +188,7 @@
         @ok="handleWalletSignOK"
         @cancel="handleWalletSignCancel">
           <div v-if="stakeWallet.key">
+              <p v-if="isQuit">{{$t('nodeStake.quitWarmMsg')}}</p><br>
               <p>{{$t('nodeStake.enterWalletPass')}}</p>
               <a-input class="input" v-model="walletPassword" :plaecholder="$t('nodeStake.password')" type="password"></a-input>
           </div>
@@ -241,6 +242,8 @@ export default {
       isDelegateSendTx:true,
 
       redeemPosVisible: false,
+
+      isQuit: false,
 
     };
   },
@@ -304,6 +307,7 @@ export default {
     handleWalletSignCancel() {
       this.tx = "";
       this.walletPassModal = false;
+      this.isQuit = false;
       this.walletPassword = '';
     },
     handleWalletSignOK() {
@@ -386,6 +390,7 @@ export default {
         net === "TEST_NET" ? ONT_PASS_NODE : ONT_PASS_NODE_PRD;
       axios.post(ontPassNode + ONT_PASS_URL.DelegateSendTx, body).then(res => {
         this.walletPassModal = false;
+        this.isQuit = false;
         this.walletPassword = ''
         this.tx = ''
         this.$store.dispatch("hideLoadingModals");
@@ -408,6 +413,7 @@ export default {
         restClient.sendRawTransaction(tx.serialize()).then(res => {
         console.log(res)
         this.isDelegateSendTx = true;
+        this.isQuit = false;
         this.walletPassModal = false;
         this.walletPassword = '';
         this.$store.dispatch("hideLoadingModals");
@@ -481,6 +487,7 @@ export default {
         const payer = userAddr;
         const tx = GovernanceTxBuilder.makeQuitNodeTx(userAddr, peerPubkey, payer, GAS_PRICE, GAS_LIMIT)
         this.tx = tx;
+        this.isQuit = true;
         this.walletPassModal = true;
     },
     handleNewStake() {
