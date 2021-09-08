@@ -123,6 +123,7 @@ export default {
             this.$store.commit('UPDATE_STAKE_WALLET', {stakeWallet: node.stakeWallet})
             this.$store.commit('UPDATE_NODE_PUBLICKEY', {nodePublicKey: node.publicKey})
             this.$store.commit('UPDATE_NODE_STATUS', {status: node.status})
+			this.$store.commit('UPDATE_MENU_TAB_INDEX', 1)
             this.$router.push({name: 'NodeStakeManagement'})
         }
 	}

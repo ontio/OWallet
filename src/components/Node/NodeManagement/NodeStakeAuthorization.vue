@@ -154,7 +154,7 @@
             <div class="content-row">
                 <div class="content-column">
                     <span>{{$t('nodeMgmt.yourStakeAmount')}}</span>
-                    <span>{{current_peer.initPosStr}} ONT</span>
+                    <span>{{initPosStr}} ONT</span>
                 </div>
                 <div class="content-column">
                     <span>{{$t('nodeMgmt.stakeLimit')}}</span>
@@ -305,6 +305,9 @@ export default {
                 const initPos = this.$store.state.NodeAuthorization.current_peer.initPos;
                 return numeral(this.posLimit * initPos).format('0,0');
             }
+        },
+        initPosStr (){
+            return this.current_peer.initPosStr
         }
     },
     methods:{
