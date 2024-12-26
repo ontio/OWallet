@@ -67,7 +67,7 @@
 
 					<div class="form-item">
 						<label for="">{{$t('nodeApply.stakeWallet')}}</label>
-						<p>{{stakeWallet.address}}</p>
+						<p>{{stakeWallet.address}} {{ this.walletType === 'ledgerWallet' ? '(Ledger)' : '' }}</p>
 					</div>
 					<div class="form-item">
 						<label for="">{{$t('nodeApply.operationWalletPublickey')}}</label>

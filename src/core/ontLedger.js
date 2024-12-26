@@ -235,3 +235,8 @@ export const legacySignWithLedger = async (unsignedTx, neo = false, acct = 0) =>
         await ledger.close()
     }
 }
+
+export const checkPublicKeyIsInTheConnectedLedger = async (acct = 0, neo = false, publicKey) => {
+    const pk = await getPublicKey(acct, neo);
+    return pk === publicKey;
+}

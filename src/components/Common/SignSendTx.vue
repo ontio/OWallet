@@ -25,7 +25,7 @@ import {mapState} from 'vuex'
 import delay from 'delay'
 import {DEFAULT_SCRYPT} from '../../core/consts'
 import { getRestClient } from '../../core/utils'
-import {legacySignWithLedger} from '../../core/ontLedger'
+import {legacySignWithLedger, checkPublicKeyIsInTheConnectedLedger} from '../../core/ontLedger'
 import {Crypto, TransactionBuilder, TxSignature, utils, RestClient, WebsocketClient, Transaction, OntAssetTxBuilder} from 'ontology-ts-sdk'
 // common component to sign tx or messages with wallet or ledger.
 
@@ -122,6 +122,20 @@ export default {
             } else {
                 //ledger sign
                 if (this.ledgerWallet.address) {
+                    console.log(this.wallet);
+                    try {
+                        // 当前连接的Ledger需要和之前导入钱包的Ledger是同一个
+                        const isCorrectLedger = await checkPublicKeyIsInTheConnectedLedger(this.wallet.acct || 0, this.wallet.neo, this.wallet.publicKey);
+                        if (!isCorrectLedger) {
+                            
+                            this.$message.warning(this.$t('common.invalidLedger'));
+                            return;
+                        }
+                    } catch (err) {
+                        this.$message.warning(err?.message || err);
+                        throw err;
+                    } 
+
                     this.$store.dispatch("showLoadingModals");
                     this.$store.dispatch('stopGetLedgerStatus')
                     await delay(1000);
@@ -129,15 +143,15 @@ export default {
                     if(typeof tx === 'string') {
                         txData =  tx
                         // ledger 签名message特殊处理，放到tx的payload里. 先构造个占位的tx
-                        const addr = new Crypto.Address(this.ledgerWallet.address)
+                        const addr = new Crypto.Address(this.wallet.address)
                         const txTemp = OntAssetTxBuilder.makeTransferTx('ONT', addr, addr, '1', '2500', '20000', addr)
                         txTemp.payload.code = tx;
-                        const pk = new Crypto.PublicKey(this.ledgerWallet.publicKey);
+                        const pk = new Crypto.PublicKey(this.wallet.publicKey);
                         const txSig = new TxSignature();
                         txSig.M = 1;
                         txSig.pubKeys = [pk];
                         txData = txTemp.serializeUnsignedData();
-                        legacySignWithLedger(txData).then(res => {
+                        legacySignWithLedger(txData, this.wallet.neo, this.wallet.acct || 0).then(res => {
                             // console.log('txSigned: ' + res);
                             const sign = "01" + res; //ECDSAwithSHA256
                             txSig.sigData = [sign];
@@ -155,13 +169,13 @@ export default {
                           this.$store.dispatch('getLedgerStatus')
                         });
                     } else {
-                        const pk = new Crypto.PublicKey(this.ledgerWallet.publicKey);
+                        const pk = new Crypto.PublicKey(this.wallet.publicKey);
                         const txSig = new TxSignature();
                         txSig.M = 1;
                         txSig.pubKeys = [pk];
-                        tx.payer = new Crypto.Address(this.ledgerWallet.address);
+                        tx.payer = new Crypto.Address(this.wallet.address);
                         txData = tx.serializeUnsignedData();
-                        legacySignWithLedger(txData).then(res => {
+                        legacySignWithLedger(txData, this.wallet.neo, this.wallet.acct || 0).then(res => {
                             // console.log('txSigned: ' + res);
                             const sign = "01" + res; //ECDSAwithSHA256
                             txSig.sigData = [sign];
