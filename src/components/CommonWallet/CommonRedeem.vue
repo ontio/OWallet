@@ -208,7 +208,8 @@ export default {
                     tx.payer = from;
                     const txData = tx.serializeUnsignedData();
                     const neo = this.currentWallet.neo;
-                    legacySignWithLedger(txData, neo).then(res => {
+                    const acct = this.currentWallet.acct;
+                    legacySignWithLedger(txData, neo, acct).then(res => {
                     // console.log('txSigned: ' + res);
                         const sign = '01' + res; //ECDSAwithSHA256
                         txSig.sigData = [sign]

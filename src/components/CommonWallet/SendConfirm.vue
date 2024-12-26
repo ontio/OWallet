@@ -194,7 +194,7 @@ import {Oep4} from 'ontology-ts-sdk'
 import { TEST_NET, MAIN_NET, ONT_CONTRACT, ONT_PASS_NODE, DEFAULT_SCRYPT } from '../../core/consts'
 import {Crypto, OntAssetTxBuilder, TransactionBuilder, utils, RestClient, TxSignature} from 'ontology-ts-sdk'
 import axios from 'axios';
-import {getDeviceInfo, getPublicKey} from '../../core/ontLedger'
+import {getDeviceInfo, getPublicKey, checkPublicKeyIsInTheConnectedLedger} from '../../core/ontLedger'
 import $ from 'jquery'
 import {BigNumber} from 'bignumber.js'
 import { getRestClient } from '../../core/utils'
@@ -302,7 +302,7 @@ export default {
           this.$message.error(this.$t('common.networkError'))
         })
       },
-    submit() {
+    async submit() {
       if (this.isCommonWallet && (!this.password || !this.checked)) {
         this.$message.warning(this.$t('common.confirmPwdTips'))
         return;
@@ -349,6 +349,9 @@ export default {
         this.sendTx(tx)
       } else {
         if(this.publicKey) {
+            const neo = this.currentWallet.neo;
+            const acct = this.currentWallet.acct;
+            await checkPublicKeyIsInTheConnectedLedger(acct, neo, this.currentWallet.publicKey);
             this.sending = true;
             this.ledgerStatus = this.$t('common.waitForSign')
             this.$store.dispatch('showLoadingModals')
@@ -358,8 +361,7 @@ export default {
             txSig.pubKeys = [pk];
             tx.payer = from;
             const txData = tx.serializeUnsignedData();
-            const neo = this.currentWallet.neo;
-            legacySignWithLedger(txData, neo).then(res => {
+            legacySignWithLedger(txData, neo, acct).then(res => {
             // console.log('txSigned: ' + res);
             const sign = '01' + res; //ECDSAwithSHA256
             txSig.sigData = [sign]

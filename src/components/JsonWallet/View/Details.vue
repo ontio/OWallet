@@ -125,13 +125,13 @@
     },
     methods: {
       toWalletHome(wallet) {
-        if(this.isCommonWallet) {
+        // if(this.isCommonWallet) {
           sessionStorage.setItem('currentWallet', JSON.stringify(wallet))
           this.$router.push({name: 'Dashboard'})
-        } else {
-          sessionStorage.setItem('currentWallet', JSON.stringify(wallet))
-          this.$router.push({name: 'LoginLedger'})
-        }
+        // } else {
+        //   sessionStorage.setItem('currentWallet', JSON.stringify(wallet))
+        //   this.$router.push({name: 'LoginLedger'})
+        // }
 
       },
       copyAddress(wallet) {
