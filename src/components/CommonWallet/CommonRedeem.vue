@@ -59,7 +59,7 @@ import {legacySignWithLedger} from '../../core/ontLedger'
 import {RestClient, Crypto,OntAssetTxBuilder, TransactionBuilder, utils, TxSignature} from 'ontology-ts-sdk'
 import { TEST_NET, MAIN_NET, ONT_CONTRACT, ONT_PASS_NODE, DEFAULT_SCRYPT, GAS_PRICE, GAS_LIMIT } from '../../core/consts'
 import {mapState} from 'vuex'
-import {getDeviceInfo, getPublicKey} from '../../core/ontLedger'
+import {getDeviceInfo, getPublicKey, checkPublicKeyIsInTheConnectedLedger} from '../../core/ontLedger'
 import {BigNumber} from 'bignumber.js'
 import { getRestClient } from '../../core/utils'
 export default {
@@ -170,7 +170,7 @@ export default {
                     this.$message.error(this.$t('common.networkError'))
                 })
       },
-        submit() {
+        async submit() {
             if(this.type === 'commonWallet' &&!this.password) {
                 this.$message.error(this.$t('commonWalletHome.emptyPass'))
                 return;
@@ -198,6 +198,9 @@ export default {
                 this.sendTx(tx);
             } else {
                 if(this.publicKey) {
+                    const neo = this.currentWallet.neo;
+                    const acct = this.currentWallet.acct;
+                    await checkPublicKeyIsInTheConnectedLedger(acct, neo, this.currentWallet.publicKey);
                     this.$store.dispatch('showLoadingModals')
                     this.sending = true;
                     this.ledgerStatus = this.$t('common.waitForSign')
@@ -207,8 +210,6 @@ export default {
                     txSig.pubKeys = [pk];
                     tx.payer = from;
                     const txData = tx.serializeUnsignedData();
-                    const neo = this.currentWallet.neo;
-                    const acct = this.currentWallet.acct;
                     legacySignWithLedger(txData, neo, acct).then(res => {
                     // console.log('txSigned: ' + res);
                         const sign = '01' + res; //ECDSAwithSHA256
