@@ -13,10 +13,10 @@
 			<div class="steps-content">
 				<div class="register-form"
 					v-show="current === 0">
-					<div class="proxy-tip">
+					<!-- <div class="proxy-tip">
 						<span>{{$t('nodeApply.proxyServiceTip')}}</span>
 						<span @click="onProxyLink" class="proxy-link">{{$t('nodeApply.proxyServiceLink')}}</span>
-					</div>
+					</div> -->
 					<form>
 						<div class="form-item">
 							<label for="stakeWallet">{{$t('nodeApply.stakeWallet')}}</label>
@@ -27,7 +27,7 @@
 							<label for="stakeWallet">{{$t('nodeApply.operationWallet')}}</label>
 							<a-tabs default-active-key="1" type="card" >
 								<a-tab-pane key="1" :tab="$t('nodeApply.selectOperationWallet')">
-									<a-select :options="normalWallet"
+									<a-select :options="normalWalletAndLedgerWallet"
 										class="select-ontid"
 										v-model="operationWallet"
 										@change="onSelectOperationWallet"
@@ -149,6 +149,31 @@ export default {
 					});
 				});
 			}
+		},
+
+		normalWalletAndLedgerWallet: {
+			get() {
+				const NormalList = this.$store.state.Wallets.NormalWallet.slice();
+				const LedgerList = this.$store.state.Wallets.HardwareWallet.slice();
+
+				const list1 = NormalList.map(i => {
+					return Object.assign({}, i, {
+						label: i.label + " " + i.address,
+						value: i.publicKey
+					});
+				});
+
+				const list2 = LedgerList.map(i => {
+					return Object.assign({}, i, {
+						label: i.label + " " + i.address + " (Ledger)",
+						value: i.publicKey
+					});
+				});
+
+				const list = [...list1, ...list2]
+
+				return list.filter(item => item.address !== this.stakeWallet?.address);
+			}
 		}
 	},
 	methods: {
@@ -209,6 +234,7 @@ export default {
 						this.$t("nodeApply.sameWalletNotAllowed")
 					);
 					this.operationWallet = null;
+					this.operationPk = "";
 					return;
 				}
 			}
@@ -230,6 +256,12 @@ export default {
             // 注册成功后，更新off chain 表。后台同步到off chain表。同步可能有时差。
 			// this.$router.push({name: 'NodeApplySuccess'})
 			this.registerSucceed = true
+			const nodePk = this.operationWallet ? this.operationWallet : this.operationPk
+			await this.$store.dispatch('newStakeInfo', {
+				name: 'Node_' + nodePk.substr(0, 6),
+				address: this.stakeWallet.address,
+				public_key: nodePk
+			})
 		},
 
 		async onComplete() { // 进入节点管理页面且打开信息填写的tab

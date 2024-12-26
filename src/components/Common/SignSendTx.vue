@@ -123,18 +123,8 @@ export default {
                 //ledger sign
                 if (this.ledgerWallet.address) {
                     console.log(this.wallet);
-                    try {
-                        // 当前连接的Ledger需要和之前导入钱包的Ledger是同一个
-                        const isCorrectLedger = await checkPublicKeyIsInTheConnectedLedger(this.wallet.acct || 0, this.wallet.neo, this.wallet.publicKey);
-                        if (!isCorrectLedger) {
-                            
-                            this.$message.warning(this.$t('common.invalidLedger'));
-                            return;
-                        }
-                    } catch (err) {
-                        this.$message.warning(err?.message || err);
-                        throw err;
-                    } 
+                    // 当前连接的Ledger需要和之前导入钱包的Ledger是同一个
+                    await checkPublicKeyIsInTheConnectedLedger(this.wallet.acct || 0, this.wallet.neo, this.wallet.publicKey);
 
                     this.$store.dispatch("showLoadingModals");
                     this.$store.dispatch('stopGetLedgerStatus')
