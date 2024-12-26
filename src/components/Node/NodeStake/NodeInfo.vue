@@ -144,7 +144,7 @@ export default {
             } else { // ledger 钱包
                 const data = {
                     node_info: signed,
-                    publicKey: this.stakeWallet.publicKey
+                    public_key: this.stakeWallet.publicKey
                 }
                 this.$store.dispatch('updateLedgerNodeInfo', data).then(res => {
                     this.signVisible = false;

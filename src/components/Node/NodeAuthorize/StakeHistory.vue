@@ -32,28 +32,14 @@
         <breadcrumb :current="$t('nodeMgmt.stakeHistory')" v-on:backEvent="handleRouteBack"></breadcrumb>
         <div class="auth-login">
             <div class="intro-item">
-                <p class="font-medium-black">{{$t('nodeStake.selectStakeWallet')}}</p>
-                <a-radio-group @change="changePayerWallet" v-model="payerWalletType" class="change-payer-radio">
-                <a-radio value="commonWallet" class="payer-radio-item">{{$t('createIdentity.commonWallet')}}</a-radio>
-                <a-radio value="ledgerWallet" class="payer-radio-item">{{$t('createIdentity.ledgerWallet')}}</a-radio>
+                <p class="font-medium-black" style="margin-bottom: 10px">{{$t('nodeStake.selectStakeWallet')}}</p>
 
-                <div v-if="payerWalletType === 'commonWallet'">
-                    <a-select :options="normalWallet" class="select-wallet" v-model="payerWalletValue"
+                <div>
+                    <a-select :options="normalWalletAndLedgerWallet" class="select-wallet" v-model="payerWalletValue"
                     :placeholder="$t('createIdentity.selectCommonWallet')"
                         @change="handleChangePayer">
                     </a-select>
                 </div>
-
-                <div v-if="payerWalletType === 'ledgerWallet'">
-
-                    <div class="payer-ledger-status">
-                    <div class="font-bold" style="margin-bottom: 10px;">{{$t('ledgerWallet.connectApp')}}</div>
-                    <span class="font-medium-black">{{$t('ledgerWallet.status')}}: </span>
-                    <span class="font-medium">{{ledgerStatus}} </span>
-                    </div>
-                    
-                </div>
-                </a-radio-group>
             </div>
             <div class="stake-btn-container">
                 <!-- <p class="font-medium"><a-icon type="exclamation-circle" /> {{$t('nodeMgmt.userParticipate')}}</p> -->
@@ -154,17 +140,29 @@ export default {
             ledgerWallet: state => state.LedgerConnector.ledgerWallet,
             stakeHistory: state => state.NodeAuthorization.stakeHistory,
         }),
-        normalWallet: {
-            get() {
-                const list = this.$store.state.Wallets.NormalWallet.slice();
-                return list.map(i => {
-                    return Object.assign({}, i, {
-                        label: i.label + " " + i.address,
-                        value: i.address
-                    });
-                });
-            }
-        },
+
+		normalWalletAndLedgerWallet: {
+			get() {
+				const NormalList = this.$store.state.Wallets.NormalWallet.slice();
+				const LedgerList = this.$store.state.Wallets.HardwareWallet.slice();
+
+				const list1 = NormalList.map(i => {
+					return Object.assign({}, i, {
+						label: i.label + " " + i.address,
+						value: i.address
+					});
+				});
+
+				const list2 = LedgerList.map(i => {
+					return Object.assign({}, i, {
+						label: i.label + " " + i.address + " (Ledger)",
+						value: i.address
+					});
+				});
+
+				return [...list1, ...list2];
+			}
+		}
     },
     methods: {
         handleRouteBack() {
@@ -184,7 +182,7 @@ export default {
             }
         },
         handleChangePayer(value) {
-            this.payerWallet = this.normalWallet.find((v)=>{return v.address === value})
+            this.payerWallet = this.normalWalletAndLedgerWallet.find((v)=>{return v.address === value})
             this.payerWalletValue = this.payerWallet.address
         },
         handleSearch() {
