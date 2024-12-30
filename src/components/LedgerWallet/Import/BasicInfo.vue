@@ -3,207 +3,406 @@
     <div>
       <a-input class="input" :placeholder="$t('importLedgerWallet.label')" v-model="label"></a-input>
 
-      <a-checkbox @change="onChangeNeo" :checked="neo" class="check-neo">{{$t('importLedgerWallet.neoCompatible')}}</a-checkbox>
-
+      <!-- <a-checkbox @change="onChangeNeo" :checked="neo" class="check-neo">{{ $t('importLedgerWallet.neoCompatible')
+        }}</a-checkbox> -->
     </div>
     <div class="div-ledger-info">
-      <div class="div-ledger-info-tit"><strong>{{$t('ledgerWallet.info')}}</strong></div>
-
-      <div class="font-bold" style="margin-bottom: 15px;">{{$t('ledgerWallet.connectApp')}}</div>
-
-      <div class="ledger-status">
-          <span class="font-medium-black">{{$t('ledgerWallet.status')}}: </span>
-          <span class="font-medium">{{ledgerStatus}} </span>
+      <div class="div-ledger-info-tit">
+        <strong>{{ $t("ledgerWallet.info") }}</strong>
       </div>
 
+      <div v-show="!isAdvancedMode">
+        <a-spin :spinning="isLoading">
+          <div class="font-bold" style="margin-bottom: 15px">
+            {{ $t("ledgerWallet.connectApp") }}
+          </div>
+          <!-- <div class="ledger-status">
+            <span class="font-medium-black">{{$t('ledgerWallet.status')}}: </span>
+           <span class="font-medium">{{ledgerStatus}} </span>
+          </div> -->
+          <div class="address-list">
+            <a-row v-for="pk in publicKeyList" :key="pk">
+              <!-- <a-col :span="24"> -->
+              <a-checkbox :value="pk" @change="selectAddress" :checked="checkPkSelect(pk)">
+                {{ getAddressFromPubKey(pk) }}
+              </a-checkbox>
+              <!-- </a-col> -->
+            </a-row>
+          </div>
+
+          <div class="paging-line">
+            <div class="prev paging-item" @click="prevPage">&lt;</div>
+            <div class="page-number paging-item">{{ page }}</div>
+            <div class="next paging-item" @click="nextPage">&gt;</div>
+          </div>
+        </a-spin>
+      </div>
+      <div v-show="isAdvancedMode">
+        <div class="font-bold" style="margin-bottom: 15px">
+          请输入路径以导入您想要查看的账户
+        </div>
+
+        <a-radio-group v-model="neo">
+          <a-radio :style="radioStyle" :value="false">
+            <span>44'/1024'/0'/0/</span>
+            <a-input-number :disabled="neo" size="small" style="width: 60px; margin-left: 10px" :step="1" :min="0"
+              :precision="0" v-model="notNeoPathParam" placeholder="0" @change="debouncedGetPkForAdvancedMode" />
+          </a-radio>
+          <a-radio :style="radioStyle" :value="true">
+            <span>44'/888'/0'/0/</span>
+            <a-input-number :disabled="!neo" size="small" style="width: 60px; margin-left: 10px" :step="1" :min="0"
+              :precision="0" v-model="neoPathParam" placeholder="0" @change="debouncedGetPkForAdvancedMode" />
+          </a-radio>
+        </a-radio-group>
+
+
+        <div>{{ getAddressFromPubKey(advancedModePublicKey) }}</div>
+      </div>
+    </div>
+
+    <div class="mode-line">
+      <div class="mode-select">
+        <span v-show="isAdvancedMode" @click="isAdvancedMode = !isAdvancedMode">Advanced Mode</span>
+        <span v-show="!isAdvancedMode" @click="isAdvancedMode = !isAdvancedMode">Normal Mode</span>
+      </div>
     </div>
 
     <div class="basic-pk-btns">
       <div class="btn-container">
-        <a-button type="default" @click="cancel" class="btn-cancel">{{$t('importJsonWallet.cancel')}}</a-button>
-        <a-button type="primary" @click="next" class="btn-next">{{$t('importLedgerWallet.next')}}</a-button>
+        <a-button type="default" @click="cancel" class="btn-cancel">{{
+          $t("importJsonWallet.cancel")
+        }}</a-button>
+        <a-button type="primary" @click="addWallet" class="btn-next">{{
+          $t("importLedgerWallet.next")
+        }}</a-button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import {mapState} from 'vuex'
-  import {Wallet, Account, Crypto} from "ontology-ts-sdk"
-  import dbService from '../../../core/dbService'
-  import {WALLET_TYPE}  from '../../../core/consts'
-  import {getDeviceInfo, getPublicKey} from '../../../core/ontLedger'
+import { mapState } from "vuex";
+import { Wallet, Account, Crypto } from "ontology-ts-sdk";
+import dbService from "../../../core/dbService";
+import { WALLET_TYPE } from "../../../core/consts";
+import { getDeviceInfo, getPublicKey } from "../../../core/ontLedger";
+import _ from "lodash";
 
-  export default {
-    name: 'BasicInfo',
-    mounted: function () {
-      let that = this;
-      that.getDevice()
-      this.intervalId = setInterval(() => {
-        that.getDevice()
-      }, this.interval)
-    },
-    beforeDestroy(){
-      clearInterval(this.intervalId)
-    },
-    data() {
-      return {
-        intervalId: '',
-        interval: 3000,
-        label: '',
-        ledgerStatus: '',
-        neo: false
+function toggleElement(array, element) {
+  const index = array.indexOf(element);
+  if (index === -1) {
+    array.push(element);
+  } else {
+    array.splice(index, 1);
+  }
+}
+
+export default {
+  name: "BasicInfo",
+  created() {
+    this.debouncedGetPkForAdvancedMode = _.debounce(this.getPkForAdvancedMode, 500);
+  },
+  mounted: async function () {
+    // let that = this;
+    // await that.getDevice()
+    // this.intervalId = setInterval(async() => {
+    //   await that.getDevice()
+    // }, this.interval)
+    await this.getPublicKeyList();
+  },
+  // beforeDestroy() {
+  // clearInterval(this.intervalId)
+  // },
+  data() {
+    return {
+      intervalId: "",
+      interval: 3000,
+      label: "",
+      ledgerStatus: "",
+      neo: false,
+      device: null,
+      page: 1,
+      pageSize: 5,
+      selectPublicKeys: [],
+      publicKeyList: [],
+      isAdvancedMode: false,
+      isLoading: false,
+      radioStyle: {
+        display: "block",
+        height: "30px",
+        lineHeight: "30px",
+      },
+      notNeoPathParam: "",
+      neoPathParam: "",
+      advancedModePublicKey: '',
+    };
+  },
+  methods: {
+    async addWallet() {
+      // if(!this.label) {
+      //   this.$message.error(this.$t('ledgerWallet.labelEmpty'))
+      //   return;
+      // }
+      // if (!this.publicKey) {
+      //   this.$message.error(this.$t("ledgerWallet.deviceError"));
+      //   return;
+      // }
+      // if (this.publicKey) {
+      //   const body = {
+      //     pk: this.publicKey,
+      //     neo: this.neo,
+      //   };
+      //   this.$store.dispatch("createLedgerWalletWithPk", body).then((res) => {
+      //     if (res) {
+      //       this.saveToDb(res);
+      //     }
+      //   });
+      // }
+
+      let list = []
+      console.log('this.advancedModePublicKey', this.advancedModePublicKey);
+      if (!this.isAdvancedMode && this.selectPublicKeys === 0) {
+        this.$message.error('请选择地址')
+        return
       }
+      if (this.isAdvancedMode && (!this.advancedModePublicKey)) {
+        this.$message.error('请选择地址')
+        return
+      }
+
+      this.isAdvancedMode ? list = [this.advancedModePublicKey] : list = this.selectPublicKeys
+
+
+      list.forEach(async (pk) => {
+        const body = {
+          pk: pk,
+          neo: this.neo,
+        }
+        const res = await this.$store.dispatch("createLedgerWalletWithPk", body)
+        console.log('createLedgerWalletWithPk', res);
+
+        if (res) {
+          this.saveToDb(res);
+        }
+      })
+      this.$router.push({ name: "Wallets" });
     },
-    methods: {
-      next() {
-        // if(!this.label) {
-        //   this.$message.error(this.$t('ledgerWallet.labelEmpty'))
-        //   return;
-        // }
-        if(!this.publicKey) {
-          this.$message.error(this.$t('ledgerWallet.deviceError'))
+
+    // getDevice() {
+    //   getDeviceInfo().then(res => {
+    //     console.log('device' ,res)
+    //     this.device = res;
+    //     this.getPublicKey()
+    //   }).catch(err => {
+    //     console.log(err)
+    //     if (err === 'NOT_FOUND') {
+    //       this.ledgerStatus = this.$t('common.ledgerNotOpen')
+    //     } else if (err === 'NOT_SUPPORT') {
+    //       this.ledgerStatus = this.$t('common.ledgerNotSupported')
+    //     } else {
+    //       this.ledgerStatus = this.$t('common.pluginDevice')
+    //     }
+    //   })
+    // },
+    // async getDevice() {
+    //   const res = await getDeviceInfo();
+    //   console.log('device', res)
+    //   this.device = res;
+    //   return res
+    // },
+    async getPublicKeyForLedger(acctNum) {
+      // if(!this.device){
+      //   throw new Error('device not found')
+      // }
+
+      // const acctNum = 0;
+      // getPublicKey(acctNum, this.neo).then(res => {
+      // console.log('pk info: ' + res);
+      // this.publicKey = res
+      // this.ledgerStatus = this.$t('common.readyToImport')
+      // this.next();
+      // }).catch(err => {
+      // this.ledgerStatus = err.message
+      // })
+      console.log("acctNum", acctNum, this.neo);
+      const pk = await getPublicKey(acctNum, this.neo);
+      console.log("pk", pk);
+      return pk;
+    },
+    async getPublicKeyList() {
+      this.isLoading = true;
+      const pkArr = [];
+
+      for (let i = 0; i < this.pageSize; i++) {
+        const pk = await this.getPublicKeyForLedger(
+          (this.page - 1) * this.pageSize + i
+        );
+        pkArr.push(pk);
+      }
+      this.publicKeyList = pkArr;
+      console.log("this.publicKeyList", this.publicKeyList);
+      this.isLoading = false;
+    },
+    checkPkSelect(pk) {
+      return this.selectPublicKeys.includes(pk);
+    },
+
+    saveToDb(account) {
+      account.label = this.label || "Ledger Wallet";
+      const that = this;
+      const wallet = {
+        type: WALLET_TYPE.HardwareWallet,
+        address: account.address,
+        wallet: account,
+      };
+
+      dbService.find({ address: account.address }, (err, accounts) => {
+        if (err) {
+          console.log(err);
           return;
         }
-        if(this.publicKey) {
-          const body = {
-            pk: this.publicKey,
-            neo: this.neo
-          }
-          this.$store.dispatch('createLedgerWalletWithPk', body).then(res => {
-            if(res) {
-              this.saveToDb(res)
-            }
-          })
-        }
-      },
-
-      getDevice() {
-        getDeviceInfo().then(res => {
-          console.log('device: ' + res)
-          this.device = res;
-          this.getPublicKey()
-        }).catch(err => {
-          console.log(err)
-          if (err === 'NOT_FOUND') {
-            this.ledgerStatus = this.$t('common.ledgerNotOpen')
-          } else if (err === 'NOT_SUPPORT') {
-            this.ledgerStatus = this.$t('common.ledgerNotSupported')
-          } else {
-            this.ledgerStatus = this.$t('common.pluginDevice')
-          }
-        })
-      },
-      getPublicKey() {
-        const acctNum = 0;
-        getPublicKey(acctNum, this.neo).then(res => {
-          console.log('pk info: ' + res);
-          this.publicKey = res
-          this.ledgerStatus = this.$t('common.readyToImport')
-          // this.next();
-        }).catch(err => {
-          this.ledgerStatus = err.message
-        })
-      },
-
-      saveToDb(account) {
-        account.label = this.label || 'Ledger Wallet';
-        const that = this;
-        const wallet = {
-          type: WALLET_TYPE.HardwareWallet,
-          address: account.address,
-          wallet: account
-        }
-
-        dbService.find({address: account.address}, (err, accounts) => {
-          if(err) {
-            console.log(err)
-            return;
-          }
-          if(accounts && accounts.length > 0) {
-            dbService.update(
-              {address: account.address},
-              {$set: {wallet: account}}, {},
-              (err, replaceDoc) => {
-                if(err) {
-                  console.log(err);
-                  return;
-                }
-              }
-            )
-          } else {
-            dbService.insert(wallet, function (err, newDoc) {
+        if (accounts && accounts.length > 0) {
+          dbService.update(
+            { address: account.address },
+            { $set: { wallet: account } },
+            {},
+            (err, replaceDoc) => {
               if (err) {
-                console.log(err)
+                console.log(err);
+                return;
               }
-            })
-          }
-        })
+            }
+          );
+        } else {
+          dbService.insert(wallet, function (err, newDoc) {
+            if (err) {
+              console.log(err);
+            }
+          });
+        }
+      });
 
+      sessionStorage.setItem("currentWallet", JSON.stringify(account));
+      // that.$router.push({ name: "Dashboard" });
+    },
+    cancel() {
+      this.$router.push({ name: "Wallets" });
+    },
+    // onChangeNeo() {
+    // this.neo = !this.neo;
+    // this.getPublicKey()
+    // },
+    selectAddress(e) {
+      const pk = e.target.value;
+      toggleElement(this.selectPublicKeys, pk);
+      console.log(this.selectPublicKeys);
 
-        sessionStorage.setItem('currentWallet', JSON.stringify(account))
-        that.$router.push({name: 'Dashboard'})
-      },
-      cancel() {
-        this.$router.push({name: 'Wallets'})
-      },
-      onChangeNeo() {
-        this.neo = !this.neo;
-        this.getPublicKey()
-      }
-    }
-  }
+    },
+    getAddressFromPubKey(pk) {
+      if (!pk) return "";
+      return Crypto.Address.fromPubKey(new Crypto.PublicKey(pk)).toBase58();
+    },
+    prevPage() {
+      if (this.page === 1) return;
+      this.page--;
+      this.publicKeyList = [];
+      this.getPublicKeyList();
+    },
+    nextPage() {
+      this.page++;
+      this.publicKeyList = [];
+      this.getPublicKeyList();
+    },
+    async getPkForAdvancedMode() {
+      const pk = await this.getPublicKeyForLedger(this.neo ? this.neoPathParam : this.notNeoPathParam)
+      this.advancedModePublicKey = pk
+    },
+  },
+};
 </script>
 
 <style scoped>
-  .ledger-import-container {
-    width: 36rem;
-  }
+.ledger-import-container {
+  width: 36rem;
+}
 
-  .div-ledger-info {
-    border: 1px solid #DFE2E9;
-    margin-top: 15px;
-    padding: 10px;
-  }
+.div-ledger-info {
+  border: 1px solid #dfe2e9;
+  margin-top: 15px;
+  padding: 10px;
+}
 
-  .div-ledger-info-tit {
-    border-bottom: 1px solid #DFE2E9;
-    padding-bottom: 10px;
-    margin-bottom: 10px;
-  }
+.div-ledger-info-tit {
+  border-bottom: 1px solid #dfe2e9;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
 
-  .basic-pk-btns {
-    position: fixed;
-    bottom: 0;
-    width: calc(100% - 4rem);
-    height: 85px;
-    left: 4rem;
-    background: #FFFFFF;
-    box-shadow: 0 -1px 6px 0 #F2F2F2;
-    z-index: 1000;
-  }
+.basic-pk-btns {
+  position: fixed;
+  bottom: 0;
+  width: calc(100% - 4rem);
+  height: 85px;
+  left: 4rem;
+  background: #ffffff;
+  box-shadow: 0 -1px 6px 0 #f2f2f2;
+  z-index: 1000;
+}
 
-  .basic-pk-btns button:first-child {
-    float: left;
-  }
+.basic-pk-btns button:first-child {
+  float: left;
+}
 
-  .basic-pk-btns :nth-child(2) {
-    float: right;
-  }
+.basic-pk-btns :nth-child(2) {
+  float: right;
+}
 
-  .basic-pk-btns :nth-child(3) {
-    float: right;
-    margin-right: 20px;
-  }
+.basic-pk-btns :nth-child(3) {
+  float: right;
+  margin-right: 20px;
+}
 
-  .error-input {
-    border-color: red;
-  }
-  .check-neo {
-    margin-top: 10px;
-    font-family: 'AvenirNext-Medium';
-    color: #000000;
-    font-size: 13px;
-  }
+.error-input {
+  border-color: red;
+}
+
+.check-neo {
+  margin-top: 10px;
+  font-family: "AvenirNext-Medium";
+  color: #000000;
+  font-size: 13px;
+}
+
+.paging-line {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.paging-item {
+  height: 26px;
+  width: 26px;
+  border: 1px solid #555252;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.paging-item+.paging-item {
+  margin-left: 10px;
+}
+
+.mode-line {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.mode-line .mode-select {
+  text-decoration: underline;
+  cursor: pointer;
+}
 </style>
-

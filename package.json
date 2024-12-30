@@ -69,5 +69,8 @@
     "usb": "1.7.1",
     "node-hid": "2.1.1",
     "app-builder-bin": "3.5.13"
+  },
+  "engines": {
+    "node": "^14.14.0"
   }
 }

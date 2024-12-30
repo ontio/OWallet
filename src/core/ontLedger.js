@@ -1,6 +1,6 @@
 import LedgerNode from '@ledgerhq/hw-transport-node-hid'
 import asyncWrap from './asyncHelper'
-import {utils, Crypto} from 'ontology-ts-sdk'
+import { utils, Crypto } from 'ontology-ts-sdk'
 import * as elliptic from 'elliptic';
 
 const VALID_STATUS = 0x9000
@@ -38,7 +38,7 @@ const BIP44 = (acct = 0, neo = false) => {
 
     return (
         '8000002C' +
-         coinType +
+        coinType +
         '80000000' +
         '00000000' +
         '0'.repeat(8 - acctNumber.length) +
@@ -205,10 +205,15 @@ const assembleSignature = (response) => {
 }
 
 export const getPublicKey = async (acct = 0, neo = false) => {
+
     const ledger = await OntLedger.init()
     try {
         return await ledger.getPublicKey(acct, neo)
-    } finally {
+    }
+    catch (err) {
+        return Promise.reject(err)
+    }
+    finally {
         await ledger.close()
     }
 }
@@ -228,7 +233,7 @@ export const legacySignWithLedger = async (unsignedTx, neo = false, acct = 0) =>
     try {
         const signData = await ledger.getSignature(unsignedTx, acct, neo)
         return signData;
-    } catch(err) {
+    } catch (err) {
         return Promise.reject(err)
     }
     finally {
