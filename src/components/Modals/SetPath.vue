@@ -21,7 +21,7 @@
   import {mapState} from 'vuex'
   import { validateKeystorePath } from '../../core/utils'
 
-  const {dialog} = require('electron').remote;
+  const {dialog} = require('@electron/remote');
 
   export default {
     name: "set-path-modal",
