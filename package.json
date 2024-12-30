@@ -38,7 +38,7 @@
     "ontology-ts-sdk": "^1.1.14-alpha.5",
     "opn": "^5.4.0",
     "popper.js": "^1.14.3",
-    "usb": "^1.7.1",
+    "usb": "1.7.1",
     "vee-validate": "^2.2.15",
     "vue": "^2.6.11",
     "vue-axios": "^2.1.1",
@@ -69,6 +69,7 @@
   "resolutions": {
     "usb": "1.7.1",
     "node-hid": "2.1.1",
-    "app-builder-bin": "3.5.13"
+    "app-builder-bin": "3.5.13",
+    "electron-builder": "23.6.0"
   }
 }

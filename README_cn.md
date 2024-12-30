@@ -67,3 +67,6 @@ yarn build
 * $XDG_CONFIG_HOME or ~/.config on `Linux`
 
 * ~/Library/Application Support on `macOS`
+
+## Node Version
+v14.14.0
