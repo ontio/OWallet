@@ -2,6 +2,8 @@ import LedgerNode from '@ledgerhq/hw-transport-node-hid'
 import asyncWrap from './asyncHelper'
 import { utils, Crypto } from 'ontology-ts-sdk'
 import * as elliptic from 'elliptic';
+import {message} from 'ant-design-vue'
+import i18n from '../lang'
 
 const VALID_STATUS = 0x9000
 const MSG_TOO_BIG = 0x6d08
@@ -239,4 +241,21 @@ export const legacySignWithLedger = async (unsignedTx, neo = false, acct = 0) =>
     finally {
         await ledger.close()
     }
+}
+
+export const checkPublicKeyIsInTheConnectedLedger = async (acct = 0, neo = false, publicKey) => {
+    try {
+        // 当前连接的Ledger需要和之前导入钱包的Ledger是同一个
+        const pk = await getPublicKey(acct, neo);
+        const isCorrect = pk === publicKey;
+        if (!isCorrect) {
+            throw i18n.t('common.invalidLedger');
+        }
+        return true;
+    } catch (err) {
+        console.error(err);
+        message.warning(err?.message || err);
+        throw err;
+    } 
+
 }

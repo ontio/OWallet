@@ -205,7 +205,7 @@
 import Breadcrumb from "../../Breadcrumb";
 import { mapState } from "vuex";
 import { Crypto, TransactionBuilder, utils, TxSignature, GovernanceTxBuilder, RestClient } from "ontology-ts-sdk";
-import {legacySignWithLedger} from '../../../core/ontLedger'
+import {legacySignWithLedger, checkPublicKeyIsInTheConnectedLedger} from '../../../core/ontLedger'
 import {varifyPositiveInt, getNodeUrl} from '../../../core/utils.js'
 import axios from "axios";
 import {
@@ -310,7 +310,7 @@ export default {
       this.isQuit = false;
       this.walletPassword = '';
     },
-    handleWalletSignOK() {
+    async handleWalletSignOK() {
       const tx = this.tx;
       if (this.stakeWallet.key && !this.walletPassword) {
         //common wallet
@@ -345,14 +345,17 @@ export default {
       } else {
         //ledger sign
         if (this.ledgerWallet.address) {
+          console.log("stakeWallet: ", this.stakeWallet);
+          // 当前连接的Ledger需要和之前导入钱包的Ledger是同一个
+          await checkPublicKeyIsInTheConnectedLedger(this.stakeWallet.acct || 0, this.stakeWallet.neo, this.stakeWallet.publicKey);
           this.$store.dispatch("showLoadingModals");
-          const pk = new Crypto.PublicKey(this.ledgerWallet.publicKey);
+          const pk = new Crypto.PublicKey(this.stakeWallet.publicKey);
           const txSig = new TxSignature();
           txSig.M = 1;
           txSig.pubKeys = [pk];
-          tx.payer = new Crypto.Address(this.ledgerWallet.address);
+          tx.payer = new Crypto.Address(this.stakeWallet.address);
           const txData = tx.serializeUnsignedData();
-          legacySignWithLedger(txData).then(res => {
+          legacySignWithLedger(txData, this.stakeWallet.neo, this.stakeWallet.acct).then(res => {
               // console.log('txSigned: ' + res);
               const sign = "01" + res; //ECDSAwithSHA256
               txSig.sigData = [sign];

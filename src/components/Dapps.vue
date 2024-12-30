@@ -67,7 +67,7 @@
                     </p>
                 </div>
             </a-col>
-            <a-col :md="8" :lg="8" :xl="6">
+            <!-- <a-col :md="8" :lg="8" :xl="6">
                 <div
                     class="dapp-item"
                     @click="handleDappSesameseed"
@@ -78,7 +78,7 @@
                     </div>
                     <p class="dapp-content">{{$t('dapps.sesameseedDesc')}}</p>
                 </div>
-            </a-col>
+            </a-col> -->
             <a-col :md="8" :lg="8" :xl="6">
                 <div
                     class="dapp-item"
