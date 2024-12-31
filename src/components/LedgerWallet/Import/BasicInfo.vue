@@ -255,7 +255,7 @@ export default {
     },
 
     saveToDb(account) {
-      account.label = this.label || "Ledger Wallet";
+      account.label = this.label || `Ledger Wallet-${account.neo ? 'Compatible NEO' : ''}-${account.acct}`;
       const that = this;
       const wallet = {
         type: WALLET_TYPE.HardwareWallet,
