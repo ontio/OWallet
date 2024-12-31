@@ -21,10 +21,10 @@
            <span class="font-medium">{{ledgerStatus}} </span>
           </div> -->
           <div class="address-list">
-            <a-row v-for="pk in publicKeyList" :key="pk">
+            <a-row v-for="pk in publicKeyList" :key="pk.acct">
               <!-- <a-col :span="24"> -->
               <a-checkbox :value="pk" @change="selectAddress" :checked="checkPkSelect(pk)">
-                {{ getAddressFromPubKey(pk) }}
+                {{ getAddressFromPubKey(pk.publicKey) }}
               </a-checkbox>
               <!-- </a-col> -->
             </a-row>
@@ -56,7 +56,7 @@
         </a-radio-group>
 
 
-        <div>{{ getAddressFromPubKey(advancedModePublicKey) }}</div>
+        <div>{{ getAddressFromPubKey(advancedModePublicKey.publicKey) }}</div>
       </div>
     </div>
 
@@ -89,6 +89,8 @@ import { getDeviceInfo, getPublicKey } from "../../../core/ontLedger";
 import _ from "lodash";
 
 function toggleElement(array, element) {
+  console.log('toggleElement', array, element);
+
   const index = array.indexOf(element);
   if (index === -1) {
     array.push(element);
@@ -134,7 +136,7 @@ export default {
       },
       notNeoPathParam: "",
       neoPathParam: "",
-      advancedModePublicKey: '',
+      advancedModePublicKey: null,
     };
   },
   methods: {
@@ -159,7 +161,7 @@ export default {
       //   });
       // }
 
-      let list = []
+
       console.log('this.advancedModePublicKey', this.advancedModePublicKey);
       if (!this.isAdvancedMode && this.selectPublicKeys === 0) {
         this.$message.error('请选择地址')
@@ -170,13 +172,14 @@ export default {
         return
       }
 
-      this.isAdvancedMode ? list = [this.advancedModePublicKey] : list = this.selectPublicKeys
+      let list = this.isAdvancedMode ? [this.advancedModePublicKey] : this.selectPublicKeys
 
 
       list.forEach(async (pk) => {
         const body = {
-          pk: pk,
+          pk: pk.publicKey,
           neo: this.neo,
+          acct: pk.acct
         }
         const res = await this.$store.dispatch("createLedgerWalletWithPk", body)
         console.log('createLedgerWalletWithPk', res);
@@ -234,10 +237,14 @@ export default {
       const pkArr = [];
 
       for (let i = 0; i < this.pageSize; i++) {
+        const acctNum = (this.page - 1) * this.pageSize + i;
         const pk = await this.getPublicKeyForLedger(
-          (this.page - 1) * this.pageSize + i
+          acctNum
         );
-        pkArr.push(pk);
+        pkArr.push({
+          publicKey: pk,
+          acct: acctNum
+        });
       }
       this.publicKeyList = pkArr;
       console.log("this.publicKeyList", this.publicKeyList);
@@ -294,6 +301,8 @@ export default {
     // },
     selectAddress(e) {
       const pk = e.target.value;
+      console.log('pk', pk);
+
       toggleElement(this.selectPublicKeys, pk);
       console.log(this.selectPublicKeys);
 
@@ -315,7 +324,10 @@ export default {
     },
     async getPkForAdvancedMode() {
       const pk = await this.getPublicKeyForLedger(this.neo ? this.neoPathParam : this.notNeoPathParam)
-      this.advancedModePublicKey = pk
+      this.advancedModePublicKey = {
+        publicKey: pk,
+        acct: this.neo ? this.neoPathParam : this.notNeoPathParam
+      }
     },
   },
 };

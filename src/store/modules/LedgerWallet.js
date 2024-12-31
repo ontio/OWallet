@@ -36,7 +36,8 @@ const actions = {
         const ledgerWallet =  {
                 publicKey: body.pk,
                 address,
-                neo: body.neo || false
+                neo: body.neo || false,
+                acct:body.acct,
             }
         return ledgerWallet;
     }
