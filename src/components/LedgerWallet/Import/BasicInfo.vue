@@ -24,7 +24,7 @@
             <a-row v-for="pk in publicKeyList" :key="pk.acct">
               <!-- <a-col :span="24"> -->
               <a-checkbox :value="pk" @change="selectAddress" :checked="checkPkSelect(pk)">
-                {{ getAddressFromPubKey(pk.publicKey) }}
+                {{ pk && getAddressFromPubKey(pk.publicKey) }}
               </a-checkbox>
               <!-- </a-col> -->
             </a-row>
@@ -56,7 +56,7 @@
         </a-radio-group>
 
 
-        <div>{{ getAddressFromPubKey(advancedModePublicKey.publicKey) }}</div>
+        <div>{{ advancedModePublicKey && getAddressFromPubKey(advancedModePublicKey.publicKey) }}</div>
       </div>
     </div>
 
