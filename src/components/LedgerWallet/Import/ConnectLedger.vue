@@ -9,29 +9,31 @@
     </div>
 
     <div class="ledger-status">
-      <span class="font-medium-black">{{ $t("ledgerWallet.status") }}: </span>
-      <span class="font-medium" v-show="isLedgerConnected">检测到ledger</span>
-      <span class="font-medium" v-show="!isLedgerConnected"
-        >未检测到ledger
-      </span>
+      <p class="font-medium-black">{{ $t("ledgerWallet.status") }}: </p>
+      <p class="font-medium" v-show="!isLedgerConnected">未检测到ledger </p>
+      <p class="font-medium" v-show="isLedgerConnected">检测到ledger</p>
+      <p class="font-medium" v-show="isLedgerConnected && isOpenApp">已打开Ont App</p>
     </div>
 
     <div class="basic-pk-btns">
       <div class="btn-container">
-        <a-button type="primary" @click="connect" class="btn-next" :disabled="!isLedgerConnected"
-          >Connect</a-button
-        >
+        <a-button type="default" @click="cancel" class="btn-cancel">{{
+          $t("importJsonWallet.cancel")
+        }}</a-button>
+        <a-button type="primary" @click="connect" class="btn-next"
+          :disabled="!isLedgerConnected || !isOpenApp">Connect</a-button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { getDeviceInfo } from "../../../core/ontLedger";
+import { getDeviceInfo, getPublicKey } from "../../../core/ontLedger";
 export default {
   data() {
     return {
       isLedgerConnected: false,
+      isOpenApp: false
     };
   },
   methods: {
@@ -40,15 +42,28 @@ export default {
       console.log("deviceInfo", deviceInfo);
       if (deviceInfo) {
         this.isLedgerConnected = true;
+        const pk = await getPublicKey();
+        console.log("pk", pk);
+        if (pk) {
+          this.isOpenApp = true;
+        }
       }
+
     },
     connect() {
       this.$emit("next");
     },
+    cancel() {
+      this.$router.push({ name: "Wallets" });
+    },
   },
   async mounted() {
     let that = this;
-    await that.getDevice();
+    try {
+      await that.getDevice();
+    } catch (e) {
+      console.error("error", e);
+    }
     this.intervalId = setInterval(async () => {
       await that.getDevice();
     }, 3000);
@@ -56,7 +71,7 @@ export default {
   beforeDestroy() {
     clearInterval(this.intervalId);
   },
-  emit:['next'],
+  emit: ['next'],
 };
 </script>
 
