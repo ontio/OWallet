@@ -177,8 +177,8 @@ export default {
       //   return
       // }
 
-      let list = this.isAdvancedMode ? [this.advancedModePublicKey] : this.selectPublicKeys
-
+      let list = this.isAdvancedMode ? [this.advancedModePublicKey] : this.selectPublicKeys;
+      list.sort((a, b) => a.acct - b.acct);
 
       list.forEach(async (pk) => {
         const body = {
@@ -240,20 +240,25 @@ export default {
     async getPublicKeyList() {
       this.isLoading = true;
       const pkArr = [];
-
-      for (let i = 0; i < this.pageSize; i++) {
-        const acctNum = (this.page - 1) * this.pageSize + i;
-        const pk = await this.getPublicKeyForLedger(
-          acctNum
-        );
-        pkArr.push({
-          publicKey: pk,
-          acct: acctNum
-        });
+      try {
+        for (let i = 0; i < this.pageSize; i++) {
+          const acctNum = (this.page - 1) * this.pageSize + i;
+          const pk = await this.getPublicKeyForLedger(
+            acctNum
+          );
+          pkArr.push({
+            publicKey: pk,
+            acct: acctNum
+          });
+        }
+        this.publicKeyList = pkArr;
+        console.log("this.publicKeyList", this.publicKeyList);
+        this.isLoading = false;
+      } catch (e) {
+        console.log(e);
+        this.isLoading = false;
       }
-      this.publicKeyList = pkArr;
-      console.log("this.publicKeyList", this.publicKeyList);
-      this.isLoading = false;
+
     },
     checkPkSelect(pk) {
       // return this.selectPublicKeys.includes(pk);
