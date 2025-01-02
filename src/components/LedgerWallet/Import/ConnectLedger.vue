@@ -9,19 +9,18 @@
     </div>
 
     <div class="ledger-status">
-      <p class="font-medium-black">{{ $t("ledgerWallet.status") }}: </p>
-      <p class="font-medium" v-show="!isLedgerConnected">未检测到ledger </p>
-      <p class="font-medium" v-show="isLedgerConnected">检测到ledger</p>
-      <p class="font-medium" v-show="isLedgerConnected && isOpenApp">已打开Ont App</p>
+      <p class="font-medium-black">{{ $t("ledgerWallet.status") }}:</p>
+      <p v-if="ledgerStatus">{{ ledgerStatus }}</p>
+
     </div>
 
     <div class="basic-pk-btns">
       <div class="btn-container">
         <a-button type="default" @click="cancel" class="btn-cancel">{{
           $t("importJsonWallet.cancel")
-        }}</a-button>
+          }}</a-button>
         <a-button type="primary" @click="connect" class="btn-next"
-          :disabled="!isLedgerConnected || !isOpenApp">Connect</a-button>
+          :disabled="!ledgerStatus || !publicKey">{{ $t("importLedgerWallet.next") }}</a-button>
       </div>
     </div>
   </div>
@@ -29,27 +28,22 @@
 
 <script>
 import { getDeviceInfo, getPublicKey } from "../../../core/ontLedger";
+import { mapState } from "vuex";
+
 export default {
   data() {
     return {
       isLedgerConnected: false,
-      isOpenApp: false
+      isOpenApp: false,
     };
   },
+  computed: {
+    ...mapState({
+      ledgerStatus: (state) => state.LedgerConnector.ledgerStatus,
+      publicKey: (state) => state.LedgerConnector.publicKey,
+    }),
+  },
   methods: {
-    async getDevice() {
-      const deviceInfo = await getDeviceInfo();
-      console.log("deviceInfo", deviceInfo);
-      if (deviceInfo) {
-        this.isLedgerConnected = true;
-        const pk = await getPublicKey();
-        console.log("pk", pk);
-        if (pk) {
-          this.isOpenApp = true;
-        }
-      }
-
-    },
     connect() {
       this.$emit("next");
     },
@@ -58,20 +52,12 @@ export default {
     },
   },
   async mounted() {
-    let that = this;
-    try {
-      await that.getDevice();
-    } catch (e) {
-      console.error("error", e);
-    }
-    this.intervalId = setInterval(async () => {
-      await that.getDevice();
-    }, 3000);
+    await this.$store.dispatch("getLedgerStatus");
   },
   beforeDestroy() {
-    clearInterval(this.intervalId);
+    this.$store.dispatch("stopGetLedgerStatus");
   },
-  emit: ['next'],
+  emit: ["next"],
 };
 </script>
 

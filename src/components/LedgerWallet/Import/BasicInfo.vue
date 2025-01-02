@@ -71,10 +71,10 @@
       <div class="btn-container">
         <a-button type="default" @click="cancel" class="btn-cancel">{{
           $t("importJsonWallet.cancel")
-        }}</a-button>
-        <a-button type="primary" @click="addWallet" class="btn-next">{{
+          }}</a-button>
+        <a-button type="primary" @click="addWallet" class="btn-next" :disabled="addDisable">{{
           $t("importLedgerWallet.next")
-        }}</a-button>
+          }}</a-button>
       </div>
     </div>
   </div>
@@ -89,7 +89,7 @@ import { getDeviceInfo, getPublicKey } from "../../../core/ontLedger";
 import _ from "lodash";
 
 function toggleElement(array, element) {
-  console.log('toggleElement', array, element);
+  // console.log('toggleElement', array, element);
 
   const index = array.indexOf(element);
   if (index === -1) {
@@ -139,6 +139,11 @@ export default {
       advancedModePublicKey: null,
     };
   },
+  computed: {
+    addDisable() {
+      return !(this.label && (this.selectPublicKeys.length > 0 || this.advancedModePublicKey))
+    }
+  },
   methods: {
     async addWallet() {
       // if(!this.label) {
@@ -163,14 +168,14 @@ export default {
 
 
       console.log('this.advancedModePublicKey', this.advancedModePublicKey);
-      if (!this.isAdvancedMode && this.selectPublicKeys === 0) {
-        this.$message.error('请选择地址')
-        return
-      }
-      if (this.isAdvancedMode && (!this.advancedModePublicKey)) {
-        this.$message.error('请选择地址')
-        return
-      }
+      // if (!this.isAdvancedMode && this.selectPublicKeys.length === 0) {
+      //   this.$message.error('请选择地址')
+      //   return
+      // }
+      // if (this.isAdvancedMode && (!this.advancedModePublicKey)) {
+      //   this.$message.error('请选择地址')
+      //   return
+      // }
 
       let list = this.isAdvancedMode ? [this.advancedModePublicKey] : this.selectPublicKeys
 
@@ -251,11 +256,12 @@ export default {
       this.isLoading = false;
     },
     checkPkSelect(pk) {
-      return this.selectPublicKeys.includes(pk);
+      // return this.selectPublicKeys.includes(pk);
+      return this.selectPublicKeys.map(item => item.acct).includes(pk.acct)
     },
 
     saveToDb(account) {
-      account.label = this.label || `Ledger Wallet-${account.neo ? 'Compatible NEO' : ''}-${account.acct}`;
+      account.label = `${this.label}${account.neo ? '-Compatible NEO' : ''}-${account.acct}`;
       const that = this;
       const wallet = {
         type: WALLET_TYPE.HardwareWallet,
@@ -301,10 +307,10 @@ export default {
     // },
     selectAddress(e) {
       const pk = e.target.value;
-      console.log('pk', pk);
+      // console.log('pk', pk);
 
       toggleElement(this.selectPublicKeys, pk);
-      console.log(this.selectPublicKeys);
+      // console.log(this.selectPublicKeys);
 
     },
     getAddressFromPubKey(pk) {
