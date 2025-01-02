@@ -456,7 +456,8 @@ export default {
     status: 'Device Status',
     labelEmpty: 'Label can not be empty.',
     deviceError: 'Can not connect to device.Please try again.',
-    signFailed: 'Sign with ledger failed.'
+    signFailed: 'Sign with ledger failed.',
+    selectAccount:"Please select the account(s) on your Ledger device."
   },
 
   ledgerStatus: {

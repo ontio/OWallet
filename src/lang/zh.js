@@ -454,7 +454,8 @@ export default {
     status: '设备状态',
     labelEmpty: '钱包名称不能为空.',
     deviceError: '不能连接到设备，请重试.',
-    signFailed: '使用ledger签名交易失败。'
+    signFailed: '使用ledger签名交易失败。',
+    selectAccount:"请选择您Ledger设备里的账户（可多选）"
   },
   ledgerStatus: {
     NOT_FOUND: 'Ledger没有打开',

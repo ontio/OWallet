@@ -14,7 +14,7 @@
       <div v-show="!isAdvancedMode">
         <a-spin :spinning="isLoading">
           <div class="font-bold" style="margin-bottom: 15px">
-            {{ $t("ledgerWallet.connectApp") }}
+            {{ $t("ledgerWallet.selectAccount") }}
           </div>
           <!-- <div class="ledger-status">
             <span class="font-medium-black">{{$t('ledgerWallet.status')}}: </span>
@@ -71,10 +71,10 @@
       <div class="btn-container">
         <a-button type="default" @click="cancel" class="btn-cancel">{{
           $t("importJsonWallet.cancel")
-          }}</a-button>
+        }}</a-button>
         <a-button type="primary" @click="addWallet" class="btn-next" :disabled="addDisable">{{
           $t("importLedgerWallet.next")
-          }}</a-button>
+        }}</a-button>
       </div>
     </div>
   </div>
