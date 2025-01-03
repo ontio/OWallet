@@ -250,7 +250,7 @@ export default {
       // this.ledgerStatus = err.message
       // })
       console.log("acctNum", acctNum, this.neo);
-      const pk = await getPublicKey(acctNum, this.neo);
+      const pk = await getPublicKey(acctNum, this.isAdvancedMode ? this.neo : false);
       console.log("pk", pk);
       return pk;
     },
