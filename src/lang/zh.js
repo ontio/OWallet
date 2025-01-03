@@ -455,7 +455,11 @@ export default {
     labelEmpty: '钱包名称不能为空.',
     deviceError: '不能连接到设备，请重试.',
     signFailed: '使用ledger签名交易失败。',
-    selectAccount:"请选择您Ledger设备里的账户（可多选）"
+    selectAccount:"请选择您Ledger设备里的账户（可多选）",
+    normalMode:'普通模式',
+    advancedMode:'高级模式',
+    alreadyImported:"部分选中账户已导入",
+
   },
   ledgerStatus: {
     NOT_FOUND: 'Ledger没有打开',
@@ -487,7 +491,7 @@ export default {
     stakeQuantityEmpty: '请输入质押数量',
     password: '输入密码',
     signWithOntid: '使用ONT ID签名',
-    signWithWallet: '使用钱包签名',
+    signWithWallet: '选择钱包',
     enterOntidPass: '请输入ONT ID的密码',
     enterWalletPass: '请输入钱包的密码',
     quitWarmMsg: '选择退出节点，则可退回所有初始质押。候选节点退出后一周期可以退回质押，共识节点需要两周期。退出节点后，如果想要再次运行节点，需要重新注册。',

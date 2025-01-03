@@ -23,15 +23,16 @@
           <div class="address-list">
             <a-row v-for="pk in publicKeyList" :key="pk.acct">
               <!-- <a-col :span="24"> -->
-              <a-checkbox :value="pk" @change="selectAddress" :checked="checkPkSelect(pk)">
-                {{ pk && getAddressFromPubKey(pk.publicKey) }}
+              <a-checkbox v-if="pk" :value="pk" @change="selectAddress" :checked="checkPkSelect(pk)">
+                {{ `${pk.acct}. ${getAddressFromPubKey(pk.publicKey)}` }}
               </a-checkbox>
               <!-- </a-col> -->
             </a-row>
           </div>
 
           <div class="paging-line">
-            <div class="prev paging-item" @click="prevPage">&lt;</div>
+            <div class="prev paging-item" @click="prevPage" :style="{ 'opacity': page === 1 && '0.6' || '1' }">&lt;
+            </div>
             <div class="page-number paging-item">{{ page }}</div>
             <div class="next paging-item" @click="nextPage">&gt;</div>
           </div>
@@ -44,12 +45,12 @@
 
         <a-radio-group v-model="neo">
           <a-radio :style="radioStyle" :value="false">
-            <span>44'/1024'/0'/0/</span>
+            <span class="path">44'/1024'/0'/0/</span>
             <a-input-number :disabled="neo" size="small" style="width: 60px; margin-left: 10px" :step="1" :min="0"
               :precision="0" v-model="notNeoPathParam" placeholder="0" @change="advancedModeInputChange" />
           </a-radio>
           <a-radio :style="radioStyle" :value="true">
-            <span>44'/888'/0'/0/</span>
+            <span class="path">44'/888'/0'/0/</span>
             <a-input-number :disabled="!neo" size="small" style="width: 60px; margin-left: 10px" :step="1" :min="0"
               :precision="0" v-model="neoPathParam" placeholder="0" @change="advancedModeInputChange" />
           </a-radio>
@@ -62,8 +63,10 @@
 
     <div class="mode-line">
       <div class="mode-select">
-        <span v-show="!isAdvancedMode" @click="isAdvancedMode = !isAdvancedMode">Advanced Mode</span>
-        <span v-show="isAdvancedMode" @click="isAdvancedMode = !isAdvancedMode">Normal Mode</span>
+        <span v-show="!isAdvancedMode" @click="isAdvancedMode = !isAdvancedMode">{{ $t('ledgerWallet.advancedMode')
+          }}</span>
+        <span v-show="isAdvancedMode" @click="isAdvancedMode = !isAdvancedMode">{{ $t('ledgerWallet.normalMode')
+          }}</span>
       </div>
     </div>
 
@@ -91,7 +94,10 @@ import _ from "lodash";
 function toggleElement(array, element) {
   // console.log('toggleElement', array, element);
 
-  const index = array.indexOf(element);
+
+  const publicKeyArray = array.map(item => item.publicKey)
+  // const index = array.indexOf(element);
+  const index = publicKeyArray.indexOf(element.publicKey);
   if (index === -1) {
     array.push(element);
   } else {
@@ -296,25 +302,26 @@ export default {
           console.log(err);
           return;
         }
-        // if (accounts && accounts.length > 0) {
-        // dbService.update(
-        //   { address: account.address },
-        //   { $set: { wallet: account } },
-        //   {},
-        //   (err, replaceDoc) => {
-        //     if (err) {
-        //       console.log(err);
-        //       return;
-        //     }
-        //   }
-        // );
-        // } else {
-        dbService.insert(wallet, function (err, newDoc) {
-          if (err) {
-            console.log(err);
-          }
-        });
-        // }
+        if (accounts && accounts.length > 0) {
+          this.$message.warn(this.$t('ledgerWallet.alreadyImported'))
+          // dbService.update(
+          //   { address: account.address },
+          //   { $set: { wallet: account } },
+          //   {},
+          //   (err, replaceDoc) => {
+          //     if (err) {
+          //       console.log(err);
+          //       return;
+          //     }
+          //   }
+          // );
+        } else {
+          dbService.insert(wallet, function (err, newDoc) {
+            if (err) {
+              console.log(err);
+            }
+          });
+        }
       });
 
       sessionStorage.setItem("currentWallet", JSON.stringify(account));
@@ -328,11 +335,10 @@ export default {
     // this.getPublicKey()
     // },
     selectAddress(e) {
+      console.log('selectAddress', e);
       const pk = e.target.value;
-      // console.log('pk', pk);
-
       toggleElement(this.selectPublicKeys, pk);
-      // console.log(this.selectPublicKeys);
+      console.log('this.selectPublicKeys', this.selectPublicKeys);
 
     },
     getAddressFromPubKey(pk) {
@@ -450,6 +456,11 @@ export default {
   margin-left: 10px;
 }
 
+.path {
+  display: inline-block;
+  width: 86px;
+}
+
 .mode-line {
   margin-top: 20px;
   display: flex;
@@ -459,5 +470,7 @@ export default {
 .mode-line .mode-select {
   text-decoration: underline;
   cursor: pointer;
+  color: #909090;
+  font-size: 14px;
 }
 </style>
