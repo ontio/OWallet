@@ -55,8 +55,8 @@
           </a-radio>
         </a-radio-group>
 
-
-        <div>{{ advancedModePublicKey && getAddressFromPubKey(advancedModePublicKey.publicKey) }}</div>
+        <div><a-spin :spinning="advancedModeLoading" /></div>
+        <div v-if="advancedModePublicKey">{{ getAddressFromPubKey(advancedModePublicKey.publicKey) }}</div>
       </div>
     </div>
 
@@ -71,10 +71,10 @@
       <div class="btn-container">
         <a-button type="default" @click="cancel" class="btn-cancel">{{
           $t("importJsonWallet.cancel")
-          }}</a-button>
+        }}</a-button>
         <a-button type="primary" @click="addWallet" class="btn-next" :disabled="addDisable">{{
           $t("importLedgerWallet.next")
-          }}</a-button>
+        }}</a-button>
       </div>
     </div>
   </div>
@@ -136,6 +136,7 @@ export default {
       },
       notNeoPathParam: "",
       neoPathParam: "",
+      advancedModeLoading: false,
       advancedModePublicKey: null,
     };
   },
@@ -147,6 +148,9 @@ export default {
   watch: {
     neo: function (val) {
       this.advancedModePublicKey = null;
+      this.notNeoPathParam = ""
+      this.neoPathParam = ""
+
     }
   },
   methods: {
@@ -284,25 +288,25 @@ export default {
           console.log(err);
           return;
         }
-        if (accounts && accounts.length > 0) {
-          dbService.update(
-            { address: account.address },
-            { $set: { wallet: account } },
-            {},
-            (err, replaceDoc) => {
-              if (err) {
-                console.log(err);
-                return;
-              }
-            }
-          );
-        } else {
-          dbService.insert(wallet, function (err, newDoc) {
-            if (err) {
-              console.log(err);
-            }
-          });
-        }
+        // if (accounts && accounts.length > 0) {
+        // dbService.update(
+        //   { address: account.address },
+        //   { $set: { wallet: account } },
+        //   {},
+        //   (err, replaceDoc) => {
+        //     if (err) {
+        //       console.log(err);
+        //       return;
+        //     }
+        //   }
+        // );
+        // } else {
+        dbService.insert(wallet, function (err, newDoc) {
+          if (err) {
+            console.log(err);
+          }
+        });
+        // }
       });
 
       sessionStorage.setItem("currentWallet", JSON.stringify(account));
@@ -341,11 +345,20 @@ export default {
     async getPkForAdvancedMode() {
       console.log('getPkForAdvancedMode');
 
-      const pk = await this.getPublicKeyForLedger(this.neo ? this.neoPathParam : this.notNeoPathParam)
-      this.advancedModePublicKey = {
-        publicKey: pk,
-        acct: this.neo ? this.neoPathParam : this.notNeoPathParam
+      try {
+        this.advancedModeLoading = true;
+        const pk = await this.getPublicKeyForLedger(this.neo ? this.neoPathParam : this.notNeoPathParam)
+        this.advancedModePublicKey = {
+          publicKey: pk,
+          acct: this.neo ? this.neoPathParam : this.notNeoPathParam
+        }
+        this.advancedModeLoading = false;
+      } catch (error) {
+        console.log(error);
+        this.advancedModeLoading = false;
       }
+
+
     },
     advancedModeInputChange() {
       this.advancedModePublicKey = null;
