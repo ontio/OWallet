@@ -71,10 +71,10 @@
       <div class="btn-container">
         <a-button type="default" @click="cancel" class="btn-cancel">{{
           $t("importJsonWallet.cancel")
-        }}</a-button>
+          }}</a-button>
         <a-button type="primary" @click="addWallet" class="btn-next" :disabled="addDisable">{{
           $t("importLedgerWallet.next")
-        }}</a-button>
+          }}</a-button>
       </div>
     </div>
   </div>
@@ -192,7 +192,7 @@ export default {
       list.forEach(async (pk) => {
         const body = {
           pk: pk.publicKey,
-          neo: this.neo,
+          neo: this.isAdvancedMode && this.neo,
           acct: pk.acct
         }
         const res = await this.$store.dispatch("createLedgerWalletWithPk", body)
