@@ -46,12 +46,12 @@
           <a-radio :style="radioStyle" :value="false">
             <span>44'/1024'/0'/0/</span>
             <a-input-number :disabled="neo" size="small" style="width: 60px; margin-left: 10px" :step="1" :min="0"
-              :precision="0" v-model="notNeoPathParam" placeholder="0" @change="debouncedGetPkForAdvancedMode" />
+              :precision="0" v-model="notNeoPathParam" placeholder="0" @change="advancedModeInputChange" />
           </a-radio>
           <a-radio :style="radioStyle" :value="true">
             <span>44'/888'/0'/0/</span>
             <a-input-number :disabled="!neo" size="small" style="width: 60px; margin-left: 10px" :step="1" :min="0"
-              :precision="0" v-model="neoPathParam" placeholder="0" @change="debouncedGetPkForAdvancedMode" />
+              :precision="0" v-model="neoPathParam" placeholder="0" @change="advancedModeInputChange" />
           </a-radio>
         </a-radio-group>
 
@@ -62,8 +62,8 @@
 
     <div class="mode-line">
       <div class="mode-select">
-        <span v-show="isAdvancedMode" @click="isAdvancedMode = !isAdvancedMode">Advanced Mode</span>
-        <span v-show="!isAdvancedMode" @click="isAdvancedMode = !isAdvancedMode">Normal Mode</span>
+        <span v-show="!isAdvancedMode" @click="isAdvancedMode = !isAdvancedMode">Advanced Mode</span>
+        <span v-show="isAdvancedMode" @click="isAdvancedMode = !isAdvancedMode">Normal Mode</span>
       </div>
     </div>
 
@@ -71,10 +71,10 @@
       <div class="btn-container">
         <a-button type="default" @click="cancel" class="btn-cancel">{{
           $t("importJsonWallet.cancel")
-        }}</a-button>
+          }}</a-button>
         <a-button type="primary" @click="addWallet" class="btn-next" :disabled="addDisable">{{
           $t("importLedgerWallet.next")
-        }}</a-button>
+          }}</a-button>
       </div>
     </div>
   </div>
@@ -142,6 +142,11 @@ export default {
   computed: {
     addDisable() {
       return !(this.label && (this.selectPublicKeys.length > 0 || this.advancedModePublicKey))
+    }
+  },
+  watch: {
+    neo: function (val) {
+      this.advancedModePublicKey = null;
     }
   },
   methods: {
@@ -334,12 +339,18 @@ export default {
       this.getPublicKeyList();
     },
     async getPkForAdvancedMode() {
+      console.log('getPkForAdvancedMode');
+
       const pk = await this.getPublicKeyForLedger(this.neo ? this.neoPathParam : this.notNeoPathParam)
       this.advancedModePublicKey = {
         publicKey: pk,
         acct: this.neo ? this.neoPathParam : this.notNeoPathParam
       }
     },
+    advancedModeInputChange() {
+      this.advancedModePublicKey = null;
+      this.debouncedGetPkForAdvancedMode()
+    }
   },
 };
 </script>
