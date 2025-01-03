@@ -142,7 +142,15 @@ export default {
   },
   computed: {
     addDisable() {
-      return !(this.label && (this.selectPublicKeys.length > 0 || this.advancedModePublicKey))
+      if (!this.label) {
+        return true;
+      }
+      if (this.isAdvancedMode === false) {
+        return this.selectPublicKeys.length === 0 ? true : false;
+      }
+      else {
+        return this.advancedModePublicKey === null ? true : false;
+      }
     }
   },
   watch: {
