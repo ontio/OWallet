@@ -38,6 +38,7 @@ const actions = {
                 address,
                 neo: body.neo || false,
                 acct:body.acct,
+                timestamp: new Date().getTime(),
             }
         return ledgerWallet;
     }
