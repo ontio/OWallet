@@ -133,7 +133,14 @@ export default {
       hardwareWallet: state => state.Wallets.HardwareWallet
     }),
     hardwareWalletSort() {
-      return this.hardwareWallet.toSorted((a, b) => b.timestamp - a.timestamp)
+      return this.hardwareWallet.toSorted((a, b) => {
+        if (b.timestamp !== a.timestamp) {
+          return b.timestamp - a.timestamp;
+        } else {
+          return b.acct - a.acct;
+        }
+
+      });
     }
   },
   mounted() {

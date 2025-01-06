@@ -40,7 +40,7 @@
       </div>
       <div v-show="isAdvancedMode">
         <div class="font-bold" style="margin-bottom: 15px">
-          请输入路径以导入您想要查看的账户
+          {{ $t('ledgerWallet.specifyPath') }}
         </div>
 
         <a-radio-group v-model="neo">
@@ -74,10 +74,10 @@
       <div class="btn-container">
         <a-button type="default" @click="cancel" class="btn-cancel">{{
           $t("importJsonWallet.cancel")
-          }}</a-button>
+        }}</a-button>
         <a-button type="primary" @click="addWallet" class="btn-next" :disabled="addDisable">{{
           $t("importLedgerWallet.next")
-          }}</a-button>
+        }}</a-button>
       </div>
     </div>
   </div>

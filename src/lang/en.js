@@ -461,6 +461,7 @@ export default {
     normalMode:'Normal Mode',
     advancedMode:'Advanced Mode',
     alreadyImported:"Some selected accounts already imported",
+    specifyPath:"Please select and specify the path to import the account",
   },
 
   ledgerStatus: {

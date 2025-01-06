@@ -459,7 +459,7 @@ export default {
     normalMode:'普通模式',
     advancedMode:'高级模式',
     alreadyImported:"部分选中账户已导入",
-
+    specifyPath:"请选择并指定导入帐户的路径",
   },
   ledgerStatus: {
     NOT_FOUND: 'Ledger没有打开',
