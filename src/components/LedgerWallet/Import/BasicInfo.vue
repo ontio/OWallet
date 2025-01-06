@@ -74,10 +74,10 @@
       <div class="btn-container">
         <a-button type="default" @click="cancel" class="btn-cancel">{{
           $t("importJsonWallet.cancel")
-        }}</a-button>
+          }}</a-button>
         <a-button type="primary" @click="addWallet" class="btn-next" :disabled="addDisable">{{
           $t("importLedgerWallet.next")
-        }}</a-button>
+          }}</a-button>
       </div>
     </div>
   </div>
@@ -203,6 +203,17 @@ export default {
       let list = this.isAdvancedMode ? [this.advancedModePublicKey] : this.selectPublicKeys;
       list.sort((a, b) => a.acct - b.acct);
 
+      // Check if it has been imported.
+      dbService.find({ 'wallet.publicKey': { $in: list.map(item => item.publicKey) } }, (err, accounts) => {
+        if (err) {
+          console.log(err);
+          return;
+        }
+        if (accounts && accounts.length > 0) {
+          this.$message.warn(this.$t('ledgerWallet.alreadyImported'))
+        }
+      })
+
       list.forEach(async (pk) => {
         const body = {
           pk: pk.publicKey,
@@ -303,7 +314,7 @@ export default {
           return;
         }
         if (accounts && accounts.length > 0) {
-          this.$message.warn(this.$t('ledgerWallet.alreadyImported'))
+          // this.$message.warn(this.$t('ledgerWallet.alreadyImported'))
           // dbService.update(
           //   { address: account.address },
           //   { $set: { wallet: account } },
