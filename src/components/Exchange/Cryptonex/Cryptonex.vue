@@ -22,7 +22,7 @@
 <script>
 import Breadcrumb from "../../Breadcrumb";
 const cryptonexURL = "https://wallet.cryptonex.org/member/sign-in";
-const { BrowserWindow } = require("electron").remote;
+const { BrowserWindow } = require('@electron/remote');
 
 export default {
   name: "Cryptonex",

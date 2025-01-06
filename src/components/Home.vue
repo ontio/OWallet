@@ -126,7 +126,7 @@
   import {TEST_NET, MAIN_NET} from '../core/consts'
   import axios from 'axios';
   import pkg from '../../package.json'
-  const {BrowserWindow} = require('electron').remote;
+  const { BrowserWindow } = require('@electron/remote')
   import { open } from '../core/utils'
 import {Modal} from 'ant-design-vue'
   export default {

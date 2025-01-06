@@ -27,7 +27,7 @@
 import Breadcrumb from "../../Breadcrumb";
 const changellyURL =
   "https://widget.changelly.com?currencies=&from=btc&to=ont&amount=1&address=&fiat=true&fixedTo=false&theme=default&ref_id=su5srryl1mhz4fno&merchant_id=su5srryl1mhz4fno";
-const { BrowserWindow } = require("electron").remote;
+const { BrowserWindow } = require('@electron/remote')
 const open = require('open')
 export default {
   name: "Changelly",

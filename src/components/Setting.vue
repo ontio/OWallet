@@ -49,7 +49,7 @@
   import LangStorage from './../core/lang'
   import { TEST_NET_LIST, MAIN_NET_LIST, TEST_NET} from '../core/consts'
   import { validateKeystorePath, validateAddress } from '../core/utils'
-  const {dialog} = require('electron').remote;
+  const {dialog} = require('@electron/remote')
 
 
   export default {

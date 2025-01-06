@@ -17,7 +17,7 @@ import {Crypto, RestClient} from 'ontology-ts-sdk'
 const opn = require('opn')
 const {
     BrowserWindow
-  } = require('electron').remote;
+  } = require('@electron/remote');
 
 const os = require('os')
 const fs = require('fs')

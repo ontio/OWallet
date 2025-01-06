@@ -3,6 +3,7 @@
 import { app, protocol, BrowserWindow, Menu } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
+require('@electron/remote/main').initialize()
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -26,9 +27,13 @@ function createWindow() {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
-      webSecurity: false
+      webSecurity: false,
+      enableRemoteModule: true,
+      // TODO: Expose only necessary modules.
+      contextIsolation: false,
     }
   })
+  require('@electron/remote/main').enable(win.webContents);
 
   const menu = Menu.buildFromTemplate(template)
   Menu.setApplicationMenu(menu)
