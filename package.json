@@ -8,9 +8,9 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service electron:serve",
-    "build": "vue-cli-service electron:build -mlw --x64",
-    "build:mac": "vue-cli-service electron:build -m --x64",
-    "build:linux": "vue-cli-service electron:build -l --x64",
+    "build": "vue-cli-service electron:build -mlw",
+    "build:mac": "vue-cli-service electron:build -m",
+    "build:linux": "vue-cli-service electron:build -l",
     "build:win": "vue-cli-service electron:build -w --x64",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps"
@@ -58,7 +58,7 @@
     "@vue/cli-service": "^4.4.0",
     "babel-eslint": "^10.1.0",
     "babel-plugin-import": "^1.11.0",
-    "electron": "^15.0.0",
+    "electron": "^33.0.0",
     "electron-devtools-installer": "^3.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
