@@ -101,12 +101,12 @@
       </div>
     </div>
 
-    <set-path-modal></set-path-modal>
+    <set-path-modal v-model="showPathModal"></set-path-modal>
   </div>
 </template>
 
 <script>
-import $ from 'jquery'
+// import $ from 'jquery'
 import { mapState } from 'vuex'
 import JsonWalletDetails from './JsonWallet/View/Details'
 import SharedWalletDetails from './SharedWallet/View/Details'
@@ -123,7 +123,8 @@ export default {
     return {
       network: network,
       viewBtn: false,
-      activeTab: index
+      activeTab: index,
+      showPathModal: false,
     }
   },
   computed: {
@@ -150,7 +151,8 @@ export default {
   methods: {
     isSetPath() {
       if (localStorage.getItem('isSavePath') !== 'true') {
-        $("#setPathModal").modal("show")
+        // $("#setPathModal").modal("show")
+        this.showPathModal = true
       }
     },
     ledgerLogin() {

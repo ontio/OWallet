@@ -39,7 +39,7 @@
   import FileHelper from "../../../core/fileHelper"
   import dbService from '../../../core/dbService'
   import {DEFAULT_SCRYPT, TEST_NET, MAIN_NET} from '../../../core/consts'
-  import $ from 'jquery'
+  // import $ from 'jquery'
 import { getNodeUrl, getRestClient, formatScryptParams } from '../../../core/utils';
 
   export default {

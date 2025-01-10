@@ -195,7 +195,7 @@ import { TEST_NET, MAIN_NET, ONT_CONTRACT, ONT_PASS_NODE, DEFAULT_SCRYPT } from 
 import {Crypto, OntAssetTxBuilder, TransactionBuilder, utils, RestClient, TxSignature} from 'ontology-ts-sdk'
 import axios from 'axios';
 import {getDeviceInfo, getPublicKey, checkPublicKeyIsInTheConnectedLedger} from '../../core/ontLedger'
-import $ from 'jquery'
+// import $ from 'jquery'
 import {BigNumber} from 'bignumber.js'
 import { getRestClient } from '../../core/utils'
 

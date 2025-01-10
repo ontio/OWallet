@@ -1,5 +1,5 @@
 <template>
-  <div class="modal modal_wapper fade" id="setPathModal">
+  <div class="modal modal_wapper fade" id="setPathModal" v-if="value">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-title text-center">{{ $t('SetPaths.name') }}</div>
@@ -17,7 +17,7 @@
 </template>
 
 <script>
-  import $ from 'jquery'
+  // import $ from 'jquery'
   import {mapState} from 'vuex'
   import { validateKeystorePath } from '../../core/utils'
 
@@ -28,6 +28,8 @@
     data() {
       return {}
     },
+    props: ['value'],
+    emits: ['input'],
     methods: {
       setSavePath() {
         dialog.showOpenDialog({properties: ['openDirectory', 'createDirectory']}).then(({filePaths}) => {
@@ -43,7 +45,8 @@
           localStorage.setItem('savePath', filePaths[0])
           localStorage.setItem('isSavePath', 'true')
           window.location.reload();//reset dbService
-          $("#setPathModal").modal("hide")
+          this.$emit('input', false)
+          // $("#setPathModal").modal("hide")
         })
       }
     }

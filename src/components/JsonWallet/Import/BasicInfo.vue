@@ -260,7 +260,7 @@
   import FileHelper from "../../../core/fileHelper"
   import dbService from '../../../core/dbService'
   import {DEFAULT_SCRYPT} from '../../../core/consts'
-  import $ from 'jquery'
+  // import $ from 'jquery'
   import {isHexString, convertScryptParams} from '../../../core/utils'
 
   export default {
@@ -369,8 +369,9 @@
       },
       onFileChange() {
         // Custom upload button copywriting.
-        let uploadFile = $("#datFile").val();
-        $(".fileerrorTip").html("").hide();
+        // let uploadFile = $("#datFile").val();
+        // $(".fileerrorTip").html("").hide();
+        let uploadFile=document.getElementById("datFile").value;
         let arr = uploadFile.split('\\');
         let fileName = arr[arr.length - 1];
         this.datPath = this.$t('importJsonWallet.selectedDatFile') + fileName
