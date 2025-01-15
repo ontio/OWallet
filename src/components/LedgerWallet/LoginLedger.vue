@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div id="wrapper">
     <main>
       <div class="left-side">
@@ -52,7 +52,7 @@
       },
       getDevice() {
         getDeviceInfo().then(res => {
-          console.log('device: ' + res)
+          console.log('device: ' , res)
           this.device = res;
           this.getPublicKey()
         }).catch(err => {
@@ -180,4 +180,4 @@
   .backBtn {
     font-size: 16px;
   }
-</style>
+</style> -->

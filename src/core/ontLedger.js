@@ -4,6 +4,7 @@ import { utils, Crypto } from 'ontology-ts-sdk'
 import * as elliptic from 'elliptic';
 import {message} from 'ant-design-vue'
 import i18n from '../lang'
+import OntApp from "../ont_app";
 
 const VALID_STATUS = 0x9000
 const MSG_TOO_BIG = 0x6d08
@@ -65,6 +66,8 @@ export default class OntLedger {
         // if (!supported) { throw new Error(`Your computer does not support the ledger!`) }
         if (!supported) { throw 'NOT_SUPPORT' }
         const paths = await OntLedger.list()
+        console.log('paths', paths);
+        
         // if (paths.length === 0) throw new Error('USB Error: No device found.')
         if (paths.length === 0) throw 'NOT_FOUND'
         const ledger = new OntLedger(paths[0])
@@ -102,13 +105,28 @@ export default class OntLedger {
      * @param {number} [acct] - Account that you want to retrieve the public key from.
      * @return {string} Public Key (Unencoded)
      */
-    async getPublicKey(acct = 0, neo) {
-        const res = await this.send('80040000', BIP44(acct, neo), [VALID_STATUS])
-        const uncompressed = res.toString('hex').substring(0, 130)
-        const ec = new elliptic.ec(Crypto.CurveLabel.SECP256R1.preset);
-        const keyPair = ec.keyFromPublic(uncompressed, 'hex');
-        const compressed = keyPair.getPublic(true, 'hex');
-        return compressed;
+    async getPublicKey(acct = 0, neo= false) {
+        console.log('getPublicKey', acct, neo);
+        const path = neo ? `44'/888'/0'/0/${acct}` : `44'/1024'/0'/0/${acct}`
+        try {
+            console.log('this.device' , this.device);
+            const app = new OntApp(this.device);
+            const res = await app.getPublicKey(path);
+            console.log("res", res);
+            
+                 // const res = await this.send('80040000', BIP44(acct, neo), [VALID_STATUS])
+            const uncompressed = res.toString('hex').substring(0, 130)
+            const ec = new elliptic.ec(Crypto.CurveLabel.SECP256R1.preset);
+            const keyPair = ec.keyFromPublic(uncompressed, 'hex');
+            const compressed = keyPair.getPublic(true, 'hex');
+            console.log('compressed', compressed);
+            
+            return compressed;
+        } catch (error) {
+            console.error('getPublicKey error:', error);
+        }
+       
+   
     }
 
     getDeviceInfo() {
@@ -126,25 +144,25 @@ export default class OntLedger {
      * @param {number[]} statusList - Statuses to return
      * @return {Promise<Buffer>} return value decoded to ASCII string
      */
-    async send(params, msg, statusList) {
-        if (params.length !== 8) throw new Error(`params requires 4 bytes`)
-        // $FlowFixMe
-        const [cla, ins, p1, p2] = params
-            .match(/.{1,2}/g)
-            .map(i => parseInt(i, 16))
-        try {
-            return await this.device.send(
-                cla,
-                ins,
-                p1,
-                p2,
-                Buffer.from(msg, 'hex'),
-                statusList
-            )
-        } catch (err) {
-            throw evalTransportError(err)
-        }
-    }
+    // async send(params, msg, statusList) {
+    //     if (params.length !== 8) throw new Error(`params requires 4 bytes`)
+    //     // $FlowFixMe
+    //     const [cla, ins, p1, p2] = params
+    //         .match(/.{1,2}/g)
+    //         .map(i => parseInt(i, 16))
+    //     try {
+    //         return await this.device.send(
+    //             cla,
+    //             ins,
+    //             p1,
+    //             p2,
+    //             Buffer.from(msg, 'hex'),
+    //             statusList
+    //         )
+    //     } catch (err) {
+    //         throw evalTransportError(err)
+    //     }
+    // }
 
     /**
      * Gets the ECDH signature of the data from Ledger using acct
@@ -152,27 +170,37 @@ export default class OntLedger {
      * @param {number} [acct]
      * @return {Promise<string>}
      */
+    // async getSignature(data, acct = 0, neo = false) {
+    //     data += BIP44(acct, neo)
+    //     let response = null
+    //     const chunks = data.match(/.{1,510}/g) || [];
+    //     if (!chunks.length) throw new Error(`Invalid data provided: ${data}`)
+    //     for (let i = 0; i < chunks.length; i++) {
+    //         const p = i === chunks.length - 1 ? '80' : '00'
+    //         // $FlowFixMe
+    //         const chunk = chunks[i]
+    //         const params = `8002${p}00`
+    //         let [err, res] = await asyncWrap(
+    //             this.send(params, chunk, [VALID_STATUS])
+    //         )
+    //         if (err) throw evalTransportError(err)
+    //         response = res
+    //     }
+    //     if (response === 0x9000) {
+    //         throw new Error(`No more data but Ledger did not return signature!`)
+    //     }
+    //     // $FlowFixMe
+    //     return assembleSignature(response.toString('hex'))
+    // }
     async getSignature(data, acct = 0, neo = false) {
-        data += BIP44(acct, neo)
-        let response = null
-        const chunks = data.match(/.{1,510}/g) || [];
-        if (!chunks.length) throw new Error(`Invalid data provided: ${data}`)
-        for (let i = 0; i < chunks.length; i++) {
-            const p = i === chunks.length - 1 ? '80' : '00'
-            // $FlowFixMe
-            const chunk = chunks[i]
-            const params = `8002${p}00`
-            let [err, res] = await asyncWrap(
-                this.send(params, chunk, [VALID_STATUS])
-            )
-            if (err) throw evalTransportError(err)
-            response = res
+        const path = neo ? `44'/888'/0'/0/${acct}` : `44'/1024'/0'/0/${acct}`
+        try {
+            const app = new OntApp(this.device);
+            const res = await app.signMessage(path, data);
+            return res.toString('hex');
+        } catch (error) {
+            console.error('getSignature error:', error);
         }
-        if (response === 0x9000) {
-            throw new Error(`No more data but Ledger did not return signature!`)
-        }
-        // $FlowFixMe
-        return assembleSignature(response.toString('hex'))
     }
 }
 
@@ -180,31 +208,31 @@ export default class OntLedger {
  * The signature is returned from the ledger in a DER format
  * @param {string} response - Signature in DER format
  */
-const assembleSignature = (response) => {
-    let ss = new utils.StringReader(response)
-    // The first byte is format. It is usually 0x30 (SEQ) or 0x31 (SET)
-    // The second byte represents the total length of the DER module.
-    ss.read(2)
-    // Now we read each field off
-    // Each field is encoded with a type byte, length byte followed by the data itself
-    ss.read(1) // Read and drop the type
-    const r = ss.readNextBytes()
-    ss.read(1)
-    const s = ss.readNextBytes()
+// const assembleSignature = (response) => {
+//     let ss = new utils.StringReader(response)
+//     // The first byte is format. It is usually 0x30 (SEQ) or 0x31 (SET)
+//     // The second byte represents the total length of the DER module.
+//     ss.read(2)
+//     // Now we read each field off
+//     // Each field is encoded with a type byte, length byte followed by the data itself
+//     ss.read(1) // Read and drop the type
+//     const r = ss.readNextBytes()
+//     ss.read(1)
+//     const s = ss.readNextBytes()
 
-    // We will need to ensure both integers are 32 bytes long
-    const integers = [r, s].map(i => {
-        if (i.length < 64) {
-            i = i.padStart(64, '0')
-        }
-        if (i.length > 64) {
-            i = i.substr(-64)
-        }
-        return i
-    })
+//     // We will need to ensure both integers are 32 bytes long
+//     const integers = [r, s].map(i => {
+//         if (i.length < 64) {
+//             i = i.padStart(64, '0')
+//         }
+//         if (i.length > 64) {
+//             i = i.substr(-64)
+//         }
+//         return i
+//     })
 
-    return integers.join('')
-}
+//     return integers.join('')
+// }
 
 export const getPublicKey = async (acct = 0, neo = false) => {
 

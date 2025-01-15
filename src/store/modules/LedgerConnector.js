@@ -14,11 +14,11 @@ function getDevice(commit, state) {
     //     return;
     // }
      getDeviceInfo().then(res => {
-        console.log('device: ' + res)
+        console.log('device: ' , res)
         getLedgerPublicKey(commit, state)
          commit('UPDATE_LEDGER_DEVICE_INFO', {deviceInfo: res});
     }).catch(err => {
-        console.log(err)
+        console.log('21',err)
         commit('UPDATE_LEDGER_PUBLICKEY', { publicKey: '' })
         const ledgerWallet = {
             address: '',
@@ -45,7 +45,7 @@ function getLedgerPublicKey(commit, state) {
         commit('UPDATE_LEDGER_STATUS', { ledgerStatus: formatLedgerStatus('READY') })
         getLedgerWallet(commit, res)
     }).catch(err => {
-        console.log(err.message)
+        console.log('48',err.message)
         commit('UPDATE_LEDGER_STATUS', { ledgerStatus: formatLedgerStatus('NOT_OPEN') })
     })
 }
