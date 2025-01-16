@@ -75,7 +75,7 @@
         <a-button type="default" @click="cancel" class="btn-cancel">{{
           $t("importJsonWallet.cancel")
           }}</a-button>
-        <a-button type="primary" @click="addWallet" class="btn-next" :disabled="addDisable">{{
+        <a-button type="primary" @click="addWallet" class="btn-next" >{{
           $t("importLedgerWallet.next")
           }}</a-button>
       </div>
@@ -169,6 +169,10 @@ export default {
   },
   methods: {
     async addWallet() {
+      if(this.addDisable){
+        this.$message.warn(this.$t('ledgerWallet.pleaseSelectWallet'))
+        return;
+      }
       // if(!this.label) {
       //   this.$message.error(this.$t('ledgerWallet.labelEmpty'))
       //   return;

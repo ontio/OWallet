@@ -460,6 +460,7 @@ export default {
     advancedMode:'高级模式',
     alreadyImported:"部分选中账户已导入",
     specifyPath:"请选择并指定导入帐户的路径",
+    pleaseSelectWallet:"请选择想导入的钱包并输入名称",
   },
   ledgerStatus: {
     NOT_FOUND: 'Ledger没有打开',
