@@ -159,6 +159,13 @@ export default {
 						value: i.address
 					});
 				});
+                list2.sort((a,b)=>{
+					if (b.timestamp !== a.timestamp) {
+						return b.timestamp - a.timestamp;
+					} else {
+						return b.acct - a.acct;
+					}
+				})
 
 				return [...list1, ...list2];
 			}

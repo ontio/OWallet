@@ -169,6 +169,13 @@ export default {
 						value: i.publicKey
 					});
 				});
+				list2.sort((a,b)=>{
+					if (b.timestamp !== a.timestamp) {
+						return b.timestamp - a.timestamp;
+					} else {
+						return b.acct - a.acct;
+					}
+				})
 
 				const list = [...list1, ...list2]
 
