@@ -35,19 +35,19 @@ const evalTransportError = err => {
     return err
 }
 
-const BIP44 = (acct = 0, neo = false) => {
-    const acctNumber = acct.toString(16)
-    const coinType = neo ? '80000378' : '80000400';
+// const BIP44 = (acct = 0, neo = false) => {
+//     const acctNumber = acct.toString(16)
+//     const coinType = neo ? '80000378' : '80000400';
 
-    return (
-        '8000002C' +
-        coinType +
-        '80000000' +
-        '00000000' +
-        '0'.repeat(8 - acctNumber.length) +
-        acctNumber
-    )
-}
+//     return (
+//         '8000002C' +
+//         coinType +
+//         '80000000' +
+//         '00000000' +
+//         '0'.repeat(8 - acctNumber.length) +
+//         acctNumber
+//     )
+// }
 
 export default class OntLedger {
     path;
@@ -123,7 +123,7 @@ export default class OntLedger {
             
             return compressed;
         } catch (error) {
-            console.error('getPublicKey error:', error);
+            throw evalTransportError(error)
         }
        
    
@@ -199,7 +199,7 @@ export default class OntLedger {
             const res = await app.signMessage(path, data);
             return res.toString('hex');
         } catch (error) {
-            console.error('getSignature error:', error);
+            throw evalTransportError(error)
         }
     }
 }
