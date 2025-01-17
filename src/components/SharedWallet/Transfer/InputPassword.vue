@@ -206,7 +206,7 @@ export default {
                 const txData = tx.serializeUnsignedData();
                 let res;
                 try {
-                    res = await legacySignWithLedger(txData)
+                    res = await legacySignWithLedger(txData,this.sponsorWallet.wallet.neo,this.sponsorWallet.wallet.acct)
                 } catch(err) {
                     this.ledgerStatus = '';
                       this.$store.dispatch('hideLoadingModals')
