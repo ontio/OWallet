@@ -155,7 +155,9 @@ export default {
                     const txData = tx.serializeUnsignedData();
                     let res;
                     try {
-                        res = await legacySignWithLedger(txData)
+                        console.log('this.currentSigner',this.currentSigner);
+                        
+                        res = await legacySignWithLedger(txData,this.currentSigner.neo, this.currentSigner.acct)
                     } catch(err) {
                         this.ledgerStatus = '';
                         this.$store.dispatch('hideLoadingModals')
