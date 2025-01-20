@@ -33,6 +33,9 @@
 										@change="onSelectOperationWallet"
 										:placeholder="$t('nodeApply.selectOperationWallet')">
 									</a-select>
+									<p class="ledger-warning" v-show="ledgerList.some((wallet) => wallet.publicKey === operationWallet)">
+										<a-icon :style="{ color: 'red' }" type="close-circle" /> {{$t('nodeApply.unsupportedLedger')}}
+									</p>
 								</a-tab-pane>
 								<a-tab-pane key="2" :tab="$t('nodeApply.enterOperationPk')" >
 									<a-input v-model="operationPk"
@@ -111,6 +114,7 @@ import SelectWallet from "../../Common/SelectWallet";
 import { Crypto, GovernanceTxBuilder } from "ontology-ts-sdk";
 import SignSendTx from '../../Common/SignSendTx'
 import { open, varifyPositiveInt } from '../../../core/utils'
+import { mapState } from 'vuex'
 
 export default {
 	name: "NodeApply",
@@ -139,6 +143,9 @@ export default {
 		this.$store.dispatch("fetchWalletsFromDb");
 	},
 	computed: {
+		...mapState({
+			ledgerList:state=>state.Wallets.HardwareWallet,
+		}),
 		normalWallet: {
 			get() {
 				const list = this.$store.state.Wallets.NormalWallet.slice();
@@ -371,5 +378,11 @@ export default {
 		text-decoration: underline;
 		cursor: pointer;
 	}
+}
+.ledger-warning{
+	margin-top: 8px;
+	display: flex;
+	align-items: center;
+	column-gap: 6px;
 }
 </style>

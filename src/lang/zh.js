@@ -716,7 +716,9 @@ export default {
     stakeAmountRequired: '质押金额是必需的',
     minStateAmount: '质押金额至少是10,000 ONT',
     proxyServiceTip: '本体社区提供了节点代运营服务。',
-    proxyServiceLink: '点击这里查看详情。'
+    proxyServiceLink: '点击这里查看详情。',
+    unsupportedLedger:"节点启动时，暂不支持选择Ledger硬件钱包作为运营钱包",
+
   },
   myNode: {
     myNode: '我的节点',
