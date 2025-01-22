@@ -262,13 +262,7 @@ export default {
             this.$router.push({name: 'StakeHistory'})
         },
         toQuestion() {
-            const lang = localStorage.getItem("user_lang");
-            let url = "";
-            if (lang === "zh") {
-                url = "https://medium.com/ontology-cn/owallet%E8%8A%82%E7%82%B9%E8%B4%A8%E6%8A%BC%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98-efc3d7d84e3e";
-            } else {
-                url = "https://medium.com/ontologynetwork/owallet-stake-authorization-faq-4a4bce224122";
-            }
+            let url = "https://medium.com/ontologynetwork/owallet-stake-authorization-faq-4a4bce224122";
 
             open(url)
         }

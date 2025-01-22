@@ -293,10 +293,10 @@ export default {
         onLater() {
             this.$router.push({name: 'MyNode'})
 		},
-		onProxyLink() {
-			const url = 'http://triones-node.store.ont.io/'
-			open(url)
-		},
+		// onProxyLink() {
+		// 	const url = 'http://triones-node.store.ont.io/'
+		// 	open(url)
+		// },
 		validateAmount() {
 
 			if(this.stakeAmount && !varifyPositiveInt(this.stakeAmount)) {
