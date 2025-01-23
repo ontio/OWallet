@@ -1,0 +1,66 @@
+name: Release on Tag
+
+on:
+  push:
+    tags:
+      - '*' # Listen for any tag push events
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Check out the code
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Set up Node.js and Yarn environment
+    - name: Setup Node.js and Yarn
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+        cache: 'yarn'
+
+    # Install dependencies
+    - name: Install dependencies
+      run: |
+        yarn install
+
+    # Build all packages (macOS, Linux, and Windows)
+    - name: Build packages
+      run: |
+        yarn build
+
+    # Upload all generated artifacts
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: all-builds
+        path: |
+          dist_electron/*.dmg
+          dist_electron/*.AppImage
+          dist_electron/*.exe
+
+    # Create a GitHub Release
+    - name: Create Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref_name }}
+        release_name: Release ${{ github.ref_name }}
+        body: |
+          New release with builds for macOS, Linux, and Windows!
+        draft: false
+        prerelease: false
+
+    # Upload all generated files to the GitHub Release
+    - name: Upload Release Assets
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: dist_electron/*.*
+        asset_name: ${{ basename(env.asset_path) }}
+        asset_content_type: application/octet-stream
