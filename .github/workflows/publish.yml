@@ -39,7 +39,6 @@ jobs:
       run: |
         yarn build:mac
 
-    # # Build all packages (macOS, Linux, and Windows)
     - name: Build Windows App
       # if: matrix.os == 'windows-latest'
       run: |
@@ -67,8 +66,9 @@ jobs:
     - name: Generate Checksums
       run: |
         brew install coreutils
-        #echo "# Release ${{ github.ref_name }}" > CHECKSUMS.md
+        #echo "# OWallet ${{ github.ref_name }}" > CHECKSUMS.md
         echo "" > CHECKSUMS.md
+        echo "Current Tag: $(git describe --tags --abbrev=0)" >> CHECKSUMS.md
         echo "## SHA256 Checksums" >> CHECKSUMS.md
         echo "| File | SHA256 Checksum |" >> CHECKSUMS.md
         echo "|------|----------------|" >> CHECKSUMS.md
@@ -81,8 +81,6 @@ jobs:
         echo "| $(ls dist_electron/OWallet-*.exe | sed -e 's#dist_electron/##') | \`$(sha256sum dist_electron/OWallet-*.exe | cut -d " " -f1)\` |" >> CHECKSUMS.md
         echo "| $(ls dist_electron/OWallet-*.AppImage | sed -e 's#dist_electron/##') | \`$(sha256sum dist_electron/OWallet-*.AppImage | cut -d " " -f1)\` |" >> CHECKSUMS.md
         echo "| $(ls dist_electron/OWallet-*.dmg | sed -e 's#dist_electron/##') | \`$(sha256sum dist_electron/OWallet-*.dmg | cut -d " " -f1)\` |" >> CHECKSUMS.md
-
-
 
     - name: Create Release v2
       uses: softprops/action-gh-release@v1
