@@ -7,7 +7,15 @@ on:
 
 jobs:
   build-and-release:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
+
+    # permissions: # Add this permissions block
+    #   contents: write
+    #   packages: write
+    #   issues: write
+    #   pull-requests: write
+
+    permissions: write-all
 
     steps:
     # Check out the code
@@ -26,41 +34,73 @@ jobs:
       run: |
         yarn install
 
-    # Build all packages (macOS, Linux, and Windows)
-    - name: Build packages
+    # # Build all packages (macOS, Linux, and Windows)
+    - name: Build macos packages
       run: |
-        yarn build
+        yarn build:mac
 
-    # Upload all generated artifacts
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v3
+    # # Build all packages (macOS, Linux, and Windows)
+    - name: Build Windows App
+      # if: matrix.os == 'windows-latest'
+      run: |
+        yarn build:win
+
+    - name: Build Linux App
+      # if: matrix.os == 'ubuntu-latest'
+      run: |
+        yarn build:linux
+
+    # - name: Create Release v1
+    #   id: create_release
+    #   uses: actions/create-release@latest
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+    #   with:
+    #     tag_name: ${{ github.ref }}
+    #     release_name: Release ${{ github.ref }}
+    #     body: |
+    #       Change Log
+    #       - TODO
+    #     draft: false
+    #     prerelease: false
+
+    - name: Generate Checksums
+      run: |
+        brew install coreutils
+        #echo "# Release ${{ github.ref_name }}" > CHECKSUMS.md
+        echo "" > CHECKSUMS.md
+        echo "## SHA256 Checksums" >> CHECKSUMS.md
+        echo "| File | SHA256 Checksum |" >> CHECKSUMS.md
+        echo "|------|----------------|" >> CHECKSUMS.md
+        # find dist_electron/ -type f -name OWallet\*.AppImage -o -name OWallet\*.dmg -o -name OWallet\*.exe -o -name OWallet\*.deb -exec sh -c '
+        #   for file; do
+        #     echo "| $(basename "$file") | \`$(sha256sum "$file" | cut -d " " -f1)\` |" >> CHECKSUMS.md
+        #   done
+        # ' sh {} +
+        echo "| $(ls dist_electron/OWallet-*.deb | sed -e 's#dist_electron/##') | \`$(sha256sum dist_electron/OWallet-*.deb | cut -d " " -f1)\` |" >> CHECKSUMS.md
+        echo "| $(ls dist_electron/OWallet-*.exe | sed -e 's#dist_electron/##') | \`$(sha256sum dist_electron/OWallet-*.exe | cut -d " " -f1)\` |" >> CHECKSUMS.md
+        echo "| $(ls dist_electron/OWallet-*.AppImage | sed -e 's#dist_electron/##') | \`$(sha256sum dist_electron/OWallet-*.AppImage | cut -d " " -f1)\` |" >> CHECKSUMS.md
+        echo "| $(ls dist_electron/OWallet-*.dmg | sed -e 's#dist_electron/##') | \`$(sha256sum dist_electron/OWallet-*.dmg | cut -d " " -f1)\` |" >> CHECKSUMS.md
+
+
+
+    - name: Create Release v2
+      uses: softprops/action-gh-release@v1
       with:
-        name: all-builds
-        path: |
-          dist_electron/*.dmg
+        name: Release ${{ github.ref_name }}
+        body_path: CHECKSUMS.md
+        files: |
+          dist_electron/*.deb
           dist_electron/*.AppImage
+          dist_electron/*.dmg
           dist_electron/*.exe
 
-    # Create a GitHub Release
-    - name: Create Release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref_name }}
-        release_name: Release ${{ github.ref_name }}
-        body: |
-          New release with builds for macOS, Linux, and Windows!
-        draft: false
-        prerelease: false
-
-    # Upload all generated files to the GitHub Release
-    - name: Upload Release Assets
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: dist_electron/*.*
-        asset_name: ${{ basename(env.asset_path) }}
-        asset_content_type: application/octet-stream
+            
+    # - name: Release with attachment
+    #   uses: softprops/action-gh-release@v1
+    #   if: startsWith(github.ref, 'refs/tags/')
+    #   with:
+    #     files: |
+    #       dist_electron/*.deb
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

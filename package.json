@@ -8,10 +8,10 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service electron:serve",
-    "build": "vue-cli-service electron:build -mlw",
-    "build:mac": "vue-cli-service electron:build -m",
-    "build:linux": "vue-cli-service electron:build -l",
-    "build:win": "vue-cli-service electron:build -w",
+    "build": "vue-cli-service electron:build -mlw --publish=never",
+    "build:mac": "vue-cli-service electron:build -m --publish=never",
+    "build:linux": "vue-cli-service electron:build -l --publish=never",
+    "build:win": "vue-cli-service electron:build -w --publish=never",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps"
   },
