@@ -3,7 +3,7 @@
 
 
 <h1 align="center">OWallet - a comprehensive Ontology desktop wallet</h1>
-<h4 align="center">Version 0.10.0</h4>
+<h4 align="center">Version 0.11.0</h4>
 
 ## Introduction
 
