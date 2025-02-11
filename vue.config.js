@@ -37,9 +37,16 @@ module.exports = {
         },
         mac: {
           icon: 'src/assets/icons/icon.icns',
-          artifactName: '${productName}-${version}.${ext}'
-        }
+          artifactName: '${productName}-${version}.${ext}',
+          hardenedRuntime: true,
+          // gatekeeperAssess: false,
+          // entitlements: 'build/entitlements.mac.plist',
+          // entitlementsInherit: 'build/entitlements.mac.plist',
+          identity:null,
+        },
+        //  afterSign: "build/notarize.js"
       },
+    
     }
   },
   css: {
