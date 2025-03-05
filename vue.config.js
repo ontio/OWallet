@@ -36,8 +36,12 @@ module.exports = {
           artifactName: '${productName}-${version}.${ext}'
         },
         mac: {
+          target: [{
+            target: 'dmg',
+            arch: ['x64', 'arm64'] 
+          }],
           icon: 'src/assets/icons/icon.icns',
-          artifactName: '${productName}-${version}.${ext}'
+          artifactName: '${productName}-${version}-${arch}.${ext}'
         }
       },
     }
