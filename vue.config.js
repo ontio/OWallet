@@ -5,7 +5,7 @@ module.exports = {
       externals: ['node-hid', 'usb', 'nedb'],
       builderOptions: {
         productName: process.env.VUE_APP_TITLE,
-        appId: 'org.ont.wallet',
+        appId: 'com.ontio.owallet',
         nsis: {
           oneClick: false,
           perMachine: true,
