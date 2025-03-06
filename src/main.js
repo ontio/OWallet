@@ -9,7 +9,7 @@ import store from './store'
 
 import 'font-awesome/css/font-awesome.css'
 import {Button, message, Steps, Input ,Form, Icon, Select, Spin, Alert, Modal, Slider,Radio, Pagination,Switch, DatePicker, TimePicker,
-  Row, Col, InputNumber, Layout, Menu, Breadcrumb, Checkbox, Tooltip, Table, Dropdown, Card, Tabs } from 'ant-design-vue'
+  Row, Col, InputNumber, Layout, Menu, Breadcrumb, Checkbox, Tooltip, Table, Dropdown, Card, Tabs,Space } from 'ant-design-vue'
 
 import VueClipboard from 'vue-clipboard2'
 VueClipboard.config.autoSetContainer = true // add this line
@@ -92,6 +92,7 @@ Vue.component(DatePicker.name, DatePicker)
 Vue.component(TimePicker.name, TimePicker)
 Vue.use(Tabs)
 Vue.use(Checkbox)
+Vue.use(Space)
 
 Vue.prototype.$message = message
 Vue.prototype.$confirm = Modal.confirm
