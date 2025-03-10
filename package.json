@@ -1,7 +1,7 @@
 {
   "name": "owallet",
   "homepage": "http://ont.io",
-  "version": "v0.10.0",
+  "version": "v0.11.0",
   "author": "Ontology Foundation Ltd. <devops@ont.io>",
   "description": "OWallet is a comprehensive Ontology desktop wallet",
   "license": "Apache-2.0",
@@ -23,7 +23,7 @@
     "ant-design-vue": "^1.1.9",
     "axios": "^0.21.1",
     "bignumber.js": "^7.2.1",
-    "bootstrap": "^4.1.1",
+    "bootstrap": "^5.0.0",
     "clipboard": "^2.0.1",
     "core-js": "^3.6.5",
     "dateformat": "^3.0.3",
