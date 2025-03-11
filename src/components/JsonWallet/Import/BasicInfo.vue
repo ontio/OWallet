@@ -1,6 +1,7 @@
 <style scoped>
 .json-import-container {
   width: 48rem;
+  padding-bottom: 100px;
 }
 
 .import-json-nav-pills>li.nav-item {
@@ -382,11 +383,13 @@ export default {
       let uploadFile = document.getElementById("datFile").value;
       let arr = uploadFile.split('\\');
       let fileName = arr[arr.length - 1];
-      this.datPath = this.$t('importJsonWallet.selectedDatFile') + fileName
-
       let files = document.getElementById("datFile").files
       this.dat = files[0]
       console.log('this.dat', this.dat);
+      if (!this.dat) {
+        return
+      }
+      this.datPath = this.$t('importJsonWallet.selectedDatFile') + fileName
 
       FileHelper.readWalletFile(this.dat).then(res => {
         console.log('res', res);
@@ -464,7 +467,7 @@ export default {
 
       });
       this.$store.dispatch('hideLoadingModals')
-      this.$message.success(`共导入${successAmount}个钱包`)
+      this.$message.success(`A total of ${this.datWallet.accounts.length - successAmount} addresses failed to import.`)
 
     },
     importAccountForWif() {

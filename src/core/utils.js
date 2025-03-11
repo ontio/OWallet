@@ -76,7 +76,7 @@ export function getNodeUrl() {
     }
     // const node = localStorage.getItem('nodeAddress') || MAIN_NET_LIST[0]
     // node = 'http://172.168.3.151'
-    return node + ':10334';
+    return node + ':20334';
 }
 
 export function getRestClient() {
