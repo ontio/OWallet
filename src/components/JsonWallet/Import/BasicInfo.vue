@@ -434,7 +434,7 @@ export default {
     },
 
     importAccountForDat() {
-      let successAmount = 0;
+      let faildAmount = 0;
       console.log('this.datWallet', this.datWallet);
 
       this.datWallet.accounts.forEach((account, index) => {
@@ -460,15 +460,15 @@ export default {
           this.saveToDb(account);
         } catch (err) {
           console.log(err)
+          faildAmount++
           return;
         }
-        successAmount++
-
 
       });
       this.$store.dispatch('hideLoadingModals')
-      this.$message.success(`A total of ${this.datWallet.accounts.length - successAmount} addresses failed to import.`)
-
+      if(faildAmount > 0) {
+        this.$message.error(this.$t('importJsonWallet.importFailed',{amount: faildAmount}))
+      }
     },
     importAccountForWif() {
       let privateKey;

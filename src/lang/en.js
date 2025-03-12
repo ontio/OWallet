@@ -213,7 +213,8 @@ export default {
     saveDbFailed: 'Save to keystore failed. Please try later.',
     invalidPrivateKey: 'Please enter valid private key.',
     setPassword: 'Set password',
-    importFirstDefault: 'Will only import the default wallet or the first wallet in the .dat file'
+    importFirstDefault: 'Will only import the default wallet or the first wallet in the .dat file',
+    importFailed:'Incorrect password, {amount} wallet(s) failed to import'
   },
 
   createSharedWallet: {
