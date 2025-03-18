@@ -68,7 +68,7 @@ jobs:
         brew install coreutils
         #echo "# OWallet ${{ github.ref_name }}" > CHECKSUMS.md
         echo "" > CHECKSUMS.md
-        echo "Current Tag: $(git describe --tags --abbrev=0)" >> CHECKSUMS.md
+        echo "CHANGELOG: $(git log -1 --format=%s ${{ github.ref_name }})" >> CHECKSUMS.md
         echo "## SHA256 Checksums" >> CHECKSUMS.md
         echo "| File | SHA256 Checksum |" >> CHECKSUMS.md
         echo "|------|----------------|" >> CHECKSUMS.md
@@ -80,7 +80,9 @@ jobs:
         echo "| $(ls dist_electron/OWallet-*.deb | sed -e 's#dist_electron/##') | \`$(sha256sum dist_electron/OWallet-*.deb | cut -d " " -f1)\` |" >> CHECKSUMS.md
         echo "| $(ls dist_electron/OWallet-*.exe | sed -e 's#dist_electron/##') | \`$(sha256sum dist_electron/OWallet-*.exe | cut -d " " -f1)\` |" >> CHECKSUMS.md
         echo "| $(ls dist_electron/OWallet-*.AppImage | sed -e 's#dist_electron/##') | \`$(sha256sum dist_electron/OWallet-*.AppImage | cut -d " " -f1)\` |" >> CHECKSUMS.md
-        echo "| $(ls dist_electron/OWallet-*.dmg | sed -e 's#dist_electron/##') | \`$(sha256sum dist_electron/OWallet-*.dmg | cut -d " " -f1)\` |" >> CHECKSUMS.md
+        for dmg in dist_electron/OWallet-*.dmg; do
+          echo "| $(basename "$dmg") | \`$(sha256sum "$dmg" | cut -d " " -f1)\` |" >> CHECKSUMS.md
+        done
 
     - name: Create Release v2
       uses: softprops/action-gh-release@v1

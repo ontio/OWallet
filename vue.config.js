@@ -19,7 +19,7 @@ module.exports = {
             }
           ],
           icon: 'src/assets/icons/icon.ico',
-          artifactName: '${productName}-${version}.${ext}'
+          artifactName: '${productName}-${version}-${os}.${ext}'
         },
         linux: {
           target: [
@@ -33,7 +33,7 @@ module.exports = {
             }
           ],
           icon: 'src/assets/icons',
-          artifactName: '${productName}-${version}.${ext}'
+          artifactName: '${productName}-${version}-${os}.${ext}'
         },
         mac: {
           target: [{
@@ -41,7 +41,7 @@ module.exports = {
             arch: ['x64', 'arm64'] 
           }],
           icon: 'src/assets/icons/icon.icns',
-          artifactName: '${productName}-${version}-${arch}.${ext}'
+          artifactName: '${productName}-${version}-${os}-${arch}.${ext}'
         }
       },
     }
