@@ -50,7 +50,9 @@ export default {
     txFailed: '该交易在区块链上失败。',
     availableNewVersion: '有新版本可用。为了获得更好的使用体验，请升级OWallet。',
     toUpdate: '立即升级',
-    cancel: '取消'
+    cancel: '取消',
+    transactionFailed: '交易失败',
+    rejectedByUser: '用户拒绝'
   },
 
   FormField: {

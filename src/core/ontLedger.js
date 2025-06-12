@@ -4,6 +4,7 @@ import { utils, Crypto } from 'ontology-ts-sdk'
 import * as elliptic from 'elliptic';
 import {message} from 'ant-design-vue'
 import i18n from '../lang'
+import OntLedgerNew from './ontLedgerNew'
 
 const VALID_STATUS = 0x9000
 const MSG_TOO_BIG = 0x6d08
@@ -34,8 +35,12 @@ const evalTransportError = err => {
     return err
 }
 
-const BIP44 = (acct = 0, neo = false) => {
+const BIP44 = (acct = 0, neo = false, usePath = false) => {
     const acctNumber = acct.toString(16)
+    if (usePath) {
+        const coinType = neo ? 888 : 1024;  // NEO 或 ONT 的币种类型
+        return `44'/${coinType}'/0'/0/${acct}`;
+    }
     const coinType = neo ? '80000378' : '80000400';
 
     return (
@@ -103,11 +108,15 @@ export default class OntLedger {
      * @return {string} Public Key (Unencoded)
      */
     async getPublicKey(acct = 0, neo) {
-        const res = await this.send('80040000', BIP44(acct, neo), [VALID_STATUS])
-        const uncompressed = res.toString('hex').substring(0, 130)
+        const ledger = new OntLedgerNew(this.device)
+        const uncompressed = await ledger.getPublicKey(BIP44(acct, neo, true))
+
+        // const res = await this.send('80040000', BIP44(acct, neo), [VALID_STATUS])
+        // const uncompressed = res.toString('hex').substring(0, 130)
         const ec = new elliptic.ec(Crypto.CurveLabel.SECP256R1.preset);
         const keyPair = ec.keyFromPublic(uncompressed, 'hex');
         const compressed = keyPair.getPublic(true, 'hex');
+        console.log("compressed", compressed);
         return compressed;
     }
 
@@ -153,26 +162,30 @@ export default class OntLedger {
      * @return {Promise<string>}
      */
     async getSignature(data, acct = 0, neo = false) {
-        data += BIP44(acct, neo)
-        let response = null
-        const chunks = data.match(/.{1,510}/g) || [];
-        if (!chunks.length) throw new Error(`Invalid data provided: ${data}`)
-        for (let i = 0; i < chunks.length; i++) {
-            const p = i === chunks.length - 1 ? '80' : '00'
-            // $FlowFixMe
-            const chunk = chunks[i]
-            const params = `8002${p}00`
-            let [err, res] = await asyncWrap(
-                this.send(params, chunk, [VALID_STATUS])
-            )
-            if (err) throw evalTransportError(err)
-            response = res
-        }
-        if (response === 0x9000) {
-            throw new Error(`No more data but Ledger did not return signature!`)
-        }
-        // $FlowFixMe
-        return assembleSignature(response.toString('hex'))
+        const ledger = new OntLedgerNew(this.device)
+        const res = await ledger.signMessage(BIP44(acct, neo, true), data)
+        return res;
+        // old logic
+        // data += BIP44(acct, neo)
+        // let response = null
+        // const chunks = data.match(/.{1,510}/g) || [];
+        // if (!chunks.length) throw new Error(`Invalid data provided: ${data}`)
+        // for (let i = 0; i < chunks.length; i++) {
+        //     const p = i === chunks.length - 1 ? '80' : '00'
+        //     // $FlowFixMe
+        //     const chunk = chunks[i]
+        //     const params = `8002${p}00`
+        //     let [err, res] = await asyncWrap(
+        //         this.send(params, chunk, [VALID_STATUS])
+        //     )
+        //     if (err) throw evalTransportError(err)
+        //     response = res
+        // }
+        // if (response === 0x9000) {
+        //     throw new Error(`No more data but Ledger did not return signature!`)
+        // }
+        // // $FlowFixMe
+        // return assembleSignature(response.toString('hex'))
     }
 }
 
@@ -207,7 +220,6 @@ const assembleSignature = (response) => {
 }
 
 export const getPublicKey = async (acct = 0, neo = false) => {
-
     const ledger = await OntLedger.init()
     try {
         return await ledger.getPublicKey(acct, neo)

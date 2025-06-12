@@ -271,7 +271,8 @@ export default {
           this.publicKey = res
           this.ledgerStatus = this.$t('common.readyToSubmit')
         }).catch(err => {
-          this.ledgerStatus = err.message
+          this.ledgerStatus = this.$t('common.pluginDevice');
+          // this.ledgerStatus = err.message
         })
       },
       sendTx(tx){

@@ -50,7 +50,9 @@ export default {
     txFailed: 'Transaction failed',
     availableNewVersion: 'A new version is available. In order to get a better user experience, please upgrade OWallet.',
     toUpdate: 'Upgrade now',
-    cancel: 'Cancel'
+    cancel: 'Cancel',
+    transactionFailed: 'Transaction failed',
+    rejectedByUser: 'Rejected by user'
   },
 
   FormField: {

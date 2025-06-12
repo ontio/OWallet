@@ -88,7 +88,7 @@ import {OntAssetTxBuilder, Crypto, TransactionBuilder, Transaction, RestClient, 
 import {ONT_PASS_NODE, ONT_PASS_NODE_PRD, ONT_PASS_URL, DEFAULT_SCRYPT, TEST_NET, MAIN_NET} from '../../../core/consts'
 import axios from 'axios'
 import dbService from '../../../core/dbService'
-import {legacySignWithLedger} from '../../../core/ontLedger'
+import {legacySignWithLedger, checkPublicKeyIsInTheConnectedLedger} from '../../../core/ontLedger'
 import { getRestClient } from '../../../core/utils';
 
 export default {
@@ -156,12 +156,12 @@ export default {
                     let res;
                     try {
                         console.log('this.currentSigner',this.currentSigner);
-                        
+                        await checkPublicKeyIsInTheConnectedLedger(this.currentSigner.acct, this.currentSigner.neo, this.currentSigner.publicKey);
                         res = await legacySignWithLedger(txData,this.currentSigner.neo, this.currentSigner.acct)
                     } catch(err) {
                         this.ledgerStatus = '';
                         this.$store.dispatch('hideLoadingModals')
-                        alert(err.message)
+                        alert(typeof err === 'string' ? err : err.message)
                         return;
                     }
                     const sig = new TxSignature();

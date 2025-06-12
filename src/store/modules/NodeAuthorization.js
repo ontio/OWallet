@@ -384,6 +384,7 @@ const actions = {
             return list.length;
         } catch(err) {
             console.log(err)
+            commit('UPDATE_NODE_LIST', {list: []});
             dispatch('hideLoadingModals')
             return 0;
         }
@@ -419,11 +420,14 @@ const actions = {
                 commit('UPDATE_NODE_LIST', {list})
                 return total;
             } else {
+                throw new Error('Network error when fetch node list.')
                 return 0;
             }
         }catch(err) {
             console.log(err)
+            commit('UPDATE_NODE_LIST', {list: []});
             dispatch('hideLoadingModals')
+            message.error(i18n.t('commonWalletHome.networkError'))
             return 0;
         }
 

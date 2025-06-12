@@ -100,7 +100,7 @@ import {ONT_PASS_NODE, ONT_PASS_NODE_PRD, ONT_PASS_URL, DEFAULT_SCRYPT} from '..
 import axios from 'axios'
 import dbService from '../../../core/dbService'
 import { BigNumber } from 'bignumber.js';
-import {legacySignWithLedger} from '../../../core/ontLedger'
+import {legacySignWithLedger, checkPublicKeyIsInTheConnectedLedger} from '../../../core/ontLedger'
 
 export default {
     name:'InputPassword',
@@ -207,12 +207,12 @@ export default {
                 let res;
                 try {
                     console.log('this.sponsorWallet.wallet',this.sponsorWallet.wallet);
-                    
+                    await checkPublicKeyIsInTheConnectedLedger(this.sponsorWallet.wallet.acct, this.sponsorWallet.wallet.neo, this.sponsorWallet.publickey);
                     res = await legacySignWithLedger(txData,this.sponsorWallet.wallet.neo,this.sponsorWallet.wallet.acct)
                 } catch(err) {
                     this.ledgerStatus = '';
                       this.$store.dispatch('hideLoadingModals')
-                      alert(err.message)
+                      alert(typeof err === 'string' ? err : err.message)
                     return;
                 }
                 const sig = new TxSignature();

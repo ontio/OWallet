@@ -122,13 +122,18 @@ export default {
             } else {
                 //ledger sign
                 if (this.ledgerWallet.address) {
-                    console.log(this.wallet);
-                    // 当前连接的Ledger需要和之前导入钱包的Ledger是同一个
-                    await checkPublicKeyIsInTheConnectedLedger(this.wallet.acct || 0, this.wallet.neo, this.wallet.publicKey);
-
                     this.$store.dispatch("showLoadingModals");
                     this.$store.dispatch('stopGetLedgerStatus')
                     await delay(1000);
+                    console.log(this.wallet);
+                    // 当前连接的Ledger需要和之前导入钱包的Ledger是同一个
+                    try {
+                        await checkPublicKeyIsInTheConnectedLedger(this.wallet.acct || 0, this.wallet.neo, this.wallet.publicKey)
+                    } catch (err) {
+                        this.$store.dispatch("hideLoadingModals");
+                        this.$store.dispatch('getLedgerStatus')
+                        return;
+                    }
                     let txData
                     if(typeof tx === 'string') {
                         txData =  tx
