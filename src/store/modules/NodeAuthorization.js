@@ -421,7 +421,7 @@ const actions = {
                 return total;
             } else {
                 throw new Error('Network error when fetch node list.')
-                return 0;
+                // return 0;
             }
         }catch(err) {
             console.log(err)
