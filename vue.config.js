@@ -2,53 +2,60 @@ module.exports = {
   pluginOptions: {
     electronBuilder: {
       nodeIntegration: true,
-      externals: ['node-hid', 'usb', 'nedb'],
+      externals: ["node-hid", "usb", "nedb"],
       builderOptions: {
         productName: process.env.VUE_APP_TITLE,
-        appId: 'com.ontio.owallet',
+        appId: "com.ontio.owallet",
         nsis: {
           oneClick: false,
           perMachine: true,
-          allowToChangeInstallationDirectory: true
+          allowToChangeInstallationDirectory: true,
         },
+        afterSign: "build/after-sign.js",
         win: {
           target: [
             {
-              target: 'nsis',
-              arch: ['x64']
-            }
+              target: "nsis",
+              arch: ["x64"],
+            },
           ],
-          icon: 'src/assets/icons/icon.ico',
-          artifactName: '${productName}-${version}-${os}.${ext}'
+          sign: true,
+          icon: "src/assets/icons/icon.ico",
+          artifactName: "${productName}-${version}-${os}.${ext}",
         },
         linux: {
           target: [
             {
-              target: 'deb',
-              arch: ['x64']
+              target: "deb",
+              arch: ["x64"],
             },
             {
-              target: 'AppImage',
-              arch: ['x64']
-            }
+              target: "AppImage",
+              arch: ["x64"],
+            },
           ],
-          icon: 'src/assets/icons',
-          artifactName: '${productName}-${version}-${os}.${ext}'
+          category: "Utility",
+          icon: "src/assets/icons",
+          artifactName: "${productName}-${version}-${os}.${ext}",
         },
         mac: {
-          target: [{
-            target: 'dmg',
-            arch: ['x64', 'arm64'] 
-          }],
-          icon: 'src/assets/icons/icon.icns',
-          artifactName: '${productName}-${version}-${os}-${arch}.${ext}'
-        }
+          target: [
+            {
+              target: "dmg",
+              arch: ["x64", "arm64"],
+            },
+          ],
+          forceCodeSigning: false,
+          identity: null,
+          icon: "src/assets/icons/icon.icns",
+          artifactName: "${productName}-${version}-${os}-${arch}.${ext}",
+        },
       },
-    }
+    },
   },
   css: {
     loaderOptions: {
-      sass: {}
-    }
-  }
-}
+      sass: {},
+    },
+  },
+};
