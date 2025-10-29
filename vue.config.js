@@ -19,7 +19,6 @@ module.exports = {
               arch: ["x64"],
             },
           ],
-          sign: true,
           icon: "src/assets/icons/icon.ico",
           artifactName: "${productName}-${version}-${os}.${ext}",
         },

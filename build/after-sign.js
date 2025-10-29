@@ -13,9 +13,14 @@ function run(cmd) {
 }
 
 exports.default = async function afterSign(context) {
+
+  
   if (context.electronPlatformName !== "darwin") {
     console.log("!Skipping afterSign: not macOS build.");
     return;
+  }
+  if (process.env.CI !== 'true' || process.env.GITHUB_ACTIONS!=='true') {
+    return
   }
 
   const appPath = path.join(
