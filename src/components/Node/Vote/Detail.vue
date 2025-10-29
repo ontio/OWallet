@@ -88,7 +88,7 @@
 					</div>
 					<div class="info-item">
 						<span>{{$t('vote.hash')}}</span>
-						<span>{{vote.hash}}</span>
+						<span class="hash-link" @click="openVoteInExplorer">{{reverseHash(vote.hash)}}</span>
 					</div>
 					<div class="info-item">
 						<span>{{$t('vote.creatorAddress')}}</span>
@@ -140,6 +140,7 @@
 import Breadcrumb from "@/components/Breadcrumb";
 import SignSendTx from "../../Common/SignSendTx";
 import { VOTE_STATUS_TEXT, MY_VOTED } from "../../../store/modules/Vote";
+import { open, getExplorerUrl } from "../../../core/utils";
 
 import { mapState } from "vuex";
 var dateFormat = require("dateformat");
@@ -226,6 +227,13 @@ export default {
 				[VOTE_STATUS_TEXT.CANCELED]: this.$t("vote.canceled")
 			};
 			return statusMap[vote.statusText];
+		},
+		reverseHash(hash) {
+			return Buffer.from(hash, 'hex').reverse().toString('hex');
+		},
+		openVoteInExplorer() {
+			const url = `${getExplorerUrl()}/transaction/${this.reverseHash(this.vote.hash)}`;
+			open(url);
 		},
 		refresh() {
 			const hash = this.vote.hash;
@@ -509,5 +517,18 @@ export default {
 }
 .my-voted-text {
 	opacity: 1 !important;
+}
+
+.hash-link {
+	color: #1890ff;
+	cursor: pointer;
+	text-decoration: none;
+	transition: color 0.3s ease;
+	word-break: break-all;
+}
+
+.hash-link:hover {
+	color: #40a9ff;
+	text-decoration: underline;
 }
 </style>
