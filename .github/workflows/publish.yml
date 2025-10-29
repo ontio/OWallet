@@ -29,6 +29,61 @@ jobs:
         node-version: '16'
         cache: 'yarn'
 
+    - name: 🔐 Setup Temporary Keychain and Import Certificate
+      run: |
+        KEYCHAIN_NAME="temp.keychain"
+        NODE_PATH=$(which node)
+        echo "Found Node executable at: $NODE_PATH"
+
+        # 1. Create a new temporary keychain
+        security create-keychain -p ${{ secrets.KEYCHAIN_PASSWORD }} $KEYCHAIN_NAME
+
+        # 2. Set the new keychain as the default for the session
+        security default-keychain -s $KEYCHAIN_NAME
+        security unlock-keychain -p ${{ secrets.KEYCHAIN_PASSWORD }} $KEYCHAIN_NAME
+
+        # 3. Increase the keychain search timeout
+        security set-keychain-settings -t 3600 $KEYCHAIN_NAME
+
+        # 4. Decode the P12 file content from the secret and save it to a file
+        echo "${{ secrets.DEV_ID_CERTIFICATE_P12 }}" | base64 --decode > dev_cert.p12
+
+
+        # 6. Set the partition list to ensure automated tools can access the key
+        #    This is crucial for CI environments.
+        CERT_ID='Developer ID Application: Ontology Foundation Ltd (29B4VVVVKM)' # <-- Replace with your exact Identity name
+
+        #security set-key-partition-list -S apple-tool: -S apple: -k $KEYCHAIN_NAME -p ${{ secrets.KEYCHAIN_PASSWORD }} $KEYCHAIN_NAME
+        curl https://www.apple.com/certificateauthority/DeveloperIDG2CA.cer -o DeveloperIDG2CA.cer
+        sudo security add-trusted-cert -d -r unspecified -k $KEYCHAIN_NAME DeveloperIDG2CA.cer
+        rm -f DeveloperIDG2CA.cer
+
+        # 5. Import the certificate and private key into the new keychain
+        security import dev_cert.p12 -k $KEYCHAIN_NAME -P "${{ secrets.P12_PASSWORD }}" -T /usr/bin/codesign -T /usr/bin/security -T /usr/bin/xcodebuild -T $NODE_PATH
+        echo "import success!"
+        security set-key-partition-list -S apple-tool:,apple: -s -k ${{ secrets.KEYCHAIN_PASSWORD }} $KEYCHAIN_NAME
+        echo "partition list success"
+
+
+        # Set the temporary keychain as the default for the session
+        security default-keychain -s $KEYCHAIN_NAME
+        echo "default keychain success"
+
+        # Unlock the keychain
+        security unlock-keychain -p ${{ secrets.KEYCHAIN_PASSWORD }} $KEYCHAIN_NAME
+
+        # Set lock timeout to the maximum (3600 seconds) and ensure it's always searched
+        security set-keychain-settings -l -u -t 3600 $KEYCHAIN_NAME
+        if security find-identity -p codesigning $KEYCHAIN_NAME | grep -q "$CERT_ID"; then
+        echo "✅ SUCCESS: Code Signing Identity '$CERT_ID' found in the temporary keychain."
+        else
+        echo "❌ FAILURE: Code Signing Identity '$CERT_ID' NOT found. Codesign will likely fail."
+        exit 1 # Exit the job immediately if the identity isn't found
+        fi
+
+
+
+
     # Install dependencies
     - name: Install dependencies
       run: |
@@ -63,6 +118,15 @@ jobs:
     #     draft: false
     #     prerelease: false
 
+
+    # --- Cleanup ---
+    - name: 🗑️ Clean Up Keychain and Files
+      if: always() # Ensure cleanup runs even on failure
+      run: |
+        security delete-keychain temp.keychain
+        rm dev_cert.p12
+
+
     - name: Generate Checksums
       run: |
         brew install coreutils
@@ -95,12 +159,3 @@ jobs:
           dist_electron/*.dmg
           dist_electron/*.exe
 
-            
-    # - name: Release with attachment
-    #   uses: softprops/action-gh-release@v1
-    #   if: startsWith(github.ref, 'refs/tags/')
-    #   with:
-    #     files: |
-    #       dist_electron/*.deb
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
