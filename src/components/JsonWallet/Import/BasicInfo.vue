@@ -467,7 +467,11 @@ export default {
 
       });
       this.$store.dispatch('hideLoadingModals')
-      this.$message.success(`A total of ${this.datWallet.accounts.length - successAmount} addresses failed to import.`)
+      if(successAmount==0){
+        this.$message.error('Import failed.')
+        return
+      }
+      this.$message.success(`A total of ${ successAmount} addresses succeed to import.`)
 
     },
     importAccountForWif() {

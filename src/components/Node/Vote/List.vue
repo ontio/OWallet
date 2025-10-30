@@ -101,7 +101,9 @@ export default {
     computed: {
         ...mapState({
             role: state => state.Vote.role,
-            all_votes: state => state.Vote.all_votes,
+            all_votes: state =>{
+               return  state.Vote.all_votes.sort((a, b)=>b.startTime - a.startTime)
+            },
             admin_votes: state => state.Vote.admin_votes,
             voteWallet : state => state.Vote.voteWallet,
             
