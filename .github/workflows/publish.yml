@@ -91,6 +91,10 @@ jobs:
 
     # # Build all packages (macOS, Linux, and Windows)
     - name: Build macos packages
+      env:
+        APPLE_ID: ${{ secrets.APPLE_ID }}
+        TEAM_ID: ${{ secrets.TEAM_ID }}
+        PASSWORD: ${{ secrets.PASSWORD }}
       run: |
         yarn build:mac
 
