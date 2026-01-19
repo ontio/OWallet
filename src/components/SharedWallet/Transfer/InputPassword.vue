@@ -164,7 +164,7 @@ export default {
                 const from = new Crypto.Address(this.sharedWallet.sharedWalletAddress)
                 const to = from
                 const value = new BigNumber(this.redeem.claimableOng);
-                gasPrice = '2500'
+                gasPrice = '500'
                 amount = value.multipliedBy(1e9).toString();
                 tx = OntAssetTxBuilder.makeWithdrawOngTx(from, to, amount, from, gasPrice, gasLimit);
             } else {

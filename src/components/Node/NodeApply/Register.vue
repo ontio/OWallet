@@ -258,7 +258,7 @@ export default {
             const publicKey = this.operationWallet ? this.operationWallet : this.operationPk
             const userAddr = new Crypto.Address(this.stakeWallet.address)
             const initPos = Number(this.stakeAmount)
-            const tx = GovernanceTxBuilder.makeRegisterCandidateTx(ontid, publicKey, 1, userAddr, initPos, userAddr, '2500', '200000')
+            const tx = GovernanceTxBuilder.makeRegisterCandidateTx(ontid, publicKey, 1, userAddr, initPos, userAddr, '500', '200000')
             this.tx = tx;
             this.signVisible = true;
         },

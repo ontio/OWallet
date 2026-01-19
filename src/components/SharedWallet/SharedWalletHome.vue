@@ -426,7 +426,7 @@ export default {
       method,
       [],
       contractAddr,
-      "2500",
+      "500",
       "20000"
     );
     const restClient = getRestClient();

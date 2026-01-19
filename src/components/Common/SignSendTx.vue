@@ -139,7 +139,7 @@ export default {
                         txData =  tx
                         // ledger 签名message特殊处理，放到tx的payload里. 先构造个占位的tx
                         const addr = new Crypto.Address(this.wallet.address)
-                        const txTemp = OntAssetTxBuilder.makeTransferTx('ONT', addr, addr, '1', '2500', '20000', addr)
+                        const txTemp = OntAssetTxBuilder.makeTransferTx('ONT', addr, addr, '1', '500', '20000', addr)
                         txTemp.payload.code = tx;
                         const pk = new Crypto.PublicKey(this.wallet.publicKey);
                         const txSig = new TxSignature();

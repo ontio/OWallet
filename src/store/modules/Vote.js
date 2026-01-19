@@ -8,7 +8,7 @@ import {
 import i18n from '../../lang';
 import axios from 'axios';
 
-const gasPrice = '2500'
+const gasPrice = '500'
 const gasLimit = '200000'
 const contract_hash = {
     MAIN_NET: 'c0df752ca786a99755b2e8950060ade9fa3d4e1b',
