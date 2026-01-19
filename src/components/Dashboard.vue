@@ -522,7 +522,7 @@ const ONG_GOVERNANCE_CONTRACT = 'AFmseVrdL9f9oyCzZefL9tG6UbviEH9ugK'
         // this.getNep5Balance();
       },
       sendAsset() {
-        if(Number(this.balance.ong) < 0.05) {
+        if(Number(this.balance.ong) < 0.01) {
           this.$message.warning(this.$t('common.ongNoEnough'))
           return;
         }

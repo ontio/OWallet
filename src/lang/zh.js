@@ -391,7 +391,7 @@ export default {
     walletQrCode: '钱包地址二维码',
     walletAddress: '钱包地址',
     publicKey: '公钥',
-    redeemCharge: '提取ONG需要支付0.05ONG',
+    redeemCharge: '提取ONG需要支付0.01ONG',
     inputPass: '请输入钱包密码',
     emptyPass: '密码不能为空',
     cancel: '取消',
@@ -534,7 +534,7 @@ export default {
   },
   redeemInfo: {
     info: '提取ONG',
-    claimableOng: '可提取ONG是您可以提取的ONG的数量，手续费为0.05个ONG。每次钱包中完成一笔交易后，该余额会更新。',
+    claimableOng: '可提取ONG是您可以提取的ONG的数量，手续费为0.01个ONG。每次钱包中完成一笔交易后，该余额会更新。',
     unboundOng: '已解绑的ONG是指尚未添加到您的可提取ONG余额（仅会在您钱包做出一笔ONT交易后更新）中的ONG。当您的地址完成一笔交易后，您可提取的ONG余额将会更新（即将已解绑的ONG数额将添加到您可提取的ONG余额中去。）',
     claimableOngName: '可提取ONG：',
     unboundOngName: '已解绑的ONG：',

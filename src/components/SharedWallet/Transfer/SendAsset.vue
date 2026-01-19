@@ -57,13 +57,13 @@
                 <label class="fee-label font-medium">Fee:</label>
             </a-col>
             <a-col :span="16">
-                <a-slider :min="0.05" :max="0.1" v-model="gas" :step="0.002" />
+                <a-slider :min="0.01" :max="0.02" v-model="gas" :step="0.001" />
             </a-col>
             <a-col :span="6">
                 <a-input-number
-                    :min="0.05"
-                    :max="0.1"
-                    :step="0.002"
+                    :min="0.01"
+                    :max="0.02"
+                    :step="0.001"
                     v-model="gas"
                     style="width:60px;margin-right:10px;margin-left:10px;"
                 />
@@ -99,7 +99,7 @@ export default {
         // const currentWallet = JSON.parse(sessionStorage.getItem('currentWallet'));
         return {
             // address: currentWallet.address,
-            gas: 0.05,
+            gas: 0.01,
             asset:'ONT',
             scriptHash: 'ONT',
             decimal: 0,

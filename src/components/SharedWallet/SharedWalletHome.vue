@@ -595,7 +595,7 @@ export default {
       this.$router.push({ name: "Dashboard" });
     },
     showTransferBox() {
-      if (Number(this.balance.ong) < 0.05) {
+      if (Number(this.balance.ong) < 0.01) {
         this.$message.warning(this.$t("common.ongNoEnough"));
         return;
       }
@@ -676,7 +676,7 @@ export default {
         this.redeemInfoVisible = true;
         return;
       }
-      if (Number(this.balance.ong) < 0.05) {
+      if (Number(this.balance.ong) < 0.01) {
         this.$message.warning(this.$t("common.ongNoEnough"));
         return;
       }
