@@ -12,7 +12,7 @@ const messages = {
 };
 
 const i18n = new VueI18n({
-  locale: LangStorage.getLang("en"),
+  locale: "en", //LangStorage.getLang("en"),
   messages
 });
 

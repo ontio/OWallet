@@ -21,14 +21,14 @@
           </select>
         </div>
 
-        <div class="form-group form-group-top">
+        <!-- <div class="form-group form-group-top">
           <label for="lang-selection">{{ $t('setting.lang') }}</label>
           <select name="lang-selection" id="lang-selection" class="form-control" v-model="lang"
                   @change="changeLanguage">
             <option value="en">{{ $t('setting.en') }}</option>
             <option value="zh">{{ $t('setting.zh') }}</option>
           </select>
-        </div>
+        </div> -->
 
         <div class="form-group form-group-top">
           <label>{{ $t('setting.path') }}</label>
